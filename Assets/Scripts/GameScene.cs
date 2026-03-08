@@ -7,6 +7,8 @@
 */
 
 using System;
+using Module.GameUI;
+using MVC;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -26,7 +28,7 @@ namespace DefaultNamespace
             Cursor.SetCursor(commonCursor, Vector2.zero, CursorMode.Auto);
             
             RegisterConfigs();
-            RegisterModule();
+            RegisterModules();
             InitModules();
         }
 
@@ -37,9 +39,9 @@ namespace DefaultNamespace
         }
 
         // 注册控制器
-        private void RegisterModule()
+        private void RegisterModules()
         {
-            
+            GameApp.ControllerManager.Register(ControllerType.GameUIController, new GameUIController());
         }
         
         // 初始化所有控制器

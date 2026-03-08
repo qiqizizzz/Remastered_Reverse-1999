@@ -10,6 +10,6 @@ namespace MVC
 {
     public enum ControllerType
     {
-        
+        GameUIController
     }
 }

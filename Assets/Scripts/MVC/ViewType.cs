@@ -10,6 +10,7 @@ namespace MVC
 {
     public enum ViewType
     {
-        
+        MainMenuView, //主菜单界面
+        GameView //游戏主界面
     }
 }
