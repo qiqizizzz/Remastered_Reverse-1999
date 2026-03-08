@@ -175,12 +175,12 @@ namespace MVC
                  * 简单来说就是需要加入命名空间 Module才能查找到对应的脚本
                  */
                 
-                //Type viewType = FindType(type); // 使用新方法查找类型
-                //view = uiObj.AddComponent(viewType) as IBaseView;//添加对应View脚本
-                string typeName = $"Module.View.{type.ToString()}";
-                Type viewType = Type.GetType(typeName);
+                Type viewType = FindType(type); // 使用新方法查找类型
+                view = uiObj.AddComponent(viewType) as IBaseView;//添加对应View脚本
+                //string typeName = $"Module.View.{type.ToString()}";
+                //Type viewType = Type.GetType(typeName);
                 
-                view = uiObj.AddComponent(viewType) as IBaseView;
+                //view = uiObj.AddComponent(viewType) as IBaseView;
                 
                 
                 view.ViewId = key;//设置视图id
@@ -215,16 +215,13 @@ namespace MVC
             Open((int)viewType, args);
         }
         
-        //查找对应类型的脚本 - 弃用中(这个项目没用不知道为什么)
+        //查找对应类型的脚本 - 内存开销大
         private Type FindType(string typeName)
         {
             return AppDomain.CurrentDomain.GetAssemblies() //获取当前应用程序域中所有已加载的程序集
+                .Where(assembly => assembly.GetName().Name == "Assembly-CSharp")
                 .SelectMany(assembly => assembly.GetTypes()) //将获取的所有类型扁平化为一个序列
-                .FirstOrDefault(type =>
-                {
-                    Debug.Log(type.FullName);
-                    return type.FullName == typeName;
-                }); //寻找匹配名称的第一个类型脚本
+                .FirstOrDefault(type => type.Name == typeName); //寻找匹配名称的第一个类型脚本
         }
         
     }
