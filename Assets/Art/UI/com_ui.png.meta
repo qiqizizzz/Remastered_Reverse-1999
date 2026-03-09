@@ -201,6 +201,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: com_ui_0
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 1852
+        width: 886
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95249a28f1d97e24db1743102adaf516
+      internalID: -1891347711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: com_ui_1
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 1129
+        width: 739
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04cadcdad292e564cb89158b02ff126a
+      internalID: -1499040623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -212,6 +254,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      com_ui_0: -1891347711
+      com_ui_1: -1499040623
       com_ui_bg1: -2084524231
       com_ui_circle: 1103357616
       com_ui_detail_bg: 1429241474
