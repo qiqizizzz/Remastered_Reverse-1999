@@ -44,7 +44,7 @@ namespace DefaultNamespace
             GameApp.ControllerManager.Register(ControllerType.GameUIController, new GameUIController());
         }
         
-        // 初始化所有控制器
+        // 初始化所有模块
         private void InitModules()
         {
             GameApp.ControllerManager.Init();
@@ -55,6 +55,5 @@ namespace DefaultNamespace
         {
             
         }
-        
     }
 }

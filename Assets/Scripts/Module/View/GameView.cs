@@ -19,7 +19,7 @@ namespace Module.View
         {
             base.OnAwake();
             //注册
-            Find<Button>("btns/txt").onClick.AddListener(onOpenButton1);
+            //Find<Button>("btns/txt").onClick.AddListener(onOpenButton1);
         }
 
         //测试打开主面板界面

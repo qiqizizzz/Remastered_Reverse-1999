@@ -24,10 +24,5 @@ public class GameApp : Singleton<GameApp>
     {
             
     }
-
-    public override void Destroy()
-    {
-            
-    }
 }
     

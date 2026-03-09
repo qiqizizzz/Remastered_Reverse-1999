@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
 using MVC.Controller;
 using MVC.View;
 using UnityEngine;
@@ -152,8 +153,10 @@ namespace MVC
             {
                 //若视图不存在,则进行资源加载
                 string type = ((ViewType)key).ToString();
-                GameObject uiObj = UnityEngine.Object.Instantiate(Resources.Load($"View/{viewInfo.PrefabName}"), 
-                    viewInfo.parentTf) as GameObject;
+                //GameObject uiObj = UnityEngine.Object.Instantiate(Resources.Load($"View/{viewInfo.PrefabName}"), 
+                    //viewInfo.parentTf) as GameObject;
+
+                GameObject uiObj = ResManager.Instantiate(viewInfo.PrefabName, viewInfo.parentTf);
 
                 Canvas canvas = uiObj.GetComponent<Canvas>();
                 if (canvas == null)
@@ -175,14 +178,12 @@ namespace MVC
                  * 简单来说就是需要加入命名空间 Module才能查找到对应的脚本
                  */
                 
-                Type viewType = FindType(type); // 使用新方法查找类型
-                view = uiObj.AddComponent(viewType) as IBaseView;//添加对应View脚本
-                //string typeName = $"Module.View.{type.ToString()}";
-                //Type viewType = Type.GetType(typeName);
+                //Type viewType = FindType(type); // 使用新方法查找类型 - 开销大
+                //view = uiObj.AddComponent(viewType) as IBaseView;//添加对应View脚本
+                string typeName = $"Module.View.{type.ToString()}";
+                Type viewType = Type.GetType(typeName);
                 
-                //view = uiObj.AddComponent(viewType) as IBaseView;
-                
-                
+                view = uiObj.AddComponent(viewType) as IBaseView;
                 view.ViewId = key;//设置视图id
                 view.Controller = viewInfo.controller;//设置控制器
                 
