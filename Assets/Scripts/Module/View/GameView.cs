@@ -29,6 +29,7 @@ namespace Module.View
         private void onOpenLevelBtn()
         {
             Debug.Log("打开Level界面");
+            Close();
             ViewExtensions.LoadScene(this, SceneDefines.LevelView);
         }
     }

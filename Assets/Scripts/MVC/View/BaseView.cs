@@ -39,12 +39,22 @@ namespace MVC.View
             OnStart();
         }
 
+        private void Update()
+        {
+            OnUpdate();
+        }
+
         protected virtual void OnAwake()
         {
             
         }
 
         protected virtual void OnStart()
+        {
+            
+        }
+
+        protected virtual void OnUpdate()
         {
             
         }

@@ -7,6 +7,7 @@
 */
 
 using Common;
+using Module.View;
 using MVC;
 using MVC.Controller;
 using MVC.Model;
@@ -18,7 +19,7 @@ namespace Module.Loading
     public class LoadingController : BaseController
     {
         private AsyncOperation asyncOp;
-        private float delayTime = 0.25f;//延迟时间
+        private float delayTime = 2f;//延迟时间
         
         public LoadingController() : base()
         {
@@ -49,6 +50,9 @@ namespace Module.Loading
             //TODO:后面需要区分游戏内还是游戏外加载
             GameApp.ViewManager.Open(ViewType.LoadingView);
             asyncOp = SceneManager.LoadSceneAsync(model.SceneName);
+
+            syncProcess();//这里也要区分
+            
             asyncOp.completed += onLoadEndCallback;
         }
 
@@ -63,6 +67,14 @@ namespace Module.Loading
                 GetModel<LoadingModel>().callback?.Invoke();
                 GameApp.ViewManager.Close(ViewType.LoadingView);
             });
+        }
+
+        //同步进度条
+        private void syncProcess()
+        {
+            asyncOp.allowSceneActivation = false;//禁止场景自动切换
+            var view = GameApp.ViewManager.GetView<LoadingView>(ViewType.LoadingView);
+            view.InitLoading(asyncOp);
         }
     }
 }
