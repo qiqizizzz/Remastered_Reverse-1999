@@ -1,0 +1,17 @@
+﻿/*
+* ┌──────────────────────────────────┐
+* │  描    述: 事件定义类                      
+* │  类    名: EventDefines.cs       
+* │  创    建: By qiqizizzz
+* └──────────────────────────────────┘
+*/
+
+namespace Common
+{
+    public static class EventDefines
+    {
+        // UI事件
+        public static readonly string OpenGameView = "OpenGameView";
+        public static readonly string LoadingScene = "LoadingScene";
+    }
+}

@@ -35,7 +35,7 @@ namespace Module.Loading
 
         public override void InitModuleEvent()
         {
-            RegisterFunc(Defines.LoadingScene, loadSceneCallback);
+            RegisterFunc(EventDefines.LoadingScene, loadSceneCallback);
         }
 
         //加载场景回调

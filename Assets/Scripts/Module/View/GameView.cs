@@ -9,6 +9,7 @@
 using Common;
 using Module.Loading;
 using MVC;
+using MVC.Extensions;
 using MVC.View;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,14 +25,11 @@ namespace Module.View
             Find<Button>("RightArea/level").onClick.AddListener(onOpenLevelBtn);
         }
 
-        //测试打开主面板界面
+        //测试打开level界面
         private void onOpenLevelBtn()
         {
             Debug.Log("打开Level界面");
-            LoadingModel model = new LoadingModel();
-            model.SetSceneName("level");
-            model.callback = () => { Debug.Log("加载LevelScene完成回调"); };
-            Controller.ApplyControllerFunc(ControllerType.Loading,Defines.LoadingScene, model);
+            ViewExtensions.LoadScene(this, SceneDefines.LevelView);
         }
     }
 }

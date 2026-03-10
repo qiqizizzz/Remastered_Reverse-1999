@@ -1,17 +1,16 @@
 ﻿/*
 * ┌──────────────────────────────────┐
-* │  描    述:                       
-* │  类    名: Defines.cs       
+* │  描    述: 场景名字                      
+* │  类    名: SceneType.cs       
 * │  创    建: By qiqizizzz
 * └──────────────────────────────────┘
 */
 
-namespace Common
+namespace Module.Loading
 {
-    public class Defines
+    public static class SceneDefines
     {
-        // UI事件
-        public static readonly string OpenGameView = "OpenGameView";
-        public static readonly string LoadingScene = "LoadingScene";
+        public static readonly string GameView = "game";
+        public static readonly string LevelView = "level";
     }
 }

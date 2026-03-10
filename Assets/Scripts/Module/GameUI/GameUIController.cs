@@ -29,13 +29,13 @@ namespace Module.GameUI
             InitModuleEvent();
             InitGlobalEvent();
             
-            ApplyFunc(Defines.OpenGameView); // 这个只是临时的
+            ApplyFunc(EventDefines.OpenGameView); // 这个只是临时的
         }
 
         // 注册事件
         public override void InitModuleEvent()
         {
-            RegisterFunc(Defines.OpenGameView, openGameView);
+            RegisterFunc(EventDefines.OpenGameView, openGameView);
         }
 
         //打开主要面板
