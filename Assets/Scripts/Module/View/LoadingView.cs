@@ -1,17 +1,17 @@
 ﻿/*
 * ┌──────────────────────────────────┐
-* │  描    述:                       
-* │  类    名: Defines.cs       
+* │  描    述: 加载界面                      
+* │  类    名: LoadingView.cs       
 * │  创    建: By qiqizizzz
 * └──────────────────────────────────┘
 */
 
-namespace Common
+using MVC.View;
+
+namespace Module.View
 {
-    public class Defines
+    public class LoadingView : BaseView
     {
-        // UI事件
-        public static readonly string OpenGameView = "OpenGameView";
-        public static readonly string LoadingScene = "LoadingScene";
+        
     }
 }

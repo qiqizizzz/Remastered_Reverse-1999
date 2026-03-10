@@ -7,6 +7,8 @@
 */
 
 using Common;
+using Module.Loading;
+using MVC;
 using MVC.View;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,13 +21,17 @@ namespace Module.View
         {
             base.OnAwake();
             //注册
-            //Find<Button>("btns/txt").onClick.AddListener(onOpenButton1);
+            Find<Button>("RightArea/level").onClick.AddListener(onOpenLevelBtn);
         }
 
         //测试打开主面板界面
-        private void onOpenButton1()
+        private void onOpenLevelBtn()
         {
-            Debug.Log("打开主界面");
+            Debug.Log("打开Level界面");
+            LoadingModel model = new LoadingModel();
+            model.SetSceneName("level");
+            model.callback = () => { Debug.Log("加载LevelScene完成回调"); };
+            Controller.ApplyControllerFunc(ControllerType.Loading,Defines.LoadingScene, model);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace MVC
     public enum ViewType
     {
         MainMenuView, //主菜单界面
-        GameView //游戏主界面
+        GameView, //游戏主界面
+        LoadingView, //加载界面
     }
 }

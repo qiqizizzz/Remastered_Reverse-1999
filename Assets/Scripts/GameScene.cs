@@ -8,6 +8,7 @@
 
 using System;
 using Module.GameUI;
+using Module.Loading;
 using MVC;
 using UnityEngine;
 
@@ -41,7 +42,8 @@ namespace DefaultNamespace
         // 注册控制器
         private void RegisterModules()
         {
-            GameApp.ControllerManager.Register(ControllerType.GameUIController, new GameUIController());
+            GameApp.ControllerManager.Register(ControllerType.GameUI, new GameUIController());
+            GameApp.ControllerManager.Register(ControllerType.Loading, new LoadingController());
         }
         
         // 初始化所有模块

@@ -134,7 +134,10 @@ namespace MVC
                 _viewInfos[key].controller.CloseView(view);
             }
         }
-
+        public void Close(ViewType viewType)
+        {
+            Close((int)viewType);
+        }
         public void CloseAll()
         {
             List<IBaseView> list = _opens.Values.ToList();

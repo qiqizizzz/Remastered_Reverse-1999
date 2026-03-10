@@ -35,11 +35,11 @@ namespace Module.GameUI
         // 注册事件
         public override void InitModuleEvent()
         {
-            RegisterFunc(Defines.OpenGameView, OpenGameView);
+            RegisterFunc(Defines.OpenGameView, openGameView);
         }
 
         //打开主要面板
-        private void OpenGameView(System.Object[] args)
+        private void openGameView(System.Object[] args)
         {
             GameApp.ViewManager.Open(ViewType.GameView, args);
         }
