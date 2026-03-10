@@ -9,6 +9,7 @@
 using System;
 using System.Globalization;
 using Common;
+using Common.Defines;
 using Module.Loading;
 using MVC.View;
 using UnityEngine;

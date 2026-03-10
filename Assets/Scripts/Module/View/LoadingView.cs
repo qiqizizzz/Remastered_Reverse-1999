@@ -6,9 +6,12 @@
 * └──────────────────────────────────┘
 */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Common;
+using Common.Defines;
+using Data;
 using DG.Tweening;
 using Module.Loading;
 using MVC;
@@ -16,12 +19,15 @@ using MVC.Extensions;
 using MVC.View;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using Random = System.Random;
 
 namespace Module.View
 {
     public class LoadingView : BaseView
     {
         //UI组件
+        private Image bg;
         private TextMeshProUGUI titleText;
         private TextMeshProUGUI detailText;
         private Transform fillTf;
@@ -31,13 +37,21 @@ namespace Module.View
         private float startPosX;
         private float _process;
         private float time = 0.2f;//进度条动画时间
-        
-        protected override void OnStart()
+
+        protected override void OnAwake()
         {
+            bg = Find<Image>("bg");
             titleText = Find<TextMeshProUGUI>("title");
             detailText = Find<TextMeshProUGUI>("detail");
             fillTf = Find<Transform>("processBar/FillArea");
+        }
 
+        protected override void OnStart()
+        {
+            //加载随机提示数据
+            ResManager.LoadAssetAsync<LoadingTextListSO>(AddressDefines.Data_LoadingTextData, data =>
+                SetLoadingText(data.GetRandomTip()));
+            
             startPosX = fillTf.localPosition.x;
         }
 
@@ -47,7 +61,14 @@ namespace Module.View
         }
 
         public void InitLoading(AsyncOperation op) => _op = op;
-
+        
+        private void SetLoadingText(LoadingText text)
+        {
+            bg.sprite = text.bg;
+            titleText.text = text.title;
+            detailText.text = text.detail;
+        }
+        
         //更新进度条动画
         private void UpdateFillTf()
         {

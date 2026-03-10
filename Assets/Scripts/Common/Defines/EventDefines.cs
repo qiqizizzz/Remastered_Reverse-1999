@@ -6,7 +6,7 @@
 * └──────────────────────────────────┘
 */
 
-namespace Common
+namespace Common.Defines
 {
     public static class EventDefines
     {

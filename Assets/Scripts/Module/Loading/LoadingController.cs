@@ -7,6 +7,7 @@
 */
 
 using Common;
+using Common.Defines;
 using Module.View;
 using MVC;
 using MVC.Controller;
@@ -25,7 +26,7 @@ namespace Module.Loading
         {
             GameApp.ViewManager.Register(ViewType.LoadingView,new ViewInfo()
             {
-                PrefabName = "LoadingView",
+                PrefabName = AddressDefines.UI_LoadingView,
                 parentTf = GameApp.ViewManager.canvasTf,
                 controller = this
             });

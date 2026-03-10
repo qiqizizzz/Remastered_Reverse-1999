@@ -7,6 +7,7 @@
 */
 
 using Common;
+using Common.Defines;
 using MVC;
 using MVC.Controller;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace Module.GameUI
             //注册视图
             GameApp.ViewManager.Register(ViewType.GameView, new ViewInfo()
             {
-                PrefabName = "GameView",
+                PrefabName = AddressDefines.UI_GameView,
                 parentTf = GameApp.ViewManager.canvasTf,
                 controller = this
             });
