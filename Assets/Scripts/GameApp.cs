@@ -9,18 +9,21 @@
 using Common;
 using Module.Timer;
 using MVC;
+using Network;
 
 public class GameApp : Singleton<GameApp>
 {
     public static ControllerManager ControllerManager;
     public static ViewManager ViewManager;
     public static TimerManager TimerManager;
+    public static NetworkManager NetworkManager;
         
     public override void Init()
     {
         ControllerManager = new ControllerManager();
         ViewManager = new ViewManager();
         TimerManager = new TimerManager();
+        NetworkManager = new NetworkManager();
     }
 
     public override void Update(float dt)
