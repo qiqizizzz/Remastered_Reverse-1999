@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -231,7 +231,7 @@ TextureImporter:
         width: 739
         height: 93
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -239,6 +239,27 @@ TextureImporter:
       bones: []
       spriteID: 04cadcdad292e564cb89158b02ff126a
       internalID: -1499040623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: com_ui_loading
+      rect:
+        serializedVersion: 2
+        x: 906
+        y: 1718
+        width: 109
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c399edaaa557ab469c500e060e12754
+      internalID: -1377481905
       vertices: []
       indices: 
       edges: []
@@ -261,6 +282,7 @@ TextureImporter:
       com_ui_detail_bg: 1429241474
       com_ui_detail_bg2: 2102298370
       com_ui_id: 801379778
+      com_ui_loading: -1377481905
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

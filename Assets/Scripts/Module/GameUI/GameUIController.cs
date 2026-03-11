@@ -25,24 +25,37 @@ namespace Module.GameUI
                 parentTf = GameApp.ViewManager.canvasTf,
                 controller = this
             });
+            GameApp.ViewManager.Register(ViewType.MainMenuView,new ViewInfo()
+            {
+                PrefabName = AddressDefines.UI_MainMenuView,
+                parentTf = GameApp.ViewManager.canvasTf,
+                controller = this
+            });
             
             //初始化事件
             InitModuleEvent();
             InitGlobalEvent();
             
-            ApplyFunc(EventDefines.OpenGameView); // 这个只是临时的
+            ApplyFunc(EventDefines.OpenMainMenuView); // 这个只是临时的
         }
 
         // 注册事件
         public override void InitModuleEvent()
         {
             RegisterFunc(EventDefines.OpenGameView, openGameView);
+            RegisterFunc(EventDefines.OpenMainMenuView, openMainMenuView);
         }
 
         //打开主要面板
         private void openGameView(System.Object[] args)
         {
             GameApp.ViewManager.Open(ViewType.GameView, args);
+        }
+        
+        //打开主菜单界面
+        private void openMainMenuView(System.Object[] args)
+        {
+            GameApp.ViewManager.Open(ViewType.MainMenuView,args);
         }
     }
 }

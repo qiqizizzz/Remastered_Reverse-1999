@@ -12,6 +12,7 @@ namespace Common.Defines
     {
         // UI事件
         public static readonly string OpenGameView = "OpenGameView";
+        public static readonly string OpenMainMenuView = "OpenMainMenuView";
         public static readonly string LoadingScene = "LoadingScene";
     }
 }
