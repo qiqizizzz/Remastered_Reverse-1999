@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 2217498983753832931}
   - component: {fileID: 4565532887205870004}
   m_Layer: 0
-  m_Name: account
+  m_Name: Txt_account
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -914,7 +914,7 @@ GameObject:
   - component: {fileID: 5571672228416468667}
   - component: {fileID: 502115568136866236}
   m_Layer: 0
-  m_Name: startBtn
+  m_Name: Btn_start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1241,7 +1241,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4747708701154459201}
   m_Layer: 0
-  m_Name: login
+  m_Name: loginView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1418,7 +1418,7 @@ GameObject:
   - component: {fileID: 5466844031105603164}
   - component: {fileID: 6836425603258453096}
   m_Layer: 0
-  m_Name: registerBtn
+  m_Name: Btn_register
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2260,7 +2260,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7274705702318295362}
   m_Layer: 0
-  m_Name: Titles
+  m_Name: UpArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2301,7 +2301,7 @@ GameObject:
   - component: {fileID: 7274992273172283840}
   - component: {fileID: 2276331458891350173}
   m_Layer: 0
-  m_Name: passward
+  m_Name: Txt_password
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2528,8 +2528,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2551,7 +2551,7 @@ GameObject:
   - component: {fileID: 9147391172432515582}
   - component: {fileID: 1655465464224450756}
   m_Layer: 0
-  m_Name: loginBtn
+  m_Name: Btn_login
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2670,7 +2670,7 @@ GameObject:
   - component: {fileID: 2396573628682845746}
   - component: {fileID: 6175591599842985942}
   m_Layer: 0
-  m_Name: acBtn
+  m_Name: Tog_ac
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2755,7 +2755,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5001903986108484091}
   m_Layer: 0
-  m_Name: btns
+  m_Name: btnsArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3103,7 +3103,7 @@ GameObject:
   - component: {fileID: 6103920207077522808}
   - component: {fileID: 5125660278888350772}
   m_Layer: 0
-  m_Name: forgetBtn
+  m_Name: Btn_forget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

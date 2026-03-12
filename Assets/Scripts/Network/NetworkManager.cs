@@ -6,10 +6,25 @@
 * └──────────────────────────────────┘
 */
 
+using Network.Clients;
+using UnityEngine;
+
 namespace Network
 {
     public class NetworkManager
     {
+        [Header("网络配置")] 
+        public string serverIP = "127.0.0.1";
+        public int serverPort = 8888;
+        
+        private Client _client;
+        private string _log = "";
+
+        public NetworkManager()
+        {
+            _client = new Client();
+        }
+        
         
     }
 }
