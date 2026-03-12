@@ -21,13 +21,13 @@ namespace Network.Clients
         private string _ip;
         private int _port;
 
-        private ConcurrentQueue<string> _receiveQueue = new ConcurrentQueue<string>();//线程安全的消息队列
+        private ConcurrentQueue<byte[]> _receiveQueue = new ConcurrentQueue<byte[]>();//线程安全的消息队列
         public bool IsConnected => _socket != null && _socket.Connected;
         
         //回调事件
         public event Action OnConnected;
         public event Action OnDisconnected;
-        public event Action<string> OnMessageReceived; //已经处理的消息直接通知
+        public event Action<byte[]> OnMessageReceived; //已经处理的消息直接通知
         
         [Header("粘包处理相关")]
         //接收缓冲区
@@ -38,17 +38,25 @@ namespace Network.Clients
         private int _messageLength = 0;//当前消息预期长度
         private bool _isHeaderReceived = false;//是否已接收消息头
         
+        private const string SYS_CONNECTED = "[SYS]CONNECTED";
+        private const string SYS_DISCONNECTED = "[SYS]DISCONNECTED";
+        
         // 主线程调用：处理消息队列
         public void Update()
         {
-            while (_receiveQueue.TryDequeue(out string msg))
+            while (_receiveQueue.TryDequeue(out byte[] data))
             {
-                if (msg == "[SYS]CONNECTED")
+                if (data == null || data.Length == 0) continue;
+                
+                // 尝试将字节转回字符串
+                string msgStr = bytesToString(data);
+                
+                if (msgStr == SYS_CONNECTED)
                     OnConnected?.Invoke();
-                else if (msg == "[SYS]DISCONNECTED")
+                else if (msgStr == SYS_DISCONNECTED)
                     OnDisconnected?.Invoke();
                 else
-                    OnMessageReceived?.Invoke(msg);
+                    OnMessageReceived?.Invoke(data);//Protobuf字节流
             }
         }
         
@@ -95,7 +103,7 @@ namespace Network.Clients
                 Debug.Log($"已连接到服务器 {_ip}:{_port}");
                 
                 // 通知主线程已连接
-                _receiveQueue.Enqueue("[SYS]CONNECTED");
+                _receiveQueue.Enqueue(stringToByte(SYS_CONNECTED));
                 
                 // 开始接收
                 BeginReceive();
@@ -103,7 +111,7 @@ namespace Network.Clients
             catch (Exception e)
             {
                 Debug.LogError($"连接回调异常: {e.Message}");
-                _receiveQueue.Enqueue("[SYS]DISCONNECTED");
+                _receiveQueue.Enqueue(stringToByte(SYS_DISCONNECTED));
             }
         }
         
@@ -112,7 +120,7 @@ namespace Network.Clients
         {
             try
             {
-                if (IsConnected) return;
+                if (!IsConnected) return;
 
                 _socket.BeginReceive(_receiveBuffer,0,_receiveBuffer.Length,SocketFlags.None, onReceiveCallback, null);
             }
@@ -134,7 +142,7 @@ namespace Network.Clients
                 if(receiveLength == 0)
                 {
                     //客户端主动断开连接
-                    Debug.Log("[SYS]DISCONNECTED");
+                    Debug.Log(SYS_DISCONNECTED);
                     DisConnect();
                     return;
                 }
@@ -146,7 +154,7 @@ namespace Network.Clients
             catch (Exception ex)
             {
                 Debug.LogError($"接收异常:{ex.Message}");
-                _receiveQueue.Enqueue("[SYS]DISCONNECTED");
+                _receiveQueue.Enqueue(stringToByte(SYS_DISCONNECTED));
                 DisConnect();
             }
         }
@@ -200,9 +208,10 @@ namespace Network.Clients
                     //消息接收完整
                     if(_messageOffset == _messageLength)
                     {
-                        //将消息转换为字符串并入队
-                        string message = Encoding.UTF8.GetString(_messageBuffer, 0, _messageLength);
-                        _receiveQueue.Enqueue(message);
+                        //拷贝字节数组存入队列
+                        byte[] messagePayload = new byte[_messageLength];
+                        Array.Copy(_messageBuffer, 0, messagePayload, 0, _messageLength);
+                        _receiveQueue.Enqueue(messagePayload);
                         
                         //重置状态,准备接收下一条消息
                         _messageOffset = 0;
@@ -239,20 +248,35 @@ namespace Network.Clients
             }
         }
         
-        //发送回调
-        private void onSendCallback(IAsyncResult ar)
+        public void Send(byte[] data)
         {
             try
             {
-                _socket.EndSend(ar);
+                if (!IsConnected) return;
 
-                //TODO:处理发送完成后的逻辑
+                byte[] header = BitConverter.GetBytes(data.Length);
+                byte[] fullPacket = new byte[header.Length + data.Length];
+
+                Array.Copy(header, 0, fullPacket, 0, 4);
+                Array.Copy(data, 0, fullPacket, 4, data.Length);
+
+                _socket.BeginSend(fullPacket, 0, fullPacket.Length, SocketFlags.None, onSendCallback, null);
             }
             catch (Exception ex)
             {
-                Debug.LogError($"发送回调异常: {ex.Message}");
+                Debug.LogError($"发送失败: {ex.Message}");
             }
         }
         
+        //发送回调
+        private void onSendCallback(IAsyncResult ar)
+        {
+            try { _socket.EndSend(ar); }
+            catch (Exception ex) { Debug.LogError($"发送回调异常: {ex.Message}"); }
+        }
+        
+        private byte[] stringToByte(string msg) => Encoding.UTF8.GetBytes(msg);
+        private string bytesToString(byte[] bytes) => Encoding.UTF8.GetString(bytes);
+
     }
 }

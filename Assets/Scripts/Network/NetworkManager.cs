@@ -6,6 +6,9 @@
 * └──────────────────────────────────┘
 */
 
+using System;
+using GameProtocol;
+using Google.Protobuf;
 using Network.Clients;
 using UnityEngine;
 
@@ -37,7 +40,7 @@ namespace Network
         {
             _client.OnConnected += onConnected;
             _client.OnDisconnected += onDisconnected;
-            _client.OnMessageReceived += onMessageReceived;
+            _client.OnMessageReceived += onHandleMessage;
         }
 
         //连接服务器
@@ -66,6 +69,27 @@ namespace Network
                 Debug.LogError("发送失败,未连接到服务器");
             }
         }
+
+        //发送Protobuf消息
+        public void Send(MainPack pack)
+        {
+            byte[] data = pack.ToByteArray();//Protobuf序列化
+            _client.Send(data);
+        }
+
+        //接收消息并解析
+        private void onHandleMessage(byte[] data)
+        {
+            try
+            {
+                MainPack pack = MainPack.Parser.ParseFrom(data);//Protobuf反序列化
+                Debug.Log($"解析到消息: Request={pack.RequestCode}, Action={pack.ActionCode}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("解析Protobuf失败" + ex.Message);
+            }
+        }
         
         private void onConnected()
         {
@@ -76,12 +100,6 @@ namespace Network
         {
             Debug.Log("onDisconnected");
         }
-        
-        private void onMessageReceived(string msg)
-        {
-            Debug.Log("onMessageReceived: " + msg);
-        }
-        
         
     }
 }

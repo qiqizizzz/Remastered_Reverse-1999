@@ -6,6 +6,7 @@
 * └──────────────────────────────────┘
 */
 
+using GameProtocol;
 using MVC.View;
 using TMPro;
 using UnityEngine;
@@ -46,8 +47,17 @@ namespace Module.View
             //测试
             Debug.Log("点击了登陆按钮,尝试连接服务器...");
             
+            //构造Protobuf大包
+            MainPack pack = new MainPack();
+            pack.RequestCode = RequestCode.User;
+            pack.ActionCode = ActionCode.Login;
+            pack.LoginPack = new LoginPack()
+            {
+                Username = accountInput.text,
+                Password = passwordInput.text
+            };
             
-            GameApp.NetworkManager.Send($"Hello Server!My account is:{accountInput.text}");
+            GameApp.NetworkManager.Send(pack);
         }
     }
 }
