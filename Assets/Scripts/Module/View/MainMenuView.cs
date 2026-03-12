@@ -38,7 +38,16 @@ namespace Module.View
 
         protected override void OnStart()
         {
+            loginBtn.onClick.AddListener(onLoginBtnClick);
+        }
+
+        private void onLoginBtnClick()
+        {
+            //测试
+            Debug.Log("点击了登陆按钮,尝试连接服务器...");
             
+            
+            GameApp.NetworkManager.Send($"Hello Server!My account is:{accountInput.text}");
         }
     }
 }

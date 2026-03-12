@@ -32,6 +32,8 @@ namespace DefaultNamespace
             RegisterConfigs();
             RegisterModules();
             InitModules();
+
+            ConnectToServer(); //连接服务器
         }
 
         private void Update()
@@ -40,6 +42,12 @@ namespace DefaultNamespace
             GameApp.Instance.Update(dt);
         }
 
+        //连接服务器
+        private void ConnectToServer()
+        {
+            GameApp.NetworkManager.Connect();
+        }
+        
         // 注册控制器
         private void RegisterModules()
         {

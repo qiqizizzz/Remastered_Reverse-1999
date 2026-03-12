@@ -23,6 +23,63 @@ namespace Network
         public NetworkManager()
         {
             _client = new Client();
+            
+            BindEvents();//绑定事件
+        }
+
+        public void OnUpdate()
+        {
+            _client.Update();
+        }
+
+        //绑定事件
+        private void BindEvents()
+        {
+            _client.OnConnected += onConnected;
+            _client.OnDisconnected += onDisconnected;
+            _client.OnMessageReceived += onMessageReceived;
+        }
+
+        //连接服务器
+        public void Connect()
+        {
+            if (!_client.IsConnected)
+            {
+                Debug.Log($"正在尝试连接到{serverIP}:{serverPort}...");
+                _client.Connect(serverIP,serverPort);
+            }
+            else
+            {
+                Debug.Log("当前已连接到服务器，无需重复连接");
+            }
+        }
+        
+        //发送消息
+        public void Send(string msg)
+        {
+            if (_client.IsConnected)
+            {
+                _client.Send(msg);
+            }
+            else
+            {
+                Debug.LogError("发送失败,未连接到服务器");
+            }
+        }
+        
+        private void onConnected()
+        {
+            Debug.Log("onConnected");
+        }
+
+        private void onDisconnected()
+        {
+            Debug.Log("onDisconnected");
+        }
+        
+        private void onMessageReceived(string msg)
+        {
+            Debug.Log("onMessageReceived: " + msg);
         }
         
         
