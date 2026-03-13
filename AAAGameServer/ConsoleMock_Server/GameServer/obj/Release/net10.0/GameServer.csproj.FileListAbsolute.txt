@@ -1,0 +1,17 @@
+D:\CCodes\unity\ConsoleMock_Server\GameServer\bin\Release\net10.0\GameServer.exe
+D:\CCodes\unity\ConsoleMock_Server\GameServer\bin\Release\net10.0\GameServer.deps.json
+D:\CCodes\unity\ConsoleMock_Server\GameServer\bin\Release\net10.0\GameServer.runtimeconfig.json
+D:\CCodes\unity\ConsoleMock_Server\GameServer\bin\Release\net10.0\GameServer.dll
+D:\CCodes\unity\ConsoleMock_Server\GameServer\bin\Release\net10.0\GameServer.pdb
+D:\CCodes\unity\ConsoleMock_Server\GameServer\bin\Release\net10.0\Google.Protobuf.dll
+D:\CCodes\unity\ConsoleMock_Server\GameServer\obj\Release\net10.0\GameServer.csproj.AssemblyReference.cache
+D:\CCodes\unity\ConsoleMock_Server\GameServer\obj\Release\net10.0\GameServer.GeneratedMSBuildEditorConfig.editorconfig
+D:\CCodes\unity\ConsoleMock_Server\GameServer\obj\Release\net10.0\GameServer.AssemblyInfoInputs.cache
+D:\CCodes\unity\ConsoleMock_Server\GameServer\obj\Release\net10.0\GameServer.AssemblyInfo.cs
+D:\CCodes\unity\ConsoleMock_Server\GameServer\obj\Release\net10.0\GameServer.csproj.CoreCompileInputs.cache
+D:\CCodes\unity\ConsoleMock_Server\GameServer\obj\Release\net10.0\GameServer.csproj.Up2Date
+D:\CCodes\unity\ConsoleMock_Server\GameServer\obj\Release\net10.0\GameServer.dll
+D:\CCodes\unity\ConsoleMock_Server\GameServer\obj\Release\net10.0\refint\GameServer.dll
+D:\CCodes\unity\ConsoleMock_Server\GameServer\obj\Release\net10.0\GameServer.pdb
+D:\CCodes\unity\ConsoleMock_Server\GameServer\obj\Release\net10.0\GameServer.genruntimeconfig.cache
+D:\CCodes\unity\ConsoleMock_Server\GameServer\obj\Release\net10.0\ref\GameServer.dll

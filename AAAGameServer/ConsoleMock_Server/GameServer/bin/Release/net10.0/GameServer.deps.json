@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "GameServer/1.0.0": {
+        "dependencies": {
+          "Google.Protobuf": "3.11.1.0"
+        },
+        "runtime": {
+          "GameServer.dll": {}
+        }
+      },
+      "Google.Protobuf/3.11.1.0": {
+        "runtime": {
+          "Google.Protobuf.dll": {
+            "assemblyVersion": "3.11.1.0",
+            "fileVersion": "3.11.1.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GameServer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Google.Protobuf/3.11.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

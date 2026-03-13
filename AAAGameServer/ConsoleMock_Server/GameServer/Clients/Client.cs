@@ -1,5 +1,8 @@
-﻿using System;
+﻿using GameProtocol;
+using Google.Protobuf;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Text;
 
@@ -37,7 +40,7 @@ namespace GameServer
             {
                 if (_socket == null || !_socket.Connected) return;
 
-                _socket.BeginReceive(_receiveBuffer,0,_receiveBuffer.Length,SocketFlags.None, onBeginReceiveCallback, null);
+                _socket.BeginReceive(_receiveBuffer,0,_receiveBuffer.Length,SocketFlags.None, onReceiveCallback, null);
             }
             catch (Exception ex)
             {
@@ -46,7 +49,7 @@ namespace GameServer
             }
         }
 
-        private void onBeginReceiveCallback(IAsyncResult ar)
+        private void onReceiveCallback(IAsyncResult ar)
         {
             try
             {
@@ -166,11 +169,7 @@ namespace GameServer
         {
             try
             {
-                //这里假设是UTF8字符串
-                string content = Encoding.UTF8.GetString(message);
-                Console.WriteLine($"[{_clientId}] 收到消息: {content}");
-
-                HandleGameMessage(content);
+                HandleGameMessage(message);
             }
             catch (Exception ex)
             {
@@ -178,31 +177,46 @@ namespace GameServer
             }
         }
 
-        private void HandleGameMessage(string content)
+        //根据游戏协议处理消息
+        private void HandleGameMessage(byte[] message)
         {
-            //根据Json协议、Protobuf协议分发
+            //解析客户端发来的包
+            MainPack pack = MainPack.Parser.ParseFrom(message);
+            Console.Write($"收到客户端请求:{pack.RequestCode} - {pack.ActionCode}");
+
+            //根据Protobuf协议分发
+            
+            //登陆
+            if (pack.ActionCode == ActionCode.Login)
+            {
+                Console.WriteLine($"用户登录尝试:{pack.LoginPack.Username}");
+                Console.WriteLine($"密码是: {pack.LoginPack.Password}");
+
+                //回包给客户端
+                MainPack resPack = new MainPack();
+                resPack.ReturnCode = ReturnCode.Succeed;
+                Send(resPack.ToByteArray());
+            }
         }
 
         //发送数据给客户端
-        private void Send(byte[] data)
+        public void Send(byte[] data)
         {
             try
             {
                 if (_socket == null || !_socket.Connected) return;
 
-                //添加长度头
-                byte[] lengthBytes = BitConverter.GetBytes(data.Length);
-                byte[] sendData = new byte[lengthBytes.Length + data.Length];
+                byte[] header = BitConverter.GetBytes(data.Length);
+                byte[] fullPacket = new byte[header.Length + data.Length];
 
-                Array.Copy(lengthBytes, 0, sendData, 0, 4);
-                Array.Copy(data, 0, sendData, 4, data.Length);
+                Array.Copy(header, 0, fullPacket, 0, 4);
+                Array.Copy(data, 0, fullPacket, 4, data.Length);
 
-                //异步发送
-                _socket.BeginSend(sendData, 0, sendData.Length, SocketFlags.None, onSendCallback, null);
+                _socket.BeginSend(fullPacket, 0, fullPacket.Length, SocketFlags.None, onSendCallback, null);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[{_clientId}] 发送失败: {ex.Message}");
+                Console.WriteLine($"[{_clientId}] 发送字节失败: {ex.Message}");
             }
         }
 
