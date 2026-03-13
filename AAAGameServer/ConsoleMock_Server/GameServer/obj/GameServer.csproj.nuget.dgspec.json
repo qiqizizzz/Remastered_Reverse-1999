@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\CCodes\\unity\\ConsoleMock_Server\\GameServer\\GameServer.csproj": {}
+    "D:\\CCodes\\unity\\Remastered_Reverse-1999\\AAAGameServer\\ConsoleMock_Server\\GameServer\\GameServer.csproj": {}
   },
   "projects": {
-    "D:\\CCodes\\unity\\ConsoleMock_Server\\GameServer\\GameServer.csproj": {
+    "D:\\CCodes\\unity\\Remastered_Reverse-1999\\AAAGameServer\\ConsoleMock_Server\\GameServer\\GameServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\CCodes\\unity\\ConsoleMock_Server\\GameServer\\GameServer.csproj",
+        "projectUniqueName": "D:\\CCodes\\unity\\Remastered_Reverse-1999\\AAAGameServer\\ConsoleMock_Server\\GameServer\\GameServer.csproj",
         "projectName": "GameServer",
-        "projectPath": "D:\\CCodes\\unity\\ConsoleMock_Server\\GameServer\\GameServer.csproj",
+        "projectPath": "D:\\CCodes\\unity\\Remastered_Reverse-1999\\AAAGameServer\\ConsoleMock_Server\\GameServer\\GameServer.csproj",
         "packagesPath": "C:\\Users\\wuqian\\.nuget\\packages\\",
-        "outputPath": "D:\\CCodes\\unity\\ConsoleMock_Server\\GameServer\\obj\\",
+        "outputPath": "D:\\CCodes\\unity\\Remastered_Reverse-1999\\AAAGameServer\\ConsoleMock_Server\\GameServer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\有用的\\NuGetPackages"
