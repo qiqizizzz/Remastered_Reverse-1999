@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace Network.Clients
 {
-    public class Client
+    public class NetworkClient
     {
         private Socket _socket;
         private string _ip;
@@ -135,7 +135,7 @@ namespace Network.Clients
         {
             try
             {
-                if (IsConnected) return;
+                if (!IsConnected) return;
 
                 int receiveLength = _socket.EndReceive(ar);
 

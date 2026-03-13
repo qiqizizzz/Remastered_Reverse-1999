@@ -10,46 +10,43 @@ using System;
 using GameProtocol;
 using Google.Protobuf;
 using Network.Clients;
+using Network.Config;
 using UnityEngine;
 
 namespace Network
 {
     public class NetworkManager
     {
-        [Header("网络配置")] 
-        public string serverIP = "127.0.0.1";
-        public int serverPort = 8888;
-        
-        private Client _client;
-        private string _log = "";
+        private NetworkClient _networkClient;
+        private NetworkConfig _config;
 
         public NetworkManager()
         {
-            _client = new Client();
+            _networkClient = new NetworkClient();
             
             BindEvents();//绑定事件
         }
 
         public void OnUpdate()
         {
-            _client.Update();
+            _networkClient.Update();
         }
 
         //绑定事件
         private void BindEvents()
         {
-            _client.OnConnected += onConnected;
-            _client.OnDisconnected += onDisconnected;
-            _client.OnMessageReceived += onHandleMessage;
+            _networkClient.OnConnected += onConnected;
+            _networkClient.OnDisconnected += onDisconnected;
+            _networkClient.OnMessageReceived += onHandleMessage;
         }
 
         //连接服务器
         public void Connect()
         {
-            if (!_client.IsConnected)
+            if (!_networkClient.IsConnected)
             {
-                Debug.Log($"正在尝试连接到{serverIP}:{serverPort}...");
-                _client.Connect(serverIP,serverPort);
+                //Debug.Log($"正在尝试连接到{serverIP}:{serverPort}...");
+                //_networkClient.Connect(serverIP,serverPort);
             }
             else
             {
@@ -60,9 +57,9 @@ namespace Network
         //发送消息
         public void Send(string msg)
         {
-            if (_client.IsConnected)
+            if (_networkClient.IsConnected)
             {
-                _client.Send(msg);
+                _networkClient.Send(msg);
             }
             else
             {
@@ -74,7 +71,7 @@ namespace Network
         public void Send(MainPack pack)
         {
             byte[] data = pack.ToByteArray();//Protobuf序列化
-            _client.Send(data);
+            _networkClient.Send(data);
         }
 
         //接收消息并解析
