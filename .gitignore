@@ -97,3 +97,22 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# --- Custom Server Project Ignores ---
+
+# 递归忽略所有子目录下的 bin 和 obj 文件夹 (不管在多少层目录深处)
+**/[Bb]in/
+**/[Oo]bj/
+
+# 忽略 Visual Studio 自动生成的缓存
+.vs/
+*.user
+*.suo
+*.shell
+
+# 忽略发布文件夹
+**/publish/
+
+# 忽略 NuGet 相关的临时文件
+**/packages/
+!**/packages/repository.config

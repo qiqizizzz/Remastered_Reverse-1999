@@ -8,7 +8,7 @@
 
 namespace Network.Config
 {
-    public class NetworkConfig
+    public static class NetworkConfig
     {
         public const string DefaultIP = "127.0.0.1";
         public const int DefaultPort = 8888;
