@@ -44,6 +44,11 @@ namespace MVC.View
             OnUpdate();
         }
 
+        protected virtual void OnDestroy()
+        {
+            
+        }
+
         protected virtual void OnAwake()
         {
             

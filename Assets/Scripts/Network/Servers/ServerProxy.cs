@@ -7,6 +7,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using GameProtocol;
 using Google.Protobuf;
 using Network.Clients;
@@ -18,11 +19,15 @@ namespace Network.Servers
     {
         private NetworkClient _client;
         
+        //消息分发字典
+        private Dictionary<ActionCode, Action<MainPack>> _messageHandlers;
+        
         public bool IsConnected => _client != null && _client.IsConnected;
 
         public ServerProxy()
         {
             _client = new NetworkClient();
+            _messageHandlers = new Dictionary<ActionCode, Action<MainPack>>();
 
             BindEvents();
         }
@@ -98,11 +103,41 @@ namespace Network.Servers
             {
                 MainPack pack = MainPack.Parser.ParseFrom(data);//Protobuf反序列化
                 Debug.Log($"[ServerProxy] 解析到消息: Request={pack.RequestCode}, Action={pack.ActionCode}");
+                
+                //分发消息
+                if (_messageHandlers.TryGetValue(pack.ActionCode, out var handler))
+                {
+                    handler?.Invoke(pack);
+                }
+                else
+                {
+                    Debug.Log($"[ServerProxy] 未找到消息处理器: ActionCode={pack.ActionCode}");
+                }
             }
             catch (Exception ex)
             {
                 Debug.LogError("解析Protobuf失败" + ex.Message);
             }
+        }
+        
+        //添加消息处理器
+        public void AddMessageHandler(ActionCode actionCode, Action<MainPack> handler)
+        {
+            if (!_messageHandlers.ContainsKey(actionCode))
+            {
+                _messageHandlers.Add(actionCode, handler);
+            }
+            else
+            {
+                _messageHandlers[actionCode] += handler;
+            }
+        }
+        
+        //移除消息处理器
+        public void RemoveMessageHandler(ActionCode actionCode, Action<MainPack> handler)
+        {
+            if (_messageHandlers.ContainsKey(actionCode))
+                _messageHandlers[actionCode] -= handler;
         }
     }
 }

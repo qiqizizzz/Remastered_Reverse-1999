@@ -195,6 +195,8 @@ namespace GameServer
                 //回包给客户端
                 MainPack resPack = new MainPack();
                 resPack.ReturnCode = ReturnCode.Succeed;
+                resPack.RequestCode = RequestCode.User;
+                resPack.ActionCode = ActionCode.Login;
                 Send(resPack.ToByteArray());
             }
         }

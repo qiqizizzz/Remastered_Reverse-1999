@@ -47,5 +47,17 @@ namespace Network
         {
             _server.Send(pack);
         }
+        
+        //注册事件
+        public void AddMessageHandler(ActionCode actionCode, System.Action<MainPack> handler)
+        {
+            _server.AddMessageHandler(actionCode, handler);
+        }
+        
+        //移除事件
+        public void RemoveMessageHandler(ActionCode actionCode, System.Action<MainPack> handler)
+        {
+            _server.RemoveMessageHandler(actionCode, handler);
+        }
     }
 }

@@ -40,6 +40,14 @@ namespace Module.View
         protected override void OnStart()
         {
             loginBtn.onClick.AddListener(onLoginBtnClick);
+            
+            //注册回调
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.Login, OnLoginCallback);
+        }
+
+        protected override void OnDestroy()
+        {
+            GameApp.NetworkManager.RemoveMessageHandler(ActionCode.Login, OnLoginCallback);
         }
 
         private void onLoginBtnClick()
@@ -58,6 +66,21 @@ namespace Module.View
             };
             
             GameApp.NetworkManager.Send(pack);
+        }
+
+        private void OnLoginCallback(MainPack pack)
+        {
+            if (pack.ReturnCode == ReturnCode.Succeed)
+            {
+                Debug.Log($"登陆成功，欢迎 {pack.LoginPack?.Username??accountInput.text}!");
+                
+                //TODO：隐藏登陆面板
+            }
+            else
+            {
+                Debug.LogError($"登陆失败，错误码: {pack.StrMsg}");
+                //TODO：显示错误提示
+            }
         }
     }
 }
