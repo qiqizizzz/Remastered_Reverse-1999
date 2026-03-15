@@ -60,7 +60,7 @@ namespace GameServer
             {
                 Socket clientSocket = _socket.EndAccept(ar);
                 string clientId = $"Client_{++_clientIdCounter}_{Guid.NewGuid().ToString("N").Substring(0, 6)}";
-                Console.WriteLine($"{clientId}新客户端连接: {clientSocket.RemoteEndPoint}");
+                Console.WriteLine($"[{clientId}] 新客户端连接: {clientSocket.RemoteEndPoint}");
 
                 var client = new Client(clientSocket, clientId);
 
