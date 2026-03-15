@@ -1,4 +1,5 @@
 ﻿using GameProtocol;
+using GameServer.DataBase;
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
@@ -186,18 +187,14 @@ namespace GameServer
 
             //根据Protobuf协议分发
             
-            //登陆
-            if (pack.ActionCode == ActionCode.Login)
+            //注册
+            if (pack.ActionCode == ActionCode.Logon)
             {
-                Console.WriteLine($"用户登录尝试:{pack.LoginPack.Username}");
-                Console.WriteLine($"密码是: {pack.LoginPack.Password}");
-
-                //回包给客户端
-                MainPack resPack = new MainPack();
-                resPack.ReturnCode = ReturnCode.Succeed;
-                resPack.RequestCode = RequestCode.User;
-                resPack.ActionCode = ActionCode.Login;
-                Send(resPack.ToByteArray());
+                registerReturnPack(pack);
+            }
+            else if(pack.ActionCode == ActionCode.Login) //登录
+            {
+                loginReturnPack(pack);
             }
             else if(pack.ActionCode == ActionCode.Heartbeat)
             {
@@ -206,6 +203,72 @@ namespace GameServer
                 Send(resPack.ToByteArray());
                 return;
             }
+        }
+
+        private void registerReturnPack(MainPack pack)
+        {
+            string username = pack.LoginPack.Username;
+            string password = pack.LoginPack.Password;
+            Console.WriteLine($"注册请求 - 用户名:{username} 密码:{password}");
+
+            bool isSuccess = DBManager.Register(username, password);
+
+            //回包给客户端
+            MainPack resPack = new MainPack();
+            resPack.RequestCode = RequestCode.User;
+            resPack.ActionCode = ActionCode.Logon;
+
+            if (isSuccess)
+            {
+                resPack.ReturnCode = ReturnCode.Succeed;
+                resPack.StrMsg = "注册成功!";
+                Console.WriteLine($"{_clientId} 注册成功");
+            }
+            else
+            { 
+                resPack.ReturnCode = ReturnCode.Failed;
+                resPack.StrMsg = "注册失败!用户名已存在";
+                Console.WriteLine($"{_clientId} 注册失败 - 用户名已存在");
+            }
+
+            Send(resPack.ToByteArray());
+        }
+
+        private void loginReturnPack(MainPack pack)
+        {
+            string username = pack.LoginPack.Username;
+            string password = pack.LoginPack.Password;
+            Console.WriteLine($"[{_clientId}] 尝试登录: 账号={username}");
+
+            // 调用 DBManager 的登录方法
+            int loginResult = DBManager.Login(username, password);
+
+            MainPack resPack = new MainPack();
+            resPack.RequestCode = RequestCode.User;
+            resPack.ActionCode = ActionCode.Login;
+
+            if (loginResult == 1)
+            {
+                resPack.ReturnCode = ReturnCode.Succeed;
+                resPack.StrMsg = "登录成功！";
+                Console.WriteLine($"[{_clientId}] 登录成功");
+
+                DBManager.UpdateLastLoginTime(username);
+            }
+            else if (loginResult == -2)
+            {
+                resPack.ReturnCode = ReturnCode.Failed;
+                resPack.StrMsg = "登录失败，账号被封禁！";
+                Console.WriteLine($"[{_clientId}] 登录失败: 账号被封禁");
+            }
+            else
+            {
+                resPack.ReturnCode = ReturnCode.Failed;
+                resPack.StrMsg = "登录失败，用户名或密码错误！";
+                Console.WriteLine($"[{_clientId}] 登录失败: 密码错误或用户不存在");
+            }
+
+            Send(resPack.ToByteArray());
         }
 
 

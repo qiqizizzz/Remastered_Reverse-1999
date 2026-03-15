@@ -68,7 +68,7 @@ namespace GameServer.DataBase
         }
 
         //更新最后登录时间
-        public void UpdateLastLoginTime(string username)
+        public static void UpdateLastLoginTime(string username)
         {
             using(var db = new GameDbContext())
             {
