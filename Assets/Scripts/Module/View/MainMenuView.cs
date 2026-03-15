@@ -6,7 +6,11 @@
 * └──────────────────────────────────┘
 */
 
+using Common.Defines;
 using GameProtocol;
+using Module.Loading;
+using MVC;
+using MVC.Extensions;
 using MVC.View;
 using TMPro;
 using UnityEngine;
@@ -56,6 +60,7 @@ namespace Module.View
         {
             loginBtn.onClick.AddListener(onLoginBtnClick);
             registerBtn.onClick.AddListener(onRegisterBtnClick);
+            startGameBtn.onClick.AddListener(onStartGameBtnClick);
             
             //注册回调
             GameApp.NetworkManager.AddMessageHandler(ActionCode.Login, onLoginCallback);
@@ -134,7 +139,12 @@ namespace Module.View
                 //TODO：显示错误提示
             }
         }
-            
-        
+
+        private void onStartGameBtnClick()
+        {
+            GameApp.ViewManager.Close(ViewType.MainMenuView);
+            ViewExtensions.LoadScene(this, SceneDefines.GameView);
+            Close();
+        }
     }
 }
