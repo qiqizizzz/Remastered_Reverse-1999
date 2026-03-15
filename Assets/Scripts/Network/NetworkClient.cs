@@ -108,7 +108,7 @@ namespace Network
         }
 
         //断开连接
-        private void DisConnect()
+        public void DisConnect()
         {
             if (_socket == null) return;
 

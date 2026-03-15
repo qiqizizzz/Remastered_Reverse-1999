@@ -199,7 +199,15 @@ namespace GameServer
                 resPack.ActionCode = ActionCode.Login;
                 Send(resPack.ToByteArray());
             }
+            else if(pack.ActionCode == ActionCode.Heartbeat)
+            {
+                MainPack resPack = new MainPack();
+                resPack.ActionCode = ActionCode.Heartbeat;
+                Send(resPack.ToByteArray());
+                return;
+            }
         }
+
 
         //发送数据给客户端
         public void Send(byte[] data)

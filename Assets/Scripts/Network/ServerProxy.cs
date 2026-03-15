@@ -17,9 +17,13 @@ namespace Network
     public class ServerProxy
     {
         private NetworkClient _client;
-        
-        //消息分发字典
-        private Dictionary<ActionCode, Action<MainPack>> _messageHandlers;
+        private Dictionary<ActionCode, Action<MainPack>> _messageHandlers;//消息分发字典
+
+        [Header("心跳相关参数")] 
+        private float _pingInterval = 3f;//心跳间隔
+        private float _timeoutLimit = 10f;//超时限制
+        private float _lastPingTime = 0f;//上次发送心跳的时间
+        private float _lastReceiveTime = 0f;//上次收到消息的时间
         
         public bool IsConnected => _client != null && _client.IsConnected;
 
@@ -34,6 +38,41 @@ namespace Network
         public void Update()
         {
             _client.Update();
+            
+            //心跳检测
+            if (IsConnected)
+                CheckHeartbeat();
+        }
+
+        //心跳检测
+        private void CheckHeartbeat()
+        {
+            float currentTime = Time.realtimeSinceStartup;
+
+            //若超过心跳间隔，发送心跳检测
+            if (currentTime - _lastPingTime > _pingInterval)
+            {
+                SendPing();
+                _lastPingTime = currentTime;
+            }
+
+            //若超过超时限制，认为连接已断开
+            if (currentTime - _lastReceiveTime > _timeoutLimit)
+            {
+                Debug.LogError("[ServerProxy] 心跳超时，连接已断开");
+                onError("网络连接超时");
+                
+                //主动断开连接
+                _client.DisConnect();
+            }
+        }
+
+        private void SendPing()
+        {
+            MainPack pack = new MainPack();
+            pack.RequestCode = RequestCode.User;
+            pack.ActionCode = ActionCode.Heartbeat;
+            Send(pack);
         }
         
         //绑定事件
@@ -89,6 +128,8 @@ namespace Network
         private void onConnected()
         {
             Debug.Log("连接成功");
+            _lastPingTime = Time.realtimeSinceStartup;
+            _lastReceiveTime = Time.realtimeSinceStartup;
         }
         
         private void onConnectFailed(string msg)
@@ -111,7 +152,12 @@ namespace Network
         {
             try
             {
+                _lastReceiveTime = Time.realtimeSinceStartup;
                 MainPack pack = MainPack.Parser.ParseFrom(data);//Protobuf反序列化
+                
+                //过滤心跳消息，不分发
+                if(pack.ActionCode == ActionCode.Heartbeat) return;
+                
                 Debug.Log($"[ServerProxy] 解析到消息: Request={pack.RequestCode}, Action={pack.ActionCode}");
                 
                 //分发消息

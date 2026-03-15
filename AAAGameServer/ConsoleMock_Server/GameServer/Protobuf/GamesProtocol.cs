@@ -31,10 +31,10 @@ namespace GameProtocol {
             "dHVybkNvZGUSDgoGc3RyTXNnGAQgASgJEiwKCWxvZ2luUGFjaxgFIAEoCzIX",
             "LkdhbWVQcm90b2NvbC5Mb2dpblBhY2tIAEIGCgRkYXRhIi8KCUxvZ2luUGFj",
             "axIQCgh1c2VybmFtZRgBIAEoCRIQCghwYXNzd29yZBgCIAEoCSooCgtSZXF1",
-            "ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggKBFVzZXIQASoyCgpBY3Rpb25D",
-            "b2RlEg4KCkFjdGlvbk5vbmUQABIJCgVMb2dvbhABEgkKBUxvZ2luEAIqNQoK",
-            "UmV0dXJuQ29kZRIOCgpSZXR1cm5Ob25lEAASCwoHU3VjY2VlZBABEgoKBkZh",
-            "aWxlZBACYgZwcm90bzM="));
+            "ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggKBFVzZXIQASpBCgpBY3Rpb25D",
+            "b2RlEg4KCkFjdGlvbk5vbmUQABIJCgVMb2dvbhABEgkKBUxvZ2luEAISDQoJ",
+            "SGVhcnRiZWF0EAMqNQoKUmV0dXJuQ29kZRIOCgpSZXR1cm5Ob25lEAASCwoH",
+            "U3VjY2VlZBABEgoKBkZhaWxlZBACYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProtocol.RequestCode), typeof(global::GameProtocol.ActionCode), typeof(global::GameProtocol.ReturnCode), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -64,6 +64,10 @@ namespace GameProtocol {
     ///登录
     /// </summary>
     [pbr::OriginalName("Login")] Login = 2,
+    /// <summary>
+    ///心跳包
+    /// </summary>
+    [pbr::OriginalName("Heartbeat")] Heartbeat = 3,
   }
 
   public enum ReturnCode {
