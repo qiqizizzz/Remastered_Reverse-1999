@@ -10,23 +10,42 @@ using System;
 using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using UnityEngine;
 
-namespace Network.Clients
+namespace Network
 {
+    //网络事件类型
+    public enum NetEventType
+    {
+        Connected,
+        ConnectFailed,
+        Disconnected,
+        Error, 
+        Data
+    }
+
+    //网络事件结构
+    public struct NetEvent
+    {
+        public NetEventType Type;
+        public byte[] Data;
+        public string Message; //可选的文本消息
+    }
+    
     public class NetworkClient
     {
         private Socket _socket;
         private string _ip;
         private int _port;
 
-        private ConcurrentQueue<byte[]> _receiveQueue = new ConcurrentQueue<byte[]>();//线程安全的消息队列
+        private ConcurrentQueue<NetEvent> _receiveQueue = new ConcurrentQueue<NetEvent>();//线程安全的消息队列
         public bool IsConnected => _socket != null && _socket.Connected;
         
         //回调事件
         public event Action OnConnected;
-        public event Action OnDisconnected;
+        public event Action<string> OnConnectFailed;//连接失败(IP错误、服务器没开等)
+        public event Action OnDisconnected;//断开连接
+        public event Action<string> OnError;//发生异常(网络错误,Socket异常等)
         public event Action<byte[]> OnMessageReceived; //已经处理的消息直接通知
         
         [Header("粘包处理相关")]
@@ -38,25 +57,30 @@ namespace Network.Clients
         private int _messageLength = 0;//当前消息预期长度
         private bool _isHeaderReceived = false;//是否已接收消息头
         
-        private const string SYS_CONNECTED = "[SYS]CONNECTED";
-        private const string SYS_DISCONNECTED = "[SYS]DISCONNECTED";
-        
         // 主线程调用：处理消息队列
         public void Update()
         {
-            while (_receiveQueue.TryDequeue(out byte[] data))
+            while (_receiveQueue.TryDequeue(out NetEvent netEvent))
             {
-                if (data == null || data.Length == 0) continue;
-                
-                // 尝试将字节转回字符串
-                string msgStr = bytesToString(data);
-                
-                if (msgStr == SYS_CONNECTED)
-                    OnConnected?.Invoke();
-                else if (msgStr == SYS_DISCONNECTED)
-                    OnDisconnected?.Invoke();
-                else
-                    OnMessageReceived?.Invoke(data);//Protobuf字节流
+                switch (netEvent.Type)
+                {
+                    case NetEventType.Connected:
+                        OnConnected?.Invoke();
+                        break;
+                    case NetEventType.ConnectFailed:
+                        OnConnectFailed?.Invoke(netEvent.Message);
+                        break;
+                    case NetEventType.Disconnected:
+                        OnDisconnected?.Invoke();
+                        break;
+                    case NetEventType.Error:
+                        OnError?.Invoke(netEvent.Message);
+                        break;
+                    case NetEventType.Data:
+                        if(netEvent.Data != null && netEvent.Data.Length > 0)
+                            OnMessageReceived?.Invoke(netEvent.Data);//Protobuf字节流
+                        break;
+                }
             }
         }
         
@@ -73,7 +97,7 @@ namespace Network.Clients
             }
             catch (Exception e)
             {
-                Debug.LogError($"连接失败: {e.Message}");
+                _receiveQueue.Enqueue(setNetEvent(NetEventType.ConnectFailed, null, $"连接失败: {e.Message}"));
             }
         }
         
@@ -87,11 +111,11 @@ namespace Network.Clients
                 _socket.Shutdown(SocketShutdown.Both);//Both:同时关闭发送和接收
                 _socket.Close();
                 _socket = null;
-                Debug.Log("已断开连接");
+                _receiveQueue.Enqueue(setNetEvent(NetEventType.Disconnected));
             }
             catch (Exception ex)
             {
-                Debug.LogError($"断开异常:{ex.Message}");
+                _receiveQueue.Enqueue(setNetEvent(NetEventType.Error, null, $"断开异常:{ex.Message}"));
             }
         }
         
@@ -100,18 +124,16 @@ namespace Network.Clients
             try
             {
                 _socket.EndConnect(ar);
-                Debug.Log($"已连接到服务器 {_ip}:{_port}");
                 
                 // 通知主线程已连接
-                _receiveQueue.Enqueue(stringToByte(SYS_CONNECTED));
+                _receiveQueue.Enqueue(setNetEvent(NetEventType.Connected));
                 
                 // 开始接收
                 BeginReceive();
             }
             catch (Exception e)
             {
-                Debug.LogError($"连接回调异常: {e.Message}");
-                _receiveQueue.Enqueue(stringToByte(SYS_DISCONNECTED));
+                _receiveQueue.Enqueue(setNetEvent(NetEventType.ConnectFailed, null, e.Message));
             }
         }
         
@@ -126,7 +148,7 @@ namespace Network.Clients
             }
             catch (Exception ex)
             {
-                Debug.LogError($"开始接收失败:{ex.Message}");
+                _receiveQueue.Enqueue(setNetEvent(NetEventType.Error, null, $"接收数据异常: {ex.Message}"));
                 DisConnect();
             }
         }
@@ -141,8 +163,8 @@ namespace Network.Clients
 
                 if(receiveLength == 0)
                 {
-                    //客户端主动断开连接
-                    Debug.Log(SYS_DISCONNECTED);
+                    //服务器主动断开连接
+                    _receiveQueue.Enqueue(setNetEvent(NetEventType.Disconnected));
                     DisConnect();
                     return;
                 }
@@ -153,8 +175,7 @@ namespace Network.Clients
             }
             catch (Exception ex)
             {
-                Debug.LogError($"接收异常:{ex.Message}");
-                _receiveQueue.Enqueue(stringToByte(SYS_DISCONNECTED));
+                _receiveQueue.Enqueue(setNetEvent(NetEventType.Error, null, $"接收数据回调异常:{ex.Message}"));
                 DisConnect();
             }
         }
@@ -188,7 +209,7 @@ namespace Network.Clients
                         //检查消息长度合法性
                         if (_messageLength <= 0 || _messageLength > _messageBuffer.Length)
                         {
-                            Debug.LogError($"非法消息长度:{_messageLength}");
+                            _receiveQueue.Enqueue(setNetEvent(NetEventType.Error, null, $"非法消息长度:{_messageLength}"));
                             DisConnect();
                             return;
                         }
@@ -211,7 +232,7 @@ namespace Network.Clients
                         //拷贝字节数组存入队列
                         byte[] messagePayload = new byte[_messageLength];
                         Array.Copy(_messageBuffer, 0, messagePayload, 0, _messageLength);
-                        _receiveQueue.Enqueue(messagePayload);
+                        _receiveQueue.Enqueue(setNetEvent(NetEventType.Data, messagePayload));
                         
                         //重置状态,准备接收下一条消息
                         _messageOffset = 0;
@@ -244,7 +265,7 @@ namespace Network.Clients
             }
             catch (Exception ex)
             {
-                Debug.LogError($"发送失败: {ex.Message}");
+                _receiveQueue.Enqueue(setNetEvent(NetEventType.Error, null, $"向服务器发送消息失败:{ex.Message}"));
             }
         }
         
@@ -264,7 +285,7 @@ namespace Network.Clients
             }
             catch (Exception ex)
             {
-                Debug.LogError($"发送失败: {ex.Message}");
+                _receiveQueue.Enqueue(setNetEvent(NetEventType.Error, null, $"向服务器发送消息失败:{ex.Message}"));
             }
         }
         
@@ -272,11 +293,13 @@ namespace Network.Clients
         private void onSendCallback(IAsyncResult ar)
         {
             try { _socket.EndSend(ar); }
-            catch (Exception ex) { Debug.LogError($"发送回调异常: {ex.Message}"); }
+            catch (Exception ex) { _receiveQueue.Enqueue(setNetEvent(NetEventType.Error, null, $"发送数据回调异常:{ex.Message}")); }
         }
         
-        private byte[] stringToByte(string msg) => Encoding.UTF8.GetBytes(msg);
-        private string bytesToString(byte[] bytes) => Encoding.UTF8.GetString(bytes);
-
+        //字符串转字节数组
+        private NetEvent setNetEvent(NetEventType type, byte[] data = null, string message = null)
+        {
+            return new NetEvent { Type = type, Data = data, Message = message };
+        }
     }
 }

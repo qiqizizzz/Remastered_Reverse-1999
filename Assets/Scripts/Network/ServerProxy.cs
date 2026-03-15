@@ -10,10 +10,9 @@ using System;
 using System.Collections.Generic;
 using GameProtocol;
 using Google.Protobuf;
-using Network.Clients;
 using UnityEngine;
 
-namespace Network.Servers
+namespace Network
 {
     public class ServerProxy
     {
@@ -41,7 +40,9 @@ namespace Network.Servers
         private void BindEvents()
         {
             _client.OnConnected += onConnected;
+            _client.OnConnectFailed += onConnectFailed;
             _client.OnDisconnected += onDisconnected;
+            _client.OnError += onError;
             _client.OnMessageReceived += onHandleMessage;
         }
         
@@ -50,7 +51,6 @@ namespace Network.Servers
         {
             if (!_client.IsConnected)
             {
-                Debug.Log($"正在尝试连接到{ip}:{port}...");
                 _client.Connect(ip, port);
             }
             else
@@ -88,12 +88,22 @@ namespace Network.Servers
         
         private void onConnected()
         {
-            Debug.Log("onConnected");
+            Debug.Log("连接成功");
+        }
+        
+        private void onConnectFailed(string msg)
+        {
+            Debug.LogError($"[ServerProxy] 连接服务器失败，原因: {msg}");
         }
 
         private void onDisconnected()
         {
-            Debug.Log("onDisconnected");
+            Debug.Log("断开连接");
+        }
+
+        private void onError(string msg)
+        {
+            Debug.LogError($"[ServerProxy] 网络发生异常掉线，原因: {msg}");
         }
         
         //接收消息并解析

@@ -8,7 +8,6 @@
 
 using GameProtocol;
 using Network.Config;
-using Network.Servers;
 using UnityEngine;
 
 namespace Network
