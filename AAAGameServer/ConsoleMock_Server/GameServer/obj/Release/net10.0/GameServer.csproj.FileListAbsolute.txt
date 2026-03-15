@@ -33,3 +33,17 @@ D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameSer
 D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\obj\Release\net10.0\GameServer.pdb
 D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\obj\Release\net10.0\GameServer.genruntimeconfig.cache
 D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\obj\Release\net10.0\ref\GameServer.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.EntityFrameworkCore.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.Extensions.Caching.Abstractions.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.Extensions.Caching.Memory.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.Extensions.DependencyInjection.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.Extensions.Logging.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.Extensions.Options.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Microsoft.Extensions.Primitives.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\MySqlConnector.dll
+D:\CCodes\unity\Remastered_Reverse-1999\AAAGameServer\ConsoleMock_Server\GameServer\bin\Release\net10.0\Pomelo.EntityFrameworkCore.MySql.dll

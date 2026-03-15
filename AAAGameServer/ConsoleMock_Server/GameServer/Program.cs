@@ -1,4 +1,6 @@
-﻿namespace GameServer
+﻿using GameServer.DataBase;
+
+namespace GameServer
 {
     public class Program
     {
@@ -10,6 +12,9 @@
             Server server = new Server("0.0.0.0", 8888);
 
             Console.WriteLine("服务器运行中，按任意键停止...");
+            DBManager.TestConnection();
+
+
             Console.ReadKey();
 
             // 清理（可选）
