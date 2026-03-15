@@ -18,42 +18,60 @@ namespace Module.View
     {
         private Button startGameBtn;
         
-        [Header("登陆界面UI")]
-        private TMP_InputField accountInput;
-        private TMP_InputField passwordInput;
-        private Button loginBtn;
+        [Header("注册界面")]
+        private TMP_InputField accountRegister;
+        private TMP_InputField passwordRegister;
         private Button registerBtn;
+        private Toggle acTogRegister;
+        
+        [Header("登录界面")]
+        private TMP_InputField accountLogin;
+        private TMP_InputField passwordLogin;
+        private Button loginBtn;
         private Button forgotPasswordBtn;
-        private Toggle acTog;
+        private Toggle acTogLogin;
+        
+        private GameObject loginView;
+        private GameObject registerView;
         
         protected override void OnAwake()
         {
             startGameBtn = Find<Button>("Btn_start");
-            accountInput = Find<TMP_InputField>("loginView/Txt_account");
-            passwordInput = Find<TMP_InputField>("loginView/Txt_password");
+            accountLogin = Find<TMP_InputField>("loginView/Txt_account");
+            passwordLogin = Find<TMP_InputField>("loginView/Txt_password");
             loginBtn = Find<Button>("loginView/btnsArea/Btn_login");
-            registerBtn = Find<Button>("loginView/btnsArea/Btn_register");
             forgotPasswordBtn = Find<Button>("loginView/btnsArea/Btn_forget");
-            acTog = Find<Toggle>("loginView/btnsArea/Tog_ac");
+            acTogLogin = Find<Toggle>("loginView/btnsArea/Tog_ac");
+            
+            accountRegister = Find<TMP_InputField>("registerView/Txt_account");
+            passwordRegister = Find<TMP_InputField>("registerView/Txt_password");
+            registerBtn = Find<Button>("registerView/btnsArea/Btn_register");
+            acTogRegister = Find<Toggle>("registerView/btnsArea/Tog_ac");
+            
+            loginView = Find("loginView").gameObject;
+            registerView = Find("registerView").gameObject;
         }
 
         protected override void OnStart()
         {
             loginBtn.onClick.AddListener(onLoginBtnClick);
+            registerBtn.onClick.AddListener(onRegisterBtnClick);
             
             //注册回调
-            GameApp.NetworkManager.AddMessageHandler(ActionCode.Login, OnLoginCallback);
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.Login, onLoginCallback);
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.Logon, onRegisterCallback);
         }
 
         protected override void OnDestroy()
         {
-            GameApp.NetworkManager.RemoveMessageHandler(ActionCode.Login, OnLoginCallback);
+            GameApp.NetworkManager.RemoveMessageHandler(ActionCode.Login, onLoginCallback);
+            GameApp.NetworkManager.RemoveMessageHandler(ActionCode.Logon, onRegisterCallback);
         }
 
         private void onLoginBtnClick()
         {
             //测试
-            Debug.Log("点击了登陆按钮,尝试连接服务器...");
+            Debug.Log("点击了登陆按钮,尝试登录中...");
             
             //构造Protobuf大包
             MainPack pack = new MainPack();
@@ -61,20 +79,21 @@ namespace Module.View
             pack.ActionCode = ActionCode.Login;
             pack.LoginPack = new LoginPack()
             {
-                Username = accountInput.text,
-                Password = passwordInput.text
+                Username = accountLogin.text,
+                Password = passwordLogin.text
             };
             
             GameApp.NetworkManager.Send(pack);
         }
 
-        private void OnLoginCallback(MainPack pack)
+        private void onLoginCallback(MainPack pack)
         {
             if (pack.ReturnCode == ReturnCode.Succeed)
             {
-                Debug.Log($"登陆成功，欢迎 {pack.LoginPack?.Username??accountInput.text}!");
+                Debug.Log($"登陆成功，欢迎 {pack.LoginPack?.Username??accountLogin.text}!");
                 
                 //TODO：隐藏登陆面板
+                loginView.SetActive(false);
             }
             else
             {
@@ -82,5 +101,40 @@ namespace Module.View
                 //TODO：显示错误提示
             }
         }
+
+        private void onRegisterBtnClick()
+        {
+            Debug.Log("点击了注册按钮,尝试注册中...");
+            
+            MainPack pack = new MainPack();
+            pack.RequestCode = RequestCode.User;
+            pack.ActionCode = ActionCode.Logon;
+            pack.LoginPack = new LoginPack()
+            {
+                Username = accountRegister.text,
+                Password = passwordRegister.text
+            };
+            
+            GameApp.NetworkManager.Send(pack);
+        }
+
+        private void onRegisterCallback(MainPack pack)
+        {
+            if (pack.ReturnCode == ReturnCode.Succeed)
+            {
+                Debug.Log($"注册成功 {pack.LoginPack?.Username??accountLogin.text}!");
+                
+                //TODO：显示注册成功提示，并切换到登录界面
+                registerView.SetActive(false);
+                loginView.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError($"注册失败，错误码: {pack.StrMsg}");
+                //TODO：显示错误提示
+            }
+        }
+            
+        
     }
 }
