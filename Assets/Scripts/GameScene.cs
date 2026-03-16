@@ -33,7 +33,7 @@ namespace DefaultNamespace
             RegisterModules();
             InitModules();
 
-            ConnectToServer(); //连接服务器
+            //ConnectToServer(); //连接服务器 - 暂时不使用网络功能，现在正在拼UI。。。
         }
 
         private void Update()

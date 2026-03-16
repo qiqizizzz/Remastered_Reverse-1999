@@ -36,7 +36,8 @@ namespace Module.GameUI
             InitModuleEvent();
             InitGlobalEvent();
             
-            ApplyFunc(EventDefines.OpenMainMenuView); // 这个只是临时的
+            //ApplyFunc(EventDefines.OpenMainMenuView); 
+            ApplyFunc(EventDefines.OpenGameView);// 这个只是临时的
         }
 
         // 注册事件
