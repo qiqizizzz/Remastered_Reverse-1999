@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 1612496273783849147}
   - component: {fileID: 1717924269356526622}
   m_Layer: 0
-  m_Name: story_fk
+  m_Name: Btn_story_fk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -505,7 +505,7 @@ GameObject:
   - component: {fileID: 1271160353504139465}
   - component: {fileID: 261470522253542643}
   m_Layer: 0
-  m_Name: storageBtn
+  m_Name: Btn_storage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -626,7 +626,7 @@ GameObject:
   - component: {fileID: 4554693605645528731}
   - component: {fileID: 3317993735979642763}
   m_Layer: 0
-  m_Name: moreBtn
+  m_Name: Btn_more
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1106,7 +1106,7 @@ GameObject:
   - component: {fileID: 2996887881802377839}
   - component: {fileID: 6918618691322402527}
   m_Layer: 0
-  m_Name: story_now
+  m_Name: Btn_story_now
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1474,7 +1474,7 @@ GameObject:
   - component: {fileID: 6979606748778596535}
   - component: {fileID: 8172194688307225542}
   m_Layer: 0
-  m_Name: id
+  m_Name: detailArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1658,7 +1658,7 @@ GameObject:
   - component: {fileID: 3894333360881212633}
   - component: {fileID: 4882792461274019467}
   m_Layer: 0
-  m_Name: card
+  m_Name: Btn_card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1814,7 +1814,7 @@ GameObject:
   - component: {fileID: 7872657142353827747}
   - component: {fileID: 4252282307124620387}
   m_Layer: 0
-  m_Name: idtxt
+  m_Name: Txt_id
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2347,7 +2347,7 @@ GameObject:
   - component: {fileID: 2883040780296779121}
   - component: {fileID: 5855184632185886309}
   m_Layer: 0
-  m_Name: character
+  m_Name: Btn_character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2836,7 +2836,7 @@ GameObject:
   - component: {fileID: 5241710434861006632}
   - component: {fileID: 8425302365808765188}
   m_Layer: 0
-  m_Name: storeBtn
+  m_Name: Btn_store
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2957,7 +2957,7 @@ GameObject:
   - component: {fileID: 1900550313290498046}
   - component: {fileID: 3976738267885281783}
   m_Layer: 0
-  m_Name: level
+  m_Name: Btn_level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4189,7 +4189,7 @@ GameObject:
   - component: {fileID: 1167684966160744864}
   - component: {fileID: 3780625095021875456}
   m_Layer: 0
-  m_Name: taskBtn
+  m_Name: Btn_task
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4508,7 +4508,7 @@ GameObject:
   - component: {fileID: 7530696855453188214}
   - component: {fileID: 2790277465443193732}
   m_Layer: 0
-  m_Name: home
+  m_Name: Btn_home
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4896,7 +4896,7 @@ GameObject:
   - component: {fileID: 3487388012365688922}
   - component: {fileID: 2814724723939237836}
   m_Layer: 0
-  m_Name: power
+  m_Name: Btn_power
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5018,7 +5018,7 @@ GameObject:
   - component: {fileID: 4168767175760679689}
   - component: {fileID: 6072035665740442181}
   m_Layer: 0
-  m_Name: mailBtn
+  m_Name: Btn_mail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

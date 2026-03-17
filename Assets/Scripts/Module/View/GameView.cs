@@ -7,6 +7,7 @@
 */
 
 using Common;
+using Common.Defines;
 using Module.Loading;
 using MVC;
 using MVC.Extensions;
@@ -22,15 +23,21 @@ namespace Module.View
         {
             base.OnAwake();
             //注册
-            Find<Button>("RightArea/level").onClick.AddListener(onOpenLevelBtn);
+            Find<Button>("RightArea/Btn_level").onClick.AddListener(onOpenLevelBtn);
+            Find<Button>("LeftArea/btns/Btn_more").onClick.AddListener(onOpenMoreOptionsBtn);
         }
 
         //测试打开level界面
         private void onOpenLevelBtn()
         {
             Debug.Log("打开Level界面");
-            Close();
             ViewExtensions.LoadScene(this, SceneDefines.LevelView);
+        }
+        
+        //打开更多选项界面
+        private void onOpenMoreOptionsBtn()
+        {
+            ApplyFunc(EventDefines.OpenMoreOptionsView);
         }
     }
 }

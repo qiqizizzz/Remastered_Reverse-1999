@@ -1,6 +1,6 @@
 ﻿/*
 * ┌────────────────────────────────────────────────────────────┐
-* │  描    述: 游戏主要面板控制器(任务、背包、关卡界面UI等在这里注册)                      
+* │  描    述: 游戏主要面板控制器(主界面,主菜单,提示面板UI等在这里注册)                      
 * │  类    名: GameUIController.cs       
 * │  创    建: By qiqizizzz
 * └────────────────────────────────────────────────────────────┘
@@ -31,13 +31,19 @@ namespace Module.GameUI
                 parentTf = GameApp.ViewManager.canvasTf,
                 controller = this
             });
+            GameApp.ViewManager.Register(ViewType.MoreOptionsView, new ViewInfo()
+            {
+                PrefabName = AddressDefines.UI_MoreOptionsView,
+                parentTf = GameApp.ViewManager.canvasTf,
+                controller = this,
+                Sorting_Order = 1
+            });
             
             //初始化事件
             InitModuleEvent();
             InitGlobalEvent();
             
-            //ApplyFunc(EventDefines.OpenMainMenuView); 
-            ApplyFunc(EventDefines.OpenGameView);// 这个只是临时的
+            
         }
 
         // 注册事件
@@ -45,6 +51,7 @@ namespace Module.GameUI
         {
             RegisterFunc(EventDefines.OpenGameView, openGameView);
             RegisterFunc(EventDefines.OpenMainMenuView, openMainMenuView);
+            RegisterFunc(EventDefines.OpenMoreOptionsView, onOpenMoreOptionsView);
         }
 
         //打开主要面板
@@ -56,7 +63,13 @@ namespace Module.GameUI
         //打开主菜单界面
         private void openMainMenuView(System.Object[] args)
         {
-            GameApp.ViewManager.Open(ViewType.MainMenuView,args);
+            GameApp.ViewManager.Open(ViewType.MainMenuView, args);
+        }
+        
+        //打开更多选项界面
+        private void onOpenMoreOptionsView(System.Object[] args)
+        {
+            GameApp.ViewManager.Open(ViewType.MoreOptionsView, args);
         }
     }
 }

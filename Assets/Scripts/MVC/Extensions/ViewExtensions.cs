@@ -20,6 +20,8 @@ namespace MVC.Extensions
     {
         public static void LoadScene(this IBaseView view, string sceneName , Action onComplete = null)
         {
+            GameApp.ViewManager.Close(view.ViewId);
+            
             LoadingModel model = new LoadingModel();
             model.SetSceneName(sceneName);
             model.callback = () => 

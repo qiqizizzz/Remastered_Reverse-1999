@@ -14,6 +14,7 @@ namespace Common.Defines
         public static readonly string UI_LoadingView = "UI/LoadingView";
         public static readonly string UI_GameView = "UI/GameView";
         public static readonly string UI_MainMenuView = "UI/MainMenuView";
+        public static readonly string UI_MoreOptionsView = "UI/MoreOptionsView";
         
         //Data数据
         public static readonly string Data_LoadingTextData = "Data/LoadingTextData";

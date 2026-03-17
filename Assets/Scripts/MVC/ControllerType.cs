@@ -12,5 +12,6 @@ namespace MVC
     {
         GameUI,
         Loading,
+        Game
     }
 }

@@ -8,6 +8,7 @@
 
 using System;
 using Common;
+using DefaultNamespace.Module.Game;
 using Module.GameUI;
 using Module.Loading;
 using MVC;
@@ -33,7 +34,7 @@ namespace DefaultNamespace
             RegisterModules();
             InitModules();
 
-            //ConnectToServer(); //连接服务器 - 暂时不使用网络功能，现在正在拼UI。。。
+            
         }
 
         private void Update()
@@ -53,6 +54,7 @@ namespace DefaultNamespace
         {
             GameApp.ControllerManager.Register(ControllerType.GameUI, new GameUIController());
             GameApp.ControllerManager.Register(ControllerType.Loading, new LoadingController());
+            GameApp.ControllerManager.Register(ControllerType.Game, new GameController());
         }
         
         // 初始化所有模块
