@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 1f1b2c9ed79f64541b8af8b66f1663fc
   m_SerializeEntries:
+  - m_GUID: 19213d6ec3bf15e4ca5c576a16bb211e
+    m_Address: UI/FriendsView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 20c7c3726c88d0745b5746e3dcfc6ba9
     m_Address: UI/GameView
     m_ReadOnly: 0
@@ -34,6 +39,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 63f612fc14df61543a5be869b0e795c0
     m_Address: UI/MoreOptionsView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72bba87c23a7b7e4da300bdf32caf85f
+    m_Address: UI_small/Btn_friTemp
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

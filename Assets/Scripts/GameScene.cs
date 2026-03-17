@@ -55,6 +55,7 @@ namespace DefaultNamespace
             GameApp.ControllerManager.Register(ControllerType.GameUI, new GameUIController());
             GameApp.ControllerManager.Register(ControllerType.Loading, new LoadingController());
             GameApp.ControllerManager.Register(ControllerType.Game, new GameController());
+            GameApp.ControllerManager.Register(ControllerType.Chat, new Module.chat.ChatController());
         }
         
         // 初始化所有模块

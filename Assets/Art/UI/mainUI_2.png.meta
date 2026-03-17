@@ -307,13 +307,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mainUI_2_10
+      name: mainUI_2_headPicborder
       rect:
         serializedVersion: 2
-        x: 196
-        y: 764
-        width: 136
-        height: 136
+        x: 212
+        y: 784
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1474,7 +1474,6 @@ TextureImporter:
     nameFileIdTable:
       mainUI_2_0: -1752637524
       mainUI_2_1: 372929220
-      mainUI_2_10: -1807317019
       mainUI_2_11: 813316941
       mainUI_2_13: 968744588
       mainUI_2_14: 802900442
@@ -1552,6 +1551,7 @@ TextureImporter:
       mainUI_2_cyx: -1078988516
       mainUI_2_detail: -873163197
       mainUI_2_gg: -938226558
+      mainUI_2_headPicborder: -1807317019
       mainUI_2_ht: 863202796
       mainUI_2_jt: 1646334050
       mainUI_2_ljj: 1810901023

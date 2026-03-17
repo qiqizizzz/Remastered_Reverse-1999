@@ -17,12 +17,18 @@ namespace Module.View
         protected override void OnAwake()
         {
             Find<Button>("LeftUpArea/Btn_return").onClick.AddListener(onReturnGameViewBtn);
+            Find<Button>("LeftDownArea/btns_1/Btn_hy").onClick.AddListener(onOpenFriendViewBtn);
         }
 
         private void onReturnGameViewBtn()
         {
             GameApp.ViewManager.Close(ViewId);
             GameApp.ViewManager.Open(ViewType.GameView);
+        }
+
+        private void onOpenFriendViewBtn()
+        {
+            GameApp.ViewManager.Open(ViewType.FriendsView);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace MVC
     {
         GameUI,
         Loading,
-        Game
+        Game,
+        Chat
     }
 }

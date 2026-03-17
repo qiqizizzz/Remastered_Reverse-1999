@@ -348,6 +348,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: com_ui_friendBtn1
+      rect:
+        serializedVersion: 2
+        x: 1019
+        y: 1716
+        width: 80
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ee00e806053fae48b691ae86aca1c93
+      internalID: -568135472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: com_ui_friendBtn2
+      rect:
+        serializedVersion: 2
+        x: 777
+        y: 1630
+        width: 105
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5706e9a41b32c684b896b1d9907965e5
+      internalID: -1426473658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -365,6 +407,8 @@ TextureImporter:
       com_ui_circle: 1103357616
       com_ui_detail_bg: 1429241474
       com_ui_detail_bg2: 2102298370
+      com_ui_friendBtn1: -568135472
+      com_ui_friendBtn2: -1426473658
       com_ui_id: 801379778
       com_ui_loading: -1377481905
       com_ui_retur: 214713344

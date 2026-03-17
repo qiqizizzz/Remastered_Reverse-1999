@@ -14,6 +14,7 @@ namespace Common.Defines
         public static readonly string OpenGameView = "OpenGameView";
         public static readonly string OpenMainMenuView = "OpenMainMenuView";
         public static readonly string OpenMoreOptionsView = "OpenMoreOptionsView";
+        public static readonly string OpenFriendsView = "OpenFriendsView";
         public static readonly string LoadingScene = "LoadingScene";
     }
 }

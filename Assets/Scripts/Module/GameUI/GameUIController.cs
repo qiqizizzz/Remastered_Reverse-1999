@@ -42,8 +42,6 @@ namespace Module.GameUI
             //初始化事件
             InitModuleEvent();
             InitGlobalEvent();
-            
-            
         }
 
         // 注册事件
