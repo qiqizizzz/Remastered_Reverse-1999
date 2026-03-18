@@ -31,20 +31,20 @@ namespace GameProtocol {
             "dHVybkNvZGUSDgoGc3RyTXNnGAQgASgJEiwKCWxvZ2luUGFjaxgFIAEoCzIX",
             "LkdhbWVQcm90b2NvbC5Mb2dpblBhY2tIABIqCghjaGF0UGFjaxgGIAEoCzIW",
             "LkdhbWVQcm90b2NvbC5DaGF0UGFja0gAQgYKBGRhdGEiLwoJTG9naW5QYWNr",
-            "EhAKCHVzZXJuYW1lGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJImEKCENoYXRQ",
+            "EhAKCHVzZXJuYW1lGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJImIKCENoYXRQ",
             "YWNrEg4KBnRvVXNlchgBIAEoCRIQCghmcm9tVXNlchgCIAEoCRIPCgdjb250",
-            "ZW50GAMgASgJEhAKCGNoYXRUeXBlGAQgASgFEhAKCHRpbWV0YW1wGAUgASgD",
-            "KigKC1JlcXVlc3RDb2RlEg8KC1JlcXVlc3ROb25lEAASCAoEVXNlchABKlMK",
-            "CkFjdGlvbkNvZGUSDgoKQWN0aW9uTm9uZRAAEgkKBUxvZ29uEAESCQoFTG9n",
-            "aW4QAhINCglIZWFydGJlYXQQAxIQCgxDaGF0X3ByaXZhdGUQBCo1CgpSZXR1",
-            "cm5Db2RlEg4KClJldHVybk5vbmUQABILCgdTdWNjZWVkEAESCgoGRmFpbGVk",
-            "EAJiBnByb3RvMw=="));
+            "ZW50GAMgASgJEhAKCGNoYXRUeXBlGAQgASgFEhEKCXRpbWVzdGFtcBgFIAEo",
+            "AyooCgtSZXF1ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggKBFVzZXIQASpT",
+            "CgpBY3Rpb25Db2RlEg4KCkFjdGlvbk5vbmUQABIJCgVMb2dvbhABEgkKBUxv",
+            "Z2luEAISDQoJSGVhcnRiZWF0EAMSEAoMQ2hhdF9wcml2YXRlEAQqNQoKUmV0",
+            "dXJuQ29kZRIOCgpSZXR1cm5Ob25lEAASCwoHU3VjY2VlZBABEgoKBkZhaWxl",
+            "ZBACYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProtocol.RequestCode), typeof(global::GameProtocol.ActionCode), typeof(global::GameProtocol.ReturnCode), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.MainPack), global::GameProtocol.MainPack.Parser, new[]{ "RequestCode", "ActionCode", "ReturnCode", "StrMsg", "LoginPack", "ChatPack" }, new[]{ "Data" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.LoginPack), global::GameProtocol.LoginPack.Parser, new[]{ "Username", "Password" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ChatPack), global::GameProtocol.ChatPack.Parser, new[]{ "ToUser", "FromUser", "Content", "ChatType", "Timetamp" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ChatPack), global::GameProtocol.ChatPack.Parser, new[]{ "ToUser", "FromUser", "Content", "ChatType", "Timestamp" }, null, null, null, null)
           }));
     }
     #endregion
@@ -605,7 +605,7 @@ namespace GameProtocol {
       fromUser_ = other.fromUser_;
       content_ = other.content_;
       chatType_ = other.chatType_;
-      timetamp_ = other.timetamp_;
+      timestamp_ = other.timestamp_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -670,17 +670,17 @@ namespace GameProtocol {
       }
     }
 
-    /// <summary>Field number for the "timetamp" field.</summary>
-    public const int TimetampFieldNumber = 5;
-    private long timetamp_;
+    /// <summary>Field number for the "timestamp" field.</summary>
+    public const int TimestampFieldNumber = 5;
+    private long timestamp_;
     /// <summary>
     ///时间戳
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public long Timetamp {
-      get { return timetamp_; }
+    public long Timestamp {
+      get { return timestamp_; }
       set {
-        timetamp_ = value;
+        timestamp_ = value;
       }
     }
 
@@ -701,7 +701,7 @@ namespace GameProtocol {
       if (FromUser != other.FromUser) return false;
       if (Content != other.Content) return false;
       if (ChatType != other.ChatType) return false;
-      if (Timetamp != other.Timetamp) return false;
+      if (Timestamp != other.Timestamp) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -712,7 +712,7 @@ namespace GameProtocol {
       if (FromUser.Length != 0) hash ^= FromUser.GetHashCode();
       if (Content.Length != 0) hash ^= Content.GetHashCode();
       if (ChatType != 0) hash ^= ChatType.GetHashCode();
-      if (Timetamp != 0L) hash ^= Timetamp.GetHashCode();
+      if (Timestamp != 0L) hash ^= Timestamp.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -742,9 +742,9 @@ namespace GameProtocol {
         output.WriteRawTag(32);
         output.WriteInt32(ChatType);
       }
-      if (Timetamp != 0L) {
+      if (Timestamp != 0L) {
         output.WriteRawTag(40);
-        output.WriteInt64(Timetamp);
+        output.WriteInt64(Timestamp);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -766,8 +766,8 @@ namespace GameProtocol {
       if (ChatType != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ChatType);
       }
-      if (Timetamp != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Timetamp);
+      if (Timestamp != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Timestamp);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -792,8 +792,8 @@ namespace GameProtocol {
       if (other.ChatType != 0) {
         ChatType = other.ChatType;
       }
-      if (other.Timetamp != 0L) {
-        Timetamp = other.Timetamp;
+      if (other.Timestamp != 0L) {
+        Timestamp = other.Timestamp;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -823,7 +823,7 @@ namespace GameProtocol {
             break;
           }
           case 40: {
-            Timetamp = input.ReadInt64();
+            Timestamp = input.ReadInt64();
             break;
           }
         }

@@ -8,6 +8,8 @@ namespace GameServer.DataBase
 {
     internal class DBManager
     {
+        #region 登录与连接相关
+
         //测试数据库连接
         public static bool TestConnection()
         {
@@ -81,5 +83,43 @@ namespace GameServer.DataBase
             }
         }
 
+        #endregion
+
+        #region 聊天系统相关
+        // 保存聊天消息
+        public static void SaveChatMessage(string senderName, string receiverName, string content)
+        {
+            using (var db = new GameDbContext())
+            {
+                var chatMessage = new ChatMessage
+                {
+                    SenderName = senderName,
+                    ReceiverName = receiverName,
+                    Content = content,
+                    SendTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() // 使用 UTC 时间戳
+                };
+                db.ChatMessages.Add(chatMessage);
+                db.SaveChanges();
+            }
+        }
+        // 获取聊天记录
+        public static List<ChatMessage> GetChatHistory(string user1, string user2, int limit = 50)
+        {
+            using (var db = new GameDbContext())
+            {
+                var messages = db.ChatMessages
+                    .Where(m => (m.SenderName == user1 && m.ReceiverName == user2) ||
+                                (m.SenderName == user2 && m.ReceiverName == user1))
+                    .OrderByDescending(m => m.SendTime)
+                    .Take(limit)
+                    .ToList();
+
+                // 将消息倒序,新的在前
+                messages.Reverse();
+                return messages;
+            }
+        }
+
+        #endregion
     }
 }

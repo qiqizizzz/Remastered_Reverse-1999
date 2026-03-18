@@ -14,6 +14,9 @@ namespace GameServer
     {
         private Socket _socket;
         private string _clientId;
+        private Server _server;
+
+        public string UserName { get; private set; }
 
         //接收缓冲区
         private byte[] _receiveBuffer = new byte[1024 * 4];//4KB
@@ -22,14 +25,14 @@ namespace GameServer
         private byte[] _messageBuffer = new byte[1024 * 1024];//1MB消息缓存
         private int _messageOffset = 0;//当前写入位置
         private int _messageLength = 0;//当前消息预期长度
-
         private bool _isHeaderReceived = false;//是否已接收消息头
 
 
-        public Client(Socket socket, string clientId)
+        public Client(Socket socket, string clientId, Server server)
         {
             this._socket = socket;
             this._clientId = clientId;
+            this._server = server;
 
             BeginReceive();
         }
@@ -93,6 +96,12 @@ namespace GameServer
                     _socket.Close();
                     _socket = null;
                 }
+
+                if(_server != null)
+                {
+                    _server.RemoveClient(_clientId ,UserName);
+                }
+
                 Console.WriteLine($"[{_clientId}] 连接已清理");
             }
             catch (Exception ex)
@@ -196,6 +205,10 @@ namespace GameServer
             {
                 loginReturnPack(pack);
             }
+            else if (pack.ActionCode == ActionCode.ChatPrivate)
+            {
+                chatPrivateReturnPack(pack);
+            }
             else if(pack.ActionCode == ActionCode.Heartbeat)
             {
                 MainPack resPack = new MainPack();
@@ -203,6 +216,7 @@ namespace GameServer
                 Send(resPack.ToByteArray());
                 return;
             }
+            
         }
 
         private void registerReturnPack(MainPack pack)
@@ -249,6 +263,9 @@ namespace GameServer
 
             if (loginResult == 1)
             {
+                this.UserName = username;
+                _server.AddUserClient(username, this);
+
                 resPack.ReturnCode = ReturnCode.Succeed;
                 resPack.StrMsg = "登录成功！";
                 Console.WriteLine($"[{_clientId}] 登录成功");
@@ -271,6 +288,50 @@ namespace GameServer
             Send(resPack.ToByteArray());
         }
 
+        private void chatPrivateReturnPack(MainPack pack)
+        {
+            //未登录无法发送消息
+            if (string.IsNullOrEmpty(this.UserName))
+            {
+                MainPack errPack = new MainPack { ActionCode = ActionCode.ChatPrivate, ReturnCode = ReturnCode.Failed, StrMsg = "请先登录!" };
+                Send(errPack.ToByteArray());
+                return;
+            }
+
+            string targetUser = pack.ChatPack.ToUser;
+            string content = pack.ChatPack.Content;
+            long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+            DBManager.SaveChatMessage(UserName, targetUser, content);
+
+            MainPack myResPack = new MainPack{ActionCode = ActionCode.ChatPrivate,ReturnCode = ReturnCode.Succeed,StrMsg = "发送成功"};
+            Send(myResPack.ToByteArray());
+
+            //检查是否在线
+            Client targetClient = _server.GetClientByUsername(targetUser);
+            if(targetClient != null)
+            {
+                ChatPack chatData = new ChatPack
+                {
+                    ToUser = targetUser,
+                    FromUser = this.UserName,
+                    Content = content,
+                    Timestamp = timestamp
+                };
+
+                MainPack forwardPack = new MainPack 
+                { 
+                    ActionCode = ActionCode.ChatPrivate,
+                    ReturnCode = ReturnCode.Succeed,
+                    ChatPack = chatData
+                };
+
+                targetClient.Send(forwardPack.ToByteArray());
+            }
+
+
+            Console.WriteLine($"[私聊] {this.UserName} 发给 {targetUser}: {content}");
+        }
 
         //发送数据给客户端
         public void Send(byte[] data)

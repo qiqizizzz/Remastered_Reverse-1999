@@ -16,6 +16,9 @@ namespace GameServer
 
         // 管理所有连接的客户端
         private Dictionary<string, Client> _clients = new Dictionary<string, Client>();
+        // 存储在线玩家
+        private Dictionary<string, Client> _userClients = new Dictionary<string, Client>();
+
         private int _clientIdCounter = 0;//计数器
         private readonly object _lockObj = new object();
 
@@ -62,7 +65,7 @@ namespace GameServer
                 string clientId = $"Client_{++_clientIdCounter}_{Guid.NewGuid().ToString("N").Substring(0, 6)}";
                 Console.WriteLine($"[{clientId}] 新客户端连接: {clientSocket.RemoteEndPoint}");
 
-                var client = new Client(clientSocket, clientId);
+                var client = new Client(clientSocket, clientId ,this);
 
                 //加入管理 - 这里的锁会自动赋值与清空
                 lock(_lockObj)
@@ -90,8 +93,26 @@ namespace GameServer
             }
         }
 
+        //绑定身份 - 玩家登录成功后调用
+        public void AddUserClient(string username, Client client)
+        {
+            lock(_lockObj)
+            {
+                _userClients[username] = client;
+                Console.WriteLine($"[Server] 玩家 '{username}' 已绑定在线字典");
+            }
+        }
+
+        public Client GetClientByUsername(string username)
+        {
+            lock(_lockObj)
+            {
+                return _userClients.TryGetValue(username, out Client client) ? client : null;
+            }
+        }
+
         //获取客户端
-        public Client GetClient(string clientId)
+        public Client GetClientByClientId(string clientId)
         {
             lock(_lockObj)
             {
@@ -100,10 +121,17 @@ namespace GameServer
         }
 
         //移除客户端 - Client断开时调用
-        public void RemoveClient(string clientId)
+        public void RemoveClient(string clientId, string username)
         {
             lock(_lockObj)
             {
+                if(!string.IsNullOrEmpty(username) && _userClients.ContainsKey(username))
+                {
+                    _userClients.Remove(username);
+                    Console.WriteLine($"[Server] 玩家 '{username}' 从在线字典移除");
+                }
+
+
                 if(_clients.ContainsKey(clientId))
                 {
                     _clients.Remove(clientId);
