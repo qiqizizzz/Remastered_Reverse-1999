@@ -143,8 +143,11 @@ namespace Module.View
         private void onStartGameBtnClick()
         {
             GameApp.ViewManager.Close(ViewType.MainMenuView);
-            ViewExtensions.LoadScene(this, SceneDefines.GameView);
-            Close();
+            ViewExtensions.LoadScene(this, SceneDefines.GameView,(() =>
+            {
+                GameApp.ViewManager.Open(ViewType.GameView);
+            }));
+            
         }
     }
 }
