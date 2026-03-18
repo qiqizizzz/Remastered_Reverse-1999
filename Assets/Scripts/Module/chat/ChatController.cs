@@ -17,7 +17,7 @@ namespace DefaultNamespace.Module.chat
         public ChatController() : base()
         {
             //注册视图
-            GameApp.ViewManager.Register(ViewType.FriendsView, new ViewInfo()
+            GameApp.ViewManager.Register(ViewType.ChatView, new ViewInfo()
             {
                 PrefabName = AddressDefines.UI_FriendsView,
                 parentTf = GameApp.ViewManager.canvasTf,
@@ -28,12 +28,12 @@ namespace DefaultNamespace.Module.chat
 
         public override void InitModuleEvent()
         {
-            RegisterFunc(EventDefines.OpenFriendsView, onOpenFriendsView);
+            RegisterFunc(EventDefines.OpenChatView, onOpenFriendsView);
         }
 
         private void onOpenFriendsView(System.Object[] args)
         {
-            RegisterFunc(EventDefines.OpenFriendsView, onOpenFriendsView);
+            RegisterFunc(EventDefines.OpenChatView, onOpenFriendsView);
         }
     }
 }

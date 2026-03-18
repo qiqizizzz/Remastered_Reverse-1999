@@ -17,7 +17,7 @@ namespace Module.View
         protected override void OnAwake()
         {
             Find<Button>("LeftUpArea/Btn_return").onClick.AddListener(onReturnGameViewBtn);
-            Find<Button>("LeftDownArea/btns_1/Btn_hy").onClick.AddListener(onOpenFriendViewBtn);
+            Find<Button>("LeftDownArea/btns_1/Btn_hy").onClick.AddListener(onOpenChatViewBtn);
         }
 
         private void onReturnGameViewBtn()
@@ -26,9 +26,9 @@ namespace Module.View
             GameApp.ViewManager.Open(ViewType.GameView);
         }
 
-        private void onOpenFriendViewBtn()
+        private void onOpenChatViewBtn()
         {
-            GameApp.ViewManager.Open(ViewType.FriendsView);
+            GameApp.ViewManager.Open(ViewType.ChatView);
         }
     }
 }

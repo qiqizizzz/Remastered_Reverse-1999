@@ -14,6 +14,6 @@ namespace MVC
         GameView, //游戏主界面
         LoadingView, //加载界面
         MoreOptionsView, //更多选项界面
-        FriendsView, //好友界面
+        ChatView, //好友界面
     }
 }
