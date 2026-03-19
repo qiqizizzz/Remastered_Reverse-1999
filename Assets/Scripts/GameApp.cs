@@ -7,6 +7,7 @@
 */
 
 using Common;
+using DefaultNamespace;
 using Module.Timer;
 using MVC;
 using Network;
@@ -17,6 +18,7 @@ public class GameApp : Singleton<GameApp>
     public static ViewManager ViewManager;
     public static TimerManager TimerManager;
     public static NetworkManager NetworkManager;
+    public static GameDataManager GameDataManager;
         
     public override void Init()
     {
@@ -24,6 +26,7 @@ public class GameApp : Singleton<GameApp>
         ViewManager = new ViewManager();
         TimerManager = new TimerManager();
         NetworkManager = new NetworkManager();
+        GameDataManager = new GameDataManager();
     }
 
     public override void Update(float dt)

@@ -99,6 +99,7 @@ namespace Module.View
                 
                 //TODO：隐藏登陆面板
                 loginView.SetActive(false);
+                GameApp.GameDataManager.SetPlayerName(pack.LoginPack?.Username);
             }
             else
             {
