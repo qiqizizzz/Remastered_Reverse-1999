@@ -6,6 +6,7 @@
 * └──────────────────────────────────┘
 */
 
+using Common.Defines;
 using MVC;
 using MVC.View;
 using UnityEngine.UI;
@@ -28,7 +29,7 @@ namespace Module.View
 
         private void onOpenChatViewBtn()
         {
-            GameApp.ViewManager.Open(ViewType.ChatView);
+            ApplyControllerFunc(ControllerType.Chat, EventDefines.OpenChatView);
         }
     }
 }

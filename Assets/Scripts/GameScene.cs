@@ -6,9 +6,8 @@
 * └───────────────────────────────────────────────────────────────────┘
 */
 
-using System;
-using Common;
 using DefaultNamespace.Module.Game;
+using Module.chat;
 using Module.GameUI;
 using Module.Loading;
 using MVC;
@@ -33,8 +32,6 @@ namespace DefaultNamespace
             RegisterConfigs();
             RegisterModules();
             InitModules();
-
-            
         }
 
         private void Update()
@@ -55,7 +52,7 @@ namespace DefaultNamespace
             GameApp.ControllerManager.Register(ControllerType.GameUI, new GameUIController());
             GameApp.ControllerManager.Register(ControllerType.Loading, new LoadingController());
             GameApp.ControllerManager.Register(ControllerType.Game, new GameController());
-            GameApp.ControllerManager.Register(ControllerType.Chat, new Module.chat.ChatController());
+            GameApp.ControllerManager.Register(ControllerType.Chat, new ChattingController());
         }
         
         // 初始化所有模块

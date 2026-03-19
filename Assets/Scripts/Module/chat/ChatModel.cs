@@ -9,7 +9,7 @@
 using System.Collections.Generic;
 using MVC.Model;
 
-namespace DefaultNamespace.Module.chat
+namespace Module.chat
 {
     /// <summary>
     /// 消息发送状态

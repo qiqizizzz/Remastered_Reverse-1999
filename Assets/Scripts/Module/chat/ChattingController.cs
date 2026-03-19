@@ -10,12 +10,16 @@ using Common.Defines;
 using MVC;
 using MVC.Controller;
 
-namespace DefaultNamespace.Module.chat
+namespace Module.chat
 {
-    public class ChatController : BaseController
+    public class ChattingController : BaseController
     {
-        public ChatController() : base()
+        public ChatModel Model { get; private set; }
+        
+        public ChattingController() : base()
         {
+            Model = new ChatModel();
+            
             //注册视图
             GameApp.ViewManager.Register(ViewType.ChatView, new ViewInfo()
             {
@@ -24,16 +28,18 @@ namespace DefaultNamespace.Module.chat
                 controller = this,
                 Sorting_Order = 2
             });
+
+            InitModuleEvent();
         }
 
         public override void InitModuleEvent()
         {
-            RegisterFunc(EventDefines.OpenChatView, onOpenFriendsView);
+            RegisterFunc(EventDefines.OpenChatView, onOpenChatView);
         }
 
-        private void onOpenFriendsView(System.Object[] args)
+        private void onOpenChatView(System.Object[] args)
         {
-            RegisterFunc(EventDefines.OpenChatView, onOpenFriendsView);
+            GameApp.ViewManager.Open(ViewType.ChatView);
         }
     }
 }

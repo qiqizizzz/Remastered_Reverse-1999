@@ -99,6 +99,10 @@ namespace MVC.View
         {
             Controller?.ApplyControllerFunc(controllerKey, eventName, args ?? Array.Empty<object>());
         }
+        public void ApplyControllerFunc(ControllerType type, string eventName, params object[] args)
+        {
+            ApplyControllerFunc((int)type, eventName, args);
+        }
 
         public void SetVisible(bool isVisible)
         {
