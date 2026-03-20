@@ -243,6 +243,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: border_highLight
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 377
+        width: 520
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6c688e651b14c84cbb5cce748d07a85
+      internalID: -419444460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -258,6 +279,7 @@ TextureImporter:
       border_chat_me: 1617920808
       border_chat_other: 2095365092
       border_comBtn: 473730671
+      border_highLight: -419444460
       border_inputBtn: 420196057
       border_moreBtn: 1135657350
       border_sendBtn: -1551388989

@@ -19,6 +19,9 @@ namespace Module.View
 {
     public class ChatView : BaseView
     {
+        private GameObject _currentChat;//当前聊天对象
+        
+        [Header("UI组件")]
         private TMP_InputField _inputField;
         private ScrollRect scrollRect;
         
@@ -31,14 +34,23 @@ namespace Module.View
             Find<Button>("panels/panel_friend/chatArea/Btn_send").onClick.AddListener(onSendMessageBtn);
         }
 
+        protected override void OnStart()
+        {
+            //Todo: 从数据库中读取好友列表, 生成好友列表UI, 好友按钮需要绑定相应的 点击事件
+        }
+
         private void onReturnMoreOptionBtn()
         {
             GameApp.ViewManager.Close(ViewId);
         }
 
+        private void onFriendBtn(string friendName)
+        {
+            Debug.Log("点击了好友按钮，好友名字是：" + friendName);
+        }
+
         private void onSendMessageBtn()
         {
-            Debug.Log("点击了发送消息按钮");
             string content = _inputField.text;
             string targetUser = Find<TextMeshProUGUI>("panels/panel_friend/chatArea/Txt_name").text;
             Transform parent = Find<Transform>("panels/panel_friend/chatArea/Scroll_chat/Viewport/Content");
@@ -50,7 +62,6 @@ namespace Module.View
                 //Todo:提示输入不能为空
             }
             
-            //TODO：ResManager生成气泡,并且把消息内容传给气泡
             ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_chatBox_me, (go) =>
             {
                 if (go != null)
@@ -60,9 +71,8 @@ namespace Module.View
                     StartCoroutine(scrollToDown());
                 }
             }, parent);
-
-            Debug.Log("成功生成气泡");
             
+            //保存至数据库
             //ApplyFunc(EventDefines.SendPrivateMessage, targetUser, content);
         }
 

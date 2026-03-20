@@ -42,6 +42,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3bc2e264e4cafff429530b38609e9e01
+    m_Address: UI_small/TipBox
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 63f612fc14df61543a5be869b0e795c0
     m_Address: UI/MoreOptionsView
     m_ReadOnly: 0
