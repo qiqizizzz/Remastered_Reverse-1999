@@ -41,15 +41,17 @@ namespace Module.chat
         {
             chatText.text = content;
 
+            //获取最大宽度
             chatText.rectTransform.sizeDelta = new Vector2(2000f, 2000f);
             chatText.ForceMeshUpdate();
-            float rawWidth = chatText.preferredWidth; // 获取单行纯文字宽度
+            float rawWidth = chatText.preferredWidth;
 
             float finalWidth = Mathf.Min(rawWidth, maxWidth);
 
+            //获取最大高度
             chatText.rectTransform.sizeDelta = new Vector2(finalWidth, 2000f);
             chatText.ForceMeshUpdate(); // 强迫TMP重新排版换行
-            float finalHeight = chatText.preferredHeight; // 拿到换行后被撑开的真实高度
+            float finalHeight = chatText.preferredHeight;
 
             chatText.rectTransform.sizeDelta = new Vector2(finalWidth, finalHeight);
 
