@@ -32,6 +32,8 @@ namespace Module.View
             Debug.Log("点击了发送消息按钮");
             string targetUser = Find<TextMeshProUGUI>("panels/panel_friend/chatArea/Txt_name").text;
             string content = Find<TMP_InputField>("panels/panel_friend/chatArea/Input_field").text;
+            
+            //TODO：ResManager生成气泡,并且把消息内容传给气泡
 
             ApplyFunc(EventDefines.SendPrivateMessage, targetUser, content);
         }

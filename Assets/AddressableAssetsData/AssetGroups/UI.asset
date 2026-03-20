@@ -27,6 +27,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 278679f50325f9e4794179813ba56d21
+    m_Address: UI_small/chatBox_other
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2828db831827c0446b0d33964891392f
     m_Address: UI/LoadingView
     m_ReadOnly: 0
@@ -44,6 +49,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 72bba87c23a7b7e4da300bdf32caf85f
     m_Address: UI_small/Btn_friTemp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe2186f6ce6f02f43a964a1835385743
+    m_Address: UI_small/chatBox_me
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

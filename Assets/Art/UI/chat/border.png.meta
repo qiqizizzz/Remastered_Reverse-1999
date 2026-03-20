@@ -201,6 +201,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: border_chat_me
+      rect:
+        serializedVersion: 2
+        x: 553
+        y: 935
+        width: 129
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 13, z: 19, w: 11}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5e406188a586f84faae504b118c379c
+      internalID: 1617920808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: border_chat_other
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 874
+        width: 127
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 9, y: 2, z: 0, w: 12}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42909154f0b53f047b0929d2cef8ca78
+      internalID: 2095365092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -213,6 +255,8 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       border_0: 1607611484
+      border_chat_me: 1617920808
+      border_chat_other: 2095365092
       border_comBtn: 473730671
       border_inputBtn: 420196057
       border_moreBtn: 1135657350

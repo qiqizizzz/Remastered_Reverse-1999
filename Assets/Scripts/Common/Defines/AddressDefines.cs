@@ -19,6 +19,8 @@ namespace Common.Defines
         
         //UI_small预制体
         public static readonly string UI_Small_Btn_friTemp = "UI_small/Btn_friTemp";
+        public static readonly string UI_Small_chatBox_other = "UI_small/chatBox_other";
+        public static readonly string UI_Small_chatBox_me = "UI_small/chatBox_me";
         
         //Data数据
         public static readonly string Data_LoadingTextData = "Data/LoadingTextData";
