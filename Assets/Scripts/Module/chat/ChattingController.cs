@@ -37,13 +37,15 @@ namespace Module.chat
 
         public override void InitModuleEvent()
         {
-            GameApp.NetworkManager.AddMessageHandler(ActionCode.ChatPrivate, onReceiveChatMsg);
-            
+            RegisterFunc(EventDefines.SendPrivateMessage, sendPrivateMessage);
             RegisterFunc(EventDefines.OpenChatView, onOpenChatView);
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.ChatPrivate, onReceiveChatMsg);
         }
 
         public override void RemoveModuleEvent()
         {
+            UnRegisterFunc(EventDefines.SendPrivateMessage);
+            UnRegisterFunc(EventDefines.OpenChatView);
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.ChatPrivate, onReceiveChatMsg);
         }
 
@@ -52,8 +54,15 @@ namespace Module.chat
             GameApp.ViewManager.Open(ViewType.ChatView);
         }
 
-        public void SendPrivateMessage(string targetUser, string content)
+        /// <summary>
+        /// 私聊发送消息
+        /// </summary>
+        /// <param name="args">args[0]代表targetUser,args[1]代表content</param>
+        private void sendPrivateMessage(System.Object[] args)
         {
+            string targetUser = args.Length > 0 ? args[0] as string : null;
+            string content = args.Length > 1 ? args[1] as string : null;
+            
             if(string.IsNullOrEmpty(targetUser) || string.IsNullOrEmpty(content)) return;
 
             long timestamp = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();

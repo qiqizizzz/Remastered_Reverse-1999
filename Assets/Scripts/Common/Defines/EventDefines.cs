@@ -16,5 +16,8 @@ namespace Common.Defines
         public static readonly string OpenMoreOptionsView = "OpenMoreOptionsView";
         public static readonly string OpenChatView = "OpenChatViewView";
         public static readonly string LoadingScene = "LoadingScene";
+        
+        // 网络事件
+        public static readonly string SendPrivateMessage = "SendPrivateMessage";
     }
 }

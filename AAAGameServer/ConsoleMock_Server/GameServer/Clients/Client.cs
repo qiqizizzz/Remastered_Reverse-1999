@@ -192,38 +192,40 @@ namespace GameServer
         {
             //解析客户端发来的包
             MainPack pack = MainPack.Parser.ParseFrom(message);
-            Console.Write($"收到客户端请求:{pack.RequestCode} - {pack.ActionCode}");
-
+            
             //根据Protobuf协议分发
             
             //注册
             if (pack.ActionCode == ActionCode.Logon)
             {
+                Console.WriteLine($"[收到注册请求]:{pack.RequestCode} - {pack.ActionCode}");
                 registerReturnPack(pack);
             }
             else if(pack.ActionCode == ActionCode.Login) //登录
             {
+                Console.WriteLine($"[收到登录请求]:{pack.RequestCode} - {pack.ActionCode}");
                 loginReturnPack(pack);
             }
             else if (pack.ActionCode == ActionCode.ChatPrivate)
             {
+                Console.WriteLine($"[收到聊天请求]:{pack.RequestCode} - {pack.ActionCode}");
                 chatPrivateReturnPack(pack);
             }
             else if(pack.ActionCode == ActionCode.Heartbeat)
             {
+                //Console.WriteLine($"[收到心跳请求]:{pack.RequestCode} - {pack.ActionCode}");
                 MainPack resPack = new MainPack();
                 resPack.ActionCode = ActionCode.Heartbeat;
                 Send(resPack.ToByteArray());
                 return;
             }
-            
         }
 
         private void registerReturnPack(MainPack pack)
         {
             string username = pack.LoginPack.Username;
             string password = pack.LoginPack.Password;
-            Console.WriteLine($"注册请求 - 用户名:{username} 密码:{password}");
+            Console.WriteLine($"[尝试注册] - 用户名:{username} 密码:{password}");
 
             bool isSuccess = DBManager.Register(username, password);
 
