@@ -24,11 +24,13 @@ namespace Module.View
         [Header("UI组件")]
         private TMP_InputField _inputField;
         private ScrollRect scrollRect;
+        private Transform _chatPanel;
         
         protected override void OnAwake()
         {
             _inputField = Find<TMP_InputField>("panels/panel_friend/chatArea/Input_field");
             scrollRect = Find<ScrollRect>("panels/panel_friend/chatArea/Scroll_chat");
+            _chatPanel = Find<Transform>("panels/panel_friend");
             
             Find<Button>("Btn_return").onClick.AddListener(onReturnMoreOptionBtn);
             Find<Button>("panels/panel_friend/chatArea/Btn_send").onClick.AddListener(onSendMessageBtn);
@@ -53,13 +55,23 @@ namespace Module.View
         {
             string content = _inputField.text;
             string targetUser = Find<TextMeshProUGUI>("panels/panel_friend/chatArea/Txt_name").text;
-            Transform parent = Find<Transform>("panels/panel_friend/chatArea/Scroll_chat/Viewport/Content");
+            Transform contentParent = Find<Transform>("panels/panel_friend/chatArea/Scroll_chat/Viewport/Content");
 
             if (content == string.Empty)
             {
                 Debug.Log("输入不能为空");
+                ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_TipBox, (go) =>
+                {
+                    if (go != null)
+                    {
+                        go.GetComponentInChildren<TextMeshProUGUI>().text = "输入不能为空";
+                        
+                        //TODO: 动画效果 - 协程
+
+                        ResManager.ReleaseToPool(AddressDefines.UI_Small_TipBox, go);//动画结束后释放回对象池
+                    }
+                }, _chatPanel);
                 return;
-                //Todo:提示输入不能为空
             }
             
             ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_chatBox_me, (go) =>
@@ -70,7 +82,7 @@ namespace Module.View
                     _inputField.text = string.Empty;
                     StartCoroutine(scrollToDown());
                 }
-            }, parent);
+            }, contentParent);
             
             //保存至数据库
             //ApplyFunc(EventDefines.SendPrivateMessage, targetUser, content);
