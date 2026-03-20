@@ -470,6 +470,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChatView
       objectReference: {fileID: 0}
+    - target: {fileID: 2414154240978789079, guid: 19213d6ec3bf15e4ca5c576a16bb211e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3775854741772275971, guid: 19213d6ec3bf15e4ca5c576a16bb211e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

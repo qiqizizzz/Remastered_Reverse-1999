@@ -20,7 +20,8 @@ namespace Module.chat
 
         private float maxWidth = 450f;
         public Vector2 padding = new Vector2(40, 30);// 气泡内边距
-        //public string Content = "";
+        
+        [SerializeField] private string Content = "";
         
         private void Awake()
         {
@@ -31,7 +32,7 @@ namespace Module.chat
 
         private void Update()
         {
-            //SetMessage(Content);
+            SetMessage(Content);
         }
 
         /// <summary>
