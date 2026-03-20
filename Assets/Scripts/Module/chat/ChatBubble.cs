@@ -32,7 +32,7 @@ namespace Module.chat
 
         private void Update()
         {
-            SetMessage(Content);
+            //SetMessage(Content);
         }
 
         /// <summary>
