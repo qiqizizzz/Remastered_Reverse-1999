@@ -24,27 +24,36 @@ namespace GameProtocol {
     static GamesProtocolReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChNHYW1lc1Byb3RvY29sLnByb3RvEgxHYW1lUHJvdG9jb2wiiAIKCE1haW5Q",
+            "ChNHYW1lc1Byb3RvY29sLnByb3RvEgxHYW1lUHJvdG9jb2wiuAIKCE1haW5Q",
             "YWNrEi4KC3JlcXVlc3RDb2RlGAEgASgOMhkuR2FtZVByb3RvY29sLlJlcXVl",
             "c3RDb2RlEiwKCmFjdGlvbkNvZGUYAiABKA4yGC5HYW1lUHJvdG9jb2wuQWN0",
             "aW9uQ29kZRIsCgpyZXR1cm5Db2RlGAMgASgOMhguR2FtZVByb3RvY29sLlJl",
             "dHVybkNvZGUSDgoGc3RyTXNnGAQgASgJEiwKCWxvZ2luUGFjaxgFIAEoCzIX",
             "LkdhbWVQcm90b2NvbC5Mb2dpblBhY2tIABIqCghjaGF0UGFjaxgGIAEoCzIW",
-            "LkdhbWVQcm90b2NvbC5DaGF0UGFja0gAQgYKBGRhdGEiLwoJTG9naW5QYWNr",
-            "EhAKCHVzZXJuYW1lGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJImIKCENoYXRQ",
-            "YWNrEg4KBnRvVXNlchgBIAEoCRIQCghmcm9tVXNlchgCIAEoCRIPCgdjb250",
-            "ZW50GAMgASgJEhAKCGNoYXRUeXBlGAQgASgFEhEKCXRpbWVzdGFtcBgFIAEo",
-            "AyooCgtSZXF1ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggKBFVzZXIQASpT",
-            "CgpBY3Rpb25Db2RlEg4KCkFjdGlvbk5vbmUQABIJCgVMb2dvbhABEgkKBUxv",
-            "Z2luEAISDQoJSGVhcnRiZWF0EAMSEAoMQ2hhdF9wcml2YXRlEAQqNQoKUmV0",
-            "dXJuQ29kZRIOCgpSZXR1cm5Ob25lEAASCwoHU3VjY2VlZBABEgoKBkZhaWxl",
-            "ZBACYgZwcm90bzM="));
+            "LkdhbWVQcm90b2NvbC5DaGF0UGFja0gAEi4KCmZyaWVuZFBhY2sYByABKAsy",
+            "GC5HYW1lUHJvdG9jb2wuRnJpZW5kUGFja0gAQgYKBGRhdGEiLwoJTG9naW5Q",
+            "YWNrEhAKCHVzZXJuYW1lGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJImIKCENo",
+            "YXRQYWNrEg4KBnRvVXNlchgBIAEoCRIQCghmcm9tVXNlchgCIAEoCRIPCgdj",
+            "b250ZW50GAMgASgJEhAKCGNoYXRUeXBlGAQgASgFEhEKCXRpbWVzdGFtcBgF",
+            "IAEoAyIwCgpGcmllbmRJbmZvEhAKCHVzZXJuYW1lGAEgASgJEhAKCGlzT25s",
+            "aW5lGAIgASgIInoKCkZyaWVuZFBhY2sSKgoGb3BUeXBlGAEgASgOMhouR2Ft",
+            "ZVByb3RvY29sLkZyaWVuZE9wVHlwZRISCgp0YXJnZXRVc2VyGAIgASgJEiwK",
+            "CmZyaWVuZExpc3QYAyADKAsyGC5HYW1lUHJvdG9jb2wuRnJpZW5kSW5mbyo0",
+            "CgtSZXF1ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggKBFVzZXIQARIKCgZG",
+            "cmllbmQQAipoCgpBY3Rpb25Db2RlEg4KCkFjdGlvbk5vbmUQABIJCgVMb2dv",
+            "bhABEgkKBUxvZ2luEAISDQoJSGVhcnRiZWF0EAMSEAoMQ2hhdF9wcml2YXRl",
+            "EAQSEwoPRnJpZW5kT3BlcmF0aW9uEAUqNQoKUmV0dXJuQ29kZRIOCgpSZXR1",
+            "cm5Ob25lEAASCwoHU3VjY2VlZBABEgoKBkZhaWxlZBACKk4KDEZyaWVuZE9w",
+            "VHlwZRIQCgxGcmllbmRPcE5vbmUQABILCgdHZXRMaXN0EAESDQoJQWRkRnJp",
+            "ZW5kEAISEAoMUmVtb3ZlRnJpZW5kEANiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProtocol.RequestCode), typeof(global::GameProtocol.ActionCode), typeof(global::GameProtocol.ReturnCode), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.MainPack), global::GameProtocol.MainPack.Parser, new[]{ "RequestCode", "ActionCode", "ReturnCode", "StrMsg", "LoginPack", "ChatPack" }, new[]{ "Data" }, null, null, null),
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProtocol.RequestCode), typeof(global::GameProtocol.ActionCode), typeof(global::GameProtocol.ReturnCode), typeof(global::GameProtocol.FriendOpType), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.MainPack), global::GameProtocol.MainPack.Parser, new[]{ "RequestCode", "ActionCode", "ReturnCode", "StrMsg", "LoginPack", "ChatPack", "FriendPack" }, new[]{ "Data" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.LoginPack), global::GameProtocol.LoginPack.Parser, new[]{ "Username", "Password" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ChatPack), global::GameProtocol.ChatPack.Parser, new[]{ "ToUser", "FromUser", "Content", "ChatType", "Timestamp" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ChatPack), global::GameProtocol.ChatPack.Parser, new[]{ "ToUser", "FromUser", "Content", "ChatType", "Timestamp" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.FriendInfo), global::GameProtocol.FriendInfo.Parser, new[]{ "Username", "IsOnline" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.FriendPack), global::GameProtocol.FriendPack.Parser, new[]{ "OpType", "TargetUser", "FriendList" }, null, null, null, null)
           }));
     }
     #endregion
@@ -57,6 +66,10 @@ namespace GameProtocol {
     ///用户
     /// </summary>
     [pbr::OriginalName("User")] User = 1,
+    /// <summary>
+    ///好友
+    /// </summary>
+    [pbr::OriginalName("Friend")] Friend = 2,
   }
 
   public enum ActionCode {
@@ -77,6 +90,10 @@ namespace GameProtocol {
     ///私聊频道
     /// </summary>
     [pbr::OriginalName("Chat_private")] ChatPrivate = 4,
+    /// <summary>
+    ///好友相关操作
+    /// </summary>
+    [pbr::OriginalName("FriendOperation")] FriendOperation = 5,
   }
 
   public enum ReturnCode {
@@ -89,6 +106,22 @@ namespace GameProtocol {
     ///失败
     /// </summary>
     [pbr::OriginalName("Failed")] Failed = 2,
+  }
+
+  public enum FriendOpType {
+    [pbr::OriginalName("FriendOpNone")] FriendOpNone = 0,
+    /// <summary>
+    /// 客户端请求获取列表，或服务器返回列表
+    /// </summary>
+    [pbr::OriginalName("GetList")] GetList = 1,
+    /// <summary>
+    /// 添加好友
+    /// </summary>
+    [pbr::OriginalName("AddFriend")] AddFriend = 2,
+    /// <summary>
+    /// 删除好友
+    /// </summary>
+    [pbr::OriginalName("RemoveFriend")] RemoveFriend = 3,
   }
 
   #endregion
@@ -129,6 +162,9 @@ namespace GameProtocol {
           break;
         case DataOneofCase.ChatPack:
           ChatPack = other.ChatPack.Clone();
+          break;
+        case DataOneofCase.FriendPack:
+          FriendPack = other.FriendPack.Clone();
           break;
       }
 
@@ -176,9 +212,6 @@ namespace GameProtocol {
     /// <summary>Field number for the "strMsg" field.</summary>
     public const int StrMsgFieldNumber = 4;
     private string strMsg_ = "";
-    /// <summary>
-    /// 用于携带错误信息或简单的系统提示
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string StrMsg {
       get { return strMsg_; }
@@ -209,12 +242,24 @@ namespace GameProtocol {
       }
     }
 
+    /// <summary>Field number for the "friendPack" field.</summary>
+    public const int FriendPackFieldNumber = 7;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.FriendPack FriendPack {
+      get { return dataCase_ == DataOneofCase.FriendPack ? (global::GameProtocol.FriendPack) data_ : null; }
+      set {
+        data_ = value;
+        dataCase_ = value == null ? DataOneofCase.None : DataOneofCase.FriendPack;
+      }
+    }
+
     private object data_;
     /// <summary>Enum of possible cases for the "data" oneof.</summary>
     public enum DataOneofCase {
       None = 0,
       LoginPack = 5,
       ChatPack = 6,
+      FriendPack = 7,
     }
     private DataOneofCase dataCase_ = DataOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -247,6 +292,7 @@ namespace GameProtocol {
       if (StrMsg != other.StrMsg) return false;
       if (!object.Equals(LoginPack, other.LoginPack)) return false;
       if (!object.Equals(ChatPack, other.ChatPack)) return false;
+      if (!object.Equals(FriendPack, other.FriendPack)) return false;
       if (DataCase != other.DataCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -260,6 +306,7 @@ namespace GameProtocol {
       if (StrMsg.Length != 0) hash ^= StrMsg.GetHashCode();
       if (dataCase_ == DataOneofCase.LoginPack) hash ^= LoginPack.GetHashCode();
       if (dataCase_ == DataOneofCase.ChatPack) hash ^= ChatPack.GetHashCode();
+      if (dataCase_ == DataOneofCase.FriendPack) hash ^= FriendPack.GetHashCode();
       hash ^= (int) dataCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -298,6 +345,10 @@ namespace GameProtocol {
         output.WriteRawTag(50);
         output.WriteMessage(ChatPack);
       }
+      if (dataCase_ == DataOneofCase.FriendPack) {
+        output.WriteRawTag(58);
+        output.WriteMessage(FriendPack);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -323,6 +374,9 @@ namespace GameProtocol {
       }
       if (dataCase_ == DataOneofCase.ChatPack) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(ChatPack);
+      }
+      if (dataCase_ == DataOneofCase.FriendPack) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(FriendPack);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -359,6 +413,12 @@ namespace GameProtocol {
             ChatPack = new global::GameProtocol.ChatPack();
           }
           ChatPack.MergeFrom(other.ChatPack);
+          break;
+        case DataOneofCase.FriendPack:
+          if (FriendPack == null) {
+            FriendPack = new global::GameProtocol.FriendPack();
+          }
+          FriendPack.MergeFrom(other.FriendPack);
           break;
       }
 
@@ -407,6 +467,15 @@ namespace GameProtocol {
             ChatPack = subBuilder;
             break;
           }
+          case 58: {
+            global::GameProtocol.FriendPack subBuilder = new global::GameProtocol.FriendPack();
+            if (dataCase_ == DataOneofCase.FriendPack) {
+              subBuilder.MergeFrom(FriendPack);
+            }
+            input.ReadMessage(subBuilder);
+            FriendPack = subBuilder;
+            break;
+          }
         }
       }
     }
@@ -451,9 +520,6 @@ namespace GameProtocol {
     /// <summary>Field number for the "username" field.</summary>
     public const int UsernameFieldNumber = 1;
     private string username_ = "";
-    /// <summary>
-    ///用户名
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Username {
       get { return username_; }
@@ -465,9 +531,6 @@ namespace GameProtocol {
     /// <summary>Field number for the "password" field.</summary>
     public const int PasswordFieldNumber = 2;
     private string password_ = "";
-    /// <summary>
-    ///密码
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Password {
       get { return password_; }
@@ -617,9 +680,6 @@ namespace GameProtocol {
     /// <summary>Field number for the "toUser" field.</summary>
     public const int ToUserFieldNumber = 1;
     private string toUser_ = "";
-    /// <summary>
-    ///接收方
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string ToUser {
       get { return toUser_; }
@@ -631,9 +691,6 @@ namespace GameProtocol {
     /// <summary>Field number for the "fromUser" field.</summary>
     public const int FromUserFieldNumber = 2;
     private string fromUser_ = "";
-    /// <summary>
-    ///发送方 - 客户端发送时可为空,由服务器转发时强制填入
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string FromUser {
       get { return fromUser_; }
@@ -645,9 +702,6 @@ namespace GameProtocol {
     /// <summary>Field number for the "content" field.</summary>
     public const int ContentFieldNumber = 3;
     private string content_ = "";
-    /// <summary>
-    ///聊天内容
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Content {
       get { return content_; }
@@ -659,9 +713,6 @@ namespace GameProtocol {
     /// <summary>Field number for the "chatType" field.</summary>
     public const int ChatTypeFieldNumber = 4;
     private int chatType_;
-    /// <summary>
-    ///消息类型
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int ChatType {
       get { return chatType_; }
@@ -673,9 +724,6 @@ namespace GameProtocol {
     /// <summary>Field number for the "timestamp" field.</summary>
     public const int TimestampFieldNumber = 5;
     private long timestamp_;
-    /// <summary>
-    ///时间戳
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long Timestamp {
       get { return timestamp_; }
@@ -824,6 +872,355 @@ namespace GameProtocol {
           }
           case 40: {
             Timestamp = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class FriendInfo : pb::IMessage<FriendInfo> {
+    private static readonly pb::MessageParser<FriendInfo> _parser = new pb::MessageParser<FriendInfo>(() => new FriendInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<FriendInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendInfo(FriendInfo other) : this() {
+      username_ = other.username_;
+      isOnline_ = other.isOnline_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendInfo Clone() {
+      return new FriendInfo(this);
+    }
+
+    /// <summary>Field number for the "username" field.</summary>
+    public const int UsernameFieldNumber = 1;
+    private string username_ = "";
+    /// <summary>
+    ///好友用户名
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Username {
+      get { return username_; }
+      set {
+        username_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "isOnline" field.</summary>
+    public const int IsOnlineFieldNumber = 2;
+    private bool isOnline_;
+    /// <summary>
+    ///是否在线
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsOnline {
+      get { return isOnline_; }
+      set {
+        isOnline_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as FriendInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(FriendInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Username != other.Username) return false;
+      if (IsOnline != other.IsOnline) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Username.Length != 0) hash ^= Username.GetHashCode();
+      if (IsOnline != false) hash ^= IsOnline.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Username.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Username);
+      }
+      if (IsOnline != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(IsOnline);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Username.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Username);
+      }
+      if (IsOnline != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(FriendInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Username.Length != 0) {
+        Username = other.Username;
+      }
+      if (other.IsOnline != false) {
+        IsOnline = other.IsOnline;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Username = input.ReadString();
+            break;
+          }
+          case 16: {
+            IsOnline = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class FriendPack : pb::IMessage<FriendPack> {
+    private static readonly pb::MessageParser<FriendPack> _parser = new pb::MessageParser<FriendPack>(() => new FriendPack());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<FriendPack> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendPack() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendPack(FriendPack other) : this() {
+      opType_ = other.opType_;
+      targetUser_ = other.targetUser_;
+      friendList_ = other.friendList_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendPack Clone() {
+      return new FriendPack(this);
+    }
+
+    /// <summary>Field number for the "opType" field.</summary>
+    public const int OpTypeFieldNumber = 1;
+    private global::GameProtocol.FriendOpType opType_ = global::GameProtocol.FriendOpType.FriendOpNone;
+    /// <summary>
+    /// 操作类型 (获取列表 / 添加 / 删除)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.FriendOpType OpType {
+      get { return opType_; }
+      set {
+        opType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "targetUser" field.</summary>
+    public const int TargetUserFieldNumber = 2;
+    private string targetUser_ = "";
+    /// <summary>
+    /// 目标用户
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string TargetUser {
+      get { return targetUser_; }
+      set {
+        targetUser_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "friendList" field.</summary>
+    public const int FriendListFieldNumber = 3;
+    private static readonly pb::FieldCodec<global::GameProtocol.FriendInfo> _repeated_friendList_codec
+        = pb::FieldCodec.ForMessage(26, global::GameProtocol.FriendInfo.Parser);
+    private readonly pbc::RepeatedField<global::GameProtocol.FriendInfo> friendList_ = new pbc::RepeatedField<global::GameProtocol.FriendInfo>();
+    /// <summary>
+    /// 好友列表数据 (仅在 opType = GetList 且由服务器返回时，这个列表里才会有数据)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::GameProtocol.FriendInfo> FriendList {
+      get { return friendList_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as FriendPack);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(FriendPack other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (OpType != other.OpType) return false;
+      if (TargetUser != other.TargetUser) return false;
+      if(!friendList_.Equals(other.friendList_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (OpType != global::GameProtocol.FriendOpType.FriendOpNone) hash ^= OpType.GetHashCode();
+      if (TargetUser.Length != 0) hash ^= TargetUser.GetHashCode();
+      hash ^= friendList_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (OpType != global::GameProtocol.FriendOpType.FriendOpNone) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) OpType);
+      }
+      if (TargetUser.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(TargetUser);
+      }
+      friendList_.WriteTo(output, _repeated_friendList_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (OpType != global::GameProtocol.FriendOpType.FriendOpNone) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) OpType);
+      }
+      if (TargetUser.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(TargetUser);
+      }
+      size += friendList_.CalculateSize(_repeated_friendList_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(FriendPack other) {
+      if (other == null) {
+        return;
+      }
+      if (other.OpType != global::GameProtocol.FriendOpType.FriendOpNone) {
+        OpType = other.OpType;
+      }
+      if (other.TargetUser.Length != 0) {
+        TargetUser = other.TargetUser;
+      }
+      friendList_.Add(other.friendList_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            OpType = (global::GameProtocol.FriendOpType) input.ReadEnum();
+            break;
+          }
+          case 18: {
+            TargetUser = input.ReadString();
+            break;
+          }
+          case 26: {
+            friendList_.AddEntriesFrom(input, _repeated_friendList_codec);
             break;
           }
         }

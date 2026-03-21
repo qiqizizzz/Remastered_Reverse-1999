@@ -65,23 +65,6 @@ namespace Module.View
                 return;
             }
             
-            /*if (content == string.Empty)
-            {
-                Debug.Log("输入不能为空");
-                ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_TipBox, (go) =>
-                {
-                    if (go != null)
-                    {
-                        go.GetComponentInChildren<TextMeshProUGUI>().text = "输入不能为空";
-                        
-                        //TODO: 动画效果 - 协程
-
-                        ResManager.ReleaseToPool(AddressDefines.UI_Small_TipBox, go);//动画结束后释放回对象池
-                    }
-                }, _chatPanel);
-                return;
-            }*/
-            
             ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_chatBox_me, (go) =>
             {
                 if (go != null)
