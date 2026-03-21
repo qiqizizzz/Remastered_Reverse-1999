@@ -223,6 +223,11 @@ namespace GameServer
                 Console.WriteLine($"[收到好友请求]:{pack.RequestCode} - {pack.ActionCode}");
                 friendOprationReturnPack(pack);
             }
+            else if(pack.ActionCode == ActionCode.GetChatHistory)
+            {
+                Console.WriteLine($"[收到聊天记录请求]:{pack.RequestCode} - {pack.ActionCode}");
+                getChatHistoryReturnPack(pack);
+            }
             else if(pack.ActionCode == ActionCode.Heartbeat)
             {
                 //Console.WriteLine($"[收到心跳请求]:{pack.RequestCode} - {pack.ActionCode}");
@@ -373,6 +378,39 @@ namespace GameServer
                 default:
                     break;
             }
+        }
+
+        private void getChatHistoryReturnPack(MainPack pack)
+        {
+            if (string.IsNullOrEmpty(this.UserName)) return;
+
+            string targetUser = pack.ChatHistoryPack.TargetUser;
+
+            var msgs = DBManager.GetChatHistory(this.UserName, targetUser);
+
+            MainPack resPack = new MainPack
+            {
+                ActionCode = ActionCode.GetChatHistory,
+                ReturnCode = ReturnCode.Succeed,
+                ChatHistoryPack = new ChatHistoryPack
+                {
+                    TargetUser = targetUser
+                }
+            };
+
+            foreach (var msg in msgs)
+            {
+                resPack.ChatHistoryPack.ChatList.Add(new ChatPack
+                {
+                    FromUser = msg.SenderName,
+                    ToUser = msg.ReceiverName,
+                    Content = msg.Content,
+                    Timestamp = msg.SendTime,
+                    ChatType = 0
+                });
+            }
+
+            Send(resPack.ToByteArray());
         }
 
         #region 好友协议相关

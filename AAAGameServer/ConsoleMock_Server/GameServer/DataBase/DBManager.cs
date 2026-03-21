@@ -114,8 +114,6 @@ namespace GameServer.DataBase
                     .Take(limit)
                     .ToList();
 
-                // 将消息倒序,新的在前
-                messages.Reverse();
                 return messages;
             }
         }

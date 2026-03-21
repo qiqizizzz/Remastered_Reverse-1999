@@ -22,7 +22,7 @@ namespace Module.View
 {
     public class ChatView : BaseView
     {
-        private GameObject _currentChat;//当前聊天对象
+        private Button _currentChat;//当前聊天对象
         private const int friendMaxCount = 50;//好友上限
         
         [Header("UI组件")]
@@ -45,6 +45,7 @@ namespace Module.View
         protected override void OnStart()
         {
             Controller.RegisterFunc(EventDefines.UpdateFriendList, onUpdateFriendList);
+            Controller.RegisterFunc(EventDefines.UpdateChatHistory, onUpdateChatHistory);
             
             ApplyFunc(EventDefines.GetFriendList);//发送获取好友列表请求
         }
@@ -52,6 +53,7 @@ namespace Module.View
         protected override void OnDestroy()
         {
             Controller.UnRegisterFunc(EventDefines.UpdateFriendList);
+            Controller.UnRegisterFunc(EventDefines.GetChatHistory);
         }
 
         private void onReturnMoreOptionBtn()
@@ -59,9 +61,22 @@ namespace Module.View
             GameApp.ViewManager.Close(ViewId);
         }
 
-        private void onFriendBtn(string friendName)
+        private void onFriendBtn(string friendName, GameObject btnObj)
         {
             Find<TextMeshProUGUI>("panels/panel_friend/chatArea/Txt_name").text = friendName;
+            
+            //取消之前的选中状态
+            if(_currentChat != null)
+                _currentChat.transform.Find("Imgs_bg/Img_selected").gameObject.SetActive(false);
+            
+            btnObj.transform.Find("Imgs_bg/Img_selected").gameObject.SetActive(true);//设置当前按钮的选中状态
+            
+            //如果点击的好友已经是当前聊天对象，则不重复加载聊天记录
+            if(_currentChat == btnObj.GetComponent<Button>())
+                return;
+            
+            _currentChat = btnObj.GetComponent<Button>();
+            ApplyFunc(EventDefines.GetChatHistory, friendName);
             
             //TODO: 加载与该好友的聊天记录，并刷新聊天界面
         }
@@ -90,7 +105,7 @@ namespace Module.View
             }, contentParent);
             
             //保存至数据库
-            //ApplyFunc(EventDefines.SendPrivateMessage, targetUser, content);
+            ApplyFunc(EventDefines.SendPrivateMessage, targetUser, content);
         }
 
         private IEnumerator scrollToDown()
@@ -152,10 +167,58 @@ namespace Module.View
                         
                         Button btn = go.GetComponent<Button>();
                         btn.onClick.RemoveAllListeners();//先移除之前的监听，避免重复绑定
-                        btn.onClick.AddListener(() => onFriendBtn(targetName));
+                        btn.onClick.AddListener(() => onFriendBtn(targetName ,go));
                     }
                 }),contentParent);
             }
+        }
+
+        private void onUpdateChatHistory(params object[] args)
+        {
+            Debug.Log("更新历史记录中...");
+            //args[0] 是聊天对象的名字
+            string targetUser = args[0] as string;
+            Transform contentParent = _chatScrollRect.content;
+            List<ChatMessage> messages =
+                (Controller as ChattingController)?.Model.ChatHistory.GetValueOrDefault(targetUser) ??
+                new List<ChatMessage>();
+            
+            if(messages.Count == 0) return;
+            
+            //回收先前的聊天记录UI
+            foreach (Transform child in contentParent)
+            {
+                ResManager.ReleaseToPool(AddressDefines.UI_Small_chatBox_me, child.gameObject);
+                ResManager.ReleaseToPool(AddressDefines.UI_Small_chatBox_other, child.gameObject);
+            }
+                
+            foreach (var msg in messages)
+            {
+                string content = msg.Content;
+                    
+                if (msg.IsSelf)
+                {
+                    ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_chatBox_me, (go) =>
+                    {
+                        if (go != null)
+                        {
+                            go.GetComponent<ChatBubble>().SetMessage(content);
+                        }
+                    }, contentParent);
+                }
+                else
+                {
+                    ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_chatBox_other, (go) =>
+                    {
+                        if (go != null)
+                        {
+                            go.GetComponent<ChatBubble>().SetMessage(content);
+                        }
+                    }, contentParent);
+                }
+            }
+            
+            StartCoroutine(scrollToDown());
         }
     }
 }

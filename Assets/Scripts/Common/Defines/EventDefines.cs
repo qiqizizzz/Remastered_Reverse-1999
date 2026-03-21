@@ -18,9 +18,11 @@ namespace Common.Defines
         public static readonly string OpenTipBoxView = "OpenTipBoxView";
         public static readonly string LoadingScene = "LoadingScene";
         public static readonly string UpdateFriendList = "UpdateFriendList";
+        public static readonly string UpdateChatHistory = "UpdateChatHistory";
         
         // 网络事件
         public static readonly string SendPrivateMessage = "SendPrivateMessage";
         public static readonly string GetFriendList = "GetFriendList";
+        public static readonly string GetChatHistory = "GetChatHistory";
     }
 }

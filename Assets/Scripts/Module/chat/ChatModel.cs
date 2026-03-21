@@ -36,7 +36,7 @@ namespace Module.chat
     
     public class ChatModel : BaseModel
     {
-        public Dictionary<string, List<ChatMessage>> ChatHistory;
+        public Dictionary<string, List<ChatMessage>> ChatHistory;//聊天记录
         public Dictionary<string, int> UnreadCounts;//未读聊天数量 - string是玩家名字
         public string CurrentTargetUser;//当前聊天对象的用户名
         public List<FriendInfo> FriendList;//好友列表

@@ -24,36 +24,41 @@ namespace GameProtocol {
     static GamesProtocolReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChNHYW1lc1Byb3RvY29sLnByb3RvEgxHYW1lUHJvdG9jb2wiuAIKCE1haW5Q",
+            "ChNHYW1lc1Byb3RvY29sLnByb3RvEgxHYW1lUHJvdG9jb2wi8gIKCE1haW5Q",
             "YWNrEi4KC3JlcXVlc3RDb2RlGAEgASgOMhkuR2FtZVByb3RvY29sLlJlcXVl",
             "c3RDb2RlEiwKCmFjdGlvbkNvZGUYAiABKA4yGC5HYW1lUHJvdG9jb2wuQWN0",
             "aW9uQ29kZRIsCgpyZXR1cm5Db2RlGAMgASgOMhguR2FtZVByb3RvY29sLlJl",
             "dHVybkNvZGUSDgoGc3RyTXNnGAQgASgJEiwKCWxvZ2luUGFjaxgFIAEoCzIX",
             "LkdhbWVQcm90b2NvbC5Mb2dpblBhY2tIABIqCghjaGF0UGFjaxgGIAEoCzIW",
             "LkdhbWVQcm90b2NvbC5DaGF0UGFja0gAEi4KCmZyaWVuZFBhY2sYByABKAsy",
-            "GC5HYW1lUHJvdG9jb2wuRnJpZW5kUGFja0gAQgYKBGRhdGEiLwoJTG9naW5Q",
-            "YWNrEhAKCHVzZXJuYW1lGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJImIKCENo",
-            "YXRQYWNrEg4KBnRvVXNlchgBIAEoCRIQCghmcm9tVXNlchgCIAEoCRIPCgdj",
-            "b250ZW50GAMgASgJEhAKCGNoYXRUeXBlGAQgASgFEhEKCXRpbWVzdGFtcBgF",
-            "IAEoAyIwCgpGcmllbmRJbmZvEhAKCHVzZXJuYW1lGAEgASgJEhAKCGlzT25s",
-            "aW5lGAIgASgIInoKCkZyaWVuZFBhY2sSKgoGb3BUeXBlGAEgASgOMhouR2Ft",
-            "ZVByb3RvY29sLkZyaWVuZE9wVHlwZRISCgp0YXJnZXRVc2VyGAIgASgJEiwK",
-            "CmZyaWVuZExpc3QYAyADKAsyGC5HYW1lUHJvdG9jb2wuRnJpZW5kSW5mbyo0",
-            "CgtSZXF1ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggKBFVzZXIQARIKCgZG",
-            "cmllbmQQAipoCgpBY3Rpb25Db2RlEg4KCkFjdGlvbk5vbmUQABIJCgVMb2dv",
-            "bhABEgkKBUxvZ2luEAISDQoJSGVhcnRiZWF0EAMSEAoMQ2hhdF9wcml2YXRl",
-            "EAQSEwoPRnJpZW5kT3BlcmF0aW9uEAUqNQoKUmV0dXJuQ29kZRIOCgpSZXR1",
-            "cm5Ob25lEAASCwoHU3VjY2VlZBABEgoKBkZhaWxlZBACKk4KDEZyaWVuZE9w",
-            "VHlwZRIQCgxGcmllbmRPcE5vbmUQABILCgdHZXRMaXN0EAESDQoJQWRkRnJp",
-            "ZW5kEAISEAoMUmVtb3ZlRnJpZW5kEANiBnByb3RvMw=="));
+            "GC5HYW1lUHJvdG9jb2wuRnJpZW5kUGFja0gAEjgKD2NoYXRIaXN0b3J5UGFj",
+            "axgIIAEoCzIdLkdhbWVQcm90b2NvbC5DaGF0SGlzdG9yeVBhY2tIAEIGCgRk",
+            "YXRhIi8KCUxvZ2luUGFjaxIQCgh1c2VybmFtZRgBIAEoCRIQCghwYXNzd29y",
+            "ZBgCIAEoCSJiCghDaGF0UGFjaxIOCgZ0b1VzZXIYASABKAkSEAoIZnJvbVVz",
+            "ZXIYAiABKAkSDwoHY29udGVudBgDIAEoCRIQCghjaGF0VHlwZRgEIAEoBRIR",
+            "Cgl0aW1lc3RhbXAYBSABKAMiMAoKRnJpZW5kSW5mbxIQCgh1c2VybmFtZRgB",
+            "IAEoCRIQCghpc09ubGluZRgCIAEoCCJ6CgpGcmllbmRQYWNrEioKBm9wVHlw",
+            "ZRgBIAEoDjIaLkdhbWVQcm90b2NvbC5GcmllbmRPcFR5cGUSEgoKdGFyZ2V0",
+            "VXNlchgCIAEoCRIsCgpmcmllbmRMaXN0GAMgAygLMhguR2FtZVByb3RvY29s",
+            "LkZyaWVuZEluZm8iTwoPQ2hhdEhpc3RvcnlQYWNrEhIKCnRhcmdldFVzZXIY",
+            "ASABKAkSKAoIY2hhdExpc3QYAiADKAsyFi5HYW1lUHJvdG9jb2wuQ2hhdFBh",
+            "Y2sqNAoLUmVxdWVzdENvZGUSDwoLUmVxdWVzdE5vbmUQABIICgRVc2VyEAES",
+            "CgoGRnJpZW5kEAIqfAoKQWN0aW9uQ29kZRIOCgpBY3Rpb25Ob25lEAASCQoF",
+            "TG9nb24QARIJCgVMb2dpbhACEg0KCUhlYXJ0YmVhdBADEhAKDENoYXRfcHJp",
+            "dmF0ZRAEEhMKD0ZyaWVuZE9wZXJhdGlvbhAFEhIKDkdldENoYXRIaXN0b3J5",
+            "EAYqNQoKUmV0dXJuQ29kZRIOCgpSZXR1cm5Ob25lEAASCwoHU3VjY2VlZBAB",
+            "EgoKBkZhaWxlZBACKk4KDEZyaWVuZE9wVHlwZRIQCgxGcmllbmRPcE5vbmUQ",
+            "ABILCgdHZXRMaXN0EAESDQoJQWRkRnJpZW5kEAISEAoMUmVtb3ZlRnJpZW5k",
+            "EANiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProtocol.RequestCode), typeof(global::GameProtocol.ActionCode), typeof(global::GameProtocol.ReturnCode), typeof(global::GameProtocol.FriendOpType), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.MainPack), global::GameProtocol.MainPack.Parser, new[]{ "RequestCode", "ActionCode", "ReturnCode", "StrMsg", "LoginPack", "ChatPack", "FriendPack" }, new[]{ "Data" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.MainPack), global::GameProtocol.MainPack.Parser, new[]{ "RequestCode", "ActionCode", "ReturnCode", "StrMsg", "LoginPack", "ChatPack", "FriendPack", "ChatHistoryPack" }, new[]{ "Data" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.LoginPack), global::GameProtocol.LoginPack.Parser, new[]{ "Username", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ChatPack), global::GameProtocol.ChatPack.Parser, new[]{ "ToUser", "FromUser", "Content", "ChatType", "Timestamp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.FriendInfo), global::GameProtocol.FriendInfo.Parser, new[]{ "Username", "IsOnline" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.FriendPack), global::GameProtocol.FriendPack.Parser, new[]{ "OpType", "TargetUser", "FriendList" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.FriendPack), global::GameProtocol.FriendPack.Parser, new[]{ "OpType", "TargetUser", "FriendList" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ChatHistoryPack), global::GameProtocol.ChatHistoryPack.Parser, new[]{ "TargetUser", "ChatList" }, null, null, null, null)
           }));
     }
     #endregion
@@ -94,6 +99,10 @@ namespace GameProtocol {
     ///好友相关操作
     /// </summary>
     [pbr::OriginalName("FriendOperation")] FriendOperation = 5,
+    /// <summary>
+    ///获取历史聊天记录
+    /// </summary>
+    [pbr::OriginalName("GetChatHistory")] GetChatHistory = 6,
   }
 
   public enum ReturnCode {
@@ -165,6 +174,9 @@ namespace GameProtocol {
           break;
         case DataOneofCase.FriendPack:
           FriendPack = other.FriendPack.Clone();
+          break;
+        case DataOneofCase.ChatHistoryPack:
+          ChatHistoryPack = other.ChatHistoryPack.Clone();
           break;
       }
 
@@ -253,6 +265,17 @@ namespace GameProtocol {
       }
     }
 
+    /// <summary>Field number for the "chatHistoryPack" field.</summary>
+    public const int ChatHistoryPackFieldNumber = 8;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.ChatHistoryPack ChatHistoryPack {
+      get { return dataCase_ == DataOneofCase.ChatHistoryPack ? (global::GameProtocol.ChatHistoryPack) data_ : null; }
+      set {
+        data_ = value;
+        dataCase_ = value == null ? DataOneofCase.None : DataOneofCase.ChatHistoryPack;
+      }
+    }
+
     private object data_;
     /// <summary>Enum of possible cases for the "data" oneof.</summary>
     public enum DataOneofCase {
@@ -260,6 +283,7 @@ namespace GameProtocol {
       LoginPack = 5,
       ChatPack = 6,
       FriendPack = 7,
+      ChatHistoryPack = 8,
     }
     private DataOneofCase dataCase_ = DataOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -293,6 +317,7 @@ namespace GameProtocol {
       if (!object.Equals(LoginPack, other.LoginPack)) return false;
       if (!object.Equals(ChatPack, other.ChatPack)) return false;
       if (!object.Equals(FriendPack, other.FriendPack)) return false;
+      if (!object.Equals(ChatHistoryPack, other.ChatHistoryPack)) return false;
       if (DataCase != other.DataCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -307,6 +332,7 @@ namespace GameProtocol {
       if (dataCase_ == DataOneofCase.LoginPack) hash ^= LoginPack.GetHashCode();
       if (dataCase_ == DataOneofCase.ChatPack) hash ^= ChatPack.GetHashCode();
       if (dataCase_ == DataOneofCase.FriendPack) hash ^= FriendPack.GetHashCode();
+      if (dataCase_ == DataOneofCase.ChatHistoryPack) hash ^= ChatHistoryPack.GetHashCode();
       hash ^= (int) dataCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -349,6 +375,10 @@ namespace GameProtocol {
         output.WriteRawTag(58);
         output.WriteMessage(FriendPack);
       }
+      if (dataCase_ == DataOneofCase.ChatHistoryPack) {
+        output.WriteRawTag(66);
+        output.WriteMessage(ChatHistoryPack);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -377,6 +407,9 @@ namespace GameProtocol {
       }
       if (dataCase_ == DataOneofCase.FriendPack) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(FriendPack);
+      }
+      if (dataCase_ == DataOneofCase.ChatHistoryPack) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ChatHistoryPack);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -419,6 +452,12 @@ namespace GameProtocol {
             FriendPack = new global::GameProtocol.FriendPack();
           }
           FriendPack.MergeFrom(other.FriendPack);
+          break;
+        case DataOneofCase.ChatHistoryPack:
+          if (ChatHistoryPack == null) {
+            ChatHistoryPack = new global::GameProtocol.ChatHistoryPack();
+          }
+          ChatHistoryPack.MergeFrom(other.ChatHistoryPack);
           break;
       }
 
@@ -474,6 +513,15 @@ namespace GameProtocol {
             }
             input.ReadMessage(subBuilder);
             FriendPack = subBuilder;
+            break;
+          }
+          case 66: {
+            global::GameProtocol.ChatHistoryPack subBuilder = new global::GameProtocol.ChatHistoryPack();
+            if (dataCase_ == DataOneofCase.ChatHistoryPack) {
+              subBuilder.MergeFrom(ChatHistoryPack);
+            }
+            input.ReadMessage(subBuilder);
+            ChatHistoryPack = subBuilder;
             break;
           }
         }
@@ -1221,6 +1269,164 @@ namespace GameProtocol {
           }
           case 26: {
             friendList_.AddEntriesFrom(input, _repeated_friendList_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 聊天记录包 (拉取历史记录用)
+  /// </summary>
+  public sealed partial class ChatHistoryPack : pb::IMessage<ChatHistoryPack> {
+    private static readonly pb::MessageParser<ChatHistoryPack> _parser = new pb::MessageParser<ChatHistoryPack>(() => new ChatHistoryPack());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatHistoryPack> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatHistoryPack() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatHistoryPack(ChatHistoryPack other) : this() {
+      targetUser_ = other.targetUser_;
+      chatList_ = other.chatList_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatHistoryPack Clone() {
+      return new ChatHistoryPack(this);
+    }
+
+    /// <summary>Field number for the "targetUser" field.</summary>
+    public const int TargetUserFieldNumber = 1;
+    private string targetUser_ = "";
+    /// <summary>
+    /// 目标用户(与谁的聊天记录)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string TargetUser {
+      get { return targetUser_; }
+      set {
+        targetUser_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "chatList" field.</summary>
+    public const int ChatListFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::GameProtocol.ChatPack> _repeated_chatList_codec
+        = pb::FieldCodec.ForMessage(18, global::GameProtocol.ChatPack.Parser);
+    private readonly pbc::RepeatedField<global::GameProtocol.ChatPack> chatList_ = new pbc::RepeatedField<global::GameProtocol.ChatPack>();
+    /// <summary>
+    /// 历史记录列表
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::GameProtocol.ChatPack> ChatList {
+      get { return chatList_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatHistoryPack);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatHistoryPack other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (TargetUser != other.TargetUser) return false;
+      if(!chatList_.Equals(other.chatList_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (TargetUser.Length != 0) hash ^= TargetUser.GetHashCode();
+      hash ^= chatList_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (TargetUser.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(TargetUser);
+      }
+      chatList_.WriteTo(output, _repeated_chatList_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (TargetUser.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(TargetUser);
+      }
+      size += chatList_.CalculateSize(_repeated_chatList_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatHistoryPack other) {
+      if (other == null) {
+        return;
+      }
+      if (other.TargetUser.Length != 0) {
+        TargetUser = other.TargetUser;
+      }
+      chatList_.Add(other.chatList_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            TargetUser = input.ReadString();
+            break;
+          }
+          case 18: {
+            chatList_.AddEntriesFrom(input, _repeated_chatList_codec);
             break;
           }
         }

@@ -97,9 +97,8 @@ namespace Module.View
             {
                 Debug.Log($"登陆成功，欢迎 {pack.LoginPack?.Username??accountLogin.text}!");
                 
-                //TODO：隐藏登陆面板
                 loginView.SetActive(false);
-                GameApp.GameDataManager.SetPlayerName(pack.LoginPack?.Username);
+                GameApp.GameDataManager.SetPlayerName(accountLogin.text);
             }
             else
             {

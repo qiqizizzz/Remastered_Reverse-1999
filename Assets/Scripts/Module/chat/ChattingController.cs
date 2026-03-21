@@ -40,9 +40,11 @@ namespace Module.chat
             RegisterFunc(EventDefines.OpenChatView, onOpenChatView);
             RegisterFunc(EventDefines.SendPrivateMessage, sendPrivateMessage);
             RegisterFunc(EventDefines.GetFriendList, getFriendList);
+            RegisterFunc(EventDefines.GetChatHistory, getChatHistory);
             
             GameApp.NetworkManager.AddMessageHandler(ActionCode.ChatPrivate, onReceiveChatMsg);
             GameApp.NetworkManager.AddMessageHandler(ActionCode.FriendOperation, onReceiveFriendOperation);
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.GetChatHistory, onReceiveChatHistory);
         }
 
         public override void RemoveModuleEvent()
@@ -50,9 +52,11 @@ namespace Module.chat
             UnRegisterFunc(EventDefines.OpenChatView);
             UnRegisterFunc(EventDefines.SendPrivateMessage);
             UnRegisterFunc(EventDefines.GetFriendList);
+            UnRegisterFunc(EventDefines.GetChatHistory);
             
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.ChatPrivate, onReceiveChatMsg);
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.FriendOperation, onReceiveFriendOperation);
+            GameApp.NetworkManager.RemoveMessageHandler(ActionCode.GetChatHistory, onReceiveChatHistory);
         }
 
         private void onOpenChatView(System.Object[] args)
@@ -126,6 +130,19 @@ namespace Module.chat
             GameApp.NetworkManager.Send(mainPack);
             Debug.Log("已发送获取好友列表请求");
         }
+        
+        private void getChatHistory(System.Object[] args)
+        {
+            string targetUser = args[0] as string;
+
+            MainPack pack = new MainPack
+            {
+                RequestCode = RequestCode.User,
+                ActionCode = ActionCode.GetChatHistory,
+                ChatHistoryPack = new ChatHistoryPack { TargetUser = targetUser }
+            };
+            GameApp.NetworkManager.Send(pack);
+        }
         #endregion
 
         #region 接收请求
@@ -150,8 +167,8 @@ namespace Module.chat
                     };
                     
                     saveToModel(sender, msg);
-                    
-                    //TODO：刷新气泡,显示收到的消息
+
+                    ApplyFunc(EventDefines.GetChatHistory, sender);
                 }
                 else
                 {
@@ -193,7 +210,46 @@ namespace Module.chat
                 //TODO: 显示错误提示
             }
         }
+        
+        private void onReceiveChatHistory(MainPack pack)
+        {
+            if (pack.ReturnCode == ReturnCode.Succeed && pack.ChatHistoryPack != null)
+            {
+                string targetUser = pack.ChatHistoryPack.TargetUser;
+                string myName = GameApp.GameDataManager.PlayerName;
 
+                //清空旧缓存
+                if (Model.ChatHistory.ContainsKey(targetUser))
+                {
+                    Model.ChatHistory[targetUser].Clear();
+                }
+
+                foreach (var chatMsg in pack.ChatHistoryPack.ChatList)
+                {
+                    bool isSelf = (chatMsg.FromUser == myName); // 判断这条消息是不是自己发的
+
+                    ChatMessage msg = new ChatMessage()
+                    {
+                        SenderName = chatMsg.FromUser,
+                        Content = chatMsg.Content,
+                        TimeStamp = chatMsg.Timestamp,
+                        IsSelf = isSelf,
+                        Status = ChatMessageStatus.Success
+                    };
+            
+                    saveToModel(targetUser, msg);
+                }
+
+                Debug.Log($"成功拉取与 {targetUser} 的历史记录，共 {pack.ChatHistoryPack.ChatList.Count} 条");
+
+                ApplyFunc(EventDefines.UpdateChatHistory, targetUser);
+            }
+            else
+            {
+                Debug.Log("没有获取到历史记录");
+            }
+        }
+        
         #region 好友相关操作
 
         private void getFriendList(MainPack pack)
