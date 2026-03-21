@@ -23,6 +23,7 @@ namespace Module.View
     public class ChatView : BaseView
     {
         private GameObject _currentChat;//当前聊天对象
+        private const int friendMaxCount = 50;//好友上限
         
         [Header("UI组件")]
         private TMP_InputField _inputField;
@@ -39,13 +40,12 @@ namespace Module.View
             
             Find<Button>("Btn_return").onClick.AddListener(onReturnMoreOptionBtn);
             Find<Button>("panels/panel_friend/chatArea/Btn_send").onClick.AddListener(onSendMessageBtn);
-            
-            
         }
 
         protected override void OnStart()
         {
             Controller.RegisterFunc(EventDefines.UpdateFriendList, onUpdateFriendList);
+            
             ApplyFunc(EventDefines.GetFriendList);//发送获取好友列表请求
         }
 
@@ -61,7 +61,9 @@ namespace Module.View
 
         private void onFriendBtn(string friendName)
         {
-            Debug.Log("点击了好友按钮，好友名字是：" + friendName);
+            Find<TextMeshProUGUI>("panels/panel_friend/chatArea/Txt_name").text = friendName;
+            
+            //TODO: 加载与该好友的聊天记录，并刷新聊天界面
         }
 
         private void onSendMessageBtn()
@@ -105,8 +107,55 @@ namespace Module.View
         private void onUpdateFriendList(params object[] args)
         {
             Debug.Log("更新好友列表中...");
-            //Todo: 从数据库中读取好友列表, 生成好友列表UI, 好友按钮需要绑定相应的 点击事件
-            //List<FriendInfo> friends = Controller.GetModel<ChatModel>().FriendList;
+            
+            Transform contentParent = _friendScrollRect.content; 
+            List<FriendInfo> friends = (Controller as ChattingController)?.Model.FriendList;
+
+            if (friends == null)
+            {
+                Debug.LogError("Model.FriendList 是空的！请检查 Controller 里是否正确赋值了！");
+                return;
+            }
+
+            if (friends.Count == 0)
+            {
+                //TODO: 显示没有好友的提示
+            }
+            
+            Find<TextMeshProUGUI>("panels/panel_friend/chatArea/Txt_name").text = friends[0].Username;
+            
+            //回收先前的好友列表UI
+            foreach (Transform child in contentParent)
+            {
+                ResManager.ReleaseToPool(AddressDefines.UI_Small_Btn_friTemp, child.gameObject);
+            }
+            
+            //更新好友数量
+            Find<TextMeshProUGUI>("panels/panel_friend/Txt_num").text = $"{friends.Count}/{friendMaxCount}";
+            
+            foreach (var item in friends)
+            {
+                string targetName = item.Username;
+                
+                ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_Btn_friTemp,(go =>
+                {
+                    if (go != null)
+                    {
+                        go.transform.Find("Txt_name").GetComponent<TextMeshProUGUI>().text = targetName;
+                        
+                        //获取状态节点
+                        TextMeshProUGUI txtTime = go.transform.Find("Txt_loginTime").GetComponent<TextMeshProUGUI>();
+                        if (item.IsOnline)
+                            txtTime.text = "<color=green>在线</color>";
+                        else
+                            txtTime.text = "<color=#716860>离线</color>";
+                        
+                        Button btn = go.GetComponent<Button>();
+                        btn.onClick.RemoveAllListeners();//先移除之前的监听，避免重复绑定
+                        btn.onClick.AddListener(() => onFriendBtn(targetName));
+                    }
+                }),contentParent);
+            }
         }
     }
 }

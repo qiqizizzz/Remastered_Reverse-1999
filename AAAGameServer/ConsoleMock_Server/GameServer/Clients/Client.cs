@@ -394,11 +394,11 @@ namespace GameServer
 
             foreach(var item in friends)
             {
-                bool isOnline = _server.GetClientByUsername(item.Username) != null;//检查好友是否在线
+                bool isOnline = _server.GetClientByUsername(item.FriendUsername) != null;//检查好友是否在线
 
                 resPack.FriendPack.FriendList.Add(new FriendInfo
                 {
-                    Username = item.Username,
+                    Username = item.FriendUsername,
                     IsOnline = isOnline
                 });
             }

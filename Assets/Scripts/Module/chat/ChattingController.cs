@@ -202,6 +202,7 @@ namespace Module.chat
             foreach (var friend in pack.FriendPack.FriendList)
             {
                 Model.FriendList.Add(friend);
+                Debug.Log(friend);
             }
             
             Debug.Log($"成功获取到好友列表，好友数量：{Model.FriendList.Count}");
