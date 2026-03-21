@@ -74,12 +74,12 @@ namespace MVC.View
             _isInit = true;
         }
 
-        public void Open(params object[] args)
+        public virtual void Open(params object[] args)
         {
             
         }
 
-        public void Close(params object[] args)
+        public virtual void Close(params object[] args)
         {
             SetVisible(false);
         }

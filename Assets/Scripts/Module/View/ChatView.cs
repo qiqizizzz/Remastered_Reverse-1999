@@ -61,7 +61,8 @@ namespace Module.View
             if (content == string.Empty)
             {
                 Debug.Log("输入不能为空");
-                ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenTipBoxView, TipBoxType.chat);
+                ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenTipBoxView, TipBoxType.chat, "输入不能为空");
+                return;
             }
             
             /*if (content == string.Empty)
