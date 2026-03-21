@@ -7,6 +7,7 @@
 */
 
 using System.Collections.Generic;
+using GameProtocol;
 using MVC.Model;
 
 namespace Module.chat
@@ -38,6 +39,7 @@ namespace Module.chat
         public Dictionary<string, List<ChatMessage>> ChatHistory;
         public Dictionary<string, int> UnreadCounts;//未读聊天数量 - string是玩家名字
         public string CurrentTargetUser;//当前聊天对象的用户名
+        public List<FriendInfo> FriendList;//好友列表
         
         public const int MaxCacheCount = 100;//每个聊天对象的最大消息缓存数量
         
@@ -45,6 +47,7 @@ namespace Module.chat
         {
             ChatHistory = new Dictionary<string, List<ChatMessage>>();
             UnreadCounts = new Dictionary<string, int>();
+            FriendList = new List<FriendInfo>();
             CurrentTargetUser = "";
         }
     }

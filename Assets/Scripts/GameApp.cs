@@ -35,4 +35,3 @@ public class GameApp : Singleton<GameApp>
         NetworkManager.OnUpdate();
     }
 }
-    

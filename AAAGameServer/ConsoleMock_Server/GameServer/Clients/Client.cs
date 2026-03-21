@@ -1,5 +1,6 @@
 ﻿using GameProtocol;
 using GameServer.DataBase;
+using GameServer.DataBase.Entity;
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,8 @@ namespace GameServer
 
             BeginReceive();
         }
+
+        #region 接收与处理数据
 
         //开始接收数据
         private void BeginReceive()
@@ -174,6 +177,10 @@ namespace GameServer
             }
         }
 
+        #endregion
+
+        #region 处理消息相关
+
         //收到完整消息时的处理
         private void OnMessageReceived(byte[] message)
         {
@@ -211,6 +218,11 @@ namespace GameServer
                 Console.WriteLine($"[收到聊天请求]:{pack.RequestCode} - {pack.ActionCode}");
                 chatPrivateReturnPack(pack);
             }
+            else if(pack.ActionCode == ActionCode.FriendOperation)
+            {
+                Console.WriteLine($"[收到好友请求]:{pack.RequestCode} - {pack.ActionCode}");
+                friendOprationReturnPack(pack);
+            }
             else if(pack.ActionCode == ActionCode.Heartbeat)
             {
                 //Console.WriteLine($"[收到心跳请求]:{pack.RequestCode} - {pack.ActionCode}");
@@ -220,6 +232,8 @@ namespace GameServer
                 return;
             }
         }
+
+        #region 处理协议相关函数
 
         private void registerReturnPack(MainPack pack)
         {
@@ -335,6 +349,71 @@ namespace GameServer
             Console.WriteLine($"[私聊] {this.UserName} 发给 {targetUser}: {content}");
         }
 
+        private void friendOprationReturnPack(MainPack pack)
+        {
+            //未登录无法处理
+            if (string.IsNullOrEmpty(this.UserName))
+            {
+                MainPack errPack = new MainPack { ActionCode = ActionCode.ChatPrivate, ReturnCode = ReturnCode.Failed, StrMsg = "请先登录!" };
+                Send(errPack.ToByteArray());
+                return;
+            }
+
+            switch (pack.FriendPack.OpType)
+            {
+                case FriendOpType.FriendOpNone:
+                    break;
+                case FriendOpType.GetList:
+                    HandleGetFriendList(pack);
+                    break;
+                case FriendOpType.AddFriend:
+                    break;
+                case FriendOpType.RemoveFriend:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        #region 好友协议相关
+
+        private void HandleGetFriendList(MainPack pack)
+        {
+            List<Friend> friends = DBManager.GetFriends(this.UserName);
+
+            MainPack resPack = new MainPack
+            {
+                RequestCode = RequestCode.Friend,
+                ActionCode = ActionCode.FriendOperation,
+                ReturnCode = ReturnCode.Succeed,
+                FriendPack = new FriendPack
+                {
+                    OpType = FriendOpType.GetList
+                }
+            };
+
+            foreach(var item in friends)
+            {
+                bool isOnline = _server.GetClientByUsername(item.Username) != null;//检查好友是否在线
+
+                resPack.FriendPack.FriendList.Add(new FriendInfo
+                {
+                    Username = item.Username,
+                    IsOnline = isOnline
+                });
+            }
+
+            Send(resPack.ToByteArray());
+            Console.WriteLine($"[{_clientId}] 获取好友列表,好友数量: {friends.Count}");
+        }
+
+        #endregion
+        #endregion
+
+        #endregion
+
+        #region 发送消息相关
+
         //发送数据给客户端
         public void Send(byte[] data)
         {
@@ -370,5 +449,7 @@ namespace GameServer
                 Console.WriteLine($"[{_clientId}] 发送回调异常: {ex.Message}");
             }
         }
+
+        #endregion
     }
 }

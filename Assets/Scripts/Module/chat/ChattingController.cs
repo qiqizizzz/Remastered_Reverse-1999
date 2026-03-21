@@ -37,16 +37,22 @@ namespace Module.chat
 
         public override void InitModuleEvent()
         {
-            RegisterFunc(EventDefines.SendPrivateMessage, sendPrivateMessage);
             RegisterFunc(EventDefines.OpenChatView, onOpenChatView);
+            RegisterFunc(EventDefines.SendPrivateMessage, sendPrivateMessage);
+            RegisterFunc(EventDefines.GetFriendList, getFriendList);
+            
             GameApp.NetworkManager.AddMessageHandler(ActionCode.ChatPrivate, onReceiveChatMsg);
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.FriendOperation, onReceiveFriendOperation);
         }
 
         public override void RemoveModuleEvent()
         {
-            UnRegisterFunc(EventDefines.SendPrivateMessage);
             UnRegisterFunc(EventDefines.OpenChatView);
+            UnRegisterFunc(EventDefines.SendPrivateMessage);
+            UnRegisterFunc(EventDefines.GetFriendList);
+            
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.ChatPrivate, onReceiveChatMsg);
+            GameApp.NetworkManager.RemoveMessageHandler(ActionCode.FriendOperation, onReceiveFriendOperation);
         }
 
         private void onOpenChatView(System.Object[] args)
@@ -54,6 +60,7 @@ namespace Module.chat
             GameApp.ViewManager.Open(ViewType.ChatView);
         }
 
+        #region 发送请求
         /// <summary>
         /// 私聊发送消息
         /// </summary>
@@ -98,6 +105,30 @@ namespace Module.chat
             GameApp.NetworkManager.Send(mainPack);
         }
 
+        /// <summary>
+        /// 获取好友列表
+        /// </summary>
+        /// <param name="pack"></param>
+        private void getFriendList(System.Object[] args)
+        {
+            FriendPack friendPack = new FriendPack()
+            {
+                OpType = FriendOpType.GetList
+            };
+
+            MainPack mainPack = new MainPack()
+            {
+                RequestCode = RequestCode.Friend,
+                ActionCode = ActionCode.FriendOperation,
+                FriendPack = friendPack
+            };
+            
+            GameApp.NetworkManager.Send(mainPack);
+            Debug.Log("已发送获取好友列表请求");
+        }
+        #endregion
+
+        #region 接收请求
         private void onReceiveChatMsg(MainPack pack)
         {
             if (pack.ReturnCode == ReturnCode.Succeed)
@@ -134,6 +165,53 @@ namespace Module.chat
                 //TODO：更新消息状态为失败，并且刷新界面显示
             }
         }
+
+        private void onReceiveFriendOperation(MainPack pack)
+        {
+            if (pack.ReturnCode == ReturnCode.Succeed)
+            {
+                if (pack.FriendPack != null)
+                {
+                    switch (pack.FriendPack.OpType)
+                    {
+                        case FriendOpType.GetList:
+                            getFriendList(pack);
+                            break;
+                        case FriendOpType.AddFriend:
+                            break;
+                        case FriendOpType.RemoveFriend:
+                            break;
+                        default:
+                            Debug.Log("未知的好友操作类型");
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("好友操作失败");
+                //TODO: 显示错误提示
+            }
+        }
+
+        #region 好友相关操作
+
+        private void getFriendList(MainPack pack)
+        {
+            Model.FriendList.Clear();
+            foreach (var friend in pack.FriendPack.FriendList)
+            {
+                Model.FriendList.Add(friend);
+            }
+            
+            Debug.Log($"成功获取到好友列表，好友数量：{Model.FriendList.Count}");
+            
+            ApplyFunc(EventDefines.UpdateFriendList);//通知视图更新好友列表
+        }
+
+        #endregion
+        
+        #endregion
         
         private void saveToModel(string targetUser, ChatMessage msg)
         {

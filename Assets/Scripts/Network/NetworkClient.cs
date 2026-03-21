@@ -90,6 +90,7 @@ namespace Network
             }
         }
 
+        #region 连接与接收/转换数据底层
         //连接
         public void Connect(string ip, int port)
         {
@@ -354,5 +355,7 @@ namespace Network
         {
             return new NetEvent { Type = type, Data = data, Message = message };
         }
+        
+        #endregion
     }
 }

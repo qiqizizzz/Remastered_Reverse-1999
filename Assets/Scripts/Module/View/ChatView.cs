@@ -7,8 +7,10 @@
 */
 
 using System.Collections;
+using System.Collections.Generic;
 using Common;
 using Common.Defines;
+using GameProtocol;
 using Module.chat;
 using MVC;
 using MVC.View;
@@ -24,22 +26,32 @@ namespace Module.View
         
         [Header("UI组件")]
         private TMP_InputField _inputField;
-        private ScrollRect scrollRect;
+        private ScrollRect _chatScrollRect;
+        private ScrollRect _friendScrollRect;
         private Transform _chatPanel;
         
         protected override void OnAwake()
         {
             _inputField = Find<TMP_InputField>("panels/panel_friend/chatArea/Input_field");
-            scrollRect = Find<ScrollRect>("panels/panel_friend/chatArea/Scroll_chat");
+            _chatScrollRect = Find<ScrollRect>("panels/panel_friend/chatArea/Scroll_chat");
+            _friendScrollRect = Find<ScrollRect>("panels/panel_friend/Scroll_hy");
             _chatPanel = Find<Transform>("panels/panel_friend");
             
             Find<Button>("Btn_return").onClick.AddListener(onReturnMoreOptionBtn);
             Find<Button>("panels/panel_friend/chatArea/Btn_send").onClick.AddListener(onSendMessageBtn);
+            
+            
         }
 
         protected override void OnStart()
         {
-            //Todo: 从数据库中读取好友列表, 生成好友列表UI, 好友按钮需要绑定相应的 点击事件
+            Controller.RegisterFunc(EventDefines.UpdateFriendList, onUpdateFriendList);
+            ApplyFunc(EventDefines.GetFriendList);//发送获取好友列表请求
+        }
+
+        protected override void OnDestroy()
+        {
+            Controller.UnRegisterFunc(EventDefines.UpdateFriendList);
         }
 
         private void onReturnMoreOptionBtn()
@@ -83,11 +95,18 @@ namespace Module.View
         {
             yield return new WaitForEndOfFrame();
             
-            if (scrollRect != null)
+            if (_chatScrollRect != null)
             {
                 Canvas.ForceUpdateCanvases();//强制刷新
-                scrollRect.verticalNormalizedPosition = 0f;
+                _chatScrollRect.verticalNormalizedPosition = 0f;
             }
+        }
+
+        private void onUpdateFriendList(params object[] args)
+        {
+            Debug.Log("更新好友列表中...");
+            //Todo: 从数据库中读取好友列表, 生成好友列表UI, 好友按钮需要绑定相应的 点击事件
+            //List<FriendInfo> friends = Controller.GetModel<ChatModel>().FriendList;
         }
     }
 }

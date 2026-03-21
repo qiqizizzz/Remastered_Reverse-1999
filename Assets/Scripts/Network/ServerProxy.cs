@@ -44,6 +44,7 @@ namespace Network
                 CheckHeartbeat();
         }
 
+        #region 服务端底层通信
         //心跳检测
         private void CheckHeartbeat()
         {
@@ -125,6 +126,9 @@ namespace Network
             }
         }
         
+        #endregion
+
+        #region 消息处理
         private void onConnected()
         {
             Debug.Log("连接成功");
@@ -195,5 +199,7 @@ namespace Network
             if (_messageHandlers.ContainsKey(actionCode))
                 _messageHandlers[actionCode] -= handler;
         }
+        
+        #endregion
     }
 }

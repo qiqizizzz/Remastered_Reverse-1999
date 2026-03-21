@@ -15,11 +15,15 @@ ShaderVariantCollection:
         passType: 0
       - keywords: COLOR_FILTER SAMPLING_BLUR_FAST
         passType: 0
+      - keywords: DETAIL_MASKING
+        passType: 0
       - keywords: EDGE_PLAIN
         passType: 0
       - keywords: EDGE_SHINY
         passType: 0
       - keywords: SAMPLING_BLUR_FAST
+        passType: 0
+      - keywords: SAMPLING_BLUR_MEDIUM
         passType: 0
       - keywords: TONE_GRAYSCALE
         passType: 0
