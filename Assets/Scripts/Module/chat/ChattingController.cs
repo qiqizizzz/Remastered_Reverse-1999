@@ -168,7 +168,7 @@ namespace Module.chat
                     
                     saveToModel(sender, msg);
 
-                    ApplyFunc(EventDefines.GetChatHistory, sender);
+                    ApplyFunc(EventDefines.UpdateChatHistory, sender);
                 }
                 else
                 {
