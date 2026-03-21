@@ -15,5 +15,6 @@ namespace MVC
         LoadingView, //加载界面
         MoreOptionsView, //更多选项界面
         ChatView, //好友界面
+        TipBoxView, //提示框
     }
 }

@@ -10,6 +10,7 @@ using System.Collections;
 using Common;
 using Common.Defines;
 using Module.chat;
+using MVC;
 using MVC.View;
 using TMPro;
 using UnityEngine;
@@ -60,6 +61,12 @@ namespace Module.View
             if (content == string.Empty)
             {
                 Debug.Log("输入不能为空");
+                ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenTipBoxView, TipBoxType.chat);
+            }
+            
+            /*if (content == string.Empty)
+            {
+                Debug.Log("输入不能为空");
                 ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_TipBox, (go) =>
                 {
                     if (go != null)
@@ -72,7 +79,7 @@ namespace Module.View
                     }
                 }, _chatPanel);
                 return;
-            }
+            }*/
             
             ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_chatBox_me, (go) =>
             {

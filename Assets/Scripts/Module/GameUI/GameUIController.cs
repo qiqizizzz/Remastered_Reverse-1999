@@ -38,6 +38,13 @@ namespace Module.GameUI
                 controller = this,
                 Sorting_Order = 1
             });
+            GameApp.ViewManager.Register(ViewType.TipBoxView, new ViewInfo()
+            {
+                PrefabName = AddressDefines.UI_Small_TipBox,
+                parentTf = GameApp.ViewManager.canvasTf,
+                controller = this,
+                Sorting_Order = 999
+            });
             
             //初始化事件
             InitModuleEvent();
@@ -50,6 +57,7 @@ namespace Module.GameUI
             RegisterFunc(EventDefines.OpenGameView, openGameView);
             RegisterFunc(EventDefines.OpenMainMenuView, openMainMenuView);
             RegisterFunc(EventDefines.OpenMoreOptionsView, onOpenMoreOptionsView);
+            RegisterFunc(EventDefines.OpenTipBoxView, onOpenTipBoxView);
         }
 
         //打开主要面板
@@ -68,6 +76,11 @@ namespace Module.GameUI
         private void onOpenMoreOptionsView(System.Object[] args)
         {
             GameApp.ViewManager.Open(ViewType.MoreOptionsView, args);
+        }
+
+        private void onOpenTipBoxView(System.Object[] args)
+        {
+            GameApp.ViewManager.Open(ViewType.TipBoxView, args);
         }
     }
 }

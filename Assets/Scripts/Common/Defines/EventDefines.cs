@@ -15,6 +15,7 @@ namespace Common.Defines
         public static readonly string OpenMainMenuView = "OpenMainMenuView";
         public static readonly string OpenMoreOptionsView = "OpenMoreOptionsView";
         public static readonly string OpenChatView = "OpenChatViewView";
+        public static readonly string OpenTipBoxView = "OpenTipBoxView";
         public static readonly string LoadingScene = "LoadingScene";
         
         // 网络事件
