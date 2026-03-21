@@ -120,6 +120,18 @@ namespace GameServer.DataBase
             }
         }
 
+        #region 好友系统相关
+
+        //获取玩家好友列表
+        public static List<Friend> GetFriends(string username)
+        {
+            using (var db = new GameDbContext())
+            {
+                return db.Friends.Where(f => f.Username == username).ToList();
+            }
+        }
+        #endregion
+
         #endregion
     }
 }
