@@ -27,6 +27,8 @@ namespace Common.Defines
         public static readonly string GetChatHistory = "GetChatHistory";
         public static readonly string ReceiveNewMessage = "ReceiveNewMessage";
         public static readonly string NetWork_Disconnect = "NetWork_Disconnect";
+        public static readonly string NetWork_ConnectFailed = "NetWork_ConnectFailed";
+        
         
     }
 }

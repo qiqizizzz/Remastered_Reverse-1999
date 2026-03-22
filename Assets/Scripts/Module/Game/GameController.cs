@@ -19,7 +19,7 @@ namespace DefaultNamespace.Module.Game
         public GameController() : base()
         {
             //暂时没有视图
-            
+
             GameApp.NetworkManager.Connect(); //连接服务器 - 暂时不使用网络功能，现在正在拼UI。。。
         }
 
@@ -27,19 +27,21 @@ namespace DefaultNamespace.Module.Game
         {
             //注册事件
             InitGlobalEvent();
-            
-            ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView); 
+
+            ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
             //ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenGameView);// 这个只是临时的
         }
 
         public override void InitGlobalEvent()
         {
             GameApp.MessageCenter.AddEvent(EventDefines.NetWork_Disconnect, onNetWorkDisconnect);
+            GameApp.MessageCenter.AddEvent(EventDefines.NetWork_ConnectFailed, onNetWorkConnectFailed);
         }
 
         public override void RemoveGlobalEvent()
         {
             GameApp.MessageCenter.RemoveEvent(EventDefines.NetWork_Disconnect, onNetWorkDisconnect);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.NetWork_ConnectFailed, onNetWorkConnectFailed);
         }
 
         private void onNetWorkDisconnect(object args)
@@ -55,6 +57,11 @@ namespace DefaultNamespace.Module.Game
                     //TODO:返回主界面并且要清空当前游戏数据
                     //ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
                 }));
+        }
+
+        private void onNetWorkConnectFailed(object args)
+        {
+            GameApp.ViewManager.Open(ViewType.NoticeView, "服务器暂未开放", new Action(() => { Debug.Log("已关闭界面..."); }));
         }
     }
 }

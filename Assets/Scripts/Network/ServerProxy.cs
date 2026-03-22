@@ -12,6 +12,7 @@ using Common;
 using Common.Defines;
 using GameProtocol;
 using Google.Protobuf;
+using MVC;
 using UnityEngine;
 
 namespace Network
@@ -140,7 +141,7 @@ namespace Network
         
         private void onConnectFailed(string msg)
         {
-            Debug.LogError($"[ServerProxy] 连接服务器失败，原因: {msg}");
+            GameApp.MessageCenter.PostEvent(EventDefines.NetWork_ConnectFailed);
         }
 
         private void onDisconnected()
@@ -150,7 +151,8 @@ namespace Network
 
         private void onError(string msg)
         {
-            Debug.LogError($"[ServerProxy] 网络发生异常掉线，原因: {msg}");
+            GameApp.MessageCenter.PostEvent(EventDefines.NetWork_Disconnect);
+            //Debug.LogError($"[ServerProxy] 网络发生异常掉线，原因: {msg}");
         }
         
         //接收消息并解析
