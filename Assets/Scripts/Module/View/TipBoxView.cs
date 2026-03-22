@@ -48,11 +48,6 @@ namespace Module.View
             iconsTf = Find<Transform>("Icons");
             _imageList = new Dictionary<string, GameObject>();
         }
-
-        protected override void OnStart()
-        {
-            
-        }
         
         public override void Open(params object[] args)
         {

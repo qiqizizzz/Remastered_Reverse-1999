@@ -16,5 +16,6 @@ namespace MVC
         MoreOptionsView, //更多选项界面
         ChatView, //好友界面
         TipBoxView, //提示框
+        NoticeView, //提示界面
     }
 }

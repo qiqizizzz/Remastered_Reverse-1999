@@ -57,6 +57,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f59c0b67639feb64989794b7a37b3daf
+    m_Address: UI/NoticeView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe2186f6ce6f02f43a964a1835385743
     m_Address: UI_small/chatBox_me
     m_ReadOnly: 0

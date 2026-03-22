@@ -23,7 +23,7 @@ namespace DefaultNamespace
         {
             DontDestroyOnLoad(gameObject);
             GameApp.Instance.Init();
-            Application.runInBackground = true;
+            //Application.runInBackground = true;
         }
 
         private void Start()

@@ -6,9 +6,11 @@
 * └────────────────────────────────────────────┘
 */
 
+using System;
 using Common.Defines;
 using MVC;
 using MVC.Controller;
+using UnityEngine;
 
 namespace DefaultNamespace.Module.Game
 {
@@ -23,8 +25,36 @@ namespace DefaultNamespace.Module.Game
 
         public override void Init()
         {
+            //注册事件
+            InitGlobalEvent();
+            
             ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView); 
             //ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenGameView);// 这个只是临时的
+        }
+
+        public override void InitGlobalEvent()
+        {
+            GameApp.MessageCenter.AddEvent(EventDefines.NetWork_Disconnect, onNetWorkDisconnect);
+        }
+
+        public override void RemoveGlobalEvent()
+        {
+            GameApp.MessageCenter.RemoveEvent(EventDefines.NetWork_Disconnect, onNetWorkDisconnect);
+        }
+
+        private void onNetWorkDisconnect(object args)
+        {
+            GameApp.ViewManager.Open(ViewType.NoticeView, "失去连接,确认重新连接?", new Action(() =>
+                {
+                    Debug.Log("正在重新连接...");
+                    GameApp.NetworkManager.Connect();
+                }),
+                new Action(() =>
+                {
+                    Debug.Log("取消重新连接");
+                    //TODO:返回主界面并且要清空当前游戏数据
+                    //ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
+                }));
         }
     }
 }

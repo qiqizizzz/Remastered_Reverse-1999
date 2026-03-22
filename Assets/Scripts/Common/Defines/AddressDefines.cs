@@ -16,7 +16,8 @@ namespace Common.Defines
         public static readonly string UI_MainMenuView = "UI/MainMenuView";
         public static readonly string UI_MoreOptionsView = "UI/MoreOptionsView";
         public static readonly string UI_FriendsView = "UI/ChatView";
-        public static readonly string UI_Small_TipBox = "UI/TipBoxView";
+        public static readonly string UI_TipBoxView = "UI/TipBoxView";
+        public static readonly string UI_NoticeView = "UI/NoticeView";
         
         //UI_small预制体
         public static readonly string UI_Small_Btn_friTemp = "UI_small/Btn_friTemp";

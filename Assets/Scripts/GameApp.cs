@@ -19,6 +19,7 @@ public class GameApp : Singleton<GameApp>
     public static TimerManager TimerManager;
     public static NetworkManager NetworkManager;
     public static GameDataManager GameDataManager;
+    public static MessageCenter MessageCenter;
         
     public override void Init()
     {
@@ -27,6 +28,7 @@ public class GameApp : Singleton<GameApp>
         TimerManager = new TimerManager();
         NetworkManager = new NetworkManager();
         GameDataManager = new GameDataManager();
+        MessageCenter = new MessageCenter();
     }
 
     public override void Update(float dt)

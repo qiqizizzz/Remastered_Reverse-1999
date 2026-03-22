@@ -25,7 +25,7 @@ namespace Module.GameUI
                 parentTf = GameApp.ViewManager.canvasTf,
                 controller = this
             });
-            GameApp.ViewManager.Register(ViewType.MainMenuView,new ViewInfo()
+            GameApp.ViewManager.Register(ViewType.MainMenuView, new ViewInfo()
             {
                 PrefabName = AddressDefines.UI_MainMenuView,
                 parentTf = GameApp.ViewManager.canvasTf,
@@ -40,12 +40,19 @@ namespace Module.GameUI
             });
             GameApp.ViewManager.Register(ViewType.TipBoxView, new ViewInfo()
             {
-                PrefabName = AddressDefines.UI_Small_TipBox,
+                PrefabName = AddressDefines.UI_TipBoxView,
+                parentTf = GameApp.ViewManager.canvasTf,
+                controller = this,
+                Sorting_Order = 998
+            });
+            GameApp.ViewManager.Register(ViewType.NoticeView, new ViewInfo()
+            {
+                PrefabName = AddressDefines.UI_NoticeView,
                 parentTf = GameApp.ViewManager.canvasTf,
                 controller = this,
                 Sorting_Order = 999
             });
-            
+
             //初始化事件
             InitModuleEvent();
             InitGlobalEvent();
@@ -58,6 +65,7 @@ namespace Module.GameUI
             RegisterFunc(EventDefines.OpenMainMenuView, openMainMenuView);
             RegisterFunc(EventDefines.OpenMoreOptionsView, onOpenMoreOptionsView);
             RegisterFunc(EventDefines.OpenTipBoxView, onOpenTipBoxView);
+            RegisterFunc(EventDefines.OpenNoticeView, onOpenNoticeView);
         }
 
         //打开主要面板
@@ -65,22 +73,29 @@ namespace Module.GameUI
         {
             GameApp.ViewManager.Open(ViewType.GameView, args);
         }
-        
+
         //打开主菜单界面
         private void openMainMenuView(System.Object[] args)
         {
             GameApp.ViewManager.Open(ViewType.MainMenuView, args);
         }
-        
+
         //打开更多选项界面
         private void onOpenMoreOptionsView(System.Object[] args)
         {
             GameApp.ViewManager.Open(ViewType.MoreOptionsView, args);
         }
 
+        //打开提示框界面
         private void onOpenTipBoxView(System.Object[] args)
         {
             GameApp.ViewManager.Open(ViewType.TipBoxView, args);
+        }
+
+        //打开提示界面
+        private void onOpenNoticeView(System.Object[] args)
+        {
+            GameApp.ViewManager.Open(ViewType.NoticeView, args);
         }
     }
 }

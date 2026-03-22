@@ -8,6 +8,8 @@
 
 using System;
 using System.Collections.Generic;
+using Common;
+using Common.Defines;
 using GameProtocol;
 using Google.Protobuf;
 using UnityEngine;
@@ -143,7 +145,7 @@ namespace Network
 
         private void onDisconnected()
         {
-            Debug.Log("断开连接");
+            GameApp.MessageCenter.PostEvent(EventDefines.NetWork_Disconnect);
         }
 
         private void onError(string msg)
