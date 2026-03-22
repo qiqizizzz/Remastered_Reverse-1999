@@ -1,17 +1,20 @@
-Assets filter=lfs diff=lfs merge=lfs -text
-Library filter=lfs diff=lfs merge=lfs -text
-Packages filter=lfs diff=lfs merge=lfs -text
-Remastered_Reverse-1999.sln filter=lfs diff=lfs merge=lfs -text
-UltimateEditorEnhancer-Editor.csproj filter=lfs diff=lfs merge=lfs -text
-UltimateEditorEnhancer.csproj filter=lfs diff=lfs merge=lfs -text
-Assembly-CSharp.csproj filter=lfs diff=lfs merge=lfs -text
-Assembly-CSharp-firstpass.csproj filter=lfs diff=lfs merge=lfs -text
-Logs filter=lfs diff=lfs merge=lfs -text
-ProjectSettings filter=lfs diff=lfs merge=lfs -text
-Remastered_Reverse-1999.sln.DotSettings.user filter=lfs diff=lfs merge=lfs -text
-SceneBackups filter=lfs diff=lfs merge=lfs -text
-obj filter=lfs diff=lfs merge=lfs -text
-README.md filter=lfs diff=lfs merge=lfs -text
-UserSettings filter=lfs diff=lfs merge=lfs -text
-Assets/Fonts/SourceHanSerif.ttc filter=lfs diff=lfs merge=lfs -text
-Assets/Fonts filter=lfs diff=lfs merge=lfs -text
+# 图片
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
+
+# 模型
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.obj filter=lfs diff=lfs merge=lfs -text
+
+# 音频
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+
+# 字体
+*.ttf filter=lfs diff=lfs merge=lfs -text
+*.ttc filter=lfs diff=lfs merge=lfs -text
+
+# 视频（如果你以后用）
+*.mp4 filter=lfs diff=lfs merge=lfs -text
