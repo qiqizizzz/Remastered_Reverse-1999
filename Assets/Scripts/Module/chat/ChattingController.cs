@@ -170,7 +170,7 @@ namespace Module.chat
                     saveToModel(sender, msg);
                     Debug.Log("收到来自 " + sender + " 的消息: " + content);
 
-                    ApplyFunc(EventDefines.UpdateChatHistory, sender);
+                    ApplyFunc(EventDefines.ReceiveNewMessage, sender, msg);
                 }
                 else
                 {

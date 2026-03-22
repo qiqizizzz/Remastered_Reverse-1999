@@ -351,6 +351,7 @@ namespace GameServer
             }
 
 
+            //新增
             if(targetUser == UserName)
             {
                 getChatHistoryReturnPack(pack);//刷新界面

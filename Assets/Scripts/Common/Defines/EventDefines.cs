@@ -24,5 +24,6 @@ namespace Common.Defines
         public static readonly string SendPrivateMessage = "SendPrivateMessage";
         public static readonly string GetFriendList = "GetFriendList";
         public static readonly string GetChatHistory = "GetChatHistory";
+        public static readonly string ReceiveNewMessage = "ReceiveNewMessage";
     }
 }

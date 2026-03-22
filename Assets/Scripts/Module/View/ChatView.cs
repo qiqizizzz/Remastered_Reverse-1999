@@ -46,6 +46,7 @@ namespace Module.View
         {
             Controller.RegisterFunc(EventDefines.UpdateFriendList, onUpdateFriendList);
             Controller.RegisterFunc(EventDefines.UpdateChatHistory, onUpdateChatHistory);
+            Controller.RegisterFunc(EventDefines.ReceiveNewMessage, onReceiveNewMessage);
             
             ApplyFunc(EventDefines.GetFriendList);//发送获取好友列表请求
         }
@@ -54,6 +55,7 @@ namespace Module.View
         {
             Controller.UnRegisterFunc(EventDefines.UpdateFriendList);
             Controller.UnRegisterFunc(EventDefines.GetChatHistory);
+            Controller.UnRegisterFunc(EventDefines.ReceiveNewMessage);
         }
 
         private void onReturnMoreOptionBtn()
@@ -166,6 +168,7 @@ namespace Module.View
                             txtTime.text = "<color=#716860>离线</color>";
                         
                         Button btn = go.GetComponent<Button>();
+                        btn.name = item.Username;
                         btn.onClick.RemoveAllListeners();//先移除之前的监听，避免重复绑定
                         btn.onClick.AddListener(() => onFriendBtn(targetName ,go));
                     }
@@ -178,47 +181,78 @@ namespace Module.View
             Debug.Log("更新历史记录中...");
             //args[0] 是聊天对象的名字
             string targetUser = args[0] as string;
+            if(targetUser != _currentChat.name) return;
+            
             Transform contentParent = _chatScrollRect.content;
             List<ChatMessage> messages =
                 (Controller as ChattingController)?.Model.ChatHistory.GetValueOrDefault(targetUser) ??
                 new List<ChatMessage>();
-            
             if(messages.Count == 0) return;
             
             //回收先前的聊天记录UI
-            foreach (Transform child in contentParent)
+            for (int i = contentParent.childCount - 1; i >= 0; i--)
+            {
+                Transform child = contentParent.GetChild(i);
+                if (child.name.Contains("me"))
+                    ResManager.ReleaseToPool(AddressDefines.UI_Small_chatBox_me, child.gameObject);
+                else
+                    ResManager.ReleaseToPool(AddressDefines.UI_Small_chatBox_other, child.gameObject);
+            }
+            
+            //注意：不能直接使用 foreach 循环来回收，因为在回收过程中会修改 contentParent 的子对象集合，导致枚举器失效
+            //会造成层级容易报错或者清理不干净,导致后续生成的聊天气泡层级混乱或者残留旧消息
+            /*foreach (Transform child in contentParent)
             {
                 ResManager.ReleaseToPool(AddressDefines.UI_Small_chatBox_me, child.gameObject);
                 ResManager.ReleaseToPool(AddressDefines.UI_Small_chatBox_other, child.gameObject);
-            }
-                
-            foreach (var msg in messages)
-            {
-                string content = msg.Content;
-                    
-                if (msg.IsSelf)
-                {
-                    ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_chatBox_me, (go) =>
-                    {
-                        if (go != null)
-                        {
-                            go.GetComponent<ChatBubble>().SetMessage(content);
-                        }
-                    }, contentParent);
-                }
-                else
-                {
-                    ResManager.InstantiateFromPoolAsync(AddressDefines.UI_Small_chatBox_other, (go) =>
-                    {
-                        if (go != null)
-                        {
-                            go.GetComponent<ChatBubble>().SetMessage(content);
-                        }
-                    }, contentParent);
-                }
-            }
+            }*/
             
-            StartCoroutine(scrollToDown());
+            int loadedCount = 0;
+            for(int i = 0; i < messages.Count; i++)
+            {
+                int index = i;//注意：在异步回调中使用循环变量时，必须创建一个局部副本，否则会导致所有回调都引用同一个变量，最终结果都是最后一个值
+                
+                var msg = messages[i];
+                string prefabAddress = msg.IsSelf ? AddressDefines.UI_Small_chatBox_me : AddressDefines.UI_Small_chatBox_other;
+                string content = msg.Content;
+                
+                ResManager.InstantiateFromPoolAsync(prefabAddress, (go) =>
+                {
+                    if (go != null)
+                    {
+                        go.GetComponent<ChatBubble>().SetMessage(content);
+                        go.transform.SetSiblingIndex(index);//强制按索引排序,防止异步的优先生成资源加载快的预制体气泡
+                        loadedCount++;
+                    }
+
+                    if (loadedCount == messages.Count)
+                    {
+                        StartCoroutine(scrollToDown());
+                    }
+                }, contentParent);
+            }
+        }
+
+        private void onReceiveNewMessage(params object[] args)
+        {
+            string sender = args[0] as string;
+            ChatMessage msg = args[1] as ChatMessage;
+            
+            if(sender != _currentChat.name) return;
+            
+            Transform contentParent = Find<Transform>("panels/panel_friend/chatArea/Scroll_chat/Viewport/Content");
+            
+            string prefabAddress = msg.IsSelf ? AddressDefines.UI_Small_chatBox_me : AddressDefines.UI_Small_chatBox_other;
+
+            //实例化新的消息气泡
+            ResManager.InstantiateFromPoolAsync(prefabAddress, (go) =>
+            {
+                if (go != null)
+                {
+                    go.GetComponent<ChatBubble>().SetMessage(msg.Content);
+                    StartCoroutine(scrollToDown()); // 消息追加后滚动到最底部
+                }
+            }, contentParent);
         }
     }
 }

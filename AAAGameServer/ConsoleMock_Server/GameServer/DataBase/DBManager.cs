@@ -114,6 +114,8 @@ namespace GameServer.DataBase
                     .Take(limit)
                     .ToList();
 
+                messages.Reverse();
+
                 return messages;
             }
         }
