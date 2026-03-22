@@ -52,6 +52,13 @@ namespace Module.GameUI
                 controller = this,
                 Sorting_Order = 999
             });
+            GameApp.ViewManager.Register(ViewType.SettingView, new ViewInfo()
+            {
+                PrefabName = AddressDefines.UI_SettingView,
+                parentTf = GameApp.ViewManager.canvasTf,
+                controller = this,
+                Sorting_Order = 10
+            });
 
             //初始化事件
             InitModuleEvent();
@@ -66,6 +73,7 @@ namespace Module.GameUI
             RegisterFunc(EventDefines.OpenMoreOptionsView, onOpenMoreOptionsView);
             RegisterFunc(EventDefines.OpenTipBoxView, onOpenTipBoxView);
             RegisterFunc(EventDefines.OpenNoticeView, onOpenNoticeView);
+            RegisterFunc(EventDefines.OpenSettingView, onOpenSettingView);
         }
 
         //打开主要面板
@@ -96,6 +104,12 @@ namespace Module.GameUI
         private void onOpenNoticeView(System.Object[] args)
         {
             GameApp.ViewManager.Open(ViewType.NoticeView, args);
+        }
+        
+        //打开设置界面
+        private void onOpenSettingView(System.Object[] args)
+        {
+            GameApp.ViewManager.Open(ViewType.SettingView, args);
         }
     }
 }

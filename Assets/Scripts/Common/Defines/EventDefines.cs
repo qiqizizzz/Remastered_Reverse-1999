@@ -17,6 +17,7 @@ namespace Common.Defines
         public static readonly string OpenChatView = "OpenChatViewView";
         public static readonly string OpenTipBoxView = "OpenTipBoxView";
         public static readonly string OpenNoticeView = "OpenNoticeView";
+        public static readonly string OpenSettingView = "OpenSettingView";
         public static readonly string LoadingScene = "LoadingScene";
         public static readonly string UpdateFriendList = "UpdateFriendList";
         public static readonly string UpdateChatHistory = "UpdateChatHistory";

@@ -18,6 +18,7 @@ namespace Common.Defines
         public static readonly string UI_FriendsView = "UI/ChatView";
         public static readonly string UI_TipBoxView = "UI/TipBoxView";
         public static readonly string UI_NoticeView = "UI/NoticeView";
+        public static readonly string UI_SettingView = "UI/SettingView";
         
         //UI_small预制体
         public static readonly string UI_Small_Btn_friTemp = "UI_small/Btn_friTemp";

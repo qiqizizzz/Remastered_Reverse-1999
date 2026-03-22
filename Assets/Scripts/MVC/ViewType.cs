@@ -17,5 +17,6 @@ namespace MVC
         ChatView, //好友界面
         TipBoxView, //提示框
         NoticeView, //提示界面
+        SettingView, //设置界面
     }
 }

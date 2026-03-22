@@ -19,6 +19,7 @@ namespace Module.View
         {
             Find<Button>("LeftUpArea/Btn_return").onClick.AddListener(onReturnGameViewBtn);
             Find<Button>("LeftDownArea/btns_1/Btn_hy").onClick.AddListener(onOpenChatViewBtn);
+            Find<Button>("LeftDownArea/btns_2/Btn_sz").onClick.AddListener(onOpenSettingViewBtn);
         }
 
         private void onReturnGameViewBtn()
@@ -30,6 +31,11 @@ namespace Module.View
         private void onOpenChatViewBtn()
         {
             ApplyControllerFunc(ControllerType.Chat, EventDefines.OpenChatView);
+        }
+        
+        private void onOpenSettingViewBtn()
+        {
+            GameApp.ViewManager.Open(ViewType.SettingView);
         }
     }
 }
