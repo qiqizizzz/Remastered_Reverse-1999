@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: common_bg_0
+      name: common_bg_empty
       rect:
         serializedVersion: 2
         x: 667
@@ -168,7 +168,7 @@ TextureImporter:
         width: 425
         height: 112
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -191,8 +191,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      common_bg_0: -843943062
       common_bg_down: -352300907
+      common_bg_empty: -843943062
       common_bg_tip: -1787876507
       common_bg_up: -1262937222
   mipmapLimitGroupName: 

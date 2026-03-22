@@ -399,7 +399,7 @@ TextureImporter:
         width: 181
         height: 44
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -407,6 +407,69 @@ TextureImporter:
       bones: []
       spriteID: 84eb39c874abc2a49bac1c10755ee6ec
       internalID: -1222517243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: com_ui_cancelBtn
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 1660
+        width: 300
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 111, y: 21, z: 47, w: 29}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f22f7f7d87581f34aa2ea0ba64abc1b0
+      internalID: -2014930249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: com_ui_confirmBtn
+      rect:
+        serializedVersion: 2
+        x: 1378
+        y: 867
+        width: 300
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 113, y: 21, z: 56, w: 30}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 546b6c49e7a5dcb4e8792790e298aa4d
+      internalID: 628217079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: com_ui_noticeBorder
+      rect:
+        serializedVersion: 2
+        x: 1747
+        y: 587
+        width: 135
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 327a9b39c752bae429e464e274c43a2a
+      internalID: 2079883470
       vertices: []
       indices: 
       edges: []
@@ -426,13 +489,16 @@ TextureImporter:
       com_ui_1: -1499040623
       com_ui_bg1: -2084524231
       com_ui_blackBg: -1222517243
+      com_ui_cancelBtn: -2014930249
       com_ui_circle: 1103357616
+      com_ui_confirmBtn: 628217079
       com_ui_detail_bg: 1429241474
       com_ui_detail_bg2: 2102298370
       com_ui_friendBtn1: -568135472
       com_ui_friendBtn2: -1426473658
       com_ui_id: 801379778
       com_ui_loading: -1377481905
+      com_ui_noticeBorder: 2079883470
       com_ui_retur: 214713344
       com_ui_return: 890481933
       com_ui_sq_orange: 1513560730
