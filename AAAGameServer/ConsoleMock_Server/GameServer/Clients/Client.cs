@@ -351,6 +351,11 @@ namespace GameServer
             }
 
 
+            if(targetUser == UserName)
+            {
+                getChatHistoryReturnPack(pack);//刷新界面
+            }
+
             Console.WriteLine($"[私聊] {this.UserName} 发给 {targetUser}: {content}");
         }
 

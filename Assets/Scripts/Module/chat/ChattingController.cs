@@ -148,6 +148,7 @@ namespace Module.chat
         #region 接收请求
         private void onReceiveChatMsg(MainPack pack)
         {
+            Debug.Log($"收到聊天消息的服务器响应，返回码：{pack.ReturnCode}");
             if (pack.ReturnCode == ReturnCode.Succeed)
             {
                 //如果是别人发来的消息
@@ -167,6 +168,7 @@ namespace Module.chat
                     };
                     
                     saveToModel(sender, msg);
+                    Debug.Log("收到来自 " + sender + " 的消息: " + content);
 
                     ApplyFunc(EventDefines.UpdateChatHistory, sender);
                 }
