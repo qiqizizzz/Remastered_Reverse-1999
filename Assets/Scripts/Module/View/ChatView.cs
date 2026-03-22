@@ -79,8 +79,6 @@ namespace Module.View
             
             _currentChat = btnObj.GetComponent<Button>();
             ApplyFunc(EventDefines.GetChatHistory, friendName);
-            
-            //TODO: 加载与该好友的聊天记录，并刷新聊天界面
         }
 
         private void onSendMessageBtn()
@@ -123,30 +121,21 @@ namespace Module.View
 
         private void onUpdateFriendList(params object[] args)
         {
-            Debug.Log("更新好友列表中...");
-            
             Transform contentParent = _friendScrollRect.content; 
             List<FriendInfo> friends = (Controller as ChattingController)?.Model.FriendList;
 
-            if (friends == null)
+            if (friends == null || friends.Count == 0)
             {
-                Debug.LogError("Model.FriendList 是空的！请检查 Controller 里是否正确赋值了！");
+                //回收先前的好友列表UI
+                foreach (Transform child in contentParent)
+                    ResManager.ReleaseToPool(AddressDefines.UI_Small_Btn_friTemp, child.gameObject);
+                Find<TextMeshProUGUI>("panels/panel_friend/Txt_num").text = $"0/{friendMaxCount}";
+                
+                //TODO:显示暂无好友提示
                 return;
-            }
-
-            if (friends.Count == 0)
-            {
-                //TODO: 显示没有好友的提示
             }
             
             Find<TextMeshProUGUI>("panels/panel_friend/chatArea/Txt_name").text = friends[0].Username;
-            
-            //回收先前的好友列表UI
-            foreach (Transform child in contentParent)
-            {
-                ResManager.ReleaseToPool(AddressDefines.UI_Small_Btn_friTemp, child.gameObject);
-            }
-            
             //更新好友数量
             Find<TextMeshProUGUI>("panels/panel_friend/Txt_num").text = $"{friends.Count}/{friendMaxCount}";
             
@@ -162,10 +151,7 @@ namespace Module.View
                         
                         //获取状态节点
                         TextMeshProUGUI txtTime = go.transform.Find("Txt_loginTime").GetComponent<TextMeshProUGUI>();
-                        if (item.IsOnline)
-                            txtTime.text = "<color=green>在线</color>";
-                        else
-                            txtTime.text = "<color=#716860>离线</color>";
+                        txtTime.text = item.IsOnline ? "<color=green>在线</color>" : "<color=#716860>离线</color>";
                         
                         Button btn = go.GetComponent<Button>();
                         btn.name = item.Username;
@@ -178,7 +164,6 @@ namespace Module.View
 
         private void onUpdateChatHistory(params object[] args)
         {
-            Debug.Log("更新历史记录中...");
             //args[0] 是聊天对象的名字
             string targetUser = args[0] as string;
             if(targetUser != _currentChat.name) return;
@@ -193,10 +178,10 @@ namespace Module.View
             for (int i = contentParent.childCount - 1; i >= 0; i--)
             {
                 Transform child = contentParent.GetChild(i);
-                if (child.name.Contains("me"))
-                    ResManager.ReleaseToPool(AddressDefines.UI_Small_chatBox_me, child.gameObject);
-                else
-                    ResManager.ReleaseToPool(AddressDefines.UI_Small_chatBox_other, child.gameObject);
+                ResManager.ReleaseToPool(
+                    child.name.Contains("me")
+                        ? AddressDefines.UI_Small_chatBox_me
+                        : AddressDefines.UI_Small_chatBox_other, child.gameObject);
             }
             
             //注意：不能直接使用 foreach 循环来回收，因为在回收过程中会修改 contentParent 的子对象集合，导致枚举器失效
@@ -238,6 +223,7 @@ namespace Module.View
             string sender = args[0] as string;
             ChatMessage msg = args[1] as ChatMessage;
             
+            if(msg == null) return;
             if(sender != _currentChat.name) return;
             
             Transform contentParent = Find<Transform>("panels/panel_friend/chatArea/Scroll_chat/Viewport/Content");

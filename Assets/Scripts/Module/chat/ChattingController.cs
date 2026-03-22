@@ -128,7 +128,6 @@ namespace Module.chat
             };
             
             GameApp.NetworkManager.Send(mainPack);
-            Debug.Log("已发送获取好友列表请求");
         }
         
         private void getChatHistory(System.Object[] args)

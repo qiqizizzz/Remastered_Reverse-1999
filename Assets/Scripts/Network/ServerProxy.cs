@@ -180,7 +180,7 @@ namespace Network
             }
             catch (Exception ex)
             {
-                Debug.LogError("解析Protobuf失败" + ex.Message);
+                Debug.LogError("解析Protobuf失败" + ex);
             }
         }
         

@@ -1658,7 +1658,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u5929\u7136\u6D77"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a14b9f92d5321f944838cbaf2919e98a, type: 2}
   m_sharedMaterial: {fileID: 792795043290746228, guid: a14b9f92d5321f944838cbaf2919e98a, type: 2}
@@ -3961,8 +3961,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2204505866252277317}
   m_HandleRect: {fileID: 0}
   m_Direction: 2
-  m_Value: 1.0000018
-  m_Size: 0.7517368
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
