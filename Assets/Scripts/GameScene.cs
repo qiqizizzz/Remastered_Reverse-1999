@@ -18,12 +18,19 @@ namespace DefaultNamespace
     public class GameScene : MonoBehaviour
     {
         public Texture2D commonCursor;// 鼠标指针图片
+        private float dt;
+        private static bool isLoaded = false;
         
         private void Awake()
         {
-            DontDestroyOnLoad(gameObject);
-            GameApp.Instance.Init();
-            //Application.runInBackground = true;
+            if(isLoaded) Destroy(gameObject);
+            else
+            {
+                isLoaded = true;
+                DontDestroyOnLoad(gameObject);
+                GameApp.Instance.Init();
+                //Application.runInBackground = true;
+            }
         }
 
         private void Start()
@@ -37,7 +44,7 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            float dt = Time.deltaTime;
+            dt = Time.deltaTime;
             GameApp.Instance.Update(dt);
         }
 

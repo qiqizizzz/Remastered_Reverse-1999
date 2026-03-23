@@ -6,7 +6,12 @@
 * └──────────────────────────────────┘
 */
 
+using System;
+using Common;
 using DG.Tweening;
+using Module.Loading;
+using MVC;
+using MVC.Extensions;
 using MVC.View;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,6 +43,7 @@ namespace Module.View
         protected override void OnStart()
         {
             Find<Button>("Btn_return").onClick.AddListener(onReturnBtn);
+            Find<Button>("panels/Panel_account/others/Btn_exit").onClick.AddListener(onExitBtn);
             
             acBtn.onClick.AddListener(onAccountBtn);
             graphicBtn.onClick.AddListener(onGraphicBtn);
@@ -46,7 +52,6 @@ namespace Module.View
             languageBtn.onClick.AddListener(onLanguageBtn);
             gameBtn.onClick.AddListener(onGameBtn);
             
-            currentBtn = acBtn;
             bindSelectAnim(acBtn);
         }
 
@@ -54,6 +59,7 @@ namespace Module.View
         {
             if (currentBtn != null)
             {
+                if(currentBtn == button) return;
                 Transform oldArrow = currentBtn.transform.Find("Img_selected");
                 if (oldArrow != null)
                 {
@@ -89,6 +95,20 @@ namespace Module.View
         {
             bindSelectAnim(acBtn);
             Debug.Log("账号设置");
+        }
+
+        //退出登陆
+        private void onExitBtn()
+        {
+            GameApp.ViewManager.Open(ViewType.NoticeView, "是否返回登录界面?", new Action(() =>
+            {
+                GameApp.ViewManager.CloseAll();
+                GameApp.ViewManager.Open(ViewType.LoadingView);
+                ViewExtensions.LoadScene(this,SceneDefines.StartMenuView,(() =>
+                {
+                    GameApp.ViewManager.Open(ViewType.MainMenuView);
+                }));
+            }));
         }
         #endregion
 

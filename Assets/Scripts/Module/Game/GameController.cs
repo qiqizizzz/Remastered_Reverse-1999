@@ -20,7 +20,7 @@ namespace DefaultNamespace.Module.Game
         {
             //暂时没有视图
 
-            //GameApp.NetworkManager.Connect(); //连接服务器 - 暂时不使用网络功能，现在正在拼UI。。。
+            GameApp.NetworkManager.Connect(); //连接服务器 - 暂时不使用网络功能，现在正在拼UI。。。
         }
 
         public override void Init()
@@ -28,8 +28,8 @@ namespace DefaultNamespace.Module.Game
             //注册事件
             InitGlobalEvent();
 
-            //ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
-            ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenGameView);// 这个只是临时的
+            ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
+            //ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenGameView);// 这个只是临时的
         }
 
         public override void InitGlobalEvent()

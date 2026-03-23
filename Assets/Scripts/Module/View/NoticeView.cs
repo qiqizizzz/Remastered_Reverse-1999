@@ -29,7 +29,7 @@ namespace Module.View
 
         public override void Open(params object[] args)
         {
-            //args[0]：提示内容
+            // args[0]：提示内容
             // args[1]：确认按钮的回调 (Action)
             // args[2]：取消按钮的回调 (Action)
             
