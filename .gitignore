@@ -116,3 +116,5 @@ InitTestScene*.unity*
 # 忽略 NuGet 相关的临时文件
 **/packages/
 !**/packages/repository.config
+
+Assets/Fonts/simsun SDF.asset
