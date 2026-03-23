@@ -537,6 +537,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: com_ui_star
+      rect:
+        serializedVersion: 2
+        x: 1570
+        y: 1149
+        width: 41
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e0aeb7609cc4a0469e57454c4e82eed
+      internalID: 1756869923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -569,6 +590,7 @@ TextureImporter:
       com_ui_return: 890481933
       com_ui_sq_orange: 1513560730
       com_ui_sq_white: -696113134
+      com_ui_star: 1756869923
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

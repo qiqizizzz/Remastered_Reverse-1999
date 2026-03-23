@@ -29,7 +29,16 @@ namespace Module.View
         private Button languageBtn;
         private Button gameBtn;
 
+        [Header("Panel UI")] 
+        private RectTransform acPanel;
+        private RectTransform graphicPanel;
+        private RectTransform soundPanel;
+        private RectTransform pushPanel;
+        private RectTransform languagePanel;
+        private RectTransform gamePanel;
+        
         private Button currentBtn;
+        private RectTransform currentPanel;
 
         protected override void OnAwake()
         {
@@ -39,6 +48,13 @@ namespace Module.View
             pushBtn = Find<Button>("btns/Btn_push");
             languageBtn = Find<Button>("btns/Btn_language");
             gameBtn = Find<Button>("btns/Btn_game");
+            
+            acPanel = Find<RectTransform>("panels/Panel_account");
+            graphicPanel = Find<RectTransform>("panels/Panel_graphic");
+            soundPanel = Find<RectTransform>("panels/Panel_sound");
+            pushPanel = Find<RectTransform>("panels/Panel_push");
+            languagePanel = Find<RectTransform>("panels/Panel_language");
+            gamePanel = Find<RectTransform>("panels/Panel_game");
         }
 
         protected override void OnStart()
@@ -53,6 +69,7 @@ namespace Module.View
             languageBtn.onClick.AddListener(onLanguageBtn);
             gameBtn.onClick.AddListener(onGameBtn);
             
+            currentPanel = acPanel;
             bindSelectAnim(acBtn);
         }
 
@@ -95,7 +112,10 @@ namespace Module.View
         private void onAccountBtn()
         {
             bindSelectAnim(acBtn);
-            Debug.Log("账号设置");
+            
+            currentPanel.gameObject.SetActive(false);
+            acPanel.gameObject.SetActive(true);
+            currentPanel = acPanel;
         }
 
         //退出登陆
@@ -117,7 +137,10 @@ namespace Module.View
         private void onGraphicBtn()
         {
             bindSelectAnim(graphicBtn);
-            Debug.Log("画面设置");
+            
+            currentPanel.gameObject.SetActive(false);
+            graphicPanel.gameObject.SetActive(true);
+            currentPanel = graphicPanel;
         }
         
         #endregion
@@ -126,7 +149,10 @@ namespace Module.View
         private void onSoundBtn()
         {
             bindSelectAnim(soundBtn);
-            Debug.Log("声音设置");
+            
+            currentPanel.gameObject.SetActive(false);
+            soundPanel.gameObject.SetActive(true);
+            currentPanel = soundPanel;
         }
         #endregion
 
@@ -134,7 +160,10 @@ namespace Module.View
         private void onPushBtn()
         {
             bindSelectAnim(pushBtn);
-            Debug.Log("推送设置");
+            
+            currentPanel.gameObject.SetActive(false);
+            pushPanel.gameObject.SetActive(true);
+            currentPanel = pushPanel;
         }
         
         #endregion
@@ -143,7 +172,10 @@ namespace Module.View
         private void onLanguageBtn()
         {
             bindSelectAnim(languageBtn);
-            Debug.Log("语言设置");
+            
+            currentPanel.gameObject.SetActive(false);
+            languagePanel.gameObject.SetActive(true);
+            currentPanel = languagePanel;
         }
         #endregion
 
@@ -151,7 +183,10 @@ namespace Module.View
         private void onGameBtn()
         {
             bindSelectAnim(gameBtn);
-            Debug.Log("游戏设置");
+            
+            currentPanel.gameObject.SetActive(false);
+            gamePanel.gameObject.SetActive(true);
+            currentPanel = gamePanel;
         }
         #endregion
     }
