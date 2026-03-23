@@ -46,6 +46,7 @@ namespace DefaultNamespace.Module.Game
 
         private void onNetWorkDisconnect(object args)
         {
+            GameApp.GameDataManager.isConnected = false;
             GameApp.ViewManager.Open(ViewType.NoticeView, "失去连接,确认重新连接?", new Action(() =>
                 {
                     Debug.Log("正在重新连接...");
@@ -54,14 +55,26 @@ namespace DefaultNamespace.Module.Game
                 new Action(() =>
                 {
                     Debug.Log("取消重新连接");
-                    //TODO:返回主界面并且要清空当前游戏数据
-                    //ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
+                    GameApp.ViewManager.CloseAll();
+                    ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
                 }));
         }
 
         private void onNetWorkConnectFailed(object args)
         {
-            GameApp.ViewManager.Open(ViewType.NoticeView, "服务器暂未开放", new Action(() => { Debug.Log("已关闭界面..."); }));
+            GameApp.GameDataManager.isConnected = false;
+            GameApp.GameDataManager.isServerOnline = false;
+            
+            GameApp.ViewManager.Open(ViewType.NoticeView, "服务器暂未开放", new Action(() =>
+                {
+                    GameApp.ViewManager.CloseAll();
+                    ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
+                }),
+                new Action(() =>
+                {
+                    GameApp.ViewManager.CloseAll();
+                    ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
+                }));
         }
     }
 }

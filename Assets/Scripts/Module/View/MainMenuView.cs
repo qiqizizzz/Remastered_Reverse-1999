@@ -6,6 +6,7 @@
 * └──────────────────────────────────┘
 */
 
+using System;
 using Common.Defines;
 using GameProtocol;
 using Module.Loading;
@@ -75,9 +76,6 @@ namespace Module.View
 
         private void onLoginBtnClick()
         {
-            //测试
-            Debug.Log("点击了登陆按钮,尝试登录中...");
-            
             //构造Protobuf大包
             MainPack pack = new MainPack();
             pack.RequestCode = RequestCode.User;
@@ -99,6 +97,7 @@ namespace Module.View
                 
                 loginView.SetActive(false);
                 GameApp.GameDataManager.SetPlayerName(accountLogin.text);
+                GameApp.GameDataManager.isConnected = true;
             }
             else
             {
@@ -142,6 +141,38 @@ namespace Module.View
 
         private void onStartGameBtnClick()
         {
+            if (!GameApp.GameDataManager.isServerOnline)
+            {
+                GameApp.ViewManager.Open(ViewType.NoticeView, "服务器暂未开放", new Action(() =>
+                    {
+                        GameApp.ViewManager.CloseAll();
+                        ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
+                    }),
+                    new Action(() =>
+                    {
+                        GameApp.ViewManager.CloseAll();
+                        ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
+                    }));
+                return;
+            }
+
+            if (!GameApp.GameDataManager.isConnected)
+            {
+                GameApp.ViewManager.Open(ViewType.NoticeView, "失去连接,确认重新连接?", new Action(() =>
+                    {
+                        Debug.Log("正在重新连接...");
+                        GameApp.NetworkManager.Connect();
+                    }),
+                    new Action(() =>
+                    {
+                        Debug.Log("取消重新连接");
+                        GameApp.ViewManager.CloseAll();
+                        ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
+                    }));
+                return;
+            }
+            
+            
             GameApp.ViewManager.Close(ViewType.MainMenuView);
             ViewExtensions.LoadScene(this, SceneDefines.GameView,(() =>
             {

@@ -134,23 +134,26 @@ namespace Network
         #region 消息处理
         private void onConnected()
         {
-            Debug.Log("连接成功");
+            GameApp.GameDataManager.isServerOnline = true;
             _lastPingTime = Time.realtimeSinceStartup;
             _lastReceiveTime = Time.realtimeSinceStartup;
         }
         
         private void onConnectFailed(string msg)
         {
+            GameApp.GameDataManager.isConnected = false;
             GameApp.MessageCenter.PostEvent(EventDefines.NetWork_ConnectFailed);
         }
 
         private void onDisconnected()
         {
+            GameApp.GameDataManager.isConnected = false;
             GameApp.MessageCenter.PostEvent(EventDefines.NetWork_Disconnect);
         }
 
         private void onError(string msg)
         {
+            GameApp.GameDataManager.isConnected = false;
             GameApp.MessageCenter.PostEvent(EventDefines.NetWork_Disconnect);
             //Debug.LogError($"[ServerProxy] 网络发生异常掉线，原因: {msg}");
         }

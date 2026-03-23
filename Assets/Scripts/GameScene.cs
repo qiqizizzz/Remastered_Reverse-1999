@@ -29,7 +29,7 @@ namespace DefaultNamespace
                 isLoaded = true;
                 DontDestroyOnLoad(gameObject);
                 GameApp.Instance.Init();
-                //Application.runInBackground = true;
+                Application.runInBackground = true;
             }
         }
 

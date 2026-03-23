@@ -8,6 +8,7 @@
 
 using System;
 using Common;
+using Common.Defines;
 using DG.Tweening;
 using Module.Loading;
 using MVC;
@@ -106,7 +107,7 @@ namespace Module.View
                 GameApp.ViewManager.Open(ViewType.LoadingView);
                 ViewExtensions.LoadScene(this,SceneDefines.StartMenuView,(() =>
                 {
-                    GameApp.ViewManager.Open(ViewType.MainMenuView);
+                    ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
                 }));
             }));
         }
