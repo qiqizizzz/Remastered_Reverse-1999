@@ -23,7 +23,7 @@ namespace Module.View
         private Button languageBtn;
         private Button gameBtn;
 
-        private Button preBtn;
+        private Button currentBtn;
 
         protected override void OnAwake()
         {
@@ -46,19 +46,37 @@ namespace Module.View
             languageBtn.onClick.AddListener(onLanguageBtn);
             gameBtn.onClick.AddListener(onGameBtn);
             
+            currentBtn = acBtn;
             bindSelectAnim(acBtn);
         }
 
         private void bindSelectAnim(Button button)
         {
-            if(preBtn != null)
-                preBtn.transform.Find("Img_select").gameObject.SetActive(false);//上一个按钮的此动画默认false
+            if (currentBtn != null)
+            {
+                Transform oldArrow = currentBtn.transform.Find("Img_selected");
+                if (oldArrow != null)
+                {
+                    oldArrow.GetComponent<RectTransform>().DOKill();//清理之前的动画
+                    oldArrow.gameObject.SetActive(false);//上一个按钮的此动画默认false
+                }
+            }
             
-            button.transform.Find("Img_select").gameObject.SetActive(true);
-            button.GetComponentInChildren<Image>().rectTransform.DOAnchorPosX(10f, 0.5f).SetRelative()
-                .SetLoops(-1, LoopType.Yoyo);
+            //处理当前按钮的动画
+            Transform newArrow = button.transform.Find("Img_selected");
+
+            if (newArrow != null)
+            {
+                newArrow.gameObject.SetActive(true);
+                RectTransform imgRect = newArrow.GetComponent<RectTransform>();
+                imgRect.DOKill();
+                Vector2 pos = imgRect.anchoredPosition;
+                pos.x = -97;
+                imgRect.anchoredPosition = pos;
+                imgRect.DOAnchorPosX(-87, 0.5f).SetLoops(-1, LoopType.Yoyo);
+            }
             
-            preBtn = button;
+            currentBtn = button;
         }
         
         private void onReturnBtn()
