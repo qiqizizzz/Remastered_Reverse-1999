@@ -11,6 +11,7 @@ using DefaultNamespace;
 using Module.Timer;
 using MVC;
 using Network;
+using Sound;
 
 public class GameApp : Singleton<GameApp>
 {
@@ -20,6 +21,7 @@ public class GameApp : Singleton<GameApp>
     public static NetworkManager NetworkManager;
     public static GameDataManager GameDataManager;
     public static MessageCenter MessageCenter;
+    public static SoundManager SoundManager;
         
     public override void Init()
     {
@@ -29,6 +31,7 @@ public class GameApp : Singleton<GameApp>
         NetworkManager = new NetworkManager();
         GameDataManager = new GameDataManager();
         MessageCenter = new MessageCenter();
+        SoundManager = new SoundManager();
     }
 
     public override void Update(float dt)

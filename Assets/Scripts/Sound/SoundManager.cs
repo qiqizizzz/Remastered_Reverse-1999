@@ -7,6 +7,8 @@
 */
 
 using System.Collections.Generic;
+using Common;
+using Common.Defines;
 using UnityEngine;
 
 namespace Sound
@@ -14,7 +16,7 @@ namespace Sound
     public class SoundManager
     {
         private AudioSource bgmSource;
-        private Dictionary<string, AudioClip> clips;// 音频缓存字典
+        private Dictionary<string, AudioClip> _clipDic;// 音频缓存字典
 
         private bool isStop;
         
@@ -76,7 +78,7 @@ namespace Sound
 
         public SoundManager()
         {
-            clips = new Dictionary<string, AudioClip>();
+            _clipDic = new Dictionary<string, AudioClip>();
             bgmSource = GameObject.Find("game").GetComponent<AudioSource>();
             IsStop = false;
 
@@ -89,12 +91,16 @@ namespace Sound
         {
             if(isStop) return;
 
-            if (!clips.ContainsKey(res))
+            if (!_clipDic.ContainsKey(res))
             {
                 //AA包中加载
+                ResManager.LoadAssetAsync<AudioClip>(res, (clip) =>
+                {
+                    _clipDic.Add(res, clip);
+                });
             }
 
-            bgmSource.clip = clips[res];
+            bgmSource.clip = _clipDic[res];
             bgmSource.Play();
         }
 
@@ -102,12 +108,16 @@ namespace Sound
         {
             if(isStop) return;
 
-            if (!clips.ContainsKey(res))
+            if (!_clipDic.ContainsKey(res))
             {
                 //AA包中加载
+                ResManager.LoadAssetAsync<AudioClip>(res, (clip) =>
+                {
+                    _clipDic.Add(res, clip);
+                });
             }
 
-            AudioSource.PlayClipAtPoint(clips[res], pos);
+            AudioSource.PlayClipAtPoint(_clipDic[res], pos);
         }
         
     }

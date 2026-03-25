@@ -27,5 +27,8 @@ namespace Common.Defines
         
         //Data数据
         public static readonly string Data_LoadingTextData = "Data/LoadingTextData";
+        
+        //Audio音频
+        public static readonly string Audio_BGM_Game = "Audio/Bgm_Game";
     }
 }
