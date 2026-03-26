@@ -14,6 +14,7 @@ using Module.Loading;
 using MVC;
 using MVC.Extensions;
 using MVC.View;
+using Sound;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ namespace Module.View
 {
     public class SettingView : BaseView
     {
+        #region UI组件声明
         [Header("按钮UI")] 
         private Button acBtn;
         private Button graphicBtn;
@@ -36,6 +38,7 @@ namespace Module.View
         private RectTransform pushPanel;
         private RectTransform languagePanel;
         private RectTransform gamePanel;
+        #endregion
         
         private Button currentBtn;
         private RectTransform currentPanel;
@@ -55,6 +58,11 @@ namespace Module.View
             pushPanel = Find<RectTransform>("panels/Panel_push");
             languagePanel = Find<RectTransform>("panels/Panel_language");
             gamePanel = Find<RectTransform>("panels/Panel_game");
+            
+            Find<Slider>("panels/Panel_sound/sound/Slider_soundTotal").onValueChanged.AddListener(onSliderSoundTotalBtn);
+            Find<Slider>("panels/Panel_sound/volume/Slider_soundBgm").onValueChanged.AddListener(onSliderSoundBgmBtn);
+            Find<Slider>("panels/Panel_sound/volume/Slider_soundVoice").onValueChanged.AddListener(onSliderSoundVoiceBtn);
+            Find<Slider>("panels/Panel_sound/volume/Slider_soundSfx").onValueChanged.AddListener(onSliderSoundSfxBtn);
         }
 
         protected override void OnStart()
@@ -153,6 +161,26 @@ namespace Module.View
             currentPanel.gameObject.SetActive(false);
             soundPanel.gameObject.SetActive(true);
             currentPanel = soundPanel;
+        }
+
+        private void onSliderSoundTotalBtn(float volume)
+        {
+            GameApp.SoundManager.TotalVolume = volume;
+        }
+        
+        private void onSliderSoundBgmBtn(float volume)
+        {
+            GameApp.SoundManager.BgmVolume = volume;
+        }
+        
+        private void onSliderSoundVoiceBtn(float volume)
+        {
+            GameApp.SoundManager.VoiceVolume = volume;
+        }
+        
+        private void onSliderSoundSfxBtn(float volume)
+        {
+            GameApp.SoundManager.EffectVolume = volume;
         }
         #endregion
 

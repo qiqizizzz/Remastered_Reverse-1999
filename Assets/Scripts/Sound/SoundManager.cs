@@ -45,6 +45,11 @@ namespace Sound
             set
             {
                 _totalVolume = value;
+                
+                if (bgmSource != null)
+                {
+                    bgmSource.volume = _bgmVolume * _totalVolume;
+                }
             }
         }
         
