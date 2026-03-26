@@ -15,6 +15,7 @@ using MVC;
 using MVC.Extensions;
 using MVC.View;
 using Sound;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,6 +39,9 @@ namespace Module.View
         private RectTransform pushPanel;
         private RectTransform languagePanel;
         private RectTransform gamePanel;
+        
+        [Header("graphicPanel UI")]
+        private TMP_Dropdown resolutionDropdown;
         #endregion
         
         private Button currentBtn;
@@ -59,6 +63,8 @@ namespace Module.View
             languagePanel = Find<RectTransform>("panels/Panel_language");
             gamePanel = Find<RectTransform>("panels/Panel_game");
             
+            resolutionDropdown = Find<TMP_Dropdown>("panels/Panel_graphic/view/Dropdown_resolution");
+            
             Find<Slider>("panels/Panel_sound/sound/Slider_soundTotal").onValueChanged.AddListener(onSliderSoundTotalBtn);
             Find<Slider>("panels/Panel_sound/volume/Slider_soundBgm").onValueChanged.AddListener(onSliderSoundBgmBtn);
             Find<Slider>("panels/Panel_sound/volume/Slider_soundVoice").onValueChanged.AddListener(onSliderSoundVoiceBtn);
@@ -76,6 +82,8 @@ namespace Module.View
             pushBtn.onClick.AddListener(onPushBtn);
             languageBtn.onClick.AddListener(onLanguageBtn);
             gameBtn.onClick.AddListener(onGameBtn);
+            
+            resolutionDropdown.onValueChanged.AddListener(onResolutionDropdown);
             
             currentPanel = acPanel;
             bindSelectAnim(acBtn);
@@ -149,6 +157,39 @@ namespace Module.View
             currentPanel.gameObject.SetActive(false);
             graphicPanel.gameObject.SetActive(true);
             currentPanel = graphicPanel;
+        }
+        
+        //分辨率设置
+        private void onResolutionDropdown(int index)
+        {
+            Debug.Log($"分辨率改变为{resolutionDropdown.options[index].text}");
+            string text = resolutionDropdown.options[index].text;
+
+            if (text == "窗口全屏" || text == "无边框全屏")
+            {
+                Resolution currentRes = Screen.currentResolution;//获取当前屏幕分辨率
+                if(text == "窗口全屏")
+                {
+                    Screen.SetResolution(currentRes.width,currentRes.height,FullScreenMode.Windowed);
+                }
+                else
+                {
+                    Screen.SetResolution(currentRes.width,currentRes.height,FullScreenMode.FullScreenWindow);
+                }
+            }
+            else
+            {
+                string[] resArr = text.Split('*');
+
+                if (resArr.Length == 2)
+                {
+                    if (int.TryParse(resArr[0], out int width) && int.TryParse(resArr[1], out int height))
+                    {
+                        Screen.SetResolution(width, height, FullScreenMode.Windowed);
+                    }
+                }
+            }
+
         }
         
         #endregion

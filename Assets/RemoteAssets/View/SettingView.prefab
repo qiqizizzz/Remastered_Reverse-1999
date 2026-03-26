@@ -4656,7 +4656,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2474817436723033388
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7135,8 +7135,6 @@ MonoBehaviour:
     - m_Text: 2048*1080
       m_Image: {fileID: 0}
     - m_Text: 1920*1200
-      m_Image: {fileID: 0}
-    - m_Text: 1920*1080
       m_Image: {fileID: 0}
     - m_Text: 1920*1080
       m_Image: {fileID: 0}
