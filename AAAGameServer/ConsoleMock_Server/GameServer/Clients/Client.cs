@@ -365,7 +365,7 @@ namespace GameServer
             //未登录无法处理
             if (string.IsNullOrEmpty(this.UserName))
             {
-                MainPack errPack = new MainPack { ActionCode = ActionCode.ChatPrivate, ReturnCode = ReturnCode.Failed, StrMsg = "请先登录!" };
+                MainPack errPack = new MainPack { ActionCode = pack.ActionCode, ReturnCode = ReturnCode.Failed, StrMsg = "请先登录!" };
                 Send(errPack.ToByteArray());
                 return;
             }
@@ -378,8 +378,12 @@ namespace GameServer
                     HandleGetFriendList(pack);
                     break;
                 case FriendOpType.AddFriend:
+                    HandleAddFriend(pack);
                     break;
                 case FriendOpType.RemoveFriend:
+                    break;
+                case FriendOpType.SearchUser:
+                    HandleSearchUser(pack);
                     break;
                 default:
                     break;
@@ -451,6 +455,65 @@ namespace GameServer
             Console.WriteLine($"[{_clientId}] 获取好友列表,好友数量: {friends.Count}");
         }
 
+        private void HandleAddFriend(MainPack pack)
+        {
+            bool success = DBManager.AddFriend(UserName, pack.FriendPack.TargetUser);
+
+            MainPack resPack = new MainPack
+            {
+                RequestCode = RequestCode.Friend,
+                ActionCode = ActionCode.FriendOperation,
+                FriendPack = new FriendPack
+                {
+                    OpType = FriendOpType.AddFriend,
+                    TargetUser = pack.FriendPack.TargetUser
+                }
+            };
+
+            if (success)
+            {
+                resPack.ReturnCode = ReturnCode.Succeed;
+                Console.WriteLine($"[{_clientId}] 添加好友成功: {pack.FriendPack.TargetUser}");
+                
+            }
+            else
+            {
+                resPack.ReturnCode = ReturnCode.Failed;
+                Console.WriteLine($"[{_clientId}] 添加好友失败: {pack.FriendPack.TargetUser}");
+            }
+
+            Send(resPack.ToByteArray());
+        }
+
+        private void HandleSearchUser(MainPack pack)
+        {
+            bool success = DBManager.SearchUser(pack.FriendPack.TargetUser);
+
+            MainPack resPack = new MainPack
+            {
+                RequestCode = RequestCode.Friend,
+                ActionCode = ActionCode.FriendOperation,
+                FriendPack = new FriendPack
+                {
+                    OpType = FriendOpType.SearchUser,
+                    TargetUser = pack.FriendPack.TargetUser
+                }
+            };
+
+            if(success)
+            {
+                resPack.ReturnCode = ReturnCode.Succeed;
+                Console.WriteLine($"[{_clientId}] 搜索用户成功: {pack.FriendPack.TargetUser}");
+            }
+            else
+            {
+                resPack.ReturnCode = ReturnCode.Failed;
+                Console.WriteLine($"[{_clientId}] 搜索用户失败: {pack.FriendPack.TargetUser}");
+            }
+
+            Send(resPack.ToByteArray());
+        }
+
         #endregion
         #endregion
 
@@ -458,7 +521,7 @@ namespace GameServer
 
         #region 发送消息相关
 
-        //发送数据给客户端
+            //发送数据给客户端
         public void Send(byte[] data)
         {
             try

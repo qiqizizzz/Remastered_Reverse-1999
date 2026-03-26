@@ -130,6 +130,40 @@ namespace GameServer.DataBase
                 return db.Friends.Where(f => f.Username == username).ToList();
             }
         }
+
+        //添加好友
+        public static bool AddFriend(string userName, string friendUserName)
+        {
+            //防止自己加自己
+            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(friendUserName) || userName == friendUserName)
+            {
+                return false;
+            }
+
+            using (var db = new GameDbContext())
+            {
+                bool exists = db.Friends.Any(f => f.Username == userName && f.FriendUsername == friendUserName);
+                if (exists) return false;
+                var newFriend = new Friend
+                {
+                    Username = userName,
+                    FriendUsername = friendUserName,
+                    CreateTime = DateTime.Now
+                };
+                db.Friends.Add(newFriend);
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        //搜索玩家 - 模糊查询
+        public static bool SearchUser(string key)
+        {
+            using (var db = new GameDbContext())
+            {
+                return db.Users.Any(u => u.Username.Contains(key));
+            }
+        }
         #endregion
 
         #endregion

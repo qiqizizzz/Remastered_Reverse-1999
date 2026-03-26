@@ -47,9 +47,9 @@ namespace GameProtocol {
             "TG9nb24QARIJCgVMb2dpbhACEg0KCUhlYXJ0YmVhdBADEhAKDENoYXRfcHJp",
             "dmF0ZRAEEhMKD0ZyaWVuZE9wZXJhdGlvbhAFEhIKDkdldENoYXRIaXN0b3J5",
             "EAYqNQoKUmV0dXJuQ29kZRIOCgpSZXR1cm5Ob25lEAASCwoHU3VjY2VlZBAB",
-            "EgoKBkZhaWxlZBACKk4KDEZyaWVuZE9wVHlwZRIQCgxGcmllbmRPcE5vbmUQ",
+            "EgoKBkZhaWxlZBACKl4KDEZyaWVuZE9wVHlwZRIQCgxGcmllbmRPcE5vbmUQ",
             "ABILCgdHZXRMaXN0EAESDQoJQWRkRnJpZW5kEAISEAoMUmVtb3ZlRnJpZW5k",
-            "EANiBnByb3RvMw=="));
+            "EAMSDgoKU2VhcmNoVXNlchAEYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProtocol.RequestCode), typeof(global::GameProtocol.ActionCode), typeof(global::GameProtocol.ReturnCode), typeof(global::GameProtocol.FriendOpType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -131,6 +131,7 @@ namespace GameProtocol {
     /// 删除好友
     /// </summary>
     [pbr::OriginalName("RemoveFriend")] RemoveFriend = 3,
+    [pbr::OriginalName("SearchUser")] SearchUser = 4,
   }
 
   #endregion

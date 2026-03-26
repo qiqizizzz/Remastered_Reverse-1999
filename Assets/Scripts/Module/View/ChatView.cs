@@ -31,20 +31,27 @@ namespace Module.View
         private string lastText="";
         
         [Header("UI组件")]
-        private TMP_InputField _inputField;
+        private TMP_InputField _inputField;//聊天输入框
+        private TMP_InputField _inputSearchField;//好友搜索框
         private ScrollRect _chatScrollRect;
         private ScrollRect _friendScrollRect;
-        private Transform _chatPanel;
+        private List<CanvasGroup> _canvasGroups = new List<CanvasGroup>();
         
         protected override void OnAwake()
         {
             _inputField = Find<TMP_InputField>("panels/panel_friend/chatArea/Input_field");
+            _inputSearchField = Find<TMP_InputField>("panels/panel_add/InputField_add");
             _chatScrollRect = Find<ScrollRect>("panels/panel_friend/chatArea/Scroll_chat");
             _friendScrollRect = Find<ScrollRect>("panels/panel_friend/Scroll_hy");
-            _chatPanel = Find<Transform>("panels/panel_friend");
+            
+            _canvasGroups.Add(Find<CanvasGroup>("panels/panel_friend"));//0
+            _canvasGroups.Add(Find<CanvasGroup>("panels/panel_add"));//1
             
             Find<Button>("Btn_return").onClick.AddListener(onReturnMoreOptionBtn);
+            Find<Button>("Btn_friends").onClick.AddListener(onFriendsBtn);
+            Find<Button>("Btn_add").onClick.AddListener(onAddFriendBtn);
             Find<Button>("panels/panel_friend/chatArea/Btn_send").onClick.AddListener(onSendMessageBtn);
+            Find<Button>("panels/panel_add/Btn_search").onClick.AddListener(onSearchBtn);
         }
 
         protected override void OnStart()
@@ -55,7 +62,8 @@ namespace Module.View
             Controller.RegisterFunc(EventDefines.UpdateChatHistory, onUpdateChatHistory);
             Controller.RegisterFunc(EventDefines.ReceiveNewMessage, onReceiveNewMessage);
             
-            ApplyFunc(EventDefines.GetFriendList);//发送获取好友列表请求
+            //ApplyFunc(EventDefines.GetFriendList);//发送获取好友列表请求 - 暂时关闭
+            showPanel(0);
         }
 
         protected override void OnDestroy()
@@ -70,7 +78,25 @@ namespace Module.View
             GameApp.ViewManager.Close(ViewId);
         }
 
-        private void onFriendBtn(string friendName, GameObject btnObj)
+        private void showPanel(int index)
+        {
+            for (int i = 0; i < _canvasGroups.Count; i++)
+            {
+                _canvasGroups[i].alpha = (i == index) ? 1 : 0;
+                _canvasGroups[i].blocksRaycasts = (i == index);//关闭交互和射线检测，防止点击穿透到不可见的界面
+                _canvasGroups[i].interactable = (i == index);
+            }
+        }
+
+        #region 好友聊天界面
+        private void onFriendsBtn()
+        {
+            showPanel(0);
+            
+            //ApplyFunc(EventDefines.GetFriendList); - 暂时关闭
+        }
+        
+        private void onFriendInfoBtn(string friendName, GameObject btnObj)
         {
             Find<TextMeshProUGUI>("panels/panel_friend/chatArea/Txt_name").text = friendName;
             
@@ -290,7 +316,7 @@ namespace Module.View
                         Button btn = go.GetComponent<Button>();
                         btn.name = item.Username;
                         btn.onClick.RemoveAllListeners();//先移除之前的监听，避免重复绑定
-                        btn.onClick.AddListener(() => onFriendBtn(targetName ,go));
+                        btn.onClick.AddListener(() => onFriendInfoBtn(targetName ,go));
                     }
                 }),contentParent);
             }
@@ -374,5 +400,22 @@ namespace Module.View
                 }
             }, contentParent);
         }
+        
+        #endregion
+
+        #region 添加好友界面
+
+        private void onAddFriendBtn()
+        {
+            showPanel(1);
+        }
+
+        private void onSearchBtn()
+        {
+            string searchName = _inputSearchField.text;
+            Debug.Log("搜索好友" + searchName);
+        }
+
+        #endregion
     }
 }
