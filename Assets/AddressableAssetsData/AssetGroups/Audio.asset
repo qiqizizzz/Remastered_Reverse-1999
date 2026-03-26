@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 117481cd1af7f3548b45d07a56884db7
   m_SerializeEntries:
+  - m_GUID: 57ed5706830165548ba67c6813c64238
+    m_Address: Audio/Bgm_Login
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f7e8ec787dd05314a822febc514a8ac3
     m_Address: Audio/Bgm_Game
     m_ReadOnly: 0

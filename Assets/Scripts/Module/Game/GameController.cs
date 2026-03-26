@@ -30,6 +30,8 @@ namespace DefaultNamespace.Module.Game
 
             //ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
             ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenGameView);// 这个只是临时的
+            
+            GameApp.SoundManager.PlayBGM(AddressDefines.Audio_BGM_Game);
         }
 
         public override void InitGlobalEvent()

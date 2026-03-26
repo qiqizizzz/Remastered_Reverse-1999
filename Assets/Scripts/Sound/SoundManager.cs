@@ -79,7 +79,7 @@ namespace Sound
         public SoundManager()
         {
             _clipDic = new Dictionary<string, AudioClip>();
-            bgmSource = GameObject.Find("game").GetComponent<AudioSource>();
+            bgmSource = GameObject.Find("Game").GetComponent<AudioSource>();
             IsStop = false;
 
             TotalVolume = 1f;
@@ -91,33 +91,63 @@ namespace Sound
         {
             if(isStop) return;
 
-            if (!_clipDic.ContainsKey(res))
+            if (_clipDic.TryGetValue(res, out var cachedClip))
+            {
+                bgmSource.clip = cachedClip;
+                bgmSource.Play();
+            }
+            else
             {
                 //AA包中加载
                 ResManager.LoadAssetAsync<AudioClip>(res, (clip) =>
                 {
-                    _clipDic.Add(res, clip);
+                    if (clip == null)
+                    { 
+                        Debug.LogError($"该资源不存在" + res);
+                        return;
+                    }
+                    
+                    //防止异步时重复缓存
+                    if (!_clipDic.ContainsKey(res))
+                    {
+                        _clipDic.Add(res, clip);
+                    }
+
+                    bgmSource.clip = clip;
+                    bgmSource.Play();//注意:不能放在外面，否则会有时序问题，导致bgmSource.clip还未赋值就调用了Play()，从而无法播放音乐
                 });
             }
-
-            bgmSource.clip = _clipDic[res];
-            bgmSource.Play();
         }
 
         public void PlayEffect(string res, Vector3 pos)
         {
             if(isStop) return;
 
-            if (!_clipDic.ContainsKey(res))
+            float currentVolume = _effectVolume * _totalVolume;
+            
+            if (_clipDic.ContainsKey(res))
+            {
+                AudioSource.PlayClipAtPoint(_clipDic[res], pos, currentVolume);
+            }
+            else
             {
                 //AA包中加载
                 ResManager.LoadAssetAsync<AudioClip>(res, (clip) =>
                 {
-                    _clipDic.Add(res, clip);
+                    if(clip == null)
+                    {
+                        Debug.LogError($"该资源不存在" + res);
+                        return;
+                    }
+
+                    if (!_clipDic.ContainsKey(res))
+                    {
+                        _clipDic.Add(res, clip);
+                    }
+
+                    AudioSource.PlayClipAtPoint(clip, pos, currentVolume);
                 });
             }
-
-            AudioSource.PlayClipAtPoint(_clipDic[res], pos);
         }
         
     }

@@ -6,6 +6,7 @@
 * └───────────────────────────────────────────────────────────────────┘
 */
 
+using Common.Defines;
 using DefaultNamespace.Module.Game;
 using Module.chat;
 using Module.GameUI;
