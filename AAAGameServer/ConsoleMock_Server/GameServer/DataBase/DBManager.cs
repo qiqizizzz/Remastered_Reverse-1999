@@ -156,12 +156,34 @@ namespace GameServer.DataBase
             }
         }
 
-        //搜索玩家 - 模糊查询
-        public static bool SearchUser(string key)
+        //删除好友
+        public static bool RemoveFriend(string userName, string friendUserName)
         {
             using (var db = new GameDbContext())
             {
-                return db.Users.Any(u => u.Username.Contains(key));
+                var friends = db.Friends.Where(f =>
+                    (f.Username == userName && f.FriendUsername == friendUserName) ||
+                    (f.FriendUsername == userName && f.Username == friendUserName))
+                    .ToList();
+
+                if (!friends.Any()) return false;
+
+                db.Friends.RemoveRange(friends);
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        //搜索玩家 - 模糊查询
+        public static List<string> SearchUser(string key)
+        {
+            using (var db = new GameDbContext())
+            {
+                return db.Users
+                    .Where(u => u.Username.Contains(key))
+                    .Select(u => u.Username) //只查询用户名
+                    .Take(20)
+                    .ToList();
             }
         }
         #endregion

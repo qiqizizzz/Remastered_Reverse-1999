@@ -36,27 +36,27 @@ namespace GameProtocol {
             "YXRhIi8KCUxvZ2luUGFjaxIQCgh1c2VybmFtZRgBIAEoCRIQCghwYXNzd29y",
             "ZBgCIAEoCSJiCghDaGF0UGFjaxIOCgZ0b1VzZXIYASABKAkSEAoIZnJvbVVz",
             "ZXIYAiABKAkSDwoHY29udGVudBgDIAEoCRIQCghjaGF0VHlwZRgEIAEoBRIR",
-            "Cgl0aW1lc3RhbXAYBSABKAMiMAoKRnJpZW5kSW5mbxIQCgh1c2VybmFtZRgB",
-            "IAEoCRIQCghpc09ubGluZRgCIAEoCCJ6CgpGcmllbmRQYWNrEioKBm9wVHlw",
-            "ZRgBIAEoDjIaLkdhbWVQcm90b2NvbC5GcmllbmRPcFR5cGUSEgoKdGFyZ2V0",
-            "VXNlchgCIAEoCRIsCgpmcmllbmRMaXN0GAMgAygLMhguR2FtZVByb3RvY29s",
-            "LkZyaWVuZEluZm8iTwoPQ2hhdEhpc3RvcnlQYWNrEhIKCnRhcmdldFVzZXIY",
-            "ASABKAkSKAoIY2hhdExpc3QYAiADKAsyFi5HYW1lUHJvdG9jb2wuQ2hhdFBh",
-            "Y2sqNAoLUmVxdWVzdENvZGUSDwoLUmVxdWVzdE5vbmUQABIICgRVc2VyEAES",
-            "CgoGRnJpZW5kEAIqfAoKQWN0aW9uQ29kZRIOCgpBY3Rpb25Ob25lEAASCQoF",
-            "TG9nb24QARIJCgVMb2dpbhACEg0KCUhlYXJ0YmVhdBADEhAKDENoYXRfcHJp",
-            "dmF0ZRAEEhMKD0ZyaWVuZE9wZXJhdGlvbhAFEhIKDkdldENoYXRIaXN0b3J5",
-            "EAYqNQoKUmV0dXJuQ29kZRIOCgpSZXR1cm5Ob25lEAASCwoHU3VjY2VlZBAB",
-            "EgoKBkZhaWxlZBACKl4KDEZyaWVuZE9wVHlwZRIQCgxGcmllbmRPcE5vbmUQ",
-            "ABILCgdHZXRMaXN0EAESDQoJQWRkRnJpZW5kEAISEAoMUmVtb3ZlRnJpZW5k",
-            "EAMSDgoKU2VhcmNoVXNlchAEYgZwcm90bzM="));
+            "Cgl0aW1lc3RhbXAYBSABKAMiQgoKRnJpZW5kSW5mbxIQCgh1c2VybmFtZRgB",
+            "IAEoCRIQCghpc09ubGluZRgCIAEoCBIQCghpc0ZyaWVuZBgDIAEoCCJ6CgpG",
+            "cmllbmRQYWNrEioKBm9wVHlwZRgBIAEoDjIaLkdhbWVQcm90b2NvbC5Gcmll",
+            "bmRPcFR5cGUSEgoKdGFyZ2V0VXNlchgCIAEoCRIsCgpmcmllbmRMaXN0GAMg",
+            "AygLMhguR2FtZVByb3RvY29sLkZyaWVuZEluZm8iTwoPQ2hhdEhpc3RvcnlQ",
+            "YWNrEhIKCnRhcmdldFVzZXIYASABKAkSKAoIY2hhdExpc3QYAiADKAsyFi5H",
+            "YW1lUHJvdG9jb2wuQ2hhdFBhY2sqNAoLUmVxdWVzdENvZGUSDwoLUmVxdWVz",
+            "dE5vbmUQABIICgRVc2VyEAESCgoGRnJpZW5kEAIqfAoKQWN0aW9uQ29kZRIO",
+            "CgpBY3Rpb25Ob25lEAASCQoFTG9nb24QARIJCgVMb2dpbhACEg0KCUhlYXJ0",
+            "YmVhdBADEhAKDENoYXRfcHJpdmF0ZRAEEhMKD0ZyaWVuZE9wZXJhdGlvbhAF",
+            "EhIKDkdldENoYXRIaXN0b3J5EAYqNQoKUmV0dXJuQ29kZRIOCgpSZXR1cm5O",
+            "b25lEAASCwoHU3VjY2VlZBABEgoKBkZhaWxlZBACKl4KDEZyaWVuZE9wVHlw",
+            "ZRIQCgxGcmllbmRPcE5vbmUQABILCgdHZXRMaXN0EAESDQoJQWRkRnJpZW5k",
+            "EAISEAoMUmVtb3ZlRnJpZW5kEAMSDgoKU2VhcmNoVXNlchAEYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProtocol.RequestCode), typeof(global::GameProtocol.ActionCode), typeof(global::GameProtocol.ReturnCode), typeof(global::GameProtocol.FriendOpType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.MainPack), global::GameProtocol.MainPack.Parser, new[]{ "RequestCode", "ActionCode", "ReturnCode", "StrMsg", "LoginPack", "ChatPack", "FriendPack", "ChatHistoryPack" }, new[]{ "Data" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.LoginPack), global::GameProtocol.LoginPack.Parser, new[]{ "Username", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ChatPack), global::GameProtocol.ChatPack.Parser, new[]{ "ToUser", "FromUser", "Content", "ChatType", "Timestamp" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.FriendInfo), global::GameProtocol.FriendInfo.Parser, new[]{ "Username", "IsOnline" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.FriendInfo), global::GameProtocol.FriendInfo.Parser, new[]{ "Username", "IsOnline", "IsFriend" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.FriendPack), global::GameProtocol.FriendPack.Parser, new[]{ "OpType", "TargetUser", "FriendList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ChatHistoryPack), global::GameProtocol.ChatHistoryPack.Parser, new[]{ "TargetUser", "ChatList" }, null, null, null, null)
           }));
@@ -131,6 +131,9 @@ namespace GameProtocol {
     /// 删除好友
     /// </summary>
     [pbr::OriginalName("RemoveFriend")] RemoveFriend = 3,
+    /// <summary>
+    ///搜索玩家
+    /// </summary>
     [pbr::OriginalName("SearchUser")] SearchUser = 4,
   }
 
@@ -956,6 +959,7 @@ namespace GameProtocol {
     public FriendInfo(FriendInfo other) : this() {
       username_ = other.username_;
       isOnline_ = other.isOnline_;
+      isFriend_ = other.isFriend_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -992,6 +996,20 @@ namespace GameProtocol {
       }
     }
 
+    /// <summary>Field number for the "isFriend" field.</summary>
+    public const int IsFriendFieldNumber = 3;
+    private bool isFriend_;
+    /// <summary>
+    ///是否已经是好友
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsFriend {
+      get { return isFriend_; }
+      set {
+        isFriend_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as FriendInfo);
@@ -1007,6 +1025,7 @@ namespace GameProtocol {
       }
       if (Username != other.Username) return false;
       if (IsOnline != other.IsOnline) return false;
+      if (IsFriend != other.IsFriend) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1015,6 +1034,7 @@ namespace GameProtocol {
       int hash = 1;
       if (Username.Length != 0) hash ^= Username.GetHashCode();
       if (IsOnline != false) hash ^= IsOnline.GetHashCode();
+      if (IsFriend != false) hash ^= IsFriend.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1036,6 +1056,10 @@ namespace GameProtocol {
         output.WriteRawTag(16);
         output.WriteBool(IsOnline);
       }
+      if (IsFriend != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(IsFriend);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1048,6 +1072,9 @@ namespace GameProtocol {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Username);
       }
       if (IsOnline != false) {
+        size += 1 + 1;
+      }
+      if (IsFriend != false) {
         size += 1 + 1;
       }
       if (_unknownFields != null) {
@@ -1067,6 +1094,9 @@ namespace GameProtocol {
       if (other.IsOnline != false) {
         IsOnline = other.IsOnline;
       }
+      if (other.IsFriend != false) {
+        IsFriend = other.IsFriend;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1084,6 +1114,10 @@ namespace GameProtocol {
           }
           case 16: {
             IsOnline = input.ReadBool();
+            break;
+          }
+          case 24: {
+            IsFriend = input.ReadBool();
             break;
           }
         }

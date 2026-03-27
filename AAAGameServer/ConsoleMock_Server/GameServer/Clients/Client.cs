@@ -381,6 +381,7 @@ namespace GameServer
                     HandleAddFriend(pack);
                     break;
                 case FriendOpType.RemoveFriend:
+                    HandleRemoveFriend(pack);
                     break;
                 case FriendOpType.SearchUser:
                     HandleSearchUser(pack);
@@ -485,30 +486,65 @@ namespace GameServer
             Send(resPack.ToByteArray());
         }
 
-        private void HandleSearchUser(MainPack pack)
+        private void HandleRemoveFriend(MainPack pack)
         {
-            bool success = DBManager.SearchUser(pack.FriendPack.TargetUser);
-
+            bool success = DBManager.RemoveFriend(UserName, pack.FriendPack.TargetUser);
             MainPack resPack = new MainPack
             {
                 RequestCode = RequestCode.Friend,
                 ActionCode = ActionCode.FriendOperation,
                 FriendPack = new FriendPack
                 {
-                    OpType = FriendOpType.SearchUser,
+                    OpType = FriendOpType.RemoveFriend,
                     TargetUser = pack.FriendPack.TargetUser
                 }
             };
-
-            if(success)
+            if (success)
             {
                 resPack.ReturnCode = ReturnCode.Succeed;
-                Console.WriteLine($"[{_clientId}] 搜索用户成功: {pack.FriendPack.TargetUser}");
+                Console.WriteLine($"[{_clientId}] 删除好友成功: {pack.FriendPack.TargetUser}");
             }
             else
             {
                 resPack.ReturnCode = ReturnCode.Failed;
-                Console.WriteLine($"[{_clientId}] 搜索用户失败: {pack.FriendPack.TargetUser}");
+                Console.WriteLine($"[{_clientId}] 删除好友失败: {pack.FriendPack.TargetUser}");
+            }
+            Send(resPack.ToByteArray());    
+        }
+
+        private void HandleSearchUser(MainPack pack)
+        {
+            List<string> userList = DBManager.SearchUser(pack.FriendPack.TargetUser);
+
+            MainPack resPack = new MainPack
+            {
+                RequestCode = RequestCode.Friend,
+                ActionCode = ActionCode.FriendOperation,
+                ReturnCode = ReturnCode.Succeed,
+                FriendPack = new FriendPack
+                {
+                    OpType = FriendOpType.SearchUser
+                }
+            };
+
+            if (userList.Count == 0)
+            {
+                Console.WriteLine($"[{_clientId}] 搜索无结果: {pack.FriendPack.TargetUser}");
+            }
+
+            if (userList.Count > 0)
+            {
+                resPack.ReturnCode = ReturnCode.Succeed;
+                Console.WriteLine($"[{_clientId}] 搜索用户成功: {userList.ToList()}");
+
+                for(int i = 0;i < userList.Count; i++)
+                {
+                    resPack.FriendPack.FriendList.Add(new FriendInfo
+                    {
+                        Username = userList[i],
+                        IsOnline = _server.GetClientByUsername(userList[i]) != null
+                    });
+                }
             }
 
             Send(resPack.ToByteArray());
