@@ -25,6 +25,7 @@ namespace Module.View
     {
         private Button _currentChat;//当前聊天对象
         private const int friendMaxCount = 50;//好友上限
+        private int _currentSearchId = 0;//搜索唯一Id
         
         [Header("打字效果相关")]
         private List<Vector3> _charPositions = new List<Vector3>(); // 缓存每个字符的位置
@@ -386,6 +387,8 @@ namespace Module.View
 
         private void onUpdateSearchedFriends(params object[] args)
         {
+            int searchId = ++_currentSearchId; // 生成本次搜索ID
+            
             //args[0] 是搜索结果列表
             List<FriendInfo> searchResults = args[0] as List<FriendInfo>;
             
@@ -410,6 +413,12 @@ namespace Module.View
                 
                 ResManager.InstantiateFromPoolAsync(prefab, (go) =>
                 {
+                    if (searchId != _currentSearchId) 
+                    {
+                        ResManager.ReleaseToPool(prefab, go); // 立即回收过时的
+                        return;
+                    }
+                    
                     if (go != null)
                     {
                         go.transform.Find("Txt_name").GetComponent<TextMeshProUGUI>().text = name;
@@ -417,10 +426,14 @@ namespace Module.View
                         Button cancelBtn = go.transform.Find("Btn_cancel").GetComponent<Button>();
                         addBtn.onClick.RemoveAllListeners();
                         cancelBtn.onClick.RemoveAllListeners();
-                        addBtn.onClick.AddListener(() => onAddFriendRequest(name));
+                        addBtn.onClick.AddListener(() =>
+                        {
+                            onAddFriendRequest(name);
+                            ResManager.ReleaseToPool(AddressDefines.UI_small_Box_searchedUser, go);
+                        });
                         cancelBtn.onClick.AddListener((() =>
                         {
-                            Destroy(go);
+                            ResManager.ReleaseToPool(AddressDefines.UI_small_Box_searchedUser, go);
                         }));
                         go.transform.SetSiblingIndex(index);
                     }

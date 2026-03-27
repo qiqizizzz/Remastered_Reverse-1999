@@ -542,7 +542,6 @@ namespace GameServer
             {
                 resPack.ReturnCode = ReturnCode.Succeed;
                 Console.WriteLine($"[Server] 发送搜索数据: {string.Join(", ", filteredList)}");
-                Console.WriteLine($"[Server] FriendList.Count = {resPack.FriendPack.FriendList.Count}");
 
                 for (int i = 0;i < filteredList.Count; i++)
                 {
@@ -552,6 +551,8 @@ namespace GameServer
                         IsOnline = _server.GetClientByUsername(filteredList[i]) != null
                     });
                 }
+
+                Console.WriteLine($"[Server] FriendList.Count = {resPack.FriendPack.FriendList.Count}");
             }
 
             Send(resPack.ToByteArray());

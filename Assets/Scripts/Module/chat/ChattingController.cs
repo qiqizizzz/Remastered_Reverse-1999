@@ -7,6 +7,7 @@
 */
 
 using System.Collections.Generic;
+using System.Linq;
 using Common.Defines;
 using GameProtocol;
 using Module.View;
@@ -223,8 +224,7 @@ namespace Module.chat
                         case FriendOpType.RemoveFriend:
                             break;
                         case FriendOpType.SearchUser:
-                            pack.FriendPack.FriendList.Clear();
-                            getSearchedFriends(pack);
+                            getSearchedUser(pack);
                             break;
                         default:
                             Debug.Log("未知的好友操作类型");
@@ -294,13 +294,14 @@ namespace Module.chat
             ApplyFunc(EventDefines.UpdateFriendList);//通知视图更新好友列表
         }
 
-        private void getSearchedFriends(MainPack pack)
+        private void getSearchedUser(MainPack pack)
         {
-            List<FriendInfo> searchedFriends = new List<FriendInfo>(pack.FriendPack.FriendList);
+            List<FriendInfo> searchedUser = new List<FriendInfo>(pack.FriendPack.FriendList);
+            List<FriendInfo> finalSearched = new List<FriendInfo>(searchedUser).Except(Model.FriendList).ToList();
             
-            Debug.Log($"成功获取到搜索列表，搜索数量：{searchedFriends.Count}");
+            Debug.Log($"成功获取到搜索列表，搜索数量：{finalSearched.Count}");
             
-            ApplyFunc(EventDefines.UpdateSearchedFriends, searchedFriends);//通知视图更新搜索结果
+            ApplyFunc(EventDefines.UpdateSearchedFriends, finalSearched);//通知视图更新搜索结果
         }
         
         #endregion
