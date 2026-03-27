@@ -481,10 +481,11 @@ namespace Module.View
             Debug.Log("搜索好友" + searchName);
         }
 
-        //TODO:发送添加好友请求
+        //发送添加好友请求
         private void onAddFriendRequest(string name)
         {
             Debug.Log("发送添加好友请求给" + name);
+            ApplyFunc(EventDefines.AddFriendRequest, name);
         }
         
         #endregion

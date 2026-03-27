@@ -44,6 +44,7 @@ namespace Module.chat
             RegisterFunc(EventDefines.GetFriendList, getFriendList);
             RegisterFunc(EventDefines.GetChatHistory, getChatHistory);
             RegisterFunc(EventDefines.GetSearchedFriends, getSearchedFriends);
+            RegisterFunc(EventDefines.AddFriendRequest, addFriendRequest);
             
             GameApp.NetworkManager.AddMessageHandler(ActionCode.ChatPrivate, onReceiveChatMsg);
             GameApp.NetworkManager.AddMessageHandler(ActionCode.FriendOperation, onReceiveFriendOperation);
@@ -57,6 +58,7 @@ namespace Module.chat
             UnRegisterFunc(EventDefines.GetFriendList);
             UnRegisterFunc(EventDefines.GetChatHistory);
             UnRegisterFunc(EventDefines.GetSearchedFriends);
+            UnRegisterFunc(EventDefines.AddFriendRequest);
             
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.ChatPrivate, onReceiveChatMsg);
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.FriendOperation, onReceiveFriendOperation);
@@ -166,6 +168,26 @@ namespace Module.chat
             
             GameApp.NetworkManager.Send(pack);
         }
+
+        private void addFriendRequest(System.Object[] args)
+        {
+            //args[0]代表要添加的好友名字
+            string targetUser = args[0] as string;
+            if(string.IsNullOrEmpty(targetUser)) return;
+            
+            MainPack  pack = new MainPack()
+            {
+                ActionCode = ActionCode.FriendOperation,
+                RequestCode = RequestCode.Friend,
+                FriendPack = new FriendPack()
+                {
+                    OpType = FriendOpType.AddFriend,
+                    TargetUser = targetUser
+                }
+            };
+                
+            GameApp.NetworkManager.Send(pack);
+        }
         #endregion
 
         #region 接收请求
@@ -220,6 +242,7 @@ namespace Module.chat
                             getFriendList(pack);
                             break;
                         case FriendOpType.AddFriend:
+                            getAddFriendResult(pack);
                             break;
                         case FriendOpType.RemoveFriend:
                             break;
@@ -303,7 +326,15 @@ namespace Module.chat
             
             ApplyFunc(EventDefines.UpdateSearchedFriends, finalSearched);//通知视图更新搜索结果
         }
-        
+
+        private void getAddFriendResult(MainPack pack)
+        {
+            if (pack.ReturnCode == ReturnCode.Succeed)
+            {
+                Debug.Log("好友添加成功");
+            }
+        }
+
         #endregion
         
         #endregion
