@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using Common.Defines;
 using GameProtocol;
+using Module.View;
 using MVC;
 using MVC.Controller;
 using UnityEngine;
@@ -41,6 +42,7 @@ namespace Module.chat
             RegisterFunc(EventDefines.SendPrivateMessage, sendPrivateMessage);
             RegisterFunc(EventDefines.GetFriendList, getFriendList);
             RegisterFunc(EventDefines.GetChatHistory, getChatHistory);
+            RegisterFunc(EventDefines.GetSearchedFriends, getSearchedFriends);
             
             GameApp.NetworkManager.AddMessageHandler(ActionCode.ChatPrivate, onReceiveChatMsg);
             GameApp.NetworkManager.AddMessageHandler(ActionCode.FriendOperation, onReceiveFriendOperation);
@@ -53,6 +55,7 @@ namespace Module.chat
             UnRegisterFunc(EventDefines.SendPrivateMessage);
             UnRegisterFunc(EventDefines.GetFriendList);
             UnRegisterFunc(EventDefines.GetChatHistory);
+            UnRegisterFunc(EventDefines.GetSearchedFriends);
             
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.ChatPrivate, onReceiveChatMsg);
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.FriendOperation, onReceiveFriendOperation);
@@ -142,6 +145,26 @@ namespace Module.chat
             };
             GameApp.NetworkManager.Send(pack);
         }
+
+        private void getSearchedFriends(System.Object[] args)
+        {
+            //args[0]代表搜索关键词
+            string targetUser = args[0] as string;
+            if(string.IsNullOrEmpty(targetUser)) return;
+
+            MainPack  pack = new MainPack()
+            {
+                ActionCode = ActionCode.FriendOperation,
+                RequestCode = RequestCode.Friend,
+                FriendPack = new FriendPack()
+                {
+                    OpType = FriendOpType.SearchUser,
+                    TargetUser = targetUser
+                }
+            };
+            
+            GameApp.NetworkManager.Send(pack);
+        }
         #endregion
 
         #region 接收请求
@@ -179,8 +202,8 @@ namespace Module.chat
             }
             else
             {
-                Debug.LogError($"发送失败,请检查网络连接");
-                //TODO：更新消息状态为失败，并且刷新界面显示
+                Debug.Log($"发送失败,请检查网络连接");
+                GameApp.ViewManager.Open(ViewType.TipBoxView, TipBoxType.chat, "发送失败");
             }
         }
 
@@ -198,6 +221,10 @@ namespace Module.chat
                         case FriendOpType.AddFriend:
                             break;
                         case FriendOpType.RemoveFriend:
+                            break;
+                        case FriendOpType.SearchUser:
+                            pack.FriendPack.FriendList.Clear();
+                            getSearchedFriends(pack);
                             break;
                         default:
                             Debug.Log("未知的好友操作类型");
@@ -267,6 +294,15 @@ namespace Module.chat
             ApplyFunc(EventDefines.UpdateFriendList);//通知视图更新好友列表
         }
 
+        private void getSearchedFriends(MainPack pack)
+        {
+            List<FriendInfo> searchedFriends = new List<FriendInfo>(pack.FriendPack.FriendList);
+            
+            Debug.Log($"成功获取到搜索列表，搜索数量：{searchedFriends.Count}");
+            
+            ApplyFunc(EventDefines.UpdateSearchedFriends, searchedFriends);//通知视图更新搜索结果
+        }
+        
         #endregion
         
         #endregion

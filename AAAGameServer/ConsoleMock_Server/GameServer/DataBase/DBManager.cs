@@ -130,6 +130,15 @@ namespace GameServer.DataBase
                 return db.Friends.Where(f => f.Username == username).ToList();
             }
         }
+        public static List<string> GetFriendsName(string username)
+        {
+            using (var db = new GameDbContext())
+            {
+                return db.Friends.Where(f => f.Username == username)
+                    .Select(f=> f.Username)
+                    .ToList();
+            }
+        }
 
         //添加好友
         public static bool AddFriend(string userName, string friendUserName)
@@ -182,6 +191,7 @@ namespace GameServer.DataBase
                 return db.Users
                     .Where(u => u.Username.Contains(key))
                     .Select(u => u.Username) //只查询用户名
+                    .Distinct()
                     .Take(20)
                     .ToList();
             }

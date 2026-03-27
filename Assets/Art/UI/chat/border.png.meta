@@ -252,7 +252,7 @@ TextureImporter:
         width: 520
         height: 150
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -260,6 +260,69 @@ TextureImporter:
       bones: []
       spriteID: d6c688e651b14c84cbb5cce748d07a85
       internalID: -419444460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: border_serach
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 559
+        width: 521
+        height: 150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 325, y: 79, z: 190, w: 67}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32a8fe23287ea4543aa4ad2d87f61589
+      internalID: -1353693758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: border_Btn_add
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 803
+        width: 108
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa69279e042691045abb390716c37265
+      internalID: 173917211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: border_btn_cancel
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 725
+        width: 107
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71c6caf6e3189aa49ae244b78f5f350f
+      internalID: -523636320
       vertices: []
       indices: 
       edges: []
@@ -276,6 +339,8 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       border_0: 1607611484
+      border_Btn_add: 173917211
+      border_btn_cancel: -523636320
       border_chat_me: 1617920808
       border_chat_other: 2095365092
       border_comBtn: 473730671
@@ -283,6 +348,7 @@ TextureImporter:
       border_inputBtn: 420196057
       border_moreBtn: 1135657350
       border_sendBtn: -1551388989
+      border_serach: -1353693758
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

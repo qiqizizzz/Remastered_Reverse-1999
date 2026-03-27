@@ -35,6 +35,7 @@ namespace Module.View
         private TMP_InputField _inputSearchField;//好友搜索框
         private ScrollRect _chatScrollRect;
         private ScrollRect _friendScrollRect;
+        private ScrollRect _searchScrollRect;
         private List<CanvasGroup> _canvasGroups = new List<CanvasGroup>();
         
         protected override void OnAwake()
@@ -43,6 +44,7 @@ namespace Module.View
             _inputSearchField = Find<TMP_InputField>("panels/panel_add/InputField_add");
             _chatScrollRect = Find<ScrollRect>("panels/panel_friend/chatArea/Scroll_chat");
             _friendScrollRect = Find<ScrollRect>("panels/panel_friend/Scroll_hy");
+            _searchScrollRect = Find<ScrollRect>("panels/panel_add/Scroll_searched");
             
             _canvasGroups.Add(Find<CanvasGroup>("panels/panel_friend"));//0
             _canvasGroups.Add(Find<CanvasGroup>("panels/panel_add"));//1
@@ -61,8 +63,9 @@ namespace Module.View
             Controller.RegisterFunc(EventDefines.UpdateFriendList, onUpdateFriendList);
             Controller.RegisterFunc(EventDefines.UpdateChatHistory, onUpdateChatHistory);
             Controller.RegisterFunc(EventDefines.ReceiveNewMessage, onReceiveNewMessage);
+            Controller.RegisterFunc(EventDefines.UpdateSearchedFriends, onUpdateSearchedFriends);
             
-            //ApplyFunc(EventDefines.GetFriendList);//发送获取好友列表请求 - 暂时关闭
+            ApplyFunc(EventDefines.GetFriendList);//发送获取好友列表请求 - 暂时关闭
             showPanel(0);
         }
 
@@ -279,6 +282,9 @@ namespace Module.View
         }
         #endregion
         
+        #endregion
+
+        #region UI更新事件
         private void onUpdateFriendList(params object[] args)
         {
             Transform contentParent = _friendScrollRect.content; 
@@ -378,6 +384,50 @@ namespace Module.View
             }
         }
 
+        private void onUpdateSearchedFriends(params object[] args)
+        {
+            //args[0] 是搜索结果列表
+            List<FriendInfo> searchResults = args[0] as List<FriendInfo>;
+            
+            Transform contentParent = _searchScrollRect.content;
+
+            //回收先前的搜索结果UI
+            for (int i = contentParent.childCount - 1; i >= 0; i--)
+            {
+                Transform child = contentParent.GetChild(i);
+                ResManager.ReleaseToPool(AddressDefines.UI_small_Box_searchedUser, child.gameObject);
+            }
+            
+            if(searchResults.Count == 0) return;
+
+            for (int i = 0; i < searchResults.Count; i++)
+            {
+                int index = i;
+
+                var searched = searchResults[i];
+                string prefab = AddressDefines.UI_small_Box_searchedUser;
+                string name = searched.Username;
+                
+                ResManager.InstantiateFromPoolAsync(prefab, (go) =>
+                {
+                    if (go != null)
+                    {
+                        go.transform.Find("Txt_name").GetComponent<TextMeshProUGUI>().text = name;
+                        Button addBtn = go.transform.Find("Btn_add").GetComponent<Button>();
+                        Button cancelBtn = go.transform.Find("Btn_cancel").GetComponent<Button>();
+                        addBtn.onClick.RemoveAllListeners();
+                        cancelBtn.onClick.RemoveAllListeners();
+                        addBtn.onClick.AddListener(() => onAddFriendRequest(name));
+                        cancelBtn.onClick.AddListener((() =>
+                        {
+                            Destroy(go);
+                        }));
+                        go.transform.SetSiblingIndex(index);
+                    }
+                }, contentParent);
+            }
+        }
+        
         private void onReceiveNewMessage(params object[] args)
         {
             string sender = args[0] as string;
@@ -400,8 +450,8 @@ namespace Module.View
                 }
             }, contentParent);
         }
-        
         #endregion
+        
 
         #region 添加好友界面
 
@@ -413,9 +463,17 @@ namespace Module.View
         private void onSearchBtn()
         {
             string searchName = _inputSearchField.text;
+            
+            ApplyFunc(EventDefines.GetSearchedFriends, searchName);
             Debug.Log("搜索好友" + searchName);
         }
 
+        //TODO:发送添加好友请求
+        private void onAddFriendRequest(string name)
+        {
+            Debug.Log("发送添加好友请求给" + name);
+        }
+        
         #endregion
     }
 }

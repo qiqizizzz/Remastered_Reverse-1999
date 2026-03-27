@@ -2,6 +2,7 @@
 using GameServer.DataBase;
 using GameServer.DataBase.Entity;
 using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -445,6 +446,7 @@ namespace GameServer
             {
                 bool isOnline = _server.GetClientByUsername(item.FriendUsername) != null;//检查好友是否在线
 
+                Console.WriteLine($"[Server] 好友: {item}, 找到客户端: {_clientId}, 判定在线: {isOnline}");
                 resPack.FriendPack.FriendList.Add(new FriendInfo
                 {
                     Username = item.FriendUsername,
@@ -515,6 +517,10 @@ namespace GameServer
         private void HandleSearchUser(MainPack pack)
         {
             List<string> userList = DBManager.SearchUser(pack.FriendPack.TargetUser);
+            List<string> userFriend = DBManager.GetFriendsName(UserName);
+
+            // 从搜索结果中排除已经是好友的用户
+            List<string> filteredList = userList.Except(userFriend).ToList();
 
             MainPack resPack = new MainPack
             {
@@ -527,22 +533,23 @@ namespace GameServer
                 }
             };
 
-            if (userList.Count == 0)
+            if (filteredList.Count == 0)
             {
                 Console.WriteLine($"[{_clientId}] 搜索无结果: {pack.FriendPack.TargetUser}");
             }
 
-            if (userList.Count > 0)
+            if (filteredList.Count > 0)
             {
                 resPack.ReturnCode = ReturnCode.Succeed;
-                Console.WriteLine($"[{_clientId}] 搜索用户成功: {userList.ToList()}");
+                Console.WriteLine($"[Server] 发送搜索数据: {string.Join(", ", filteredList)}");
+                Console.WriteLine($"[Server] FriendList.Count = {resPack.FriendPack.FriendList.Count}");
 
-                for(int i = 0;i < userList.Count; i++)
+                for (int i = 0;i < filteredList.Count; i++)
                 {
                     resPack.FriendPack.FriendList.Add(new FriendInfo
                     {
-                        Username = userList[i],
-                        IsOnline = _server.GetClientByUsername(userList[i]) != null
+                        Username = filteredList[i],
+                        IsOnline = _server.GetClientByUsername(filteredList[i]) != null
                     });
                 }
             }
