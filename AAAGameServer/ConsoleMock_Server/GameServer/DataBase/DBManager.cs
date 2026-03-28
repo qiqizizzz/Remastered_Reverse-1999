@@ -140,10 +140,9 @@ namespace GameServer.DataBase
             }
         }
 
-        //添加好友
         public static bool AddFriend(string userName, string friendUserName)
         {
-            //防止自己加自己
+            // 不能为空、不能自己加自己
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(friendUserName) || userName == friendUserName)
             {
                 return false;
@@ -151,17 +150,47 @@ namespace GameServer.DataBase
 
             using (var db = new GameDbContext())
             {
-                bool exists = db.Friends.Any(f => f.Username == userName && f.FriendUsername == friendUserName);
-                if (exists) return false;
-                var newFriend = new Friend
+                // 开启事务，确保双向添加要么都成功，要么都回滚
+                using (var transaction = db.Database.BeginTransaction())
                 {
-                    Username = userName,
-                    FriendUsername = friendUserName,
-                    CreateTime = DateTime.Now
-                };
-                db.Friends.Add(newFriend);
-                db.SaveChanges();
-                return true;
+                    try
+                    {
+                        // 检查是否已经是好友（双向检查）
+                        bool alreadyFriends = db.Friends.Any(f =>
+                            (f.Username == userName && f.FriendUsername == friendUserName) ||
+                            (f.Username == friendUserName && f.FriendUsername == userName)
+                        );
+
+                        if (alreadyFriends) return false;
+
+                        var now = DateTime.Now;
+
+                        // 添加 A->B 的关系
+                        db.Friends.Add(new Friend
+                        {
+                            Username = userName,
+                            FriendUsername = friendUserName,
+                            CreateTime = now
+                        });
+
+                        // 添加 B->A 的关系（互相好友）
+                        db.Friends.Add(new Friend
+                        {
+                            Username = friendUserName,
+                            FriendUsername = userName,
+                            CreateTime = now
+                        });
+
+                        db.SaveChanges();
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
             }
         }
 

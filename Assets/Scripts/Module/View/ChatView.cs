@@ -97,7 +97,7 @@ namespace Module.View
         {
             showPanel(0);
             
-            //ApplyFunc(EventDefines.GetFriendList); - 暂时关闭
+            //ApplyFunc(EventDefines.GetFriendList); - bug
         }
         
         private void onFriendInfoBtn(string friendName, GameObject btnObj)
