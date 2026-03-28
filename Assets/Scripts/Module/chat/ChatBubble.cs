@@ -21,18 +21,11 @@ namespace Module.chat
         private float maxWidth = 450f;
         public Vector2 padding = new Vector2(40, 30);// 气泡内边距
         
-        [SerializeField] private string Content = "";
-        
         private void Awake()
         {
             chatText = GetComponentInChildren<TextMeshProUGUI>();
             bgRect = transform.Find("inputBox").GetComponent<RectTransform>();
             rootRect = GetComponent<RectTransform>();
-        }
-
-        private void Update()
-        {
-            //SetMessage(Content);
         }
 
         /// <summary>

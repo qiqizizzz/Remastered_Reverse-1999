@@ -8,6 +8,7 @@
 
 using Common.Defines;
 using DefaultNamespace.Module.Game;
+using DefaultNamespace.Module.level;
 using Module.chat;
 using Module.GameUI;
 using Module.Loading;
@@ -62,6 +63,7 @@ namespace DefaultNamespace
             GameApp.ControllerManager.Register(ControllerType.Loading, new LoadingController());
             GameApp.ControllerManager.Register(ControllerType.Game, new GameController());
             GameApp.ControllerManager.Register(ControllerType.Chat, new ChattingController());
+            GameApp.ControllerManager.Register(ControllerType.Level, new LevelController());
         }
         
         // 初始化所有模块

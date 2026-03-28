@@ -30,8 +30,9 @@ namespace Module.View
         //测试打开level界面
         private void onOpenLevelBtn()
         {
-            Debug.Log("打开Level界面");
-            ViewExtensions.LoadScene(this, SceneDefines.LevelView);
+            ApplyControllerFunc(ControllerType.Level, EventDefines.OpenLevelView);
+            GameApp.ViewManager.Close(ViewId);
+            //ViewExtensions.LoadScene(this, SceneDefines.LevelView);
         }
         
         //打开更多选项界面

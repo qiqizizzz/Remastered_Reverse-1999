@@ -12,7 +12,8 @@ namespace MVC
     {
         GameUI,
         Loading,
-        Game,
-        Chat
+        Game,  //游戏
+        Chat,  //聊天
+        Level, //关卡
     }
 }

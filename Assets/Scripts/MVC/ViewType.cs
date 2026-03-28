@@ -18,5 +18,6 @@ namespace MVC
         TipBoxView, //提示框
         NoticeView, //提示界面
         SettingView, //设置界面
+        LevelView, //关卡界面
     }
 }
