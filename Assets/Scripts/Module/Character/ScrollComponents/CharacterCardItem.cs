@@ -1,0 +1,29 @@
+﻿/*
+* ┌──────────────────────────────────┐
+* │  描    述: 角色卡片                      
+* │  类    名: CharacterCardItem.cs       
+* │  创    建: By qiqizizzz
+* └──────────────────────────────────┘
+*/
+
+using UnityEngine;
+
+namespace Module.Character.ScrollComponents
+{
+    public class CharacterCardItem : MonoBehaviour
+    {
+        // 方法名必须和 SendMessage 里的名字一模一样！
+        void ScrollCellIndex(int idx)
+        {
+            // idx 就是当前卡片的索引（0代表第1个，1代表第2个...）
+        
+            // 测试：把节点名字改成对应的索引，方便你在 Hierarchy 里观察
+            gameObject.name = "Card_" + idx; 
+        
+            // 在这里写你的业务逻辑，比如：
+            // 1. 根据 idx 从你的数据列表里拿到角色数据 (苏芙比、百夫长等)
+            // 2. 替换卡片上的头像图片
+            // 3. 替换卡片上的名字 Text
+        }
+    }
+}
