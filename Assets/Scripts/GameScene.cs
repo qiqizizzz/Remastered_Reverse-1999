@@ -75,7 +75,7 @@ namespace DefaultNamespace
         // 注册配置表
         private void RegisterConfigs()
         {
-            //ResManager.InstantiateFromPoolAsync();
+            GameApp.ConfigManager.LoadAllConfigs();
         }
     }
 }

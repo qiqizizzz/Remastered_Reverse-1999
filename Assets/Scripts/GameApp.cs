@@ -7,6 +7,7 @@
 */
 
 using Common;
+using Config;
 using DefaultNamespace;
 using Module.Timer;
 using MVC;
@@ -22,6 +23,7 @@ public class GameApp : Singleton<GameApp>
     public static GameDataManager GameDataManager;
     public static MessageCenter MessageCenter;
     public static SoundManager SoundManager;
+    public static ConfigManager ConfigManager;
         
     public override void Init()
     {
@@ -32,6 +34,7 @@ public class GameApp : Singleton<GameApp>
         GameDataManager = new GameDataManager();
         MessageCenter = new MessageCenter();
         SoundManager = new SoundManager();
+        ConfigManager = new ConfigManager();
     }
 
     public override void Update(float dt)

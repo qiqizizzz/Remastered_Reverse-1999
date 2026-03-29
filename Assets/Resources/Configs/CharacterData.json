@@ -1,0 +1,32 @@
+﻿{
+  "characters": [
+    {
+      "id": 1001,
+      "name": "莱昂",
+      "characterType": 0,
+      "inspirationType": 0,
+      "property": {
+        "attack": 520,
+        "hp": 4800,
+        "defense": 280,
+        "critRate": 0.15,
+        "critDamage": 1.5
+      },
+      "cards": [2001, 2002, 2003]
+    },
+    {
+      "id": 1002,
+      "name": "莉拉妮",
+      "characterType": 0,
+      "inspirationType": 2,
+      "property": {
+        "attack": 480,
+        "hp": 5200,
+        "defense": 320,
+        "critRate": 0.1,
+        "critDamage": 1.5
+      },
+      "cards": [2004, 2005, 2006]
+    }
+  ]
+}
