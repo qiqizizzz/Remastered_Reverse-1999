@@ -7,6 +7,7 @@
 */
 
 using System.Collections.Generic;
+using System.Linq;
 using Data.card;
 using UnityEngine;
 
@@ -72,6 +73,12 @@ namespace Config
             }
             
             return cards;
+        }
+        
+        //得到所有角色
+        public List<CharacterData> GetAllCharacters()
+        {
+            return characterConfig.Values.ToList();
         }
     }
 }

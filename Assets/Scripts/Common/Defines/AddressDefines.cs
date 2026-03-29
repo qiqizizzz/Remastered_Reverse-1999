@@ -20,6 +20,7 @@ namespace Common.Defines
         public static readonly string UI_NoticeView = "UI/NoticeView";
         public static readonly string UI_SettingView = "UI/SettingView";
         public static readonly string UI_LevelView = "UI/LevelView";
+        public static readonly string UI_CharacterView = "UI/CharacterView";
         
         //UI_small预制体
         public static readonly string UI_Small_Btn_friTemp = "UI_small/Btn_friTemp";

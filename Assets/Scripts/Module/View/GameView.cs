@@ -25,6 +25,7 @@ namespace Module.View
             //注册
             Find<Button>("RightArea/Btn_level").onClick.AddListener(onOpenLevelBtn);
             Find<Button>("LeftArea/btns/Btn_more").onClick.AddListener(onOpenMoreOptionsBtn);
+            Find<Button>("RightArea/Btn_character").onClick.AddListener(onOpenCharacterBtn);
         }
 
         //测试打开level界面
@@ -39,6 +40,12 @@ namespace Module.View
         private void onOpenMoreOptionsBtn()
         {
             ApplyFunc(EventDefines.OpenMoreOptionsView);
+        }
+
+        private void onOpenCharacterBtn()
+        {
+            ApplyControllerFunc(ControllerType.Character, EventDefines.OpenCharacterView);
+            GameApp.ViewManager.Close(ViewId);
         }
     }
 }

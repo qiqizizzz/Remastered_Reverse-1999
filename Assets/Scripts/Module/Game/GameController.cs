@@ -32,6 +32,10 @@ namespace DefaultNamespace.Module.Game
             ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenGameView);// 这个只是临时的
             
             GameApp.SoundManager.PlayBGM(AddressDefines.Audio_BGM_Game);
+            
+            //Test
+            //var data = GameApp.ConfigManager.GetCardData(2001);
+            //Debug.Log($"测试获取卡牌数据: {data.name}, {data.description}");
         }
 
         public override void InitGlobalEvent()

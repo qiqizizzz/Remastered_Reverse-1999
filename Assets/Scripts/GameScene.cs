@@ -11,9 +11,11 @@ using DefaultNamespace.Module.Game;
 using DefaultNamespace.Module.level;
 using Module.chat;
 using Module.GameUI;
+using Module.Inventory;
 using Module.Loading;
 using MVC;
 using UnityEngine;
+using CharacterController = Module.Character.CharacterController;
 
 namespace DefaultNamespace
 {
@@ -64,6 +66,8 @@ namespace DefaultNamespace
             GameApp.ControllerManager.Register(ControllerType.Game, new GameController());
             GameApp.ControllerManager.Register(ControllerType.Chat, new ChattingController());
             GameApp.ControllerManager.Register(ControllerType.Level, new LevelController());
+            GameApp.ControllerManager.Register(ControllerType.Inventory, new InventoryController());
+            GameApp.ControllerManager.Register(ControllerType.Character, new CharacterController());
         }
         
         // 初始化所有模块

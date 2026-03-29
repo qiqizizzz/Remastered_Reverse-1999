@@ -19,5 +19,6 @@ namespace MVC
         NoticeView, //提示界面
         SettingView, //设置界面
         LevelView, //关卡界面
+        CharacterView, //角色界面
     }
 }

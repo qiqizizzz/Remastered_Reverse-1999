@@ -15,5 +15,7 @@ namespace MVC
         Game,  //游戏
         Chat,  //聊天
         Level, //关卡
+        Character, //角色
+        Inventory, //背包
     }
 }
