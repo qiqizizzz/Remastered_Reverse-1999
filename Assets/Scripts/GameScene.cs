@@ -6,12 +6,11 @@
 * └───────────────────────────────────────────────────────────────────┘
 */
 
-using Common.Defines;
-using DefaultNamespace.Module.Game;
-using DefaultNamespace.Module.level;
+using Module.Game;
 using Module.chat;
 using Module.GameUI;
 using Module.Inventory;
+using Module.level;
 using Module.Loading;
 using MVC;
 using UnityEngine;

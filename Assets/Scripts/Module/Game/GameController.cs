@@ -12,7 +12,7 @@ using MVC;
 using MVC.Controller;
 using UnityEngine;
 
-namespace DefaultNamespace.Module.Game
+namespace Module.Game
 {
     public class GameController : BaseController
     {

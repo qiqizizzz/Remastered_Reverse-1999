@@ -10,12 +10,14 @@ using Common.Defines;
 using MVC;
 using MVC.Controller;
 
-namespace DefaultNamespace.Module.level
+namespace Module.level
 {
     public class LevelController : BaseController
     {
         public LevelController() : base()
         {
+            SetModel(new LevelModel());
+            
             GameApp.ViewManager.Register(ViewType.LevelView, new ViewInfo()
             {
                 PrefabName = AddressDefines.UI_LevelView,
@@ -24,6 +26,11 @@ namespace DefaultNamespace.Module.level
             });
             
             InitModuleEvent();
+        }
+
+        public override void Init()
+        {
+            model.Init();
         }
 
         public override void InitModuleEvent()
