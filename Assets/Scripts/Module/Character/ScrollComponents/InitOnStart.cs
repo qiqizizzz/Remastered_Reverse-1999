@@ -17,7 +17,6 @@ namespace Module.Character.ScrollComponents
     public class InitOnStart : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDataSource
     {
         public GameObject item;
-        public int totalCount = -1;
 
         // Implement your own Cache Pool here. The following is just for example.
         Stack<Transform> pool = new Stack<Transform>();
@@ -53,7 +52,7 @@ namespace Module.Character.ScrollComponents
             var ls = GetComponent<LoopScrollRect>();
             ls.prefabSource = this;
             ls.dataSource = this;
-            ls.totalCount = totalCount;
+            ls.totalCount = GameApp.GameDataManager.CharacterCount;
             ls.RefillCells();
         }
     }

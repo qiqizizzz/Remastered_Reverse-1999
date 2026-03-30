@@ -6,6 +6,8 @@
 * └──────────────────────────────────┘
 */
 
+using UnityEngine;
+
 namespace DefaultNamespace
 {
     public class GameDataManager
@@ -13,12 +15,16 @@ namespace DefaultNamespace
         public string PlayerName;
         public bool isConnected;// 是否连接服务器
         public bool isServerOnline;// 服务器是否在线
+        
+        [Header("卡牌相关")]
+        public int CharacterCount;// 角色数量
 
         public GameDataManager()
         {
             PlayerName = "";
             isConnected = false;
             isServerOnline = false;
+            CharacterCount = 2;
         }
         
         public void SetPlayerName(string name)
