@@ -20,6 +20,7 @@ namespace Common.Defines
         public static readonly string OpenSettingView = "OpenSettingView";
         public static readonly string OpenLevelView = "OpenLevelView";
         public static readonly string OpenCharacterView = "OpenCharacterView";
+        public static readonly string OpenPrepareFightView = "OpenPrepareFightView";
         public static readonly string LoadingScene = "LoadingScene";
         public static readonly string UpdateFriendList = "UpdateFriendList";
         public static readonly string UpdateChatHistory = "UpdateChatHistory";

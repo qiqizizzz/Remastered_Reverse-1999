@@ -57,6 +57,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e44a1192dec1044eaa4d4e3182566ae
+    m_Address: UI/PrepareFightView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 72bba87c23a7b7e4da300bdf32caf85f
     m_Address: UI_small/Btn_friTemp
     m_ReadOnly: 0

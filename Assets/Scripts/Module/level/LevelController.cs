@@ -24,6 +24,12 @@ namespace Module.level
                 controller = this,
                 parentTf = GameApp.ViewManager.canvasTf
             });
+            GameApp.ViewManager.Register(ViewType.PrepareFightView, new ViewInfo()
+            {
+                PrefabName = AddressDefines.UI_PrepareFightView,
+                controller = this,
+                parentTf = GameApp.ViewManager.canvasTf
+            });
             
             InitModuleEvent();
         }
@@ -36,11 +42,17 @@ namespace Module.level
         public override void InitModuleEvent()
         {
             RegisterFunc(EventDefines.OpenLevelView, onOpenLevelView);
+            RegisterFunc(EventDefines.OpenPrepareFightView, onOpenPrepareFightView);
+        }
+        
+        private void onOpenPrepareFightView(params object[] args)
+        {
+            GameApp.ViewManager.Open(ViewType.PrepareFightView, args);
         }
         
         private void onOpenLevelView(params object[] args)
         {
-            GameApp.ViewManager.Open(ViewType.LevelView);
+            GameApp.ViewManager.Open(ViewType.LevelView, args);
         }
     }
 }

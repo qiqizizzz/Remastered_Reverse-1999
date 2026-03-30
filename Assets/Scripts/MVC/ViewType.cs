@@ -20,5 +20,6 @@ namespace MVC
         SettingView, //设置界面
         LevelView, //关卡界面
         CharacterView, //角色界面
+        PrepareFightView, //准备战斗界面
     }
 }

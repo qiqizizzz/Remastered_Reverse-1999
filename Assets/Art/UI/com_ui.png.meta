@@ -621,6 +621,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: com_ui_triangle
+      rect:
+        serializedVersion: 2
+        x: 1637
+        y: 1139
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: caef1f93157277946b6d64d645093b9c
+      internalID: -1273401881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -657,6 +678,7 @@ TextureImporter:
       com_ui_sq_orange: 1513560730
       com_ui_sq_white: -696113134
       com_ui_star: 1756869923
+      com_ui_triangle: -1273401881
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

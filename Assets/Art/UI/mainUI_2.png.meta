@@ -328,16 +328,16 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mainUI_2_11
+      name: mainUI_2_blackBorder
       rect:
         serializedVersion: 2
         x: 336
-        y: 762
+        y: 766
         width: 212
-        height: 74
+        height: 62
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 70, y: 14, z: 73, w: 19}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1474,7 +1474,6 @@ TextureImporter:
     nameFileIdTable:
       mainUI_2_0: -1752637524
       mainUI_2_1: 372929220
-      mainUI_2_11: 813316941
       mainUI_2_13: 968744588
       mainUI_2_14: 802900442
       mainUI_2_15: 1391439006
@@ -1547,6 +1546,7 @@ TextureImporter:
       mainUI_2_85: 1395319919
       mainUI_2_86: -929820569
       mainUI_2_9: 1305431058
+      mainUI_2_blackBorder: 813316941
       mainUI_2_cj: -1071406813
       mainUI_2_cyx: -1078988516
       mainUI_2_detail: -873163197
