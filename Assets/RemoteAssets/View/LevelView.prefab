@@ -751,7 +751,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8391958738267956403}
   m_Layer: 0
-  m_Name: Panel_zy
+  m_Name: Panel_Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

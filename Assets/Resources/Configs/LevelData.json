@@ -1,2 +1,82 @@
 ﻿{
+  "levels": [
+    {
+      "id": 1,
+      "name": "幽暗森林",
+      "description": "击败所有敌人-12回合内胜利",
+      "monsterSpawns": [
+        {
+          "monsterId": 3001,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "腐化林地",
+      "description": "击败所有敌人-12回合内胜利",
+      "monsterSpawns": [
+        {
+          "monsterId": 3002,
+          "count": 1
+        },
+        {
+          "monsterId": 3001,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "星光遗迹",
+      "description": "击败所有敌人-12回合内胜利",
+      "monsterSpawns": [
+        {
+          "monsterId": 3003,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "岩窟深处",
+      "description": "击败所有敌人-12回合内胜利",
+      "monsterSpawns": [
+        {
+          "monsterId": 3004,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "狼王巢穴",
+      "description": "击败所有敌人-12回合内胜利",
+      "monsterSpawns": [
+        {
+          "monsterId": 3001,
+          "count": 2
+        },
+        {
+          "monsterId": 3005,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "深渊根系",
+      "description": "击败所有敌人-12回合内胜利",
+      "monsterSpawns": [
+        {
+          "monsterId": 3006,
+          "count": 1
+        },
+        {
+          "monsterId": 3002,
+          "count": 2
+        }
+      ]
+    }
+  ]
 }

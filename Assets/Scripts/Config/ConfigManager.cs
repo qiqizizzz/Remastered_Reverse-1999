@@ -9,23 +9,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data.card;
+using Module.level;
 using UnityEngine;
 
 namespace Config
 {
     public class ConfigManager
     {
+        private Dictionary<int, LevelData> levelConfig;
         private Dictionary<int, CharacterData> characterConfig;
         private Dictionary<int, CardData> cardConfig;
 
         public ConfigManager()
         {
+            levelConfig = new Dictionary<int, LevelData>();
             characterConfig = new Dictionary<int, CharacterData>();
             cardConfig = new Dictionary<int, CardData>();
         }
         
         public void LoadAllConfigs()
         {
+            //加载关卡
+            var levelArray = JsonConfigLoader.Load<LevelDataArray>("LevelData");
+            if (levelArray != null)
+            {
+                foreach (var level in levelArray.levels)
+                {
+                    levelConfig.Add(level.id, level);
+                }
+            }
+            
             //加载卡牌
             var cardArray = JsonConfigLoader.Load<CardDataArray>("CardData");
             if (cardArray != null)
@@ -45,8 +58,8 @@ namespace Config
                     characterConfig.Add(character.id, character);
                 }
             }
-            
-            Debug.Log($"加载完成: {cardConfig.Count}张卡牌, {characterConfig.Count}个角色");
+
+            Debug.Log($"加载完成: {cardConfig.Count}张卡牌, {characterConfig.Count}个角色, {levelConfig.Count}个关卡");
         }
 
         public CardData GetCardData(int cardId)

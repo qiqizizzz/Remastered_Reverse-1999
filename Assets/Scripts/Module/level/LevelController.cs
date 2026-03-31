@@ -52,10 +52,6 @@ namespace Module.level
         
         private void onOpenLevelView(params object[] args)
         {
-            //args[0]为关卡id
-            int levelId = (int)args[0];
-            //TODO: 根据关卡id获取关卡数据,并传递给界面显示
-            
             GameApp.ViewManager.Open(ViewType.LevelView, args);
         }
     }

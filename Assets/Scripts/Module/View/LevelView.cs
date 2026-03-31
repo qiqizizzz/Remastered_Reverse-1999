@@ -6,6 +6,7 @@
 * └──────────────────────────────────┘
 */
 
+using Common.Defines;
 using MVC;
 using MVC.View;
 using UnityEngine;
@@ -18,6 +19,22 @@ namespace Module.View
         protected override void OnAwake()
         {
             Find<Button>("Btn_return").onClick.AddListener(onReturnBtn);
+            bindLevelBtn();
+        }
+
+        private void bindLevelBtn()
+        {
+            Transform tf = Find<Transform>("panels/Panel_Level");
+            
+            for(int i = 0;i < tf.childCount;i++)
+            {
+                int levelId = i + 1;
+                Button btn = tf.GetChild(i).GetComponent<Button>();
+                btn.onClick.AddListener(() =>
+                {
+                    ApplyFunc(EventDefines.OpenPrepareFightView, levelId);
+                });
+            }
         }
         
         private void onReturnBtn()
