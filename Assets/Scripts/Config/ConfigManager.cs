@@ -62,6 +62,7 @@ namespace Config
             Debug.Log($"加载完成: {cardConfig.Count}张卡牌, {characterConfig.Count}个角色, {levelConfig.Count}个关卡");
         }
 
+        #region 角色/卡牌相关
         public CardData GetCardData(int cardId)
         {
             return cardConfig.TryGetValue(cardId, out CardData cardData) ? cardData : null;
@@ -93,5 +94,14 @@ namespace Config
         {
             return characterConfig.Values.ToList();
         }
+        #endregion
+        
+        #region 关卡相关
+        public LevelData GetLevelData(int levelId)
+        {
+            return levelConfig.TryGetValue(levelId, out LevelData levelData) ? levelData : null;
+        }
+        
+        #endregion
     }
 }

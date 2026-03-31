@@ -41,17 +41,9 @@ namespace Module.level
     
     public class LevelModel : BaseModel
     {
-        private Dictionary<int, LevelData> levels;
-
         public LevelModel()
         {
-            levels = new Dictionary<int, LevelData>();
-        }
-
-        public override void Init()
-        {
-            Debug.Log("初始化数据中...");
-            //TODO: 从配置文件或服务器加载关卡数据
+            
         }
     }
 }
