@@ -110,18 +110,18 @@ namespace MVC.View
                 _canvas.enabled = isVisible;
         }
 
-        public GameObject Find(string res)
+        public GameObject Find(string res, Transform parent = null)
         {
             if (m_cache_gos.ContainsKey(res))
                 return m_cache_gos[res];
-            
-            m_cache_gos.Add(res, transform.Find(res).gameObject);
+
+            m_cache_gos.Add(res, (parent != null ? parent : transform).Find(res).gameObject);
             return m_cache_gos[res];
         }
 
-        public T Find<T>(string res) where T : Component
+        public T Find<T>(string res, Transform parent = null) where T : Component
         {
-            GameObject obj = Find(res);
+            GameObject obj = Find(res, parent);
             return obj.GetComponent<T>();
         }
     }

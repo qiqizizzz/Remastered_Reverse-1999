@@ -1,9 +1,9 @@
 ﻿/*
-* ┌──────────────────────────────────┐
-* │  描    述: 选择角色UI                      
+* ┌────────────────────────────────────────────┐
+* │  描    述: 编队界面选择角色后卡牌仓库界面的角色卡牌                      
 * │  类    名: CharacterSelectItem.cs       
 * │  创    建: By qiqizizzz
-* └──────────────────────────────────┘
+* └────────────────────────────────────────────┘
 */
 
 using Data.card;
@@ -15,13 +15,15 @@ namespace Module.level.Component
     public class CharacterSelectItem : MonoBehaviour
     {
         private int startIndex = 1001;
-        private TextMeshProUGUI txt;
+        private TextMeshProUGUI _nameTxt;
 
         private void Awake()
         {
-            txt = GetComponentInChildren<TextMeshProUGUI>();
+            _nameTxt = GetComponentInChildren<TextMeshProUGUI>();
         }
 
+        public string GetSelectCardName() => _nameTxt.text;
+        
         // 方法名必须和 SendMessage 里的名字一模一样！
         void ScrollCellIndex(int idx)
         {
@@ -31,7 +33,7 @@ namespace Module.level.Component
             CharacterData data = GameApp.ConfigManager.GetCharacterData(startIndex + idx);
             
             gameObject.name = "Card_" + data.id;
-            txt.text = data.name;
+            _nameTxt.text = data.name;
 
 
             // 在这里写你的业务逻辑，比如：
