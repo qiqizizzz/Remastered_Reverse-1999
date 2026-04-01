@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using Data.card;
 using Module.level;
 using Module.level.Component;
 using MVC;
@@ -27,16 +28,11 @@ namespace Module.View
         
         [Header("编队卡牌")]
         private FormationCardItem[] formationCards;
-        private int currentSelectCardIndex = 0;//默认从卡牌0开始
-
-        [Header("滚动列表")] 
-        private Dictionary<string, CharacterSelectItem> characterSelectItems;
-        private bool isScrollListInitialized = false;
+        private int _currentSelectCardIndex = 0;//默认从卡牌0开始
+        private CharacterSelectItem _currentCharacterSelectItem;//记录滚动列表当前选择的数据(没有点击确认键前)
 
         protected override void OnAwake()
         {
-            characterSelectItems = new Dictionary<string, CharacterSelectItem>();
-            
             Find<Button>("Btn_return").onClick.AddListener(onReturnBtn);
             
             levelTargetText1 = Find<TextMeshProUGUI>("LevelDetailArea/Target/Img_content1/Txt_content1");
@@ -94,14 +90,15 @@ namespace Module.View
         //刷新卡牌UI
         private void updateFormationCardUI(int index, string name, Sprite spr)
         {
+            //TODO:考虑卡牌互换,如果name在其他卡牌上，则需要将其他卡牌的数据也进行刷新
+            
             formationCards[index].RefreshData(name, spr);
         }
         
         private void onFormationCardBtn(int index)
         {
             setSelectFormationAreaActive(true);
-            currentSelectCardIndex = index;
-            //TODO:在selectFormationArea界面显示可选的角色卡牌列表，玩家选择后替换当前编队位的卡牌信息
+            _currentSelectCardIndex = index;
         }
         #endregion
         
@@ -110,62 +107,50 @@ namespace Module.View
         private void setSelectFormationAreaActive(bool active)
         {
             selectFormationArea.gameObject.SetActive(active);
-            
-            if (isScrollListInitialized == false && active)
+
+            if (active)
             {
-                LoopVerticalScrollRect scrollRect = Find<LoopVerticalScrollRect>("SelectFormationArea/Scroll_character");
-
-                Debug.Log("初始化滚动列表，卡牌数量：" + scrollRect.content.childCount);
-                
-                for (int i = 0; i < scrollRect.content.childCount; i++)
-                {
-                    CharacterSelectItem item = scrollRect.content.GetChild(i).GetComponent<CharacterSelectItem>();
-                    characterSelectItems.Add(item.GetSelectCardName(), item);
-                    Debug.Log($"已加入角色卡牌到字典，名称：{item.GetSelectCardName()}");
-                }
-
-                foreach (FormationCardItem item in formationCards)
-                {
-                    updateScrollUI(item.GetCardName(), 1);
-                }
-                
-                isScrollListInitialized = true;
+                LoopVerticalScrollRect rect = Find<LoopVerticalScrollRect>("SelectFormationArea/Scroll_character");
+                rect.RefreshCells();//每次打开编队选择时刷新列表
             }
         }
         
-        
-        private void updateScrollUI(string name, int type)
+        //查询卡牌自身状态
+        public int CheckCharacterState(string charName)
         {
-            characterSelectItems.TryGetValue(name, out CharacterSelectItem item);
+            //0为当前选择，1为已选但非当前，2为未选择
+            
+            if (string.IsNullOrEmpty(charName)) return 2;
 
-            if (item == null)
+            for (int i = 0; i < formationCards.Length; i++)
             {
-                Debug.Log("未找到角色卡牌，名称：" + name);
-                return;
+                if (formationCards[i] != null && formationCards[i].GetCardName() == charName)
+                {
+                    if (i == _currentSelectCardIndex) return 0;
+                    return 1;
+                }
+            }
+
+            return 2;
+        }
+
+        //选择卡牌后回调函数
+        public void OnSelectCharacterFromScroll(CharacterSelectItem item)
+        {
+            if (_currentCharacterSelectItem != null)
+            {
+                _currentCharacterSelectItem.setSelectedBorder(false);
             }
             
-            //0表示当前，1表示已选，2表示未选择
-            switch (type)
-            {
-                case 0:
-                    Debug.Log("设置为当前");
-                    Find<Image>("Img_current", item.transform).gameObject.SetActive(true);
-                    break;
-                case 1:
-                    Debug.Log("设置为已选择");
-                    Find<Image>("Img_selected", item.transform).gameObject.SetActive(true);
-                    break;
-                case 2:
-                    Debug.Log("设置为未选择");
-                    Find<Image>("Img_current", item.transform).gameObject.SetActive(false);
-                    Find<Image>("Img_selected", item.transform).gameObject.SetActive(false);
-                    break;
-            }
+            _currentCharacterSelectItem = item;
+            _currentCharacterSelectItem.setSelectedBorder(true);
         }
         
         private void onFormationConfirmBtn()
         {
             selectFormationArea.gameObject.SetActive(false);
+            //暂时不考虑卡面sprite替换
+            updateFormationCardUI(_currentSelectCardIndex, _currentCharacterSelectItem._characterData.name, null);
             //TODO:保存编队信息，准备进入战斗界面
         }
 

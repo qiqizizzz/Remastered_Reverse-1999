@@ -7,39 +7,64 @@
 */
 
 using Data.card;
+using Module.View;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Module.level.Component
 {
     public class CharacterSelectItem : MonoBehaviour
     {
         private int startIndex = 1001;
-        private TextMeshProUGUI _nameTxt;
+        public CharacterData _characterData;
 
+        [Header("UI组件")] 
+        private PrepareFightView _prepareFightView;
+        private TextMeshProUGUI _nameTxt;
+        private Image _img_current;
+        private Image _img_selected;
+        private Image _img_selectedBorder;
+        
+        private Button _btn_select;
+        
         private void Awake()
         {
+            _prepareFightView = GetComponentInParent<PrepareFightView>();
             _nameTxt = GetComponentInChildren<TextMeshProUGUI>();
+            _img_current = transform.Find("Img_current").GetComponent<Image>();
+            _img_selected = transform.Find("Img_selected").GetComponent<Image>();
+            _img_selectedBorder = transform.Find("Img_selectedBorder").GetComponent<Image>();
+            
+            _btn_select = transform.Find("Btn_select").GetComponent<Button>();
+            
+            _btn_select.onClick.AddListener(onSelectBtn);
         }
 
         public string GetSelectCardName() => _nameTxt.text;
+
+        private void onSelectBtn()
+        {
+            if(_prepareFightView != null && _characterData != null)
+                _prepareFightView.OnSelectCharacterFromScroll(this);
+        }
+
+        public void setSelectedBorder(bool value)
+        {
+            _img_selectedBorder.gameObject.SetActive(value);
+        }
         
-        // 方法名必须和 SendMessage 里的名字一模一样！
         void ScrollCellIndex(int idx)
         {
-            // idx 就是当前卡片的索引（0代表第1个，1代表第2个...）
-        
-            // 测试：把节点名字改成对应的索引，方便你在 Hierarchy 里观察
-            CharacterData data = GameApp.ConfigManager.GetCharacterData(startIndex + idx);
+            _characterData = GameApp.ConfigManager.GetCharacterData(startIndex + idx);
+            if(_characterData == null) return;
             
-            gameObject.name = "Card_" + data.id;
-            _nameTxt.text = data.name;
-
-
-            // 在这里写你的业务逻辑，比如：
-            // 1. 根据 idx 从你的数据列表里拿到角色数据 (苏芙比、百夫长等)
-            // 2. 替换卡片上的头像图片
-            // 3. 替换卡片上的名字 Text
+            gameObject.name = "Card_" + _characterData.id;
+            _nameTxt.text = _characterData.name;
+            
+            int state = _prepareFightView.CheckCharacterState(_nameTxt.text);
+            _img_current.gameObject.SetActive(state == 0);
+            _img_selected.gameObject.SetActive(state == 1);
         }
     }
 }

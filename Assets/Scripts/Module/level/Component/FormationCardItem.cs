@@ -44,7 +44,7 @@ namespace Module.level.Component
             Debug.Log("刷新卡牌数据，索引：" + CardIndex + ", 名称：" + name);
             _icon.sprite = icon;
             _txtName.text = name;
-            _icon.gameObject.SetActive(icon != null);
+            //_icon.gameObject.SetActive(icon != null);
         }
         
         private void OnCardBtnClicked()

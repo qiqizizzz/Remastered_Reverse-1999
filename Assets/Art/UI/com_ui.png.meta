@@ -630,7 +630,7 @@ TextureImporter:
         width: 16
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -638,6 +638,27 @@ TextureImporter:
       bones: []
       spriteID: caef1f93157277946b6d64d645093b9c
       internalID: -1273401881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: com_ui_selectedCard
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 586
+        width: 236
+        height: 531
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 51, y: 99, z: 84, w: 80}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0789e99f962b0784692fb3cc5ef870cd
+      internalID: -1011884654
       vertices: []
       indices: 
       edges: []
@@ -675,6 +696,7 @@ TextureImporter:
       com_ui_return: 890481933
       com_ui_search: -695660476
       com_ui_searchBtn: -394250817
+      com_ui_selectedCard: -1011884654
       com_ui_sq_orange: 1513560730
       com_ui_sq_white: -696113134
       com_ui_star: 1756869923
