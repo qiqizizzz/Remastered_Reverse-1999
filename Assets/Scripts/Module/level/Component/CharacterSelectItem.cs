@@ -6,6 +6,7 @@
 * └────────────────────────────────────────────┘
 */
 
+using System;
 using Data.card;
 using Module.View;
 using TMPro;
@@ -39,6 +40,20 @@ namespace Module.level.Component
             _btn_select = transform.Find("Btn_select").GetComponent<Button>();
             
             _btn_select.onClick.AddListener(onSelectBtn);
+        }
+
+        private void OnEnable()
+        {
+            if (_prepareFightView.GetCurrentFormationCardName() == _nameTxt.text)
+            {
+                _prepareFightView.currentCharacterSelectItem = this;
+                setSelectedBorder(true);
+            }
+        }
+
+        private void OnDisable()
+        {
+            setSelectedBorder(false);
         }
 
         public string GetSelectCardName() => _nameTxt.text;

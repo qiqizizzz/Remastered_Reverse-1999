@@ -28,8 +28,9 @@ namespace Module.View
         
         [Header("编队卡牌")]
         private FormationCardItem[] formationCards;
-        private int _currentSelectCardIndex = 0;//默认从卡牌0开始
-        private CharacterSelectItem _currentCharacterSelectItem;//记录滚动列表当前选择的数据(没有点击确认键前)
+        private int _currentFormationCardIndex = 0;//默认从卡牌0开始
+        
+        public CharacterSelectItem currentCharacterSelectItem;//记录滚动列表当前选择的数据(没有点击确认键前)
 
         protected override void OnAwake()
         {
@@ -44,6 +45,14 @@ namespace Module.View
             Find<Button>("SelectFormationArea/Btn_cancel").onClick.AddListener(onFormationCancelBtn);
         }
 
+        //提供给滚动列表查询当前编队卡牌数据的接口
+        public string GetCurrentFormationCardName()
+        {
+            if (formationCards[_currentFormationCardIndex] != null)
+                return formationCards[_currentFormationCardIndex].GetCardName();
+            return String.Empty;
+        }
+        
         private void bindFormationBtn()
         {
             int cardCount = 4;
@@ -90,15 +99,13 @@ namespace Module.View
         //刷新卡牌UI
         private void updateFormationCardUI(int index, string name, Sprite spr)
         {
-            //TODO:考虑卡牌互换,如果name在其他卡牌上，则需要将其他卡牌的数据也进行刷新
-            
             formationCards[index].RefreshData(name, spr);
         }
         
         private void onFormationCardBtn(int index)
         {
             setSelectFormationAreaActive(true);
-            _currentSelectCardIndex = index;
+            _currentFormationCardIndex = index;
         }
         #endregion
         
@@ -126,7 +133,7 @@ namespace Module.View
             {
                 if (formationCards[i] != null && formationCards[i].GetCardName() == charName)
                 {
-                    if (i == _currentSelectCardIndex) return 0;
+                    if (i == _currentFormationCardIndex) return 0;
                     return 1;
                 }
             }
@@ -137,20 +144,27 @@ namespace Module.View
         //选择卡牌后回调函数
         public void OnSelectCharacterFromScroll(CharacterSelectItem item)
         {
-            if (_currentCharacterSelectItem != null)
+            if (currentCharacterSelectItem != null)
             {
-                _currentCharacterSelectItem.setSelectedBorder(false);
+                currentCharacterSelectItem.setSelectedBorder(false);
             }
             
-            _currentCharacterSelectItem = item;
-            _currentCharacterSelectItem.setSelectedBorder(true);
+            currentCharacterSelectItem = item;
+            currentCharacterSelectItem.setSelectedBorder(true);
         }
         
         private void onFormationConfirmBtn()
         {
             selectFormationArea.gameObject.SetActive(false);
+            //TODO:考虑卡牌互换,如果name在其他卡牌上，则需要将其他卡牌的数据也进行刷新
+            //情况一：没有更换卡牌,保持不变(name与此次索引的编队卡牌name相同)
+            //情况二：更换了卡牌,但之前这个索引的编队为空 && 更换的卡牌不在编队中,则直接替换
+            //情况三：更换了卡牌,但之前这个索引的编队为空 && 更换的卡牌在编队中,则需要将更换的卡牌所在的索引卡牌数据清空,再将更换的卡牌数据替换
+            //情况四：更换了卡牌,但之前这个索引的编队不为空 && 更换的卡牌不在编队中,则直接替换
+            //情况五：更换了卡牌,但之前这个索引的编队不为空 && 更换的卡牌在编队中,则需要将更换的卡牌所在的索引卡牌数据替换到之前这个索引,再将更换的卡牌数据替换
+            
             //暂时不考虑卡面sprite替换
-            updateFormationCardUI(_currentSelectCardIndex, _currentCharacterSelectItem._characterData.name, null);
+            updateFormationCardUI(_currentFormationCardIndex, currentCharacterSelectItem._characterData.name, null);
             //TODO:保存编队信息，准备进入战斗界面
         }
 

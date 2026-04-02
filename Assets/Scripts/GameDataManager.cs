@@ -24,7 +24,7 @@ namespace DefaultNamespace
             PlayerName = "";
             isConnected = false;
             isServerOnline = false;
-            CharacterCount = 2;
+            CharacterCount = 4;
         }
         
         public void SetPlayerName(string name)
