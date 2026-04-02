@@ -30,7 +30,7 @@ namespace Module.View
         private FormationCardItem[] formationCards;
         private int _currentFormationCardIndex = 0;//默认从卡牌0开始
         
-        public CharacterSelectItem currentCharacterSelectItem;//记录滚动列表当前选择的数据(没有点击确认键前)
+        public string targetSelectCharacterName = string.Empty;//记录滚动列表当前选择的角色
 
         protected override void OnAwake()
         {
@@ -103,8 +103,9 @@ namespace Module.View
         
         private void onFormationCardBtn(int index)
         {
-            setSelectFormationAreaActive(true);
             _currentFormationCardIndex = index;
+            targetSelectCharacterName = formationCards[index].GetCardName();
+            setSelectFormationAreaActive(true);
         }
         #endregion
         
@@ -141,15 +142,12 @@ namespace Module.View
         }
 
         //选择卡牌后回调函数
-        public void OnSelectCharacterFromScroll(CharacterSelectItem item)
+        public void OnSelectCharacterFromScroll(string charName)
         {
-            if (currentCharacterSelectItem != null)
-            {
-                currentCharacterSelectItem.setSelectedBorder(false);
-            }
+            targetSelectCharacterName = charName;
             
-            currentCharacterSelectItem = item;
-            currentCharacterSelectItem.setSelectedBorder(true);
+            LoopVerticalScrollRect rect = Find<LoopVerticalScrollRect>("SelectFormationArea/Scroll_character");
+            rect.RefreshCells();
         }
         
         private void onFormationConfirmBtn()
@@ -162,10 +160,10 @@ namespace Module.View
             
             selectFormationArea.gameObject.SetActive(false);
             
-            if(currentCharacterSelectItem == null || currentCharacterSelectItem._characterData == null)
+            if(string.IsNullOrEmpty(targetSelectCharacterName))
                 return;
 
-            string targetName = currentCharacterSelectItem.GetSelectCardName();
+            string targetName = targetSelectCharacterName;
             string currentSlotName = formationCards[_currentFormationCardIndex].GetCardName();
             
             //情况一:没有发生任何改变
@@ -192,12 +190,15 @@ namespace Module.View
             
             //情况二、四
             updateFormationCardUI(_currentFormationCardIndex, targetName, null);
+
+            targetSelectCharacterName = string.Empty;//清空选中状态
             //TODO:保存编队信息，准备进入战斗界面
         }
 
         private void onFormationCancelBtn()
         {
             selectFormationArea.gameObject.SetActive(false);
+            targetSelectCharacterName = string.Empty;
             //TODO:取消编队选择，保持原有编队信息不变
         }
         #endregion
