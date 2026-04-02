@@ -42,20 +42,6 @@ namespace Module.level.Component
             _btn_select.onClick.AddListener(onSelectBtn);
         }
 
-        private void OnEnable()
-        {
-            if (_prepareFightView.GetCurrentFormationCardName() == _nameTxt.text)
-            {
-                _prepareFightView.currentCharacterSelectItem = this;
-                setSelectedBorder(true);
-            }
-        }
-
-        private void OnDisable()
-        {
-            setSelectedBorder(false);
-        }
-
         public string GetSelectCardName() => _nameTxt.text;
 
         private void onSelectBtn()
@@ -80,6 +66,17 @@ namespace Module.level.Component
             int state = _prepareFightView.CheckCharacterState(_nameTxt.text);
             _img_current.gameObject.SetActive(state == 0);
             _img_selected.gameObject.SetActive(state == 1);
+            
+            //判断是否是当前编队卡牌上选择的角色，是则显示选中边框
+            if(_prepareFightView.GetCurrentFormationCardName() == _nameTxt.text)
+            {
+                _prepareFightView.currentCharacterSelectItem = this;
+                setSelectedBorder(true);
+            }
+            else
+            {
+                setSelectedBorder(false);
+            }
         }
     }
 }

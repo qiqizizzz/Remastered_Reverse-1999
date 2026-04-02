@@ -65,8 +65,7 @@ namespace Module.View
                 FormationCardItem item = new FormationCardItem();
                 item.Init(cardTf, i, onFormationCardBtn);
                 
-                if(item.GetCardName() != String.Empty)
-                    formationCards[i] = item;
+                formationCards[i] = item;//无论是否有卡牌都存入
             }
         }
 
@@ -155,16 +154,44 @@ namespace Module.View
         
         private void onFormationConfirmBtn()
         {
-            selectFormationArea.gameObject.SetActive(false);
-            //TODO:考虑卡牌互换,如果name在其他卡牌上，则需要将其他卡牌的数据也进行刷新
             //情况一：没有更换卡牌,保持不变(name与此次索引的编队卡牌name相同)
             //情况二：更换了卡牌,但之前这个索引的编队为空 && 更换的卡牌不在编队中,则直接替换
             //情况三：更换了卡牌,但之前这个索引的编队为空 && 更换的卡牌在编队中,则需要将更换的卡牌所在的索引卡牌数据清空,再将更换的卡牌数据替换
             //情况四：更换了卡牌,但之前这个索引的编队不为空 && 更换的卡牌不在编队中,则直接替换
             //情况五：更换了卡牌,但之前这个索引的编队不为空 && 更换的卡牌在编队中,则需要将更换的卡牌所在的索引卡牌数据替换到之前这个索引,再将更换的卡牌数据替换
             
-            //暂时不考虑卡面sprite替换
-            updateFormationCardUI(_currentFormationCardIndex, currentCharacterSelectItem._characterData.name, null);
+            selectFormationArea.gameObject.SetActive(false);
+            
+            if(currentCharacterSelectItem == null || currentCharacterSelectItem._characterData == null)
+                return;
+
+            string targetName = currentCharacterSelectItem.GetSelectCardName();
+            string currentSlotName = formationCards[_currentFormationCardIndex].GetCardName();
+            
+            //情况一:没有发生任何改变
+            if(targetName == currentSlotName)
+                return;
+
+            int exitIndex = -1;
+            //查找新选择的角色是否已在队伍中(不包括自己)
+            for (int i = 0; i < formationCards.Length; i++)
+            {
+                if (i != _currentFormationCardIndex && formationCards[i].GetCardName() == targetName)
+                {
+                    exitIndex = i;
+                    break;
+                }
+            }
+
+            //情况三、五
+            if (exitIndex != -1)
+            {
+                //角色已经在该队伍中了
+                updateFormationCardUI(exitIndex, currentSlotName, null);
+            }
+            
+            //情况二、四
+            updateFormationCardUI(_currentFormationCardIndex, targetName, null);
             //TODO:保存编队信息，准备进入战斗界面
         }
 
