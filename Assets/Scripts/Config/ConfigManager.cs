@@ -29,7 +29,7 @@ namespace Config
         
         public void LoadAllConfigs()
         {
-            //加载关卡
+            /*//加载关卡
             var levelArray = JsonConfigLoader.Load<LevelDataArray>("LevelData");
             if (levelArray != null)
             {
@@ -37,9 +37,9 @@ namespace Config
                 {
                     levelConfig.Add(level.id, level);
                 }
-            }
+            }*/
             
-            //加载卡牌
+            /*//加载卡牌
             var cardArray = JsonConfigLoader.Load<CardDataArray>("CardData");
             if (cardArray != null)
             {
@@ -47,9 +47,9 @@ namespace Config
                 {
                     cardConfig.Add(card.id, card);
                 }
-            }
+            }*/
             
-            //加载角色
+            /*//加载角色
             var characterArray = JsonConfigLoader.Load<CharacterDataArray>("CharacterData");
             if (characterArray != null)
             {
@@ -57,7 +57,7 @@ namespace Config
                 {
                     characterConfig.Add(character.id, character);
                 }
-            }
+            }*/
 
             Debug.Log($"加载完成: {cardConfig.Count}张卡牌, {characterConfig.Count}个角色, {levelConfig.Count}个关卡");
         }

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd64f1787e34da79f7ffb88fe87571f, type: 3}
+  m_Name: Card_2008
+  m_EditorClassIdentifier: 
+  type: 1
+  id: 2008
+  name: "\u6D88\u5931\u4E8E\u9ED1\u5F71"
+  description: "\u63D0\u9AD8\u81EA\u8EAB\u95EA\u907F\u738730%\uFF0C\u6301\u7EED2\u56DE\u5408"
+  ownerId: 1003
+  effects:
+  - value: 0.3
+    round: 2
+    target: self

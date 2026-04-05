@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Data.card
 {
@@ -36,13 +37,8 @@ namespace Data.card
     }
     
     [Serializable]
-    public class CardDataArray
-    {
-        public List<CardData> cards;
-    }
-    
-    [Serializable]
-    public class CardData
+    [CreateAssetMenu(fileName = "NewCardData", menuName = "数据配置/Data/Card")]
+    public class CardData : ScriptableObject
     {
         public CardType type;
         public int id;

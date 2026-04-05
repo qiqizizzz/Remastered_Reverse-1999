@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fb9e1c1fe8b4703be743b5a85ce6929, type: 3}
+  m_Name: Character_1001
+  m_EditorClassIdentifier: 
+  id: 1001
+  name: "\u83B1\u6602"
+  characterType: 0
+  inspirationType: 0
+  property:
+    attack: 520
+    hp: 4800
+    defense: 280
+    critRate: 0.15
+    critDamage: 1.5
+  cards: d1070000d2070000d3070000

@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Data.card
 {
@@ -56,15 +57,10 @@ namespace Data.card
         public float critRate;//暴击率
         public float critDamage;//暴击伤害
     }
-
-    [Serializable]
-    public class CharacterDataArray
-    {
-        public List<CharacterData> characters;
-    }
     
     [Serializable]
-    public class CharacterData
+    [CreateAssetMenu(fileName = "NewCharacterData", menuName = "数据配置/Data/Character")]
+    public class CharacterData : ScriptableObject
     {
         public int id;//角色id
         public string name;//角色名字
