@@ -42,4 +42,9 @@ public class GameApp : Singleton<GameApp>
         TimerManager.OnUpdate(dt);
         NetworkManager.OnUpdate();
     }
+
+    public override void Destroy()
+    {
+        ControllerManager.Destroy();
+    }
 }

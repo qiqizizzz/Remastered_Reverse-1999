@@ -13,7 +13,7 @@ using Random = System.Random;
 
 namespace Data
 {
-    [CreateAssetMenu(menuName = "数据配置/SO/LoadingDataList", fileName = "LoadingTextData")]
+    [CreateAssetMenu(menuName = "数据配置/DataBase/LoadingDataList", fileName = "LoadingTextData")]
     public class LoadingTextListSO  : ScriptableObject
     {
         public List<LoadingText> dataList;

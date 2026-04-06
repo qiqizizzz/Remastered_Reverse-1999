@@ -6,6 +6,8 @@
 * └───────────────────────────────────────────────────────────────────┘
 */
 
+using System;
+using System.Threading.Tasks;
 using Module.Game;
 using Module.chat;
 using Module.GameUI;
@@ -23,6 +25,7 @@ namespace DefaultNamespace
         public Texture2D commonCursor;// 鼠标指针图片
         private float dt;
         private static bool isLoaded = false;
+        private bool isAppInitialized = false; 
         
         private void Awake()
         {
@@ -36,19 +39,30 @@ namespace DefaultNamespace
             }
         }
 
-        private void Start()
+        private async void Start()
         {
             Cursor.SetCursor(commonCursor, Vector2.zero, CursorMode.Auto);
             
-            RegisterConfigs();
+            await RegisterConfigs();
             RegisterModules();
             InitModules();
+
+            isAppInitialized = true;
+            
+            Debug.Log("<color=cyan>游戏所有模块与配置加载完毕，游戏正式开始！</color>");
         }
 
         private void Update()
         {
+            if (!isAppInitialized) return;
+            
             dt = Time.deltaTime;
             GameApp.Instance.Update(dt);
+        }
+        
+        private void OnDestroy()
+        {
+            GameApp.Instance.Destroy();
         }
 
         //连接服务器
@@ -76,9 +90,9 @@ namespace DefaultNamespace
         }
         
         // 注册配置表
-        private void RegisterConfigs()
+        private async Task RegisterConfigs()
         {
-            GameApp.ConfigManager.LoadAllConfigs();
+            await GameApp.ConfigManager.LoadAllConfigsAsync();
         }
     }
 }

@@ -8,6 +8,10 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Common;
+using Common.Defines;
+using Data;
 using Data.card;
 using Module.level;
 using UnityEngine;
@@ -25,6 +29,49 @@ namespace Config
             levelConfig = new Dictionary<int, LevelData>();
             characterConfig = new Dictionary<int, CharacterData>();
             cardConfig = new Dictionary<int, CardData>();
+        }
+
+        public async Task LoadAllConfigsAsync()
+        {
+            var tcs = new TaskCompletionSource<GameConfigDatabase>();
+            
+            ResManager.LoadAssetAsync<GameConfigDatabase>(AddressDefines.Data_GameConfigDatabase, database =>
+            {
+                tcs.SetResult(database);
+            });
+            
+            GameConfigDatabase db = await tcs.Task;
+
+            if (db == null)
+            {
+                Debug.LogError("加载配置数据库失败!");
+                return;
+            }
+            
+            levelConfig.Clear();
+            characterConfig.Clear();
+            cardConfig.Clear();
+
+            //加载关卡、角色、卡牌数据
+            foreach (var level in db.allLevels)
+            {
+                if (level != null && !levelConfig.ContainsKey(level.id))
+                    levelConfig.Add(level.id, level);
+            }
+            
+            foreach (var character in db.allCharacters)
+            {
+                if (character != null && !characterConfig.ContainsKey(character.id))
+                    characterConfig.Add(character.id, character);
+            }
+            
+            foreach (var card in db.allCards)
+            {
+                if (card != null && !cardConfig.ContainsKey(card.id))
+                    cardConfig.Add(card.id, card);
+            }
+            
+            Debug.Log($"加载完成: {cardConfig.Count}张卡牌, {characterConfig.Count}个角色, {levelConfig.Count}个关卡");
         }
         
         public void LoadAllConfigs()

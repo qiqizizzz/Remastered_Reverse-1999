@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: e1de0c8a7e07b49438f94c6d719b56cc
   m_SerializeEntries:
+  - m_GUID: 45bd64ef65d7ec844a2dfac3430c0234
+    m_Address: Data/GameConfigDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f4a56ffc00ba384aba93996ec3a605a
     m_Address: Data/LoadingTextData
     m_ReadOnly: 0

@@ -31,6 +31,7 @@ namespace Common.Defines
         
         //Data数据
         public static readonly string Data_LoadingTextData = "Data/LoadingTextData";
+        public static readonly string Data_GameConfigDatabase = "Data/GameConfigDatabase";
         
         //Audio音频
         public static readonly string Audio_BGM_Game = "Audio/Bgm_Game";
