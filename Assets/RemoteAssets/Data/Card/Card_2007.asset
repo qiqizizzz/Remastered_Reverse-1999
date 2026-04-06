@@ -19,5 +19,5 @@ MonoBehaviour:
   ownerId: 1003
   effects:
   - value: 1.7
-    round: 0
+    round: 2
     target: singleEnemy
