@@ -9,6 +9,7 @@
 using Common;
 using Config;
 using DefaultNamespace;
+using Module.fight;
 using Module.Timer;
 using MVC;
 using Network;
@@ -24,6 +25,7 @@ public class GameApp : Singleton<GameApp>
     public static MessageCenter MessageCenter;
     public static SoundManager SoundManager;
     public static ConfigManager ConfigManager;
+    public static EntityManager EntityManager;
         
     public override void Init()
     {
@@ -35,6 +37,7 @@ public class GameApp : Singleton<GameApp>
         MessageCenter = new MessageCenter();
         SoundManager = new SoundManager();
         ConfigManager = new ConfigManager();
+        EntityManager = new EntityManager();
     }
 
     public override void Update(float dt)

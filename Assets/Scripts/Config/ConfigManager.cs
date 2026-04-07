@@ -23,12 +23,15 @@ namespace Config
         private Dictionary<int, LevelData> levelConfig;
         private Dictionary<int, CharacterData> characterConfig;
         private Dictionary<int, CardData> cardConfig;
+        
+        private Dictionary<string, CharacterData> characterConfigByName;
 
         public ConfigManager()
         {
             levelConfig = new Dictionary<int, LevelData>();
             characterConfig = new Dictionary<int, CharacterData>();
             cardConfig = new Dictionary<int, CardData>();
+            characterConfigByName = new Dictionary<string, CharacterData>();
         }
 
         public async Task LoadAllConfigsAsync()
@@ -69,6 +72,13 @@ namespace Config
             {
                 if (card != null && !cardConfig.ContainsKey(card.Id))
                     cardConfig.Add(card.Id, card);
+            }
+            
+            //根据角色名字建立一个快速查询的字典
+            foreach (var kvp in characterConfig)
+            {
+                if (!characterConfigByName.ContainsKey(kvp.Value.Name))
+                    characterConfigByName.Add(kvp.Value.Name, kvp.Value);
             }
             
             Debug.Log($"加载完成: {cardConfig.Count}张卡牌, {characterConfig.Count}个角色, {levelConfig.Count}个关卡");
@@ -120,6 +130,11 @@ namespace Config
             return characterConfig.TryGetValue(characterId, out CharacterData characterData) ? characterData : null;
         }
 
+        public CharacterData GetCharacterData(string characterName)
+        {
+            return characterConfigByName.TryGetValue(characterName, out CharacterData characterData) ? characterData : null;
+        }
+        
         //得到某角色的全部卡牌
         public List<CardData> GetCharacterCards(int characterId)
         {
@@ -141,12 +156,22 @@ namespace Config
         {
             return characterConfig.Values.ToList();
         }
+        
         #endregion
         
         #region 关卡相关
         public LevelData GetLevelData(int levelId)
         {
             return levelConfig.TryGetValue(levelId, out LevelData levelData) ? levelData : null;
+        }
+        
+        public List<MonsterSpawnData> GetLevelMonsterSpawnData(int levelId)
+        {
+            if (levelConfig.TryGetValue(levelId, out LevelData levelData))
+            {
+                return levelData.MonsterSpawns;
+            }
+            return new List<MonsterSpawnData>();
         }
         
         #endregion

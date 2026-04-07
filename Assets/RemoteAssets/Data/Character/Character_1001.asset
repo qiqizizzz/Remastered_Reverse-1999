@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Character_1001
   m_EditorClassIdentifier: 
   Id: 1001
-  Name: 1001
+  Name: "\u83B1\u6602"
   CharacterType: 0
   InspirationType: 0
   Property:

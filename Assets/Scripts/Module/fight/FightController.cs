@@ -7,8 +7,10 @@
 */
 
 using Common.Defines;
+using Data.level;
 using MVC;
 using MVC.Controller;
+using UnityEngine;
 
 namespace Module.fight
 {
@@ -33,7 +35,11 @@ namespace Module.fight
         
         private void onOpenFightView(System.Object[] args)
         {
-            GameApp.ViewManager.Open(ViewType.FightingView);
+            LevelInitData initData = args[0] as LevelInitData;
+            
+            Debug.Log(initData);
+            
+            GameApp.ViewManager.Open(ViewType.FightingView, args);
         }
     }
 }

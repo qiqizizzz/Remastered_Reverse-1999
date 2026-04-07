@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using Common.Defines;
 using Data.card;
+using Data.level;
 using Module.level;
 using Module.level.Component;
 using Module.Loading;
@@ -99,8 +100,29 @@ namespace Module.View
             {
                 //TODO:向战斗界面传递每个怪物的数据以及自身携带的角色的数据
                 GameApp.ViewManager.CloseAll();
-                ApplyControllerFunc(ControllerType.Fight, EventDefines.OpenFightingView);
+                
+                ApplyControllerFunc(ControllerType.Fight, EventDefines.OpenFightingView, GetLevelInitData());
             });
+        }
+
+        private LevelInitData GetLevelInitData()
+        {
+            List<CharacterData> characters = new List<CharacterData>();
+            List<MonsterSpawnData> monsterSpawnData = new List<MonsterSpawnData>();
+            
+            for (int i = 0; i < formationCards.Length; i++)
+            {
+                string cardName = formationCards[i].GetCardName();
+                CharacterData data = GameApp.ConfigManager.GetCharacterData(cardName);
+                if(data == null) Debug.Log("未找到角色数据, name: " + cardName);
+                characters.Add(data); 
+            }
+
+            monsterSpawnData = GameApp.ConfigManager.GetLevelMonsterSpawnData(_currentLevelId);
+            
+            LevelInitData initData = new LevelInitData(characters, monsterSpawnData, _currentLevelId);
+
+            return initData;
         }
 
         #region 编队相关

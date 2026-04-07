@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Character_1002
   m_EditorClassIdentifier: 
   Id: 1002
-  Name: 1002
+  Name: "\u8FDC\u65C5"
   CharacterType: 0
   InspirationType: 0
   Property:
