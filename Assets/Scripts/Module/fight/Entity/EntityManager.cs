@@ -6,10 +6,18 @@
 * └────────────────────────────────────────┘
 */
 
+using Data.level;
+using UnityEngine;
+
 namespace Module.fight
 {
     public class EntityManager
     {
-        //TODO: 生成玩家与敌人等
+
+        //生成玩家与敌人等
+        public void SpawnBattleEntities(LevelInitData levelInitData)
+        {
+            Debug.Log("生成玩家与敌人等，关卡id：" + levelInitData.LevelId);
+        }
     }
 }
