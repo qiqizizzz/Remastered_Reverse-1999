@@ -10,6 +10,7 @@ using System;
 using System.Threading.Tasks;
 using Module.Game;
 using Module.chat;
+using Module.fight;
 using Module.GameUI;
 using Module.Inventory;
 using Module.level;
@@ -81,6 +82,7 @@ namespace DefaultNamespace
             GameApp.ControllerManager.Register(ControllerType.Level, new LevelController());
             GameApp.ControllerManager.Register(ControllerType.Inventory, new InventoryController());
             GameApp.ControllerManager.Register(ControllerType.Character, new CharacterController());
+            GameApp.ControllerManager.Register(ControllerType.Fight, new FightController());
         }
         
         // 初始化所有模块

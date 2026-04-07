@@ -17,5 +17,6 @@ namespace MVC
         Level, //关卡
         Character, //角色
         Inventory, //背包
+        Fight, //战斗
     }
 }

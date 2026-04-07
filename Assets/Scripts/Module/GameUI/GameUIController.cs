@@ -68,8 +68,8 @@ namespace Module.GameUI
         // 注册事件
         public override void InitModuleEvent()
         {
-            RegisterFunc(EventDefines.OpenGameView, openGameView);
-            RegisterFunc(EventDefines.OpenMainMenuView, openMainMenuView);
+            RegisterFunc(EventDefines.OpenGameView, onOpenGameView);
+            RegisterFunc(EventDefines.OpenMainMenuView, onOpenMainMenuView);
             RegisterFunc(EventDefines.OpenMoreOptionsView, onOpenMoreOptionsView);
             RegisterFunc(EventDefines.OpenTipBoxView, onOpenTipBoxView);
             RegisterFunc(EventDefines.OpenNoticeView, onOpenNoticeView);
@@ -77,13 +77,13 @@ namespace Module.GameUI
         }
 
         //打开主要面板
-        private void openGameView(System.Object[] args)
+        private void onOpenGameView(System.Object[] args)
         {
             GameApp.ViewManager.Open(ViewType.GameView, args);
         }
 
         //打开主菜单界面
-        private void openMainMenuView(System.Object[] args)
+        private void onOpenMainMenuView(System.Object[] args)
         {
             GameApp.ViewManager.Open(ViewType.MainMenuView, args);
         }

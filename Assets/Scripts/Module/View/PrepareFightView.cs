@@ -8,10 +8,13 @@
 
 using System;
 using System.Collections.Generic;
+using Common.Defines;
 using Data.card;
 using Module.level;
 using Module.level.Component;
+using Module.Loading;
 using MVC;
+using MVC.Extensions;
 using MVC.View;
 using TMPro;
 using UnityEngine;
@@ -30,11 +33,14 @@ namespace Module.View
         private FormationCardItem[] formationCards;
         private int _currentFormationCardIndex = 0;//默认从卡牌0开始
         
+        private int _currentLevelId = 0;//当前关卡id
+        
         public string targetSelectCharacterName = string.Empty;//记录滚动列表当前选择的角色
 
         protected override void OnAwake()
         {
             Find<Button>("Btn_return").onClick.AddListener(onReturnBtn);
+            Find<Button>("Btn_action").onClick.AddListener(onActionBtn);
             
             levelTargetText1 = Find<TextMeshProUGUI>("LevelDetailArea/Target/Img_content1/Txt_content1");
             levelTargetText2 = Find<TextMeshProUGUI>("LevelDetailArea/Target/Img_content2/Txt_content2");
@@ -43,14 +49,6 @@ namespace Module.View
             bindFormationBtn();
             Find<Button>("SelectFormationArea/Btn_confirm").onClick.AddListener(onFormationConfirmBtn);
             Find<Button>("SelectFormationArea/Btn_cancel").onClick.AddListener(onFormationCancelBtn);
-        }
-
-        //提供给滚动列表查询当前编队卡牌数据的接口
-        public string GetCurrentFormationCardName()
-        {
-            if (formationCards[_currentFormationCardIndex] != null)
-                return formationCards[_currentFormationCardIndex].GetCardName();
-            return String.Empty;
         }
         
         private void bindFormationBtn()
@@ -72,11 +70,11 @@ namespace Module.View
         public override void Open(params object[] args)
         {
             //args[0]为关卡id,根据关卡id显示对应的界面内容
-            int levelId = (int)args[0];
-            LevelData data = GameApp.ConfigManager.GetLevelData(levelId);
+            _currentLevelId = (int)args[0];
+            LevelData data = GameApp.ConfigManager.GetLevelData(_currentLevelId);
             if (data == null)
             {
-                Debug.LogError("未找到关卡数据, id: " + levelId);
+                Debug.LogError("未找到关卡数据, id: " + _currentLevelId);
                 return;
             }
 
@@ -94,7 +92,26 @@ namespace Module.View
             GameApp.ViewManager.Open(ViewType.LevelView);
         }
 
+        private void onActionBtn()
+        {
+            Debug.Log("进入战斗");
+            ViewExtensions.LoadScene(this, SceneDefines.Fight,() =>
+            {
+                //TODO:向战斗界面传递每个怪物的数据以及自身携带的角色的数据
+                GameApp.ViewManager.CloseAll();
+                ApplyControllerFunc(ControllerType.Fight, EventDefines.OpenFightingView);
+            });
+        }
+
         #region 编队相关
+        //提供给滚动列表查询当前编队卡牌数据的接口
+        public string GetCurrentFormationCardName()
+        {
+            if (formationCards[_currentFormationCardIndex] != null)
+                return formationCards[_currentFormationCardIndex].GetCardName();
+            return String.Empty;
+        }
+        
         //刷新卡牌UI
         private void updateFormationCardUI(int index, string name, Sprite spr)
         {
@@ -192,14 +209,12 @@ namespace Module.View
             updateFormationCardUI(_currentFormationCardIndex, targetName, null);
 
             targetSelectCharacterName = string.Empty;//清空选中状态
-            //TODO:保存编队信息，准备进入战斗界面
         }
 
         private void onFormationCancelBtn()
         {
             selectFormationArea.gameObject.SetActive(false);
             targetSelectCharacterName = string.Empty;
-            //TODO:取消编队选择，保持原有编队信息不变
         }
         #endregion
     }

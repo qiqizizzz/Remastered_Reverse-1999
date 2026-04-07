@@ -141,7 +141,7 @@ namespace Module.View
             {
                 GameApp.ViewManager.CloseAll();
                 GameApp.ViewManager.Open(ViewType.LoadingView);
-                ViewExtensions.LoadScene(this,SceneDefines.StartMenuView,(() =>
+                ViewExtensions.LoadScene(this,SceneDefines.StartMenu,(() =>
                 {
                     ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
                 }));
