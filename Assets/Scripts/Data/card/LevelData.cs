@@ -1,6 +1,6 @@
 ﻿/*
 * ┌──────────────────────────────────┐
-* │  描    述:                       
+* │  描    述: 关卡数据                      
 * │  类    名: LevelData.cs       
 * │  创    建: By qiqizizzz
 * └──────────────────────────────────┘
@@ -17,9 +17,9 @@ namespace Data.card
     [CreateAssetMenu(fileName = "NewLevelData", menuName = "数据配置/Data/Level")]
     public class LevelData : ScriptableObject
     {
-        public int id;
-        public string name;
-        public string description;//形式为xxx-xxx-xxx,每段描述一个阶段,用-分隔
-        public List<MonsterSpawnData> monsterSpawns;//关卡中会生成的怪物
+        public int Id;
+        public string Name;
+        public string Description;//形式为xxx-xxx-xxx,每段描述一个阶段,用-分隔
+        public List<MonsterSpawnData> MonsterSpawns;//关卡中会生成的怪物
     }
 }

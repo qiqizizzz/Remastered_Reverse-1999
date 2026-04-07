@@ -78,7 +78,7 @@ namespace Module.View
                 return;
             }
 
-            string[] desParts = data.description.Split('-');
+            string[] desParts = data.Description.Split('-');
             if (desParts.Length >= 2)
             {
                 levelTargetText1.text = desParts[0];

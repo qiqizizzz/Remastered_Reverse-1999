@@ -23,5 +23,6 @@ namespace Data
 
         [Header("所有关卡配置")]
         public List<LevelData> allLevels = new List<LevelData>();
+        
     }
 }

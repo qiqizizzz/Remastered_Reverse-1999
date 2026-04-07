@@ -31,8 +31,8 @@ namespace Module.Character.ScrollComponents
             // 测试：把节点名字改成对应的索引，方便你在 Hierarchy 里观察
             CharacterData data = GameApp.ConfigManager.GetCharacterData(startIndex + idx);
             
-            gameObject.name = "Card_" + data.id;
-            txt.text = data.name;
+            gameObject.name = "Card_" + data.Id;
+            txt.text = data.Name;
 
 
             // 在这里写你的业务逻辑，比如：

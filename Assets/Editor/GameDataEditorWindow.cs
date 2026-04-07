@@ -6,8 +6,6 @@
  * └────────────────────────────────────────────────────────┘
  */
 
-using Data;
-using UnityEditor;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
@@ -108,9 +106,16 @@ public class GameDataEditorWindow : EditorWindow
         
         SerializedProperty listProperty = GetCurrentListProperty();
 
-        // 左侧工具栏：标题 + 新建按钮
+        // 左侧工具栏：标题 + 清理 + 新建按钮
         EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
         GUILayout.Label($"列表 ({listProperty.arraySize})", EditorStyles.boldLabel);
+        
+        if (GUILayout.Button("清理空值", EditorStyles.toolbarButton, GUILayout.Width(60)))
+        {
+            CleanNullEntries(listProperty);
+            GUIUtility.ExitGUI(); 
+        }
+        
         if (GUILayout.Button("+ 新建", EditorStyles.toolbarButton, GUILayout.Width(50)))
         {
             CreateNewData();
@@ -122,13 +127,11 @@ public class GameDataEditorWindow : EditorWindow
         for (int i = 0; i < listProperty.arraySize; i++)
         {
             SerializedProperty elementProp = listProperty.GetArrayElementAtIndex(i);
+            bool isNull = elementProp.objectReferenceValue == null;
             
-            string displayName = "空 (Null)";
-            if (elementProp.objectReferenceValue != null)
-            {
-                displayName = $"[{i}] {elementProp.objectReferenceValue.name}";
-            }
+            EditorGUILayout.BeginHorizontal();
 
+            string displayName = isNull ? "空 (Null)" : $"[{i}] {elementProp.objectReferenceValue.name}";
             GUIStyle btnStyle = (selectedIndex == i) ? selectedBtnStyle : normalBtnStyle;
 
             if (GUILayout.Button(displayName, btnStyle))
@@ -136,6 +139,21 @@ public class GameDataEditorWindow : EditorWindow
                 selectedIndex = i;
                 GUI.FocusControl(null); 
             }
+
+            if (isNull)
+            {
+                GUI.backgroundColor = new Color(1f, 0.4f, 0.4f);
+                if (GUILayout.Button("X", GUILayout.Width(25), GUILayout.Height(30)))
+                {
+                    listProperty.DeleteArrayElementAtIndex(i);
+                    serializedDatabase.ApplyModifiedProperties();
+                    if (selectedIndex == i) selectedIndex = -1;
+                    GUIUtility.ExitGUI();
+                }
+                GUI.backgroundColor = Color.white;
+            }
+
+            EditorGUILayout.EndHorizontal();
         }
 
         EditorGUILayout.EndScrollView();
@@ -161,7 +179,6 @@ public class GameDataEditorWindow : EditorWindow
             
             if (elementProp.objectReferenceValue != null)
             {
-                // 右侧工具栏：定位、保存、删除
                 EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
                 GUILayout.Label($"当前编辑: {elementProp.objectReferenceValue.name}", EditorStyles.boldLabel);
                 GUILayout.FlexibleSpace(); 
@@ -183,7 +200,6 @@ public class GameDataEditorWindow : EditorWindow
                 GUI.backgroundColor = Color.white; 
                 EditorGUILayout.EndHorizontal();
 
-                // 详细属性列表
                 rightScrollPos = EditorGUILayout.BeginScrollView(rightScrollPos);
                 
                 SerializedObject itemObj = new SerializedObject(elementProp.objectReferenceValue);
@@ -202,6 +218,26 @@ public class GameDataEditorWindow : EditorWindow
                 
                 EditorGUILayout.EndScrollView();
             }
+            else
+            {
+                GUILayout.Space(20);
+                EditorGUILayout.HelpBox("该数据已丢失或为空引用 (Null)！\n请移除此无效项以保持数据整洁。", MessageType.Warning);
+                GUILayout.Space(10);
+                
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+                GUI.backgroundColor = new Color(1f, 0.4f, 0.4f);
+                if (GUILayout.Button("移除该空数据", GUILayout.Width(150), GUILayout.Height(35)))
+                {
+                    listProperty.DeleteArrayElementAtIndex(selectedIndex);
+                    serializedDatabase.ApplyModifiedProperties();
+                    selectedIndex = -1;
+                    GUIUtility.ExitGUI();
+                }
+                GUI.backgroundColor = Color.white;
+                GUILayout.FlexibleSpace();
+                EditorGUILayout.EndHorizontal();
+            }
         }
         else
         {
@@ -217,15 +253,28 @@ public class GameDataEditorWindow : EditorWindow
 
     private SerializedProperty GetCurrentListProperty()
     {
+        // 如果你的 GameConfigDatabase 里的列表变量也改成了大写，这里要对应改成 AllCards 等
         string propertyName = currentTab == 0 ? "allCards" : (currentTab == 1 ? "allCharacters" : "allLevels");
         return serializedDatabase.FindProperty(propertyName);
+    }
+
+    private void CleanNullEntries(SerializedProperty listProp)
+    {
+        for (int i = listProp.arraySize - 1; i >= 0; i--)
+        {
+            if (listProp.GetArrayElementAtIndex(i).objectReferenceValue == null)
+            {
+                listProp.DeleteArrayElementAtIndex(i);
+            }
+        }
+        serializedDatabase.ApplyModifiedProperties();
+        selectedIndex = -1;
     }
 
     private void CreateNewData()
     {
         SerializedProperty listProp = GetCurrentListProperty();
         
-        // 1. 确定前一个 ID 以实现自增
         int newId = 0;
         
         // 倒序查找最后一个有效的 SO，获取它的 ID
@@ -235,7 +284,8 @@ public class GameDataEditorWindow : EditorWindow
             if (elementProp.objectReferenceValue != null)
             {
                 SerializedObject lastObj = new SerializedObject(elementProp.objectReferenceValue);
-                SerializedProperty idProp = lastObj.FindProperty("id");
+                // 【已修改】统一查找首字母大写的 "Id"
+                SerializedProperty idProp = lastObj.FindProperty("Id"); 
                 if (idProp != null)
                 {
                     newId = idProp.intValue + 1;
@@ -244,53 +294,49 @@ public class GameDataEditorWindow : EditorWindow
             }
         }
 
-        // 如果列表为空，给一个默认初始 ID
-        if (newId == 0)
+        if (newId <= 0)
         {
-            if (currentTab == 0) newId = 2001;       // 卡牌默认从 2001 开始
-            else if (currentTab == 1) newId = 1001;  // 角色默认从 1001 开始
-            else newId = 1;                          // 关卡默认从 1 开始
+            if (currentTab == 0) newId = 2001;       
+            else if (currentTab == 1) newId = 1001;  
+            else newId = 1;                          
         }
 
-        // 2. 确定保存路径和文件名
         string subFolder = currentTab == 0 ? "Card" : (currentTab == 1 ? "Character" : "Level");
         string folderPath = $"{DATA_ROOT_PATH}/{subFolder}";
 
         if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
-        // 使用新 ID 命名文件
         string fileName = $"{subFolder}_{newId}.asset";
         string fullPath = $"{folderPath}/{fileName}";
 
-        // 3. 创建对应的 ScriptableObject 实例
         ScriptableObject newAsset = null;
         if (currentTab == 0) newAsset = CreateInstance<CardData>();
         else if (currentTab == 1) newAsset = CreateInstance<CharacterData>();
         else newAsset = CreateInstance<LevelData>();
 
-        // 4. 将计算好的 newId 直接写入新创建的资产中
+        AssetDatabase.CreateAsset(newAsset, fullPath);
+
         SerializedObject newAssetObj = new SerializedObject(newAsset);
-        SerializedProperty newIdProp = newAssetObj.FindProperty("id");
+        // 【已修改】统一查找首字母大写的 "Id"
+        SerializedProperty newIdProp = newAssetObj.FindProperty("Id"); 
         if (newIdProp != null)
         {
             newIdProp.intValue = newId;
             newAssetObj.ApplyModifiedPropertiesWithoutUndo();
         }
+        else
+        {
+            Debug.LogError($"无法在 {newAsset.GetType().Name} 中找到名为 'Id' 的字段！");
+        }
 
-        // 5. 在磁盘上生成 .asset 文件
-        AssetDatabase.CreateAsset(newAsset, fullPath);
-
-        // 6. 加到 GameConfigDatabase 的列表里
         listProp.arraySize++;
         SerializedProperty newElement = listProp.GetArrayElementAtIndex(listProp.arraySize - 1);
         newElement.objectReferenceValue = newAsset;
 
-        // 7. 保存刷新
         serializedDatabase.ApplyModifiedProperties();
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        // 选中刚创建的新数据
         selectedIndex = listProp.arraySize - 1;
         GUI.FocusControl(null);
     }
@@ -304,12 +350,10 @@ public class GameDataEditorWindow : EditorWindow
             
             Object assetToDelete = elementProp.objectReferenceValue;
 
-            // 从列表移除
             elementProp.objectReferenceValue = null;
             listProp.DeleteArrayElementAtIndex(selectedIndex);
             serializedDatabase.ApplyModifiedProperties();
 
-            // 从磁盘彻底删除文件
             if (assetToDelete != null)
             {
                 string path = AssetDatabase.GetAssetPath(assetToDelete);

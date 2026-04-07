@@ -52,9 +52,9 @@ namespace Data.card
     public class CardEffect
     {
         public EffectType EffectType;
-        public float value;//倍率等
-        public int round;//持续回合数,如果是0则表示即时生效
-        public TargetType target;//目标
+        public float Value;//倍率等
+        public int Round;//持续回合数,如果是0则表示即时生效
+        public TargetType Target;//目标
         
         [Tooltip("-1表示己方/敌方全部目标\n 0表示本身\n 其他数值则表示n个目标")]
         public int TargetCount = 1;//目标数量
@@ -65,14 +65,14 @@ namespace Data.card
     public class CardData : ScriptableObject
     {
         [Header("基本信息")]
-        public CardType type;
-        public int id;
-        public string name;
-        public string description;
-        public int ownerId;//拥有者id
+        public CardType CardType;
+        public int Id;
+        public string Name;
+        public string Description;
+        public int OwnerId;//拥有者id
 
         [Header("效果列表")]
-        public CardEffect[] effects;
+        public CardEffect[] Effects;
 
         [Header("视觉")]
         public Sprite CardSprite; //卡牌图片

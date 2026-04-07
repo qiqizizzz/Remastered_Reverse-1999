@@ -47,7 +47,7 @@ namespace Module.level.Component
         private void onSelectBtn()
         {
             if(_prepareFightView != null && _characterData != null)
-                _prepareFightView.OnSelectCharacterFromScroll(_characterData.name);
+                _prepareFightView.OnSelectCharacterFromScroll(_characterData.Name);
         }
 
         public void setSelectedBorder(bool value)
@@ -60,8 +60,8 @@ namespace Module.level.Component
             _characterData = GameApp.ConfigManager.GetCharacterData(startIndex + idx);
             if(_characterData == null) return;
             
-            gameObject.name = "Card_" + _characterData.id;
-            _nameTxt.text = _characterData.name;
+            gameObject.name = "Card_" + _characterData.Id;
+            _nameTxt.text = _characterData.Name;
             
             int state = _prepareFightView.CheckCharacterState(_nameTxt.text);
             _img_current.gameObject.SetActive(state == 0);

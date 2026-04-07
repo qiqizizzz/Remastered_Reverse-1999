@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fb9e1c1fe8b4703be743b5a85ce6929, type: 3}
   m_Name: Character_1003
   m_EditorClassIdentifier: 
-  id: 1003
-  name: "\u672A\u7EE3\u94E0"
-  characterType: 0
-  inspirationType: 3
-  property:
-    attack: 600
-    hp: 4000
-    defense: 200
-    critRate: 0.25
-    critDamage: 1.8
-  cards: d7070000d8070000d9070000
+  Id: 1003
+  Name: 1003
+  CharacterType: 0
+  InspirationType: 0
+  Property:
+    Attack: 0
+    Hp: 0
+    Defense: 0
+    CritRate: 0
+    CritDamage: 0
+  Cards: 

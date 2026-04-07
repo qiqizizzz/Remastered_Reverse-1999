@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fb3d216f19d4609b4f85fa58f420859, type: 3}
   m_Name: Level_1
   m_EditorClassIdentifier: 
-  id: 1
-  name: "\u5E7D\u6697\u68EE\u6797"
-  description: "\u51FB\u8D25\u6240\u6709\u654C\u4EBA-12\u56DE\u5408\u5185\u80DC\u5229"
-  monsterSpawns:
-  - monsterId: 3001
-    count: 2
+  Id: 1
+  Name: 
+  Description: 
+  MonsterSpawns: []

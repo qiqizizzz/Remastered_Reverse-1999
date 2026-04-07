@@ -51,32 +51,29 @@ namespace Data.card
     [Serializable]
     public class Property
     {
-        public float attack;//攻击
-        public float hp;//生命
-        public float defense;//防御
-        public float critRate;//暴击率
-        public float critDamage;//暴击伤害
+        public float Attack;//攻击
+        public float Hp;//生命
+        public float Defense;//防御
+        public float CritRate;//暴击率
+        public float CritDamage;//暴击伤害
     }
     
     [Serializable]
     [CreateAssetMenu(fileName = "NewCharacterData", menuName = "数据配置/Data/Character")]
     public class CharacterData : ScriptableObject
     {
-        public int id;//角色id
-        public string name;//角色名字
-        public CharacterType characterType;//角色种类
-        public InspirationType inspirationType;//角色的灵感种类
+        public int Id;//角色id
+        public string Name;//角色名字
+        public CharacterType CharacterType;//角色种类
+        public InspirationType InspirationType;//角色的灵感种类
         
-        public Property property;//角色属性
+        public Property Property;//角色属性
 
-        public List<int> cards;//角色拥有的卡牌(一张大招牌和两张普通牌)
+        public List<int> Cards;//角色拥有的卡牌(一张大招牌和两张普通牌)
 
         public CharacterData()
         {
             
         }
-        
-        
-        //TODO:实例化
     }
 }

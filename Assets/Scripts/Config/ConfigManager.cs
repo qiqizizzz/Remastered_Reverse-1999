@@ -55,20 +55,20 @@ namespace Config
             //加载关卡、角色、卡牌数据
             foreach (var level in db.allLevels)
             {
-                if (level != null && !levelConfig.ContainsKey(level.id))
-                    levelConfig.Add(level.id, level);
+                if (level != null && !levelConfig.ContainsKey(level.Id))
+                    levelConfig.Add(level.Id, level);
             }
             
             foreach (var character in db.allCharacters)
             {
-                if (character != null && !characterConfig.ContainsKey(character.id))
-                    characterConfig.Add(character.id, character);
+                if (character != null && !characterConfig.ContainsKey(character.Id))
+                    characterConfig.Add(character.Id, character);
             }
             
             foreach (var card in db.allCards)
             {
-                if (card != null && !cardConfig.ContainsKey(card.id))
-                    cardConfig.Add(card.id, card);
+                if (card != null && !cardConfig.ContainsKey(card.Id))
+                    cardConfig.Add(card.Id, card);
             }
             
             Debug.Log($"加载完成: {cardConfig.Count}张卡牌, {characterConfig.Count}个角色, {levelConfig.Count}个关卡");
@@ -127,7 +127,7 @@ namespace Config
 
             foreach (var card in cardConfig)
             {
-                if (card.Value.ownerId == characterId)
+                if (card.Value.OwnerId == characterId)
                 {
                     cards.Add(card.Value);
                 }
