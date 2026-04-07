@@ -26,28 +26,57 @@ namespace Data.card
     }
 
     /// <summary>
+    /// 效果类型
+    /// </summary>
+    public enum EffectType
+    {
+        Damage,//伤害
+        Heal,//治疗
+        Buff,//增益
+        Debuff//减益
+    }
+    
+    /// <summary>
+    /// 作用对象
+    /// </summary>
+    public enum TargetType
+    {
+        Self,//己方
+        Enemy//敌方
+    }
+    
+    /// <summary>
     /// 卡牌效果
     /// </summary>
     [Serializable]
     public class CardEffect
     {
+        public EffectType EffectType;
         public float value;//倍率等
         public int round;//持续回合数,如果是0则表示即时生效
-        public string target;//目标,可以是单体/全体/随机n个等
+        public TargetType target;//目标
+        
+        [Tooltip("-1表示己方/敌方全部目标\n 0表示本身\n 其他数值则表示n个目标")]
+        public int TargetCount = 1;//目标数量
     }
     
     [Serializable]
     [CreateAssetMenu(fileName = "NewCardData", menuName = "数据配置/Data/Card")]
     public class CardData : ScriptableObject
     {
+        [Header("基本信息")]
         public CardType type;
         public int id;
         public string name;
         public string description;
         public int ownerId;//拥有者id
 
+        [Header("效果列表")]
         public CardEffect[] effects;
 
-        //TODO: 对玩家的属性进行增加以及特殊效果
+        [Header("视觉")]
+        public Sprite CardSprite; //卡牌图片
+        public GameObject CardEffectPrefab;//特效
+        
     }
 }
