@@ -22,7 +22,7 @@ namespace Module.fight
         Die //死亡
     }
     
-    public class BaseCharacter
+    public class BaseCharacter : MonoBehaviour
     {
         private CharacterData _characterData;
         private CharacterState _currentState;
@@ -40,15 +40,21 @@ namespace Module.fight
 
         public void ChangeState(CharacterState newState)
         {
+            _currentState = newState;
+            
             switch (_currentState)
             {
                 case CharacterState.Idle:
+                    Idle();
                     break;
                 case CharacterState.Attack:
+                    Attack();
                     break;
                 case CharacterState.Hurt:
+                    Hurt();
                     break;
                 case CharacterState.Die:
+                    Die();
                     break;
                 default:
                     Debug.Log("未知状态!");

@@ -37,9 +37,13 @@ namespace Module.fight
         {
             LevelInitData initData = args[0] as LevelInitData;
             
-            GameApp.EntityManager.SpawnBattleEntities(initData);//生成玩家与敌人等
-            
-            GameApp.ViewManager.Open(ViewType.FightingView, args);
+            GameApp.EntityManager.SpawnBattleEntities(initData, onSpawnBattleCallback);//生成玩家与敌人等
+        }
+
+        private void onSpawnBattleCallback()
+        {
+            GameApp.ViewManager.CloseAll();//生成完数据后关闭准备战斗界面，打开战斗界面
+            GameApp.ViewManager.Open(ViewType.FightingView);
         }
     }
 }

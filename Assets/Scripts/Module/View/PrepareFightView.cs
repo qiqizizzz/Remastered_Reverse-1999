@@ -98,9 +98,6 @@ namespace Module.View
             Debug.Log("进入战斗");
             ViewExtensions.LoadScene(this, SceneDefines.Fight,() =>
             {
-                //TODO:向战斗界面传递每个怪物的数据以及自身携带的角色的数据
-                GameApp.ViewManager.CloseAll();
-                
                 ApplyControllerFunc(ControllerType.Fight, EventDefines.OpenFightingView, GetLevelInitData());
             });
         }
