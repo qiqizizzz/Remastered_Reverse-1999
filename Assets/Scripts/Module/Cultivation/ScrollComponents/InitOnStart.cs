@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Module.Character.ScrollComponents
+namespace Module.Cultivation.ScrollComponents
 {
     [RequireComponent(typeof(UnityEngine.UI.LoopVerticalScrollRect))]
     [DisallowMultipleComponent]

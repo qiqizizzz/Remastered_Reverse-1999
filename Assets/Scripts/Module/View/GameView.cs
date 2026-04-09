@@ -44,7 +44,7 @@ namespace Module.View
 
         private void onOpenCharacterBtn()
         {
-            ApplyControllerFunc(ControllerType.Character, EventDefines.OpenCharacterView);
+            ApplyControllerFunc(ControllerType.CultivationController, EventDefines.OpenCharacterView);
             GameApp.ViewManager.Close(ViewId);
         }
     }

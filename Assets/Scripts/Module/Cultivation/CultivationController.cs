@@ -10,11 +10,11 @@ using Common.Defines;
 using MVC;
 using MVC.Controller;
 
-namespace Module.Character
+namespace Module.Cultivation
 {
-    public class CharacterController : BaseController
+    public class CultivationController : BaseController
     {
-        public CharacterController() : base()
+        public CultivationController() : base()
         {
             GameApp.ViewManager.Register(ViewType.CharacterView, new ViewInfo()
             {

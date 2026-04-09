@@ -15,9 +15,9 @@ using Module.GameUI;
 using Module.Inventory;
 using Module.level;
 using Module.Loading;
+using Module.Cultivation;
 using MVC;
 using UnityEngine;
-using CharacterController = Module.Character.CharacterController;
 
 namespace DefaultNamespace
 {
@@ -81,7 +81,7 @@ namespace DefaultNamespace
             GameApp.ControllerManager.Register(ControllerType.Chat, new ChattingController());
             GameApp.ControllerManager.Register(ControllerType.Level, new LevelController());
             GameApp.ControllerManager.Register(ControllerType.Inventory, new InventoryController());
-            GameApp.ControllerManager.Register(ControllerType.Character, new CharacterController());
+            GameApp.ControllerManager.Register(ControllerType.CultivationController, new CultivationController());
             GameApp.ControllerManager.Register(ControllerType.Fight, new FightController());
         }
         

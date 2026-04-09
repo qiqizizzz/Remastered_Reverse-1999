@@ -11,7 +11,7 @@ using Data.card;
 using TMPro;
 using UnityEngine;
 
-namespace Module.Character.ScrollComponents
+namespace Module.Cultivation.ScrollComponents
 {
     public class CharacterCardItem : MonoBehaviour
     {
