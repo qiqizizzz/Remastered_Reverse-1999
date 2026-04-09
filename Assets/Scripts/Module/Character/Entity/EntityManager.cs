@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using Data.level;
 using UnityEngine;
 
-namespace Module.fight
+namespace Module.Character
 {
     public class EntityManager
     {

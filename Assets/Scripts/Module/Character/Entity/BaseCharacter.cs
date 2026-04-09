@@ -9,7 +9,7 @@
 using Data.card;
 using UnityEngine;
 
-namespace Module.fight
+namespace Module.Character
 {
     /// <summary>
     /// 角色状态

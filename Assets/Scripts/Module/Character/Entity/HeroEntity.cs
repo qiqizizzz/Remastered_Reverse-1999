@@ -6,7 +6,7 @@
 * └──────────────────────────────────┘
 */
 
-namespace Module.fight
+namespace Module.Character
 {
     public class HeroEntity : BaseCharacter
     {

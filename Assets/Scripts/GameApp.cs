@@ -9,6 +9,7 @@
 using Common;
 using Config;
 using DefaultNamespace;
+using Module.Character;
 using Module.fight;
 using Module.Timer;
 using MVC;
