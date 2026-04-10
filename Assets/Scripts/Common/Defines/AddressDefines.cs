@@ -34,6 +34,9 @@ namespace Common.Defines
         public static readonly string Data_LoadingTextData = "Data/LoadingTextData";
         public static readonly string Data_GameConfigDatabase = "Data/GameConfigDatabase";
         
+        //Character角色
+        public static readonly string Character_Hero = "Character/Hero_";
+        
         //Audio音频
         public static readonly string Audio_BGM_Game = "Audio/Bgm_Game";
     }

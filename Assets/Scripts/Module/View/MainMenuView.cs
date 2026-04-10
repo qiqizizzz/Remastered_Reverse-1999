@@ -176,6 +176,7 @@ namespace Module.View
             GameApp.ViewManager.Close(ViewType.MainMenuView);
             ViewExtensions.LoadScene(this, SceneDefines.Game,(() =>
             {
+                GameApp.ViewManager.CloseAll();
                 GameApp.ViewManager.Open(ViewType.GameView);
             }));
             

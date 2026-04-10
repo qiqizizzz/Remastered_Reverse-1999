@@ -79,12 +79,16 @@ namespace Module.GameUI
         //打开主要面板
         private void onOpenGameView(System.Object[] args)
         {
+            GameApp.ViewManager.CloseAll();
+            
             GameApp.ViewManager.Open(ViewType.GameView, args);
         }
 
         //打开主菜单界面
         private void onOpenMainMenuView(System.Object[] args)
         {
+            GameApp.ViewManager.CloseAll();
+            
             GameApp.ViewManager.Open(ViewType.MainMenuView, args);
         }
 

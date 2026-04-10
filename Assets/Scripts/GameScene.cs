@@ -25,23 +25,28 @@ namespace DefaultNamespace
     {
         public Texture2D commonCursor;// 鼠标指针图片
         private float dt;
-        private static bool isLoaded = false;
+        private static GameScene _instance;
         private bool isAppInitialized = false; 
         
         private void Awake()
         {
-            if(isLoaded) Destroy(gameObject);
-            else
+            if (_instance != null && _instance != this)
             {
-                isLoaded = true;
-                DontDestroyOnLoad(gameObject);
-                GameApp.Instance.Init();
-                Application.runInBackground = true;
+                Destroy(gameObject);
+                return;
             }
+
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+            GameApp.Instance.Init();
+            Application.runInBackground = true;
+            
         }
 
         private async void Start()
         {
+            if(_instance != this) return;
+            
             Cursor.SetCursor(commonCursor, Vector2.zero, CursorMode.Auto);
             
             await RegisterConfigs();
@@ -63,7 +68,8 @@ namespace DefaultNamespace
         
         private void OnDestroy()
         {
-            GameApp.Instance.Destroy();
+            if(_instance == this)
+                GameApp.Instance.Destroy();
         }
 
         //连接服务器

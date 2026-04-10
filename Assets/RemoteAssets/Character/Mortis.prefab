@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5445356951893091581}
   - component: {fileID: 8883320331839133567}
   m_Layer: 0
-  m_Name: Hero
+  m_Name: Mortis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

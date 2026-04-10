@@ -28,7 +28,8 @@ namespace Module.Loading
             {
                 PrefabName = AddressDefines.UI_LoadingView,
                 parentTf = GameApp.ViewManager.canvasTf,
-                controller = this
+                controller = this,
+                Sorting_Order = 999
             });
             //ToDo：开始加载的LoadingView - StartLoadingView
             
@@ -66,7 +67,6 @@ namespace Module.Loading
             GameApp.TimerManager.Register(delayTime, delegate()
             {
                 GetModel<LoadingModel>().callback?.Invoke();
-                GameApp.ViewManager.Close(ViewType.LoadingView);
             });
         }
 

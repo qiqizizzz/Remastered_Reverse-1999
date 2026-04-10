@@ -77,12 +77,17 @@ namespace Module.Character
             {
                 _skeAnim.AnimationState.Complete -= onAnimComplete;
                 _skeAnim.AnimationState.Event -= onAnimEvent;
+                
+                Destroy(gameObject);
             }
         }
 
         public void Init(CharacterData data)
         {
             _characterData = data;
+
+            gameObject.name = _characterData.Name;
+            
             ChangeState(CharacterStateType.Idle);
         }
         

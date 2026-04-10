@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using Spine.Unity;
 using UnityEngine;
 
 namespace Data.card
@@ -62,18 +63,14 @@ namespace Data.card
     [CreateAssetMenu(fileName = "NewCharacterData", menuName = "数据配置/Data/Character")]
     public class CharacterData : ScriptableObject
     {
+        [Header("基本信息")]
         public int Id;//角色id
         public string Name;//角色名字
         public CharacterType CharacterType;//角色种类
         public InspirationType InspirationType;//角色的灵感种类
         
+        [Header("属性与卡牌")]
         public Property Property;//角色属性
-
         public List<int> Cards;//角色拥有的卡牌(一张大招牌和两张普通牌)
-
-        public CharacterData()
-        {
-            
-        }
     }
 }
