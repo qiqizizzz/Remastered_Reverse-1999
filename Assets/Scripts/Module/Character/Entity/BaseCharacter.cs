@@ -6,80 +6,131 @@
 * └──────────────────────────────────┘
 */
 
+using System;
+using System.Collections.Generic;
 using Data.card;
+using Module.Character.Components;
+using Spine;
+using Spine.Unity;
 using UnityEngine;
+using Event = Spine.Event;
 
 namespace Module.Character
 {
     /// <summary>
     /// 角色状态
     /// </summary>
-    public enum CharacterState
+    public enum CharacterStateType
     {
         Idle, //待机
         Attack, //攻击
         Hurt, //受伤
         Die //死亡
     }
+
+    /// <summary>
+    /// 动画配置类
+    /// </summary>
+    [Serializable]
+    public class AnimationConfig
+    {
+        [SpineAnimation] public string IdleAnim;
+        [SpineAnimation] public string AttackAnim;
+        [SpineAnimation] public string HurtAnim;
+        [SpineAnimation] public string DieAnim;
+    }
     
     public class BaseCharacter : MonoBehaviour
     {
-        private CharacterData _characterData;
-        private CharacterState _currentState;
+        protected CharacterData _characterData;
+        [SerializeField]protected SkeletonAnimation _skeAnim;
 
-        public BaseCharacter()
+        [Header("状态相关")]
+        private Dictionary<CharacterStateType, BaseCharacterState> _stateMachine;
+        private BaseCharacterState _currentState;
+        public CharacterStateType CurrentStateType;
+
+        [Header("动画映射")] 
+        public AnimationConfig AnimConfig;
+
+        protected virtual void Awake()
         {
+            _skeAnim = GetComponentInChildren<SkeletonAnimation>();
             
-        }
-        
-        public BaseCharacter(CharacterData characterData)
-        {
-            _characterData = characterData;
-            _currentState = CharacterState.Idle;
+            InitStateMachine();
         }
 
-        public void ChangeState(CharacterState newState)
+        protected virtual void Start()
         {
-            _currentState = newState;
-            
-            switch (_currentState)
+            _skeAnim.AnimationState.Complete += onAnimComplete;
+            _skeAnim.AnimationState.Event += onAnimEvent;
+        }
+
+        protected virtual void Update()
+        {
+            _currentState?.OnUpdate();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            if (_skeAnim != null)
             {
-                case CharacterState.Idle:
-                    Idle();
-                    break;
-                case CharacterState.Attack:
-                    Attack();
-                    break;
-                case CharacterState.Hurt:
-                    Hurt();
-                    break;
-                case CharacterState.Die:
-                    Die();
-                    break;
-                default:
-                    Debug.Log("未知状态!");
-                    break;
+                _skeAnim.AnimationState.Complete -= onAnimComplete;
+                _skeAnim.AnimationState.Event -= onAnimEvent;
             }
         }
 
-        public virtual void Idle()
+        public void Init(CharacterData data)
         {
-            //TODO:播放动画
+            _characterData = data;
+            ChangeState(CharacterStateType.Idle);
+        }
+        
+        public void ChangeState(CharacterStateType newStateType)
+        {
+            if(CurrentStateType == CharacterStateType.Die) return;
+            
+            _currentState?.OnExit();
+            
+            //切换状态
+            CurrentStateType = newStateType;
+            _currentState = _stateMachine[newStateType];
+            
+            _currentState?.OnEnter();
         }
 
-        public virtual void Attack()
+        public void PlayAnim(string animName, bool loop = false, int trackIndex = 0)
         {
-            //TODO:播放动画
+            if (string.IsNullOrEmpty(animName))
+            {
+                Debug.LogWarning($"{gameObject.name} 尝试播放一个空的动画");
+                return;
+            }
+            
+            _skeAnim.AnimationState.SetAnimation(trackIndex, animName, loop);
+        }
+        
+        private void InitStateMachine()
+        {
+            _stateMachine = new Dictionary<CharacterStateType, BaseCharacterState>
+            {
+                { CharacterStateType.Idle, new IdleState(this) },
+                { CharacterStateType.Attack, new AttackState(this) },
+                { CharacterStateType.Hurt, new HurtState(this) },
+                { CharacterStateType.Die, new DieState(this) }
+            };
         }
 
-        public virtual void Hurt()
+        #region spine事件
+        private void onAnimComplete(TrackEntry trackEntry)
         {
-            //TODO:播放动画
+            _currentState?.OnAnimationComplete(trackEntry.Animation.Name);
         }
 
-        public virtual void Die()
+        private void onAnimEvent(TrackEntry trackEntry, Event e)
         {
-            ////TODO:播放动画
+            _currentState?.OnAnimationEvent(e.Data.Name);
         }
+        #endregion
     }
 }

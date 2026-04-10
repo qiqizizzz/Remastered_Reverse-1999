@@ -7,6 +7,8 @@
 */
 
 
+using Data.card;
+
 namespace Module.Character
 {
     public class EnemyEntity : BaseCharacter

@@ -1,17 +1,19 @@
 ﻿/*
 * ┌──────────────────────────────────┐
-* │  描    述: 英雄实体 
-* │  类    名: HeroEntity.cs       
+* │  描    述:                       
+* │  类    名: AttackState.cs       
 * │  创    建: By qiqizizzz
 * └──────────────────────────────────┘
 */
 
-using Data.card;
-
-namespace Module.Character
+namespace Module.Character.Components
 {
-    public class HeroEntity : BaseCharacter
+    public class AttackState : BaseCharacterState
     {
+        public AttackState(BaseCharacter character) : base(character)
+        {
+        }
+        
         
     }
 }

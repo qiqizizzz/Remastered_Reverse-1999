@@ -1,17 +1,17 @@
 ﻿/*
 * ┌──────────────────────────────────┐
-* │  描    述: 英雄实体 
-* │  类    名: HeroEntity.cs       
+* │  描    述:                       
+* │  类    名: HurtState.cs       
 * │  创    建: By qiqizizzz
 * └──────────────────────────────────┘
 */
 
-using Data.card;
-
-namespace Module.Character
+namespace Module.Character.Components
 {
-    public class HeroEntity : BaseCharacter
+    public class HurtState : BaseCharacterState
     {
-        
+        public HurtState(BaseCharacter character) : base(character)
+        {
+        }
     }
 }
