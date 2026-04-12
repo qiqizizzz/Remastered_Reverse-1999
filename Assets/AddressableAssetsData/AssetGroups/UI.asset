@@ -77,6 +77,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ac72b1c888e19d4eb97b603f899b281
+    m_Address: UI_small/CommonCard
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aa785256ad75cda4ca1d2570c494b174
     m_Address: UI/SettingView
     m_ReadOnly: 0

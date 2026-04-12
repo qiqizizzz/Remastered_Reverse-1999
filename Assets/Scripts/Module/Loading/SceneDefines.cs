@@ -10,8 +10,8 @@ namespace Module.Loading
 {
     public static class SceneDefines
     {
-        public static readonly string StartMenu = "start_menu";
-        public static readonly string Game = "game";
-        public static readonly string Fight = "fight";
+        public const string StartMenu = "start_menu";
+        public const string Game = "game";
+        public const string Fight = "fight";
     }
 }

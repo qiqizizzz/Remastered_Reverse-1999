@@ -11,34 +11,36 @@ namespace Common.Defines
     public static class AddressDefines
     {
         //UI预制体
-        public static readonly string UI_LoadingView = "UI/LoadingView";
-        public static readonly string UI_GameView = "UI/GameView";
-        public static readonly string UI_MainMenuView = "UI/MainMenuView";
-        public static readonly string UI_MoreOptionsView = "UI/MoreOptionsView";
-        public static readonly string UI_FriendsView = "UI/ChatView";
-        public static readonly string UI_TipBoxView = "UI/TipBoxView";
-        public static readonly string UI_NoticeView = "UI/NoticeView";
-        public static readonly string UI_SettingView = "UI/SettingView";
-        public static readonly string UI_LevelView = "UI/LevelView";
-        public static readonly string UI_CharacterView = "UI/CharacterView";
-        public static readonly string UI_PrepareFightView = "UI/PrepareFightView";
-        public static readonly string UI_FightingView = "UI/FightingView";
-        public static readonly string UI_PauseFightView = "UI/PauseFightView";
+        public const string UI_LoadingView = "UI/LoadingView";
+        public const string UI_GameView = "UI/GameView";
+        public const string UI_MainMenuView = "UI/MainMenuView";
+        public const string UI_MoreOptionsView = "UI/MoreOptionsView";
+        public const string UI_FriendsView = "UI/ChatView";
+        public const string UI_TipBoxView = "UI/TipBoxView";
+        public const string UI_NoticeView = "UI/NoticeView";
+        public const string UI_SettingView = "UI/SettingView";
+        public const string UI_LevelView = "UI/LevelView";
+        public const string UI_CharacterView = "UI/CharacterView";
+        public const string UI_PrepareFightView = "UI/PrepareFightView";
+        public const string UI_FightingView = "UI/FightingView";
+        public const string UI_PauseFightView = "UI/PauseFightView";
         
         //UI_small预制体
-        public static readonly string UI_Small_Btn_friTemp = "UI_small/Btn_friTemp";
-        public static readonly string UI_Small_chatBox_other = "UI_small/chatBox_other";
-        public static readonly string UI_Small_chatBox_me = "UI_small/chatBox_me";
-        public static readonly string UI_small_Box_searchedUser ="UI_small/Box_searchedUser";
+        public const string UI_Small_Btn_friTemp = "UI_small/Btn_friTemp";
+        public const string UI_Small_chatBox_other = "UI_small/chatBox_other";
+        public const string UI_Small_chatBox_me = "UI_small/chatBox_me";
+        public const string UI_small_Box_searchedUser ="UI_small/Box_searchedUser";
+        public const string UI_small_CommonCard = "UI_small/CommonCard";
+        public const string UI_small_UltimateCard = "UI_small/UltimateCard";
         
         //Data数据
-        public static readonly string Data_LoadingTextData = "Data/LoadingTextData";
-        public static readonly string Data_GameConfigDatabase = "Data/GameConfigDatabase";
+        public const string Data_LoadingTextData = "Data/LoadingTextData";
+        public const string Data_GameConfigDatabase = "Data/GameConfigDatabase";
         
         //Character角色
-        public static readonly string Character_Hero = "Character/Hero_";
+        public const string Character_Hero = "Character/Hero_";
         
         //Audio音频
-        public static readonly string Audio_BGM_Game = "Audio/Bgm_Game";
+        public const string Audio_BGM_Game = "Audio/Bgm_Game";
     }
 }
