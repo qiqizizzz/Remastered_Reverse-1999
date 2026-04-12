@@ -42,6 +42,7 @@ namespace Module.fight
         {
             RegisterFunc(EventDefines.OpenFightingView, onOpenFightView);
             RegisterFunc(EventDefines.OpenPauseFightView, onOpenPauseFightView);
+            RegisterFunc(EventDefines.FightingViewReady,onFightingViewReady);
         }
         
         private void onOpenFightView(System.Object[] args)
@@ -56,16 +57,19 @@ namespace Module.fight
             GameApp.ViewManager.Open(ViewType.PauseFightView);
         }
         
+        private void onFightingViewReady(System.Object[] args)
+        {
+            StartFirstRound();
+        }
+        
         private void onSpawnBattleCallback()
         {
             GameApp.CardManager.InitCards(_currentInitData);
 
             GameApp.ViewManager.CloseAll();
             GameApp.ViewManager.Open(ViewType.FightingView);
-            
-            StartFirstRound();
         }
-
+        
         private void StartFirstRound()
         {
             GameApp.CardManager.DrawCard(8);

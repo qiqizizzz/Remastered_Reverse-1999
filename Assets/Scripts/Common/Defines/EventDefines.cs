@@ -28,6 +28,7 @@ namespace Common.Defines
         public static readonly string UpdateChatHistory = "UpdateChatHistory";
         public static readonly string UpdateSearchedFriends = "UpdateSearchedFriends";
         public static readonly string UpdateHandCards = "UpdateHandCards";
+        public static readonly string FightingViewReady = "FightingViewReady";
         
         // 网络事件
         public static readonly string SendPrivateMessage = "SendPrivateMessage";

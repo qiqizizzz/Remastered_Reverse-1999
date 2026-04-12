@@ -22,8 +22,6 @@ namespace Module.View
         protected override void OnAwake()
         {
             cardDeckTf = Find<Transform>("CardDeck");
-            
-            
         }
 
         protected override void OnStart()
@@ -31,6 +29,8 @@ namespace Module.View
             Find<Button>("OperationBtns/Btn_pause").onClick.AddListener(onPauseBtn);
             
             Controller.RegisterFunc(EventDefines.UpdateHandCards, onUpdateHandCards);
+            
+            ApplyFunc(EventDefines.FightingViewReady);
         }
         
         private void onPauseBtn()
@@ -44,6 +44,11 @@ namespace Module.View
             List<BattleCard> handCards = args[0] as List<BattleCard>;
             
             Debug.Log("渲染手牌UI，当前手牌数量：" + handCards.Count);
+
+            foreach (var cards in handCards)
+            {
+                Debug.Log(cards.BaseData.Name + "  " + cards.BaseData.CardType);
+            }
             
             //TODO：区分首次生成手牌UI和更新手牌UI
             
