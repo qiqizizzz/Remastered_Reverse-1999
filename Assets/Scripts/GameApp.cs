@@ -11,6 +11,7 @@ using Config;
 using DefaultNamespace;
 using Module.Character;
 using Module.fight;
+using Module.fight.CardMgr;
 using Module.Timer;
 using MVC;
 using Network;
@@ -27,7 +28,8 @@ public class GameApp : Singleton<GameApp>
     public static SoundManager SoundManager;
     public static ConfigManager ConfigManager;
     public static EntityManager EntityManager;
-        
+    public static CardManager CardManager;
+    
     public override void Init()
     {
         ControllerManager = new ControllerManager();
@@ -39,6 +41,7 @@ public class GameApp : Singleton<GameApp>
         SoundManager = new SoundManager();
         ConfigManager = new ConfigManager();
         EntityManager = new EntityManager();
+        CardManager = new CardManager();
     }
 
     public override void Update(float dt)

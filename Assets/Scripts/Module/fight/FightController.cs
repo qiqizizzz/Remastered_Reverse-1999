@@ -16,6 +16,8 @@ namespace Module.fight
 {
     public class FightController : BaseController
     {
+        private LevelInitData _currentInitData;
+        
         public FightController() : base()
         {
             GameApp.ViewManager.Register(ViewType.FightingView, new ViewInfo()
@@ -44,9 +46,9 @@ namespace Module.fight
         
         private void onOpenFightView(System.Object[] args)
         {
-            LevelInitData initData = args[0] as LevelInitData;
+            _currentInitData = args[0] as LevelInitData;
             
-            GameApp.EntityManager.SpawnBattleEntities(initData, onSpawnBattleCallback);//生成玩家与敌人等
+            GameApp.EntityManager.SpawnBattleEntities(_currentInitData, onSpawnBattleCallback);//生成玩家与敌人等
         }
 
         private void onOpenPauseFightView(System.Object[] args)
@@ -56,8 +58,12 @@ namespace Module.fight
         
         private void onSpawnBattleCallback()
         {
-            GameApp.ViewManager.CloseAll();//生成完数据后关闭准备战斗界面，打开战斗界面
+            GameApp.CardManager.InitCards(_currentInitData);
+
+            GameApp.ViewManager.CloseAll();
             GameApp.ViewManager.Open(ViewType.FightingView);
+            
+            //TODO:开始第一回合,发牌逻辑
         }
     }
 }
