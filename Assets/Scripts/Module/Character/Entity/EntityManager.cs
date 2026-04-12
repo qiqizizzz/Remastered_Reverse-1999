@@ -20,6 +20,16 @@ namespace Module.Character
     {
         public List<HeroEntity> AliveHeroes { get; private set; }
         public List<EnemyEntity> AliveEnemies { get; private set; }
+        
+        private Dictionary<int, Vector3> heroSpawnPositions = new Dictionary<int, Vector3>()
+        {
+            {1, new Vector3(7.5f, -1.5f, 0)},
+            {2, new Vector3(6, -1.5f, 0)},
+            {3, new Vector3(4.5f, -1.5f, 0)},
+            {4, new Vector3(3f, -1.5f, 0)}
+        };
+        
+        private int hasSpawnedHeroCount = 0;//已生成的英雄数量
 
         public EntityManager()
         {
@@ -34,7 +44,7 @@ namespace Module.Character
             
             List<CharacterData> heroDataList = levelInitData.Characters;
 
-            #region 生成角色
+            #region 生成英雄
             int targetSpawnCount = 0;
             for (int i = 0; i < heroDataList.Count; i++)
             {
@@ -70,6 +80,8 @@ namespace Module.Character
             }
             #endregion
             
+            //TODO：生成英雄的位置需要设置
+            
             //TODO：生成Enemy
             
             
@@ -78,7 +90,8 @@ namespace Module.Character
 
         public void ClearBattleEntities()
         {
-            //TODO: 这里应该销毁之前生成的实体对象，目前先清空列表
+            //TODO：销毁玩家与敌人等
+            hasSpawnedHeroCount = 0;
             
             AliveHeroes.Clear();
             AliveEnemies.Clear();
@@ -88,6 +101,7 @@ namespace Module.Character
         {
             HeroEntity heroEntity = go.GetComponent<HeroEntity>();
             heroEntity.Init(characterData);
+            go.transform.position = heroSpawnPositions[++hasSpawnedHeroCount];//设置生成位置
             
             AliveHeroes.Add(heroEntity);
         }

@@ -23,6 +23,7 @@ namespace Common.Defines
         public static readonly string UI_CharacterView = "UI/CharacterView";
         public static readonly string UI_PrepareFightView = "UI/PrepareFightView";
         public static readonly string UI_FightingView = "UI/FightingView";
+        public static readonly string UI_PauseFightView = "UI/PauseFightView";
         
         //UI_small预制体
         public static readonly string UI_Small_Btn_friTemp = "UI_small/Btn_friTemp";

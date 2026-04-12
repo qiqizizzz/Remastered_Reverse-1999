@@ -663,6 +663,69 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: com_ui_Btn_detail
+      rect:
+        serializedVersion: 2
+        x: 1295
+        y: 1386
+        width: 65
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08606f9c931429a47a96f29aee019092
+      internalID: -17029964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: com_ui_star_white
+      rect:
+        serializedVersion: 2
+        x: 1389
+        y: 1595
+        width: 58
+        height: 69
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52fbf55f0a87dc4459c348973a554df2
+      internalID: -136015781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: com_ui_exit
+      rect:
+        serializedVersion: 2
+        x: 1859
+        y: 1089
+        width: 47
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d830be30e06049429358459a3e4ba4a
+      internalID: -1474991207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -676,6 +739,7 @@ TextureImporter:
     nameFileIdTable:
       com_ui_0: -1891347711
       com_ui_1: -1499040623
+      com_ui_Btn_detail: -17029964
       com_ui_arrow_selected: -1094372115
       com_ui_bg1: -2084524231
       com_ui_blackBg: -1222517243
@@ -686,6 +750,7 @@ TextureImporter:
       com_ui_confirmBtn: 628217079
       com_ui_detail_bg: 1429241474
       com_ui_detail_bg2: 2102298370
+      com_ui_exit: -1474991207
       com_ui_friendBtn1: -568135472
       com_ui_friendBtn2: -1426473658
       com_ui_id: 801379778
@@ -700,6 +765,7 @@ TextureImporter:
       com_ui_sq_orange: 1513560730
       com_ui_sq_white: -696113134
       com_ui_star: 1756869923
+      com_ui_star_white: -136015781
       com_ui_triangle: -1273401881
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0

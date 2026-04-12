@@ -12,11 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
   m_Name: Character
   m_EditorClassIdentifier: 
-  m_GroupName: Packed Assets
+  m_GroupName: Character
   m_Data:
     m_SerializedData: []
   m_GUID: 246631ec1ff854c419c2c7f75fcbb760
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: ecc792855daf6354997f855716f35cfc
+    m_Address: Character/Hero_Mortis
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72da14b152f7a2d45b28f7d67684459b, type: 2}
   m_SchemaSet:

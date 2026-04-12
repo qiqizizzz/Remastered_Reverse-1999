@@ -25,12 +25,21 @@ namespace Module.fight
                 parentTf = GameApp.ViewManager.canvasTf
             });
             
+            GameApp.ViewManager.Register(ViewType.PauseFightView, new ViewInfo()
+            {
+                PrefabName =  AddressDefines.UI_PauseFightView,
+                controller = this,
+                parentTf = GameApp.ViewManager.canvasTf,
+                Sorting_Order = 10
+            });
+            
             InitModuleEvent();
         }
 
         public override void InitModuleEvent()
         {
             RegisterFunc(EventDefines.OpenFightingView, onOpenFightView);
+            RegisterFunc(EventDefines.OpenPauseFightView, onOpenPauseFightView);
         }
         
         private void onOpenFightView(System.Object[] args)
@@ -40,6 +49,11 @@ namespace Module.fight
             GameApp.EntityManager.SpawnBattleEntities(initData, onSpawnBattleCallback);//生成玩家与敌人等
         }
 
+        private void onOpenPauseFightView(System.Object[] args)
+        {
+            GameApp.ViewManager.Open(ViewType.PauseFightView);
+        }
+        
         private void onSpawnBattleCallback()
         {
             GameApp.ViewManager.CloseAll();//生成完数据后关闭准备战斗界面，打开战斗界面

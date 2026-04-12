@@ -82,11 +82,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ecc792855daf6354997f855716f35cfc
-    m_Address: Assets/RemoteAssets/Character/Hero.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f59c0b67639feb64989794b7a37b3daf
     m_Address: UI/NoticeView
     m_ReadOnly: 0
