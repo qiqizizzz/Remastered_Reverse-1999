@@ -72,5 +72,11 @@ namespace Data.card
         [Header("属性与卡牌")]
         public Property Property;//角色属性
         public List<int> Cards;//角色拥有的卡牌(一张大招牌和两张普通牌)
+        
+        public List<CardData> GetAllCards()
+        {
+            return GameApp.ConfigManager.GetCharacterCards(Id);
+        }
+        
     }
 }

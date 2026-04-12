@@ -63,7 +63,14 @@ namespace Module.fight
             GameApp.ViewManager.CloseAll();
             GameApp.ViewManager.Open(ViewType.FightingView);
             
-            //TODO:开始第一回合,发牌逻辑
+            StartFirstRound();
+        }
+
+        private void StartFirstRound()
+        {
+            GameApp.CardManager.DrawCard(8);
+            
+            ApplyFunc(EventDefines.UpdateHandCards, GameApp.CardManager.GetHandCards());
         }
     }
 }
