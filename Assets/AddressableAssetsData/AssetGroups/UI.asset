@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 1f1b2c9ed79f64541b8af8b66f1663fc
   m_SerializeEntries:
+  - m_GUID: 0b76554fc65b5ae48b7b696957f647c2
+    m_Address: UI/PauseFightView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 19213d6ec3bf15e4ca5c576a16bb211e
     m_Address: UI/ChatView
     m_ReadOnly: 0

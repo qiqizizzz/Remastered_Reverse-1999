@@ -38,6 +38,8 @@ namespace Module.fight.CardMgr
 
             foreach (var character in initData.Characters)
             {
+                if(character == null) continue;
+                
                 List<CardData> characterCards = character.GetAllCards();
 
                 foreach (var card in characterCards)

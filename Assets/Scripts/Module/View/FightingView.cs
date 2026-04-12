@@ -6,7 +6,9 @@
 * └────────────────────────────────────────────────────┘
 */
 
+using System.Collections.Generic;
 using Common.Defines;
+using Module.fight.Component;
 using MVC.View;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +22,8 @@ namespace Module.View
         protected override void OnAwake()
         {
             cardDeckTf = Find<Transform>("CardDeck");
+            
+            
         }
 
         protected override void OnStart()
@@ -37,6 +41,11 @@ namespace Module.View
         private void onUpdateHandCards(params object[] args)
         {
             //args[0] 手牌列表
+            List<BattleCard> handCards = args[0] as List<BattleCard>;
+            
+            Debug.Log("渲染手牌UI，当前手牌数量：" + handCards.Count);
+            
+            //TODO：区分首次生成手牌UI和更新手牌UI
             
             //从左侧开始依次生成卡牌预制体，放在cardDeckTf下(根据数量生成,可能还有没打完的卡牌)
             //这个应该只是增加卡牌的更新UI函数,后面拖动卡牌/合成卡牌/发牌还有另外的逻辑吧，这应该怎么做啊？

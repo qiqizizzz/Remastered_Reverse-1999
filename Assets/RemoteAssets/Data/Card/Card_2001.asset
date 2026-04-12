@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardType: 0
   Id: 2001
-  Name: 
-  Description: 
-  OwnerId: 0
+  Name: "Mortis\u7684\u5361\u724C1"
+  Description: "Mortis\u7684\u5361\u724C1"
+  OwnerId: 1001
   Effects: []
   CardSprite: {fileID: 0}
   CardEffectPrefab: {fileID: 0}
