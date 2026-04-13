@@ -21,11 +21,11 @@ namespace Module.fight.Component
         public BattleCardData CardData { get; private set; }
 
         [Header("动画参数相关")]
-        private readonly float _cardWidth = 150f;
-        private readonly float _cardSpacing = 20f;
-        private readonly float _startX = -600f;
-        private readonly float _moveDuration = 0.4f;
-        private Vector2 _spawnPos = new Vector2(1000f, 0);
+        private readonly float _cardWidth = 180f;
+        private readonly float _cardSpacing = 10f;
+        private readonly float _startX = 90f;
+        private readonly float _moveDuration = 1f;
+        private Vector2 _spawnPos = new Vector2(-1600f, 0);
 
         [Header("UI组件")] 
         private RectTransform _rect;
@@ -75,9 +75,10 @@ namespace Module.fight.Component
             _rect.anchoredPosition = _spawnPos;//放置在初始发牌点
         }
 
-        public void MoveToIndex(int index, float delay = 0f)
+        public void MoveToIndex(int index,int totalCount ,float delay = 0f)
         {
-            float targetX = _startX + index * (_cardWidth + _cardSpacing);
+            SetVisible(true);
+            float targetX = -_startX - (totalCount - 1 - index) * (_cardWidth + _cardSpacing);
             Vector2 targetPos = new Vector2(targetX, 0);
 
             _rect.DOKill();

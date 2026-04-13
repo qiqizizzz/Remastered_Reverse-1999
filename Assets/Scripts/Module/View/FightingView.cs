@@ -88,40 +88,25 @@ namespace Module.View
             //args[0] 手牌列表->本轮新抽的牌
             List<BattleCardData> newCards = args[0] as List<BattleCardData>;
             
-            Debug.Log("渲染手牌UI，当前手牌数量：" + newCards.Count);
+            if(newCards == null) return;
 
-            int dealCount = 0;//记录发牌数量
-
-            foreach (var cardData in newCards)
+            for (int i = 0; i < _maxHandCardCount; i++)
             {
-                if (_activeCardItems.Count >= _maxHandCardCount)
-                {
-                    Debug.LogWarning("手牌已满，无法再添加新卡牌");
-                    break;
-                }
-                
-                UI_CommonCardItem freeItem = _cardPool.Find(item => !item.gameObject.activeSelf);
-                if (freeItem == null)
-                {
-                    Debug.LogError("没有可用的卡牌UI预制体了，无法显示新卡牌");
-                    break;
-                }
-                
-                freeItem.PrepareSpawn();
-                freeItem.InitCardUI(cardData);
-                _activeCardItems.Add(freeItem);
+                UI_CommonCardItem item = _cardPool[i];
 
-                dealCount++;
-            }
-            
-            //排列当前的手牌
-            for (int i = 0; i < _activeCardItems.Count; i++)
-            {
-                UI_CommonCardItem item = _activeCardItems[i];
-                bool isNewCard = i >= (_activeCardItems.Count - dealCount);
-                float delay = isNewCard ? (i - (_activeCardItems.Count - dealCount)) * 0.05f : 0f;//新加的牌有延迟
-
-                item.MoveToIndex(i, delay);
+                if (i < newCards.Count)
+                {
+                    bool isNewCard = !item.gameObject.activeSelf;
+                    if(isNewCard)
+                        item.PrepareSpawn();
+                    
+                    item.InitCardUI(newCards[i]);
+                    item.MoveToIndex(i, newCards.Count, delay: isNewCard ? i * 0.05f : 0f);
+                }
+                else
+                {
+                    item.HideCard();
+                }
             }
         }
     }
