@@ -29,6 +29,7 @@ namespace Common.Defines
         public const string UpdateSearchedFriends = "UpdateSearchedFriends";
         public const string UpdateHandCards = "UpdateHandCards";
         public const string FightingViewReady = "FightingViewReady";
+        public const string ExitLevel = "ExitLevel";
         
         // 网络事件
         public const string SendPrivateMessage = "SendPrivateMessage";

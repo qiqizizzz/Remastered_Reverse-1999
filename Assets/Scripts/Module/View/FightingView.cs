@@ -36,6 +36,7 @@ namespace Module.View
             Find<Button>("OperationBtns/Btn_pause").onClick.AddListener(onPauseBtn);
             
             Controller.RegisterFunc(EventDefines.UpdateHandCards, onUpdateHandCards);
+            Controller.RegisterFunc(EventDefines.ExitLevel, onExitLevel);
             
             PreLoadCardItem();
         }
@@ -48,6 +49,14 @@ namespace Module.View
                     ResManager.UnLoadInstance(item.gameObject);
             }
             _cardPool.Clear();
+        }
+
+        public override void Open(params object[] args)
+        {
+            SetVisible(true);
+            
+            if(_cardPool.Count == _maxHandCardCount)
+                ApplyFunc(EventDefines.FightingViewReady);
         }
 
         private void PreLoadCardItem()
@@ -83,6 +92,15 @@ namespace Module.View
             ApplyFunc(EventDefines.OpenPauseFightView);
         }
 
+        private void onExitLevel(params object[] args)
+        {
+            foreach (var item in _cardPool)
+            {
+                if (item != null)
+                    item.HideCard();
+            }
+        }
+        
         private void onUpdateHandCards(params object[] args)
         {
             //args[0] 手牌列表->本轮新抽的牌

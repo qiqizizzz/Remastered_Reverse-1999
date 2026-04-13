@@ -29,6 +29,8 @@ namespace Module.View
         {
             GameApp.ViewManager.Open(ViewType.NoticeView,"是否退出当前战斗?", new Action(() =>
             {
+                ApplyFunc(EventDefines.ExitLevel);
+                
                 ViewExtensions.LoadScene(this, SceneDefines.Game,() =>
                 {
                     ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenGameView);
