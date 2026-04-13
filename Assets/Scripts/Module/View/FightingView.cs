@@ -7,6 +7,7 @@
 */
 
 using System.Collections.Generic;
+using Common;
 using Common.Defines;
 using Module.fight.Component;
 using MVC.View;
@@ -18,7 +19,13 @@ namespace Module.View
     public class FightingView : BaseView
     {
         private Transform cardDeckTf;
+        
+        private List<UI_CommonCardItem>  _cardPool = new List<UI_CommonCardItem>();
+        private List<UI_CommonCardItem> _activeCardItems = new List<UI_CommonCardItem>();
 
+        [Header("手牌区域相关")] 
+        private readonly int _maxHandCardCount = 8;
+        
         protected override void OnAwake()
         {
             cardDeckTf = Find<Transform>("CardDeck");
@@ -30,7 +37,45 @@ namespace Module.View
             
             Controller.RegisterFunc(EventDefines.UpdateHandCards, onUpdateHandCards);
             
-            ApplyFunc(EventDefines.FightingViewReady);
+            PreLoadCardItem();
+        }
+
+        protected override void OnDestroy()
+        {
+            foreach (var item in _cardPool)
+            {
+                if (item != null)
+                    ResManager.UnLoadInstance(item.gameObject);
+            }
+            _cardPool.Clear();
+        }
+
+        private void PreLoadCardItem()
+        {
+            int loadedCount = 0;
+            for (int i = 0; i < _maxHandCardCount; i++)
+            {
+                ResManager.InstantiateAsync(AddressDefines.UI_small_CommonCard, (go) =>
+                {
+                    if (go == null)
+                    {
+                        Debug.LogError("加载卡牌预制体失败");
+                        return;
+                    }
+
+                    go.transform.SetParent(cardDeckTf, false);
+                    UI_CommonCardItem item = go.GetComponent<UI_CommonCardItem>();
+                    
+                    item.SetVisible(false);
+                    _cardPool.Add(item);
+
+                    loadedCount++;
+                    if (loadedCount == _maxHandCardCount)
+                    {
+                        ApplyFunc(EventDefines.FightingViewReady);
+                    }
+                });
+            }
         }
         
         private void onPauseBtn()
@@ -40,20 +85,44 @@ namespace Module.View
 
         private void onUpdateHandCards(params object[] args)
         {
-            //args[0] 手牌列表
-            List<BattleCardData> handCards = args[0] as List<BattleCardData>;
+            //args[0] 手牌列表->本轮新抽的牌
+            List<BattleCardData> newCards = args[0] as List<BattleCardData>;
             
-            Debug.Log("渲染手牌UI，当前手牌数量：" + handCards.Count);
+            Debug.Log("渲染手牌UI，当前手牌数量：" + newCards.Count);
 
-            foreach (var cards in handCards)
+            int dealCount = 0;//记录发牌数量
+
+            foreach (var cardData in newCards)
             {
-                Debug.Log(cards.BaseData.Name + "  " + cards.BaseData.CardType);
+                if (_activeCardItems.Count >= _maxHandCardCount)
+                {
+                    Debug.LogWarning("手牌已满，无法再添加新卡牌");
+                    break;
+                }
+                
+                UI_CommonCardItem freeItem = _cardPool.Find(item => !item.gameObject.activeSelf);
+                if (freeItem == null)
+                {
+                    Debug.LogError("没有可用的卡牌UI预制体了，无法显示新卡牌");
+                    break;
+                }
+                
+                freeItem.PrepareSpawn();
+                freeItem.InitCardUI(cardData);
+                _activeCardItems.Add(freeItem);
+
+                dealCount++;
             }
             
-            //TODO：区分首次生成手牌UI和更新手牌UI
-            
-            //从左侧开始依次生成卡牌预制体，放在cardDeckTf下(根据数量生成,可能还有没打完的卡牌)
-            //这个应该只是增加卡牌的更新UI函数,后面拖动卡牌/合成卡牌/发牌还有另外的逻辑吧，这应该怎么做啊？
+            //排列当前的手牌
+            for (int i = 0; i < _activeCardItems.Count; i++)
+            {
+                UI_CommonCardItem item = _activeCardItems[i];
+                bool isNewCard = i >= (_activeCardItems.Count - dealCount);
+                float delay = isNewCard ? (i - (_activeCardItems.Count - dealCount)) * 0.05f : 0f;//新加的牌有延迟
+
+                item.MoveToIndex(i, delay);
+            }
         }
     }
 }

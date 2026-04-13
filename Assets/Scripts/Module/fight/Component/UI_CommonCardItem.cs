@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using Data.card;
+using DG.Tweening;
 using MVC.View;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,12 +20,21 @@ namespace Module.fight.Component
     {
         public BattleCardData CardData { get; private set; }
 
+        [Header("动画参数相关")]
+        private readonly float _cardWidth = 150f;
+        private readonly float _cardSpacing = 20f;
+        private readonly float _startX = -600f;
+        private readonly float _moveDuration = 0.4f;
+        private Vector2 _spawnPos = new Vector2(1000f, 0);
+
         [Header("UI组件")] 
+        private RectTransform _rect;
         private Image _icon;
         private List<CanvasGroup> _typeGroups = new List<CanvasGroup>();
         
         protected override void OnAwake()
         {
+            _rect = GetComponent<RectTransform>();
             _icon = Find<Image>("Img_card");
             
             _typeGroups.Add(Find<CanvasGroup>("type/Attack"));
@@ -57,5 +67,30 @@ namespace Module.fight.Component
                 _typeGroups[i].interactable = (i == index);
             }
         }
+
+        #region 表现与动画逻辑
+        public void PrepareSpawn()
+        {
+            SetVisible(false);
+            _rect.anchoredPosition = _spawnPos;//放置在初始发牌点
+        }
+
+        public void MoveToIndex(int index, float delay = 0f)
+        {
+            float targetX = _startX + index * (_cardWidth + _cardSpacing);
+            Vector2 targetPos = new Vector2(targetX, 0);
+
+            _rect.DOKill();
+            _rect.DOAnchorPos(targetPos, _moveDuration)
+                .SetEase(Ease.OutBack)
+                .SetDelay(delay);
+        }
+
+        public void HideCard()
+        {
+            _rect.DOKill();
+            SetVisible(false);
+        }
+        #endregion
     }
 }
