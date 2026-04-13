@@ -46,7 +46,7 @@ namespace MVC.View
 
         protected virtual void OnDestroy()
         {
-            
+            m_cache_gos.Clear();
         }
 
         protected virtual void OnAwake()

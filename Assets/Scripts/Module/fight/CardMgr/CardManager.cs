@@ -19,15 +19,15 @@ namespace Module.fight.CardMgr
         private readonly int singleCardMaxLimit = 3;//单张牌的最大限制数量
         
         [Header("牌堆")]
-        private List<BattleCard> drawPile; //抽牌堆
-        private List<BattleCard> handCards; //手牌
-        private List<BattleCard> discardPile; //弃牌堆
+        private List<BattleCardData> drawPile; //抽牌堆
+        private List<BattleCardData> handCards; //手牌
+        private List<BattleCardData> discardPile; //弃牌堆
 
         public CardManager()
         {
-            drawPile = new List<BattleCard>();
-            handCards = new List<BattleCard>();
-            discardPile = new List<BattleCard>();
+            drawPile = new List<BattleCardData>();
+            handCards = new List<BattleCardData>();
+            discardPile = new List<BattleCardData>();
         }
         
         public void InitCards(LevelInitData initData)
@@ -48,7 +48,7 @@ namespace Module.fight.CardMgr
                     
                     for (int i = 0; i < singleCardMaxLimit; i++)
                     {
-                        drawPile.Add(new BattleCard(card));
+                        drawPile.Add(new BattleCardData(card));
                     }
                 }
             }
@@ -59,7 +59,7 @@ namespace Module.fight.CardMgr
         }
         
         //Fisher–Yates 洗牌算法
-        public void ShuffleCard(List<BattleCard> pile)
+        public void ShuffleCard(List<BattleCardData> pile)
         {
             for (int i = 0; i < pile.Count; i++)
             {
@@ -86,14 +86,14 @@ namespace Module.fight.CardMgr
                     ShuffleCard(drawPile);
                 }
                 
-                BattleCard drawnCard = drawPile[^1];
+                BattleCardData drawnCard = drawPile[^1];
                 drawPile.RemoveAt(drawPile.Count - 1);
                 handCards.Add(drawnCard);
             }
         }
         
         //弃牌
-        public void DiscardCard(BattleCard card)
+        public void DiscardCard(BattleCardData card)
         {
             if (card.BaseData.CardType == CardType.Ultimate)
                 return;
@@ -103,7 +103,7 @@ namespace Module.fight.CardMgr
         }
 
         #region 工具函数
-        public List<BattleCard> GetHandCards()
+        public List<BattleCardData> GetHandCards()
         {
             return handCards;
         }

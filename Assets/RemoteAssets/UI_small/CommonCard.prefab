@@ -248,6 +248,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4846848108391913685}
+  - component: {fileID: 463036984248317049}
   m_Layer: 0
   m_Name: CommonCard
   m_TagString: Untagged
@@ -278,6 +279,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 179, y: 260}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &463036984248317049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340449969388353844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80407178d5d140f8aabd617535939959, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1564600265319875248
 GameObject:
   m_ObjectHideFlags: 0

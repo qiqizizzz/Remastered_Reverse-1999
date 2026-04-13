@@ -41,7 +41,7 @@ namespace Module.View
         private void onUpdateHandCards(params object[] args)
         {
             //args[0] 手牌列表
-            List<BattleCard> handCards = args[0] as List<BattleCard>;
+            List<BattleCardData> handCards = args[0] as List<BattleCardData>;
             
             Debug.Log("渲染手牌UI，当前手牌数量：" + handCards.Count);
 
