@@ -101,7 +101,8 @@ namespace Module.View
                         item.PrepareSpawn();
                     
                     item.InitCardUI(newCards[i]);
-                    item.MoveToIndex(i, newCards.Count, delay: isNewCard ? i * 0.05f : 0f);
+                    float delay = isNewCard ? (newCards.Count - 1 - i) * 0.05f : 0f;
+                    item.MoveToIndex(i, newCards.Count, delay);
                 }
                 else
                 {

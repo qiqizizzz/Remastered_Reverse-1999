@@ -24,8 +24,8 @@ namespace Module.fight.Component
         private readonly float _cardWidth = 180f;
         private readonly float _cardSpacing = 10f;
         private readonly float _startX = 90f;
-        private readonly float _moveDuration = 1f;
-        private Vector2 _spawnPos = new Vector2(-1600f, 0);
+        private readonly float _moveDuration = 0.8f;
+        private Vector2 _spawnPos = new Vector2(-2200f, 0);
 
         [Header("UI组件")] 
         private RectTransform _rect;
@@ -83,7 +83,7 @@ namespace Module.fight.Component
 
             _rect.DOKill();
             _rect.DOAnchorPos(targetPos, _moveDuration)
-                .SetEase(Ease.OutBack)
+                .SetEase(Ease.OutCubic)
                 .SetDelay(delay);
         }
 
