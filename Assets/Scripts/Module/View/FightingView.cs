@@ -21,7 +21,8 @@ namespace Module.View
     public class FightingView : BaseView
     {
         private List<UI_CommonCardItem> _cardPool;
-        private List<UI_CommonCardItem> _activeCardItems;
+        private List<UI_CommonCardItem> _handCardItems;//当前手牌实例列表
+        private Stack<UI_CommonCardItem> _uiActionStack;//出牌队列实例
 
         [Header("队列区域相关")] 
         private Transform _cardActionTf;
@@ -38,7 +39,8 @@ namespace Module.View
             _cardDeckTf = Find<Transform>("CardDeck");
 
             _cardPool = new List<UI_CommonCardItem>();
-            _activeCardItems = new List<UI_CommonCardItem>();
+            _handCardItems = new List<UI_CommonCardItem>();
+            _uiActionStack = new Stack<UI_CommonCardItem>();
             _cardActionQueue = new CardActionQueue();
         }
 
@@ -106,8 +108,20 @@ namespace Module.View
 
         private void onUndoBtn()
         {
-            if(_cardActionQueue.GetCurrentActionCount() == 0) return;
-            Debug.Log("撤销上一步操作");
+            CardAction lastAction = _cardActionQueue.UndoLastAction();
+            if (lastAction == null) return;
+            
+            if(_uiActionStack.Count == 0) return;
+            UI_CommonCardItem undoItem = _uiActionStack.Pop();
+
+            undoItem.IsInQueue = false;
+            undoItem.SetBlockRaycasts(true);
+            undoItem.transform.SetParent(_cardDeckTf, true);
+
+            int insertIndex = Mathf.Clamp(lastAction.OriginalIndex, 0, _handCardItems.Count);
+            _handCardItems.Insert(insertIndex, undoItem);
+            
+            RefreshHandCardLayout();
         }
         
         private void onExitLevel(params object[] args)
@@ -137,7 +151,7 @@ namespace Module.View
                         item.PrepareSpawn();
                     
                     item.InitCardUI(newCards[i]);
-                    _activeCardItems.Add(item);
+                    _handCardItems.Add(item);
                     
                     item.OnBeginDragCallback = OnCardBeginDrag;
                     item.OnDragCallback = OnCardDrag;
@@ -166,15 +180,15 @@ namespace Module.View
         
         private void OnCardDrag(UI_CommonCardItem item, PointerEventData eventData)
         {
-            int currentIndex = _activeCardItems.IndexOf(item);
+            int currentIndex = _handCardItems.IndexOf(item);
             if (currentIndex == -1) return;
 
             float currentX = item.Rect.anchoredPosition.x;
             
             //向右拖动
-            if (currentIndex < _activeCardItems.Count - 1)
+            if (currentIndex < _handCardItems.Count - 1)
             {
-                float rightX = _activeCardItems[currentIndex + 1].Rect.anchoredPosition.x;
+                float rightX = _handCardItems[currentIndex + 1].Rect.anchoredPosition.x;
 
                 if (currentX > rightX - (item.CardWidth / 2))
                 {
@@ -186,7 +200,7 @@ namespace Module.View
             //向左拖动
             if (currentIndex > 0)
             {
-                float leftX = _activeCardItems[currentIndex - 1].Rect.anchoredPosition.x;
+                float leftX = _handCardItems[currentIndex - 1].Rect.anchoredPosition.x;
                 if (currentX < leftX + (item.CardWidth / 2))
                 {
                     SwapCard(currentIndex, currentIndex - 1);
@@ -197,15 +211,15 @@ namespace Module.View
         
         private void OnCardEndDrag(UI_CommonCardItem item, PointerEventData eventData)
         {
-            int index = _activeCardItems.IndexOf(item);
-            item.MoveToIndex(index, _activeCardItems.Count);
+            int index = _handCardItems.IndexOf(item);
+            item.MoveToIndex(index, _handCardItems.Count);
             
             //TODO:判断升星以及特殊操作等
         }
         
         private void OnCardClick(UI_CommonCardItem item)
         {
-            int index = _activeCardItems.IndexOf(item);
+            int index = _handCardItems.IndexOf(item);
             if (index != -1)
                 PlayCard(item, index);
         }
@@ -220,12 +234,10 @@ namespace Module.View
                 return;
             }
             
-            _activeCardItems.RemoveAt(index);
-
-            for (int i = 0; i < _activeCardItems.Count; i++)
-            {
-                _activeCardItems[i].MoveToIndex(i, _activeCardItems.Count);
-            }
+            _handCardItems.RemoveAt(index);
+            _uiActionStack.Push(item);
+            
+            RefreshHandCardLayout();
 
             item.transform.SetParent(_cardActionTf, true);
 
@@ -235,16 +247,26 @@ namespace Module.View
             
             item.PlayToQueueAnim(targetPos);
             item.IsInQueue = true;
+            item.SetBlockRaycasts(false);
 
             //TODO: 将出牌逻辑通知控制器进行处理,通知CardActionQueue等进行管理
         }
 
         private void SwapCard(int indexA, int indexB)
         {
-            (_activeCardItems[indexA], _activeCardItems[indexB]) = (_activeCardItems[indexB], _activeCardItems[indexA]);
+            (_handCardItems[indexA], _handCardItems[indexB]) = (_handCardItems[indexB], _handCardItems[indexA]);
 
-            var moveItem = _activeCardItems[indexA];
-            moveItem.MoveToIndex(indexA, _activeCardItems.Count);
+            RefreshHandCardLayout();
+            //var moveItem = _handCardItems[indexA];
+            //moveItem.MoveToIndex(indexA, _handCardItems.Count);
+        }
+        
+        private void RefreshHandCardLayout()
+        {
+            for (int i = 0; i < _handCardItems.Count; i++)
+            {
+                _handCardItems[i].MoveToIndex(i, _handCardItems.Count);
+            }
         }
         
         #endregion

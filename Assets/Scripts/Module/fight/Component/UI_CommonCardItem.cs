@@ -56,6 +56,8 @@ namespace Module.fight.Component
         private bool _isDragging = false;
         public bool IsInQueue = false;
         
+        public void SetBlockRaycasts(bool value) => _canvasGroup.blocksRaycasts = value;
+        
         protected override void OnAwake()
         {
             Rect = GetComponent<RectTransform>();
@@ -68,13 +70,13 @@ namespace Module.fight.Component
             _typeGroups.Add(Find<CanvasGroup>("type/Health"));
             _typeGroups.Add(Find<CanvasGroup>("type/Channel"));
         }
-
+        
         public void InitCardUI(BattleCardData data)
         {
             CardData = data;
             RefreshUI();
         }
-
+        
         private void RefreshUI()
         {
             if(CardData == null || CardData.BaseData == null) return;
