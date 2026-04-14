@@ -168,7 +168,7 @@ TextureImporter:
         width: 208
         height: 340
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -176,6 +176,48 @@ TextureImporter:
       bones: []
       spriteID: 4e3196c8733876345920435539cff55d
       internalID: 1212856505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sp_fight_actionCard_null
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 789
+        width: 100
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebd39fbb83bce984b9329d80d0f79fcc
+      internalID: -173090188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sp_fight_actionCard_empty
+      rect:
+        serializedVersion: 2
+        x: 646
+        y: 771
+        width: 100
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 698249f65a7fc0f4789b72994660ae1f
+      internalID: -1733868036
       vertices: []
       indices: 
       edges: []
@@ -191,6 +233,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      sp_fight_actionCard_empty: -1733868036
+      sp_fight_actionCard_null: -173090188
       sp_fight_skillcard-border: -655814718
       sp_fight_skillcard_grayStar: -28231182
       sp_fight_skillcard_orangeStar: -72216967

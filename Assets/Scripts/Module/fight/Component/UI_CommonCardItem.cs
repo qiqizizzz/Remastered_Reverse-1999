@@ -12,29 +12,52 @@ using Data.card;
 using DG.Tweening;
 using MVC.View;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Module.fight.Component
 {
-    public class UI_CommonCardItem : BaseItem
+    public class UI_CommonCardItem : BaseItem, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
         public BattleCardData CardData { get; private set; }
 
+        [Header("事件回调相关")] 
+        public Action<UI_CommonCardItem, PointerEventData> OnBeginDragCallback;
+        public Action<UI_CommonCardItem, PointerEventData> OnDragCallback;
+        public Action<UI_CommonCardItem, PointerEventData> OnEndDragCallback;
+        public Action<UI_CommonCardItem> OnClickCallback;
+        
         [Header("动画参数相关")]
-        private readonly float _cardWidth = 180f;
+        #region 卡牌移动相关
+        public readonly float CardWidth = 180f;
         private readonly float _cardSpacing = 10f;
         private readonly float _startX = 90f;
-        private readonly float _moveDuration = 0.8f;
+        private readonly float _moveDuration = 0.4f;
         private Vector2 _spawnPos = new Vector2(-2200f, 0);
-
+        #endregion
+        #region 卡牌拖拽相关
+        private readonly float _dragScale = 1.15f;
+        private readonly float _dragDuration = 0.4f;
+        #endregion
+        #region 卡牌出牌相关
+        private readonly float _playCommonDuration = 0.2f;
+        private readonly float _playMoveDuration = 0.5f;
+        private readonly Vector3 _playRotation = new Vector3(0, 0, -10f);
+        private readonly int _playRotationLoop = 2;
+        #endregion
+        
         [Header("UI组件")] 
-        private RectTransform _rect;
+        public  RectTransform Rect;
         private Image _icon;
+        private CanvasGroup _canvasGroup;
         private List<CanvasGroup> _typeGroups = new List<CanvasGroup>();
+        
+        private bool _isDragging = false;
         
         protected override void OnAwake()
         {
-            _rect = GetComponent<RectTransform>();
+            Rect = GetComponent<RectTransform>();
+            _canvasGroup = GetComponent<CanvasGroup>();
             _icon = Find<Image>("Img_card");
             
             _typeGroups.Add(Find<CanvasGroup>("type/Attack"));
@@ -67,34 +90,90 @@ namespace Module.fight.Component
                 _typeGroups[i].interactable = (i == index);
             }
         }
-
-        //TODO:拖拽、打出牌
-        //拖拽时卡牌会稍微变大，然后当拖拽到另外一个牌中间时，那个牌会自动让出当前索引的空位,每次换位置的时候只有那个牌会移动，其他牌保持不变(感觉像冒泡一样)
-        //打出时卡牌会稍微倾斜（不会变大）,然后移动到打出牌的队列那边，会稍微倾斜（抖动）然后停留在队列区域，后续还有撤回的逻辑。
         
         #region 表现与动画逻辑
         public void PrepareSpawn()
         {
             SetVisible(false);
-            _rect.anchoredPosition = _spawnPos;//放置在初始发牌点
+            Rect.anchoredPosition = _spawnPos;//放置在初始发牌点
+            Rect.localScale = Vector3.one;
         }
 
         public void MoveToIndex(int index,int totalCount ,float delay = 0f)
         {
             SetVisible(true);
-            float targetX = -_startX - (totalCount - 1 - index) * (_cardWidth + _cardSpacing);
+            float targetX = -_startX - (totalCount - 1 - index) * (CardWidth + _cardSpacing);
             Vector2 targetPos = new Vector2(targetX, 0);
 
-            _rect.DOKill();
-            _rect.DOAnchorPos(targetPos, _moveDuration)
+            Rect.DOKill();
+            Rect.DOAnchorPos(targetPos, _moveDuration)
                 .SetEase(Ease.OutCubic)
                 .SetDelay(delay);
+            
+            Rect.DOScale(Vector3.one, _moveDuration)
+                .SetEase(Ease.OutCubic)
+                .SetDelay(delay);
+            
+            transform.SetSiblingIndex(index);
         }
 
+        public void PlayToQueueAnim(Vector2 targetPos)
+        {
+            Rect.DOKill();
+            Rect.DOScale(Vector3.one, _playCommonDuration);
+            Rect.DOAnchorPos(targetPos, _playMoveDuration).SetEase(Ease.OutQuad);
+            Rect.DOBlendableLocalRotateBy(_playRotation, _playCommonDuration)
+                .SetLoops(_playRotationLoop, LoopType.Yoyo);
+        }
+        
         public void HideCard()
         {
-            _rect.DOKill();
+            Rect.DOKill();
             SetVisible(false);
+        }
+        #endregion
+
+        #region 拖拽、点击事件相关
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            _isDragging = true;
+            transform.SetAsLastSibling();//拖动时置于最上层
+            
+            Rect.DOKill();
+            Rect.DOScale(Vector3.one * _dragScale, _dragDuration);
+            _canvasGroup.blocksRaycasts = false;//拖动时允许穿透事件
+
+            OnBeginDragCallback?.Invoke(this, eventData);
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                (RectTransform)transform.parent,
+                eventData.position,
+                eventData.pressEventCamera,
+                out Vector2 localPos);
+
+            Rect.anchoredPosition = new Vector2(localPos.x, 0);
+
+            OnDragCallback?.Invoke(this, eventData);
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            Rect.DOKill();
+            Rect.DOScale(Vector3.one, _dragDuration);
+            _canvasGroup.blocksRaycasts = true;
+
+            OnEndDragCallback?.Invoke(this, eventData);
+            _isDragging = false;
+        }
+        
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if(_isDragging) return;
+            
+            OnClickCallback?.Invoke(this);
         }
         #endregion
     }
