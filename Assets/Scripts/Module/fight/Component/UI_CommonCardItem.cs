@@ -43,6 +43,7 @@ namespace Module.fight.Component
         private readonly float _playCommonDuration = 0.2f;
         private readonly float _playMoveDuration = 0.5f;
         private readonly Vector3 _playRotation = new Vector3(0, 0, -10f);
+        private readonly float _playQueueScale = 0.8f;
         private readonly int _playRotationLoop = 2;
         #endregion
         
@@ -122,6 +123,7 @@ namespace Module.fight.Component
             Rect.DOKill();
             Rect.DOScale(Vector3.one, _playCommonDuration);
             Rect.DOAnchorPos(targetPos, _playMoveDuration).SetEase(Ease.OutQuad);
+            Rect.DOScale(Vector3.one * _playQueueScale, _playCommonDuration).SetEase(Ease.OutQuad);
             Rect.DOBlendableLocalRotateBy(_playRotation, _playCommonDuration)
                 .SetLoops(_playRotationLoop, LoopType.Yoyo);
         }

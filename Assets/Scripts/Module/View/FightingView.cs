@@ -223,7 +223,8 @@ namespace Module.View
             item.transform.SetParent(_cardActionTf, true);
 
             Vector2 targetPos = new Vector2(-_cardActionWidth, 0) +
-                                new Vector2((_cardActionQueue.GetCurrentActionCount() - 1) * (item.CardWidth + 10f), 0);
+                                new Vector2(
+                                    (_cardActionQueue.GetCurrentActionCount() - 1) * (item.CardWidth * 0.8f + 15f), 0);
             
             item.PlayToQueueAnim(targetPos);
             
