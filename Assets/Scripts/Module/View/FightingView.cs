@@ -45,6 +45,7 @@ namespace Module.View
         protected override void OnStart()
         {
             Find<Button>("OperationBtns/Btn_pause").onClick.AddListener(onPauseBtn);
+            Find<Button>("CardAction/Btn_Undo").onClick.AddListener(onUndoBtn);
             
             Controller.RegisterFunc(EventDefines.UpdateHandCards, onUpdateHandCards);
             Controller.RegisterFunc(EventDefines.ExitLevel, onExitLevel);
@@ -103,6 +104,12 @@ namespace Module.View
             ApplyFunc(EventDefines.OpenPauseFightView);
         }
 
+        private void onUndoBtn()
+        {
+            if(_cardActionQueue.GetCurrentActionCount() == 0) return;
+            Debug.Log("撤销上一步操作");
+        }
+        
         private void onExitLevel(params object[] args)
         {
             foreach (var item in _cardPool)
@@ -227,7 +234,8 @@ namespace Module.View
                                     (_cardActionQueue.GetCurrentActionCount() - 1) * (item.CardWidth * 0.8f + 15f), 0);
             
             item.PlayToQueueAnim(targetPos);
-            
+            item.IsInQueue = true;
+
             //TODO: 将出牌逻辑通知控制器进行处理,通知CardActionQueue等进行管理
         }
 

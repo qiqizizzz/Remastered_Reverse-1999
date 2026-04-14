@@ -54,6 +54,7 @@ namespace Module.fight.Component
         private List<CanvasGroup> _typeGroups = new List<CanvasGroup>();
         
         private bool _isDragging = false;
+        public bool IsInQueue = false;
         
         protected override void OnAwake()
         {
@@ -96,6 +97,7 @@ namespace Module.fight.Component
         public void PrepareSpawn()
         {
             SetVisible(false);
+            IsInQueue = false;
             Rect.anchoredPosition = _spawnPos;//放置在初始发牌点
             Rect.localScale = Vector3.one;
         }
@@ -138,6 +140,8 @@ namespace Module.fight.Component
         #region 拖拽、点击事件相关
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if(IsInQueue) return;
+            
             _isDragging = true;
             transform.SetAsLastSibling();//拖动时置于最上层
             
@@ -150,6 +154,8 @@ namespace Module.fight.Component
 
         public void OnDrag(PointerEventData eventData)
         {
+            if(IsInQueue) return;
+            
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 (RectTransform)transform.parent,
                 eventData.position,
@@ -163,6 +169,8 @@ namespace Module.fight.Component
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if(IsInQueue) return;
+            
             Rect.DOKill();
             Rect.DOScale(Vector3.one, _dragDuration);
             _canvasGroup.blocksRaycasts = true;
@@ -173,7 +181,7 @@ namespace Module.fight.Component
         
         public void OnPointerClick(PointerEventData eventData)
         {
-            if(_isDragging) return;
+            if(_isDragging || IsInQueue) return;
             
             OnClickCallback?.Invoke(this);
         }
