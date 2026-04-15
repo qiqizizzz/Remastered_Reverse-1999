@@ -262,6 +262,14 @@ namespace Module.View
             //var moveItem = _handCardItems[indexA];
             //moveItem.MoveToIndex(indexA, _handCardItems.Count);
         }
+
+        private void CompositeCard(int indexA, int indexB)
+        {
+            //TODO:相邻牌若星级和种类相同则合成:
+            //如：两张相同的1星卡合成一张2星卡，三张相同的2星卡合成一张3星卡
+            
+            //TODO:合成卡后角色的行动点数+1
+        }
         
         private void RefreshHandCardLayout()
         {

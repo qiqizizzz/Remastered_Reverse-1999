@@ -17,6 +17,8 @@ namespace Module.fight.CardMgr
     public class CardManager
     {
         private readonly int singleCardMaxLimit = 3;//单张牌的最大限制数量
+
+        private readonly Dictionary<CharacterData, List<CardData>> m_cards;
         
         [Header("牌堆")]
         private List<BattleCardData> drawPile; //抽牌堆
@@ -25,6 +27,7 @@ namespace Module.fight.CardMgr
 
         public CardManager()
         {
+            m_cards = new Dictionary<CharacterData, List<CardData>>();
             drawPile = new List<BattleCardData>();
             handCards = new List<BattleCardData>();
             discardPile = new List<BattleCardData>();
@@ -32,6 +35,7 @@ namespace Module.fight.CardMgr
         
         public void InitCards(LevelInitData initData)
         {
+            m_cards.Clear();
             drawPile.Clear();
             handCards.Clear();
             discardPile.Clear();
@@ -41,6 +45,7 @@ namespace Module.fight.CardMgr
                 if(character == null) continue;
                 
                 List<CardData> characterCards = character.GetAllCards();
+                m_cards.Add(character, characterCards);
 
                 foreach (var card in characterCards)
                 {
@@ -56,6 +61,26 @@ namespace Module.fight.CardMgr
             ShuffleCard(drawPile);
             
             //TODO:敌人的牌堆暂时不做
+        }
+
+        //新关卡开始时准备手牌
+        public void PrepareHandsForNewLevel()
+        {
+            //回合开始时（即新进入关卡时）,玩家当前手牌应为每个角色两张普通牌,加起来一共8张（4个角色）
+
+            foreach (var kv in m_cards)
+            {
+                List<CardData> cards = kv.Value;
+
+                foreach (var card in cards)
+                {
+                    if(card.CardType == CardType.Ultimate) continue;
+                    
+                    handCards.Add(new BattleCardData(card));
+                }
+            }
+            
+            ShuffleCard(handCards);
         }
         
         //Fisher–Yates 洗牌算法
