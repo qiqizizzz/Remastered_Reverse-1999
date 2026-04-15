@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardType: 0
   Id: 2005
-  Name: 
-  Description: 
-  OwnerId: 0
+  Name: "\u857E\u7F2A\u5B89\u7684\u5361\u724C2"
+  Description: "\u857E\u7F2A\u5B89\u7684\u5361\u724C2"
+  OwnerId: 1002
   Effects: []
   CardSprite: {fileID: 0}
   CardEffectPrefab: {fileID: 0}

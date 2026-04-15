@@ -9,17 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fb9e1c1fe8b4703be743b5a85ce6929, type: 3}
-  m_Name: Character_1002
+  m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+  m_Name: char_4193_lemuen_Atlas
   m_EditorClassIdentifier: 
-  Id: 1002
-  Name: LeiMiuan
-  CharacterType: 0
-  InspirationType: 0
-  Property:
-    Attack: 0
-    Hp: 0
-    Defense: 0
-    CritRate: 0
-    CritDamage: 0
-  Cards: d4070000d5070000d6070000
+  atlasFile: {fileID: 4900000, guid: a8a75c59bdf7a2d4298c7f1e8b41d510, type: 3}
+  materials:
+  - {fileID: 2100000, guid: dd1e7ede9b44604488589dcc0c491a5c, type: 2}

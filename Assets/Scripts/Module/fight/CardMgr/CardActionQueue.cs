@@ -20,7 +20,7 @@ namespace Module.fight.CardMgr
     public class CardActionQueue
     {
         private Stack<CardAction> _actionStack;
-        public readonly int MaxActionCount = 4;
+        private readonly int MaxActionCount = 4;
 
         public CardActionQueue()
         {

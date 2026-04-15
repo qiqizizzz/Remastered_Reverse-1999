@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 246631ec1ff854c419c2c7f75fcbb760
   m_SerializeEntries:
+  - m_GUID: db33b1cb2f0a41a4f9480be990a5f58d
+    m_Address: Character/Hero_LeiMiuan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ecc792855daf6354997f855716f35cfc
     m_Address: Character/Hero_Mortis
     m_ReadOnly: 0
