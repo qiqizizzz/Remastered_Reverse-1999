@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using Common;
 using Common.Defines;
+using DG.Tweening;
 using Module.fight.CardMgr;
 using Module.fight.Component;
 using MVC.View;
@@ -114,6 +115,7 @@ namespace Module.View
             if(_uiActionStack.Count == 0) return;
             UI_CommonCardItem undoItem = _uiActionStack.Pop();
 
+            undoItem.Rect.DOKill();
             undoItem.IsInQueue = false;
             undoItem.SetBlockRaycasts(true);
             undoItem.transform.SetParent(_cardDeckTf, true);

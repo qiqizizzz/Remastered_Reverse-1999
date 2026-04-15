@@ -118,6 +118,8 @@ namespace Module.fight.Component
             Rect.DOScale(Vector3.one, _moveDuration)
                 .SetEase(Ease.OutCubic)
                 .SetDelay(delay);
+
+            Rect.transform.eulerAngles = Vector3.one;
             
             transform.SetSiblingIndex(index);
         }
