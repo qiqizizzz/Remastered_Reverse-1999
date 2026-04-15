@@ -46,6 +46,12 @@ namespace Module.fight.Component
         private readonly float _playQueueScale = 0.8f;
         private readonly int _playRotationLoop = 2;
         #endregion
+        #region 卡牌合成相关
+        private readonly float _compositeMoveDuration = 0.2f;
+        private readonly float _compositeStrength = 15f;
+        private readonly int _compositeVibrato = 20;
+        private readonly float _compositeRandomMess = 90f;
+        #endregion
         
         [Header("UI组件")] 
         public  RectTransform Rect;
@@ -132,6 +138,18 @@ namespace Module.fight.Component
             Rect.DOScale(Vector3.one * _playQueueScale, _playCommonDuration).SetEase(Ease.OutQuad);
             Rect.DOBlendableLocalRotateBy(_playRotation, _playCommonDuration)
                 .SetLoops(_playRotationLoop, LoopType.Yoyo);
+        }
+
+        public void PlayCompositeAnim(Vector2 targetPos, Action onComplete = null)
+        {
+            Rect.DOKill();
+            transform.SetAsLastSibling();
+
+            Sequence seq = DOTween.Sequence();
+            seq.Append(Rect.DOAnchorPos(targetPos,_compositeMoveDuration).SetEase(Ease.OutQuad));
+            seq.Append(Rect.DOShakeAnchorPos(_compositeMoveDuration, _compositeStrength, _compositeVibrato,
+                _compositeRandomMess));//抖动
+            seq.OnComplete(() => onComplete?.Invoke());
         }
         
         public void HideCard()

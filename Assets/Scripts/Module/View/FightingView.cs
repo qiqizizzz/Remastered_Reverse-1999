@@ -216,6 +216,8 @@ namespace Module.View
             int index = _handCardItems.IndexOf(item);
             item.MoveToIndex(index, _handCardItems.Count);
             
+            CheckAndTriggerComposite();
+            
             //TODO:判断升星以及特殊操作等
         }
         
@@ -251,6 +253,8 @@ namespace Module.View
             item.IsInQueue = true;
             item.SetBlockRaycasts(false);
 
+            CheckAndTriggerComposite();
+            
             //TODO: 将出牌逻辑通知控制器进行处理,通知CardActionQueue等进行管理
         }
 
@@ -262,13 +266,53 @@ namespace Module.View
             //var moveItem = _handCardItems[indexA];
             //moveItem.MoveToIndex(indexA, _handCardItems.Count);
         }
-
+        
         private void CompositeCard(int indexA, int indexB)
         {
-            //TODO:相邻牌若星级和种类相同则合成:
-            //如：两张相同的1星卡合成一张2星卡，三张相同的2星卡合成一张3星卡
+            UI_CommonCardItem cardA = _handCardItems[indexA];
+            UI_CommonCardItem cardB = _handCardItems[indexB];
             
-            //TODO:合成卡后角色的行动点数+1
+            Vector2 centerPos = (cardA.Rect.anchoredPosition + cardB.Rect.anchoredPosition) / 2f;
+            
+            //保留cardA并升星,cardB销毁
+            cardA.CardData.StarLevel += 1;
+            _handCardItems.Remove(cardB);
+            //TODO:刷新UI...
+            
+            cardA.PlayCompositeAnim(centerPos);
+            cardB.PlayCompositeAnim(centerPos, () =>
+            {
+                cardB.HideCard();
+                cardB.transform.SetParent(_cardDeckTf, true); // 确保父节点归位
+                
+                RefreshHandCardLayout();
+                
+                CheckAndTriggerComposite();
+            });
+            
+            // TODO: 合成卡后角色的行动点数+1(这个先不做)
+        }
+        
+        private void CheckAndTriggerComposite()
+        {
+            // 从左到右遍历手牌，寻找相邻且相同的牌
+            for (int i = 0; i < _handCardItems.Count - 1; i++)
+            {
+                var cardA = _handCardItems[i];
+                var cardB = _handCardItems[i + 1];
+
+                //相邻牌若星级和种类且拥有者相同则合成
+                //如：两张相同的1星卡合成一张2星卡，三张相同的2星卡合成一张3星卡
+                if (cardA.CardData.StarLevel == cardB.CardData.StarLevel &&
+                    cardA.CardData.BaseData.CardType == cardB.CardData.BaseData.CardType &&
+                    cardA.CardData.OwnerEntityId == cardB.CardData.OwnerEntityId)
+                {
+                    // 找到一对可以合成的牌，触发合成并立即中断循环
+                    // 一次只处理一对，靠动画回调实现连锁反应
+                    CompositeCard(i, i + 1);
+                    return; 
+                }
+            }
         }
         
         private void RefreshHandCardLayout()
