@@ -39,6 +39,11 @@ namespace Module.fight.CardMgr
             };
             
             _actionStack.Push(action);
+            
+            //出牌队列满了,触发事件,进入战斗阶段
+            //if(_actionStack.Count == MaxActionCount)
+                //GameApp.MessageCenter.PostEvent();
+            
             return true;
         }
         

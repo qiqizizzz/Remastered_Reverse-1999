@@ -40,5 +40,10 @@ namespace Common.Defines
         public const string ReceiveNewMessage = "ReceiveNewMessage";
         public const string NetWork_Disconnect = "NetWork_Disconnect";
         public const string NetWork_ConnectFailed = "NetWork_ConnectFailed";
+        
+        //战斗相关事件
+        public const string OnPlayerTurnStart = "OnPlayerTurnStart";
+        public const string OnPlayerTurnOutput = "OnPlayerTurnOutput";
+        public const string OnEnemyTurn = "OnEnemyTurn";
     }
 }

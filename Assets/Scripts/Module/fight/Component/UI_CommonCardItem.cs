@@ -61,7 +61,7 @@ namespace Module.fight.Component
         private List<Image> _stars = new List<Image>();
         
         [Header("其他参数")]
-        private int _maxStarLevel = 3;
+        private readonly int _maxStarLevel = 3;
         
         private bool _isDragging = false;
         public bool IsInQueue = false;
@@ -93,9 +93,9 @@ namespace Module.fight.Component
 
         public void ShowStarUI(int starCount)
         {
-            starCount = Mathf.Clamp(starCount, 0, _stars.Count);
+            starCount = Mathf.Clamp(starCount, 0, _maxStarLevel);
             
-            for (int i = 0; i < _stars.Count; i++)
+            for (int i = 0; i < _maxStarLevel; i++)
             {
                 _stars[i].gameObject.SetActive(i < starCount);
             }
