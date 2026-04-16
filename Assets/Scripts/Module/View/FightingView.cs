@@ -275,7 +275,7 @@ namespace Module.View
             //保留cardA并升星,cardB销毁
             cardA.BattleCardData.StarLevel += 1;
             _handCardItems.Remove(cardB);
-            //TODO:刷新UI...
+            cardA.ShowStarUI(cardA.BattleCardData.StarLevel);
             
             cardA.PlayCompositeAnim(centerPos);
             cardB.PlayCompositeAnim(centerPos, () =>

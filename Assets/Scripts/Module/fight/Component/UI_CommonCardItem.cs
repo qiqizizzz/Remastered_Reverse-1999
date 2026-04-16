@@ -58,6 +58,10 @@ namespace Module.fight.Component
         private Image _icon;
         private CanvasGroup _canvasGroup;
         private List<CanvasGroup> _typeGroups = new List<CanvasGroup>();
+        private List<Image> _stars = new List<Image>();
+        
+        [Header("其他参数")]
+        private int _maxStarLevel = 3;
         
         private bool _isDragging = false;
         public bool IsInQueue = false;
@@ -75,12 +79,26 @@ namespace Module.fight.Component
             _typeGroups.Add(Find<CanvasGroup>("type/Buff"));
             _typeGroups.Add(Find<CanvasGroup>("type/Health"));
             _typeGroups.Add(Find<CanvasGroup>("type/Channel"));
+            
+            _stars.Add(Find<Image>("Star/star_1/star_open"));
+            _stars.Add(Find<Image>("Star/star_2/star_open"));
+            _stars.Add(Find<Image>("Star/star_3/star_open"));
         }
         
         public void InitCardUI(BattleCardData data)
         {
             BattleCardData = data;
             RefreshUI();
+        }
+
+        public void ShowStarUI(int starCount)
+        {
+            starCount = Mathf.Clamp(starCount, 0, _stars.Count);
+            
+            for (int i = 0; i < _stars.Count; i++)
+            {
+                _stars[i].gameObject.SetActive(i < starCount);
+            }
         }
         
         private void RefreshUI()
@@ -89,6 +107,7 @@ namespace Module.fight.Component
 
             _icon.sprite = BattleCardData.BaseData.CardSprite;
             showTypeUI((int)BattleCardData.BaseData.CardType);
+            ShowStarUI(1);
         }
         
         private void showTypeUI(int index)

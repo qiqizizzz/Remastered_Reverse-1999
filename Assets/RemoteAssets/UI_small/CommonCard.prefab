@@ -292,6 +292,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80407178d5d140f8aabd617535939959, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Rect: {fileID: 0}
+  IsInQueue: 0
 --- !u!225 &2633205378323971749
 CanvasGroup:
   m_ObjectHideFlags: 0
