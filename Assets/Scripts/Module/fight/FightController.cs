@@ -6,8 +6,10 @@
 * └──────────────────────────────────────────────────────────────────────────────────────────────────────┘
 */
 
+using System.Collections.Generic;
 using Common.Defines;
 using Data.level;
+using Module.fight.CardMgr;
 using MVC;
 using MVC.Controller;
 using UnityEngine;
@@ -55,6 +57,7 @@ namespace Module.fight
             UnRegisterFunc(EventDefines.OpenPauseFightView, onOpenPauseFightView);
             UnRegisterFunc(EventDefines.FightingViewReady,onFightingViewReady);
             
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnEnemyTurn, onEnemyTurn);
         }
@@ -90,7 +93,15 @@ namespace Module.fight
         {
             Debug.Log("==== 玩家出牌阶段结束，开始结算队列 ====");
             
-            //TODO:...
+            //TODO:禁用UI交互,播放出牌动画等...
+            
+            //如果用了下面的内容,就会导致第四个卡牌进入到第一个卡牌前面,感觉可以在动画里面Fix,还是有问题啊,气笑了
+            List<CardAction> actions = GameApp.CardManager.CardActionQueue.GetAllActionsAndClear();
+
+            foreach (var action in actions)
+            {
+                CardSkillExecutor.ExecuteCardAction(action);
+            }
             
             GameApp.MessageCenter.PostEvent(EventDefines.OnEnemyTurn);
         }

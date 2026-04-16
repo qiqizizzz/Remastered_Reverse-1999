@@ -42,11 +42,12 @@ namespace Module.View
             _cardPool = new List<UI_CommonCardItem>();
             _handCardItems = new List<UI_CommonCardItem>();
             _uiActionStack = new Stack<UI_CommonCardItem>();
-            _cardActionQueue = new CardActionQueue();
         }
 
         protected override void OnStart()
         {
+            _cardActionQueue = GameApp.CardManager.CardActionQueue;
+            
             Find<Button>("OperationBtns/Btn_pause").onClick.AddListener(onPauseBtn);
             Find<Button>("CardAction/Btn_Undo").onClick.AddListener(onUndoBtn);
             
@@ -232,7 +233,7 @@ namespace Module.View
         #region 卡牌具体逻辑
         private void PlayCard(UI_CommonCardItem item, int index)
         {
-            if (!_cardActionQueue.PlayCard(item.BattleCardData, index))
+            if (!_cardActionQueue.CanPlayCard())
             {
                 Debug.Log("已达到本轮出牌上限");
                 return;
@@ -254,7 +255,9 @@ namespace Module.View
             item.SetBlockRaycasts(false);
 
             CheckAndTriggerComposite();
-            
+
+            _cardActionQueue.PlayCard(item.BattleCardData, index);//放最后防止动画没播完就发送事件了,bug...
+
             //TODO: 将出牌逻辑通知控制器进行处理,通知CardActionQueue等进行管理
         }
 

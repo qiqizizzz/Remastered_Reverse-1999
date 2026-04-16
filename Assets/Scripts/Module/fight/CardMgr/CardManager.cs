@@ -16,8 +16,9 @@ namespace Module.fight.CardMgr
 {
     public class CardManager
     {
+        public readonly CardActionQueue CardActionQueue;
+        
         private readonly int singleCardMaxLimit = 3;//单张牌的最大限制数量
-
         private readonly Dictionary<CharacterData, List<CardData>> m_cards;
         
         [Header("牌堆")]
@@ -27,6 +28,8 @@ namespace Module.fight.CardMgr
 
         public CardManager()
         {
+            CardActionQueue = new CardActionQueue();
+            
             m_cards = new Dictionary<CharacterData, List<CardData>>();
             drawPile = new List<BattleCardData>();
             handCards = new List<BattleCardData>();
