@@ -53,6 +53,7 @@ namespace Module.Character
         [Header("动画映射")] 
         public AnimationConfig AnimConfig;
 
+        #region 生命周期、初始化
         protected virtual void Awake()
         {
             _skeAnim = GetComponentInChildren<SkeletonAnimation>();
@@ -91,6 +92,18 @@ namespace Module.Character
             ChangeState(CharacterStateType.Idle);
         }
         
+        private void InitStateMachine()
+        {
+            _stateMachine = new Dictionary<CharacterStateType, BaseCharacterState>
+            {
+                { CharacterStateType.Idle, new IdleState(this) },
+                { CharacterStateType.Attack, new AttackState(this) },
+                { CharacterStateType.Hurt, new HurtState(this) },
+                { CharacterStateType.Die, new DieState(this) }
+            };
+        }
+        #endregion
+        
         public void ChangeState(CharacterStateType newStateType)
         {
             if(CurrentStateType == CharacterStateType.Die) return;
@@ -114,16 +127,16 @@ namespace Module.Character
             
             _skeAnim.AnimationState.SetAnimation(trackIndex, animName, loop);
         }
-        
-        private void InitStateMachine()
+
+        public void TakeDamage(int damage)
         {
-            _stateMachine = new Dictionary<CharacterStateType, BaseCharacterState>
-            {
-                { CharacterStateType.Idle, new IdleState(this) },
-                { CharacterStateType.Attack, new AttackState(this) },
-                { CharacterStateType.Hurt, new HurtState(this) },
-                { CharacterStateType.Die, new DieState(this) }
-            };
+            if(CurrentStateType == CharacterStateType.Die) return;
+            
+            //TODO:扣血,计算伤害,特效等
+            
+            Debug.Log($"{_characterData.Name} 受到 {damage} 点伤害");
+            
+            ChangeState(CharacterStateType.Hurt);
         }
 
         #region spine事件

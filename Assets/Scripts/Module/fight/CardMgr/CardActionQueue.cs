@@ -7,6 +7,7 @@
 */
 
 using System.Collections.Generic;
+using Common.Defines;
 using Module.fight.Component;
 
 namespace Module.fight.CardMgr
@@ -41,10 +42,18 @@ namespace Module.fight.CardMgr
             _actionStack.Push(action);
             
             //出牌队列满了,触发事件,进入战斗阶段
-            //if(_actionStack.Count == MaxActionCount)
-                //GameApp.MessageCenter.PostEvent();
+            if(_actionStack.Count == MaxActionCount)
+                GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
             
             return true;
+        }
+
+        public List<CardAction> GetAllActionsAndClear()
+        {
+            List<CardAction> actions = new List<CardAction>(_actionStack);
+            actions.Reverse();
+            _actionStack.Clear();
+            return actions;
         }
         
         public CardAction UndoLastAction()

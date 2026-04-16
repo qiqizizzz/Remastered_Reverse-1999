@@ -13,5 +13,10 @@ namespace Module.Character.Components
         public HurtState(BaseCharacter character) : base(character)
         {
         }
+
+        public override void OnEnter()
+        {
+            _character.PlayAnim(_character.AnimConfig.HurtAnim, false);
+        }
     }
 }

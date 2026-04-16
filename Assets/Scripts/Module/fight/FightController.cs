@@ -43,8 +43,23 @@ namespace Module.fight
             RegisterFunc(EventDefines.OpenFightingView, onOpenFightView);
             RegisterFunc(EventDefines.OpenPauseFightView, onOpenPauseFightView);
             RegisterFunc(EventDefines.FightingViewReady,onFightingViewReady);
+            
+            GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnEnemyTurn, onEnemyTurn);
         }
-        
+
+        public override void RemoveModuleEvent()
+        {
+            UnRegisterFunc(EventDefines.OpenFightingView, onOpenFightView);
+            UnRegisterFunc(EventDefines.OpenPauseFightView, onOpenPauseFightView);
+            UnRegisterFunc(EventDefines.FightingViewReady,onFightingViewReady);
+            
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnEnemyTurn, onEnemyTurn);
+        }
+
+        #region UI事件
         private void onOpenFightView(System.Object[] args)
         {
             _currentInitData = args[0] as LevelInitData;
@@ -61,6 +76,36 @@ namespace Module.fight
         {
             StartFirstRound();
         }
+        #endregion
+
+        #region 战斗事件
+        private void onPlayerTurnStart(System.Object args)
+        {
+            Debug.Log("==== 玩家回合开始 ====");
+            
+            //TODO:...
+        }
+        
+        private void onPlayerTurnOutput(System.Object args)
+        {
+            Debug.Log("==== 玩家出牌阶段结束，开始结算队列 ====");
+            
+            //TODO:...
+            
+            GameApp.MessageCenter.PostEvent(EventDefines.OnEnemyTurn);
+        }
+
+        private void onEnemyTurn(System.Object args)
+        {
+            Debug.Log("==== 敌人回合开始 ====");
+            
+            //TODO:...
+            
+            GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnStart);
+        }
+
+        #endregion
+        
         
         private void onSpawnBattleCallback()
         {
