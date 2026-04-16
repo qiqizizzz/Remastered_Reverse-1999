@@ -19,7 +19,7 @@ namespace Module.fight.Component
 {
     public class UI_CommonCardItem : BaseItem, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
-        public BattleCardData CardData { get; private set; }
+        public BattleCardData BattleCardData { get; private set; }
 
         [Header("事件回调相关")] 
         public Action<UI_CommonCardItem, PointerEventData> OnBeginDragCallback;
@@ -47,10 +47,10 @@ namespace Module.fight.Component
         private readonly int _playRotationLoop = 2;
         #endregion
         #region 卡牌合成相关
-        private readonly float _compositeMoveDuration = 0.2f;
-        private readonly float _compositeStrength = 15f;
-        private readonly int _compositeVibrato = 20;
-        private readonly float _compositeRandomMess = 90f;
+        private readonly float _compositeCommonDuration = 0.2f;
+        private readonly float _compositeStrength = 25f;
+        private readonly int _compositeVibrato = 25;
+        private readonly float _compositeRandomMess = 45f;
         #endregion
         
         [Header("UI组件")] 
@@ -79,16 +79,16 @@ namespace Module.fight.Component
         
         public void InitCardUI(BattleCardData data)
         {
-            CardData = data;
+            BattleCardData = data;
             RefreshUI();
         }
         
         private void RefreshUI()
         {
-            if(CardData == null || CardData.BaseData == null) return;
+            if(BattleCardData == null || BattleCardData.BaseData == null) return;
 
-            _icon.sprite = CardData.BaseData.CardSprite;
-            showTypeUI((int)CardData.BaseData.CardType);
+            _icon.sprite = BattleCardData.BaseData.CardSprite;
+            showTypeUI((int)BattleCardData.BaseData.CardType);
         }
         
         private void showTypeUI(int index)
@@ -146,8 +146,8 @@ namespace Module.fight.Component
             transform.SetAsLastSibling();
 
             Sequence seq = DOTween.Sequence();
-            seq.Append(Rect.DOAnchorPos(targetPos,_compositeMoveDuration).SetEase(Ease.OutQuad));
-            seq.Append(Rect.DOShakeAnchorPos(_compositeMoveDuration, _compositeStrength, _compositeVibrato,
+            seq.Append(Rect.DOAnchorPos(targetPos,_compositeCommonDuration).SetEase(Ease.OutQuad));
+            seq.Append(Rect.DOShakeAnchorPos(_compositeCommonDuration, _compositeStrength, _compositeVibrato,
                 _compositeRandomMess));//抖动
             seq.OnComplete(() => onComplete?.Invoke());
         }

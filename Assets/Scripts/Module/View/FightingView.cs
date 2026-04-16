@@ -232,7 +232,7 @@ namespace Module.View
         #region 卡牌具体逻辑
         private void PlayCard(UI_CommonCardItem item, int index)
         {
-            if (!_cardActionQueue.PlayCard(item.CardData, index))
+            if (!_cardActionQueue.PlayCard(item.BattleCardData, index))
             {
                 Debug.Log("已达到本轮出牌上限");
                 return;
@@ -263,8 +263,6 @@ namespace Module.View
             (_handCardItems[indexA], _handCardItems[indexB]) = (_handCardItems[indexB], _handCardItems[indexA]);
 
             RefreshHandCardLayout();
-            //var moveItem = _handCardItems[indexA];
-            //moveItem.MoveToIndex(indexA, _handCardItems.Count);
         }
         
         private void CompositeCard(int indexA, int indexB)
@@ -275,7 +273,7 @@ namespace Module.View
             Vector2 centerPos = (cardA.Rect.anchoredPosition + cardB.Rect.anchoredPosition) / 2f;
             
             //保留cardA并升星,cardB销毁
-            cardA.CardData.StarLevel += 1;
+            cardA.BattleCardData.StarLevel += 1;
             _handCardItems.Remove(cardB);
             //TODO:刷新UI...
             
@@ -303,9 +301,7 @@ namespace Module.View
 
                 //相邻牌若星级和种类且拥有者相同则合成
                 //如：两张相同的1星卡合成一张2星卡，三张相同的2星卡合成一张3星卡
-                if (cardA.CardData.StarLevel == cardB.CardData.StarLevel &&
-                    cardA.CardData.BaseData.CardType == cardB.CardData.BaseData.CardType &&
-                    cardA.CardData.OwnerEntityId == cardB.CardData.OwnerEntityId)
+                if (cardA.BattleCardData.Equals(cardB.BattleCardData))
                 {
                     // 找到一对可以合成的牌，触发合成并立即中断循环
                     // 一次只处理一对，靠动画回调实现连锁反应

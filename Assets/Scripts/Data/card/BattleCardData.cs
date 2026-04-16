@@ -7,22 +7,55 @@
 */
 
 using Data.card;
+using UnityEngine;
 
 namespace Module.fight.Component
 {
     public class BattleCardData
     {
-        public string InstanceId;
-        public CardData BaseData;
-        public int OwnerEntityId;//持有者Id（玩家或敌人）
+        private readonly string InstanceId;
+        public readonly CardData BaseData;
         public int StarLevel;//星级
 
         public BattleCardData(CardData baseData)
         {
             InstanceId = System.Guid.NewGuid().ToString();
             BaseData = baseData;
-            OwnerEntityId = baseData.OwnerId;
             StarLevel = 1;
         }
+
+        #region 重写函数
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj)) return true;
+            
+            if (obj is BattleCardData otherCard)
+            {
+                return BaseData.Equals(otherCard.BaseData) && StarLevel == otherCard.StarLevel;
+            }
+            return false;
+        }
+        
+        public override int GetHashCode()
+        {
+            return InstanceId.GetHashCode();
+        }
+
+        public static bool operator ==(BattleCardData left, BattleCardData right)
+        {
+            if (ReferenceEquals(left, null))
+            {
+                return ReferenceEquals(right, null);
+            }
+            
+            return left.Equals(right);
+        }
+        
+        public static bool operator !=(BattleCardData left, BattleCardData right)
+        {
+            return !(left == right);
+        }
+
+        #endregion
     }
 }

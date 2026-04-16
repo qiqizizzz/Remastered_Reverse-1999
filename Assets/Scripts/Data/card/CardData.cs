@@ -77,6 +77,38 @@ namespace Data.card
         [Header("视觉")]
         public Sprite CardSprite; //卡牌图片
         public GameObject CardEffectPrefab;//特效
-        
+
+        #region 重写函数
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj)) return true;
+            
+            if (obj is CardData otherCard)
+            {
+                return Id == otherCard.Id;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public static bool operator ==(CardData left, CardData right)
+        {
+            if (ReferenceEquals(left, null))
+            {
+                return ReferenceEquals(right, null);
+            }
+            
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(CardData left, CardData right)
+        {
+            return !(left == right);
+        }
+        #endregion
     }
 }

@@ -72,7 +72,7 @@ namespace Module.fight
         
         private void StartFirstRound()
         {
-            //GameApp.CardManager.PrepareHandsForNewLevel();
+            //GameApp.CardManager.PrepareHandsForNewLevel();后续需要改回来ing
             GameApp.CardManager.DrawCard(8);
             
             ApplyFunc(EventDefines.UpdateHandCards, GameApp.CardManager.GetHandCards());
