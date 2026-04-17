@@ -54,6 +54,8 @@ namespace Module.View
             Controller.RegisterFunc(EventDefines.UpdateHandCards, onUpdateHandCards);
             Controller.RegisterFunc(EventDefines.ExitLevel, onExitLevel);
             
+            GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
+            
             PreLoadCardItem();
         }
 
@@ -175,6 +177,14 @@ namespace Module.View
             }
         }
 
+        private void onHideAllHands(System.Object args)
+        {
+            foreach (var item in _handCardItems)
+            {
+                item.HideCard();
+            }
+        }
+
         #region 卡牌交互逻辑回调
         private void OnCardBeginDrag(UI_CommonCardItem arg1, PointerEventData arg2)
         {
@@ -248,7 +258,7 @@ namespace Module.View
 
             Vector2 targetPos = new Vector2(-_cardActionWidth, 0) +
                                 new Vector2(
-                                    (_cardActionQueue.GetCurrentActionCount()) * (item.CardWidth * 0.8f + 15f), 0);
+                                    (_cardActionQueue.GetCurrentActionCount()) * (item.CardWidth * 0.8f + 12f), 0);
             
             bool isQueueFull = _cardActionQueue.PlayCard(item.BattleCardData, index);
             

@@ -95,12 +95,13 @@ namespace Module.fight
             
             //TODO:禁用UI交互,播放出牌动画等...
             
-            //如果用了下面的内容,就会导致第四个卡牌进入到第一个卡牌前面,感觉可以在动画里面Fix,还是有问题啊,气笑了
             List<CardAction> actions = GameApp.CardManager.CardActionQueue.GetAllActionsAndClear();
 
             foreach (var action in actions)
             {
                 CardSkillExecutor.ExecuteCardAction(action);
+                
+                //TODO:需要等待动画播完ing
             }
             
             GameApp.MessageCenter.PostEvent(EventDefines.OnEnemyTurn);
