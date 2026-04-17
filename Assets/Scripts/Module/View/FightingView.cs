@@ -248,15 +248,19 @@ namespace Module.View
 
             Vector2 targetPos = new Vector2(-_cardActionWidth, 0) +
                                 new Vector2(
-                                    (_cardActionQueue.GetCurrentActionCount() - 1) * (item.CardWidth * 0.8f + 15f), 0);
+                                    (_cardActionQueue.GetCurrentActionCount()) * (item.CardWidth * 0.8f + 15f), 0);
             
-            item.PlayToQueueAnim(targetPos);
+            bool isQueueFull = _cardActionQueue.PlayCard(item.BattleCardData, index);
+            
+            item.PlayToQueueAnim(targetPos, () =>
+            {
+                if (isQueueFull)
+                    GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
+            });
             item.IsInQueue = true;
             item.SetBlockRaycasts(false);
 
             CheckAndTriggerComposite();
-
-            _cardActionQueue.PlayCard(item.BattleCardData, index);//放最后防止动画没播完就发送事件了,bug...
 
             //TODO: 将出牌逻辑通知控制器进行处理,通知CardActionQueue等进行管理
         }

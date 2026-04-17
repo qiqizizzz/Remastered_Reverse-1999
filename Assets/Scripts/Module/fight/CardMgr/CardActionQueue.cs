@@ -30,7 +30,7 @@ namespace Module.fight.CardMgr
 
         public bool CanPlayCard() => _actionStack.Count < MaxActionCount;
         
-        public void PlayCard(BattleCardData cardData, int originalIndex)
+        public bool PlayCard(BattleCardData cardData, int originalIndex)
         {
             var action = new CardAction()
             {
@@ -40,9 +40,7 @@ namespace Module.fight.CardMgr
             
             _actionStack.Push(action);
             
-            //出牌队列满了,触发事件,进入战斗阶段
-            if(_actionStack.Count == MaxActionCount)
-                GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
+            return _actionStack.Count == MaxActionCount;//返回 true 表示队列已满,可以进入战斗结算了
         }
 
         public List<CardAction> GetAllActionsAndClear()

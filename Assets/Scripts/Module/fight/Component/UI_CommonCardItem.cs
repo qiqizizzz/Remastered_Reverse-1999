@@ -149,11 +149,11 @@ namespace Module.fight.Component
             transform.SetSiblingIndex(index);
         }
 
-        public void PlayToQueueAnim(Vector2 targetPos)
+        public void PlayToQueueAnim(Vector2 targetPos, Action onComplete = null)
         {
             Rect.DOKill();
             Rect.DOScale(Vector3.one, _playCommonDuration);
-            Rect.DOAnchorPos(targetPos, _playMoveDuration).SetEase(Ease.OutQuad);
+            Rect.DOAnchorPos(targetPos, _playMoveDuration).SetEase(Ease.OutQuad).OnComplete(() => onComplete?.Invoke());
             Rect.DOScale(Vector3.one * _playQueueScale, _playCommonDuration).SetEase(Ease.OutQuad);
             Rect.DOBlendableLocalRotateBy(_playRotation, _playCommonDuration)
                 .SetLoops(_playRotationLoop, LoopType.Yoyo);
