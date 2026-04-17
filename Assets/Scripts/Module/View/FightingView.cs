@@ -6,6 +6,7 @@
 * └────────────────────────────────────────────────────┘
 */
 
+using System;
 using System.Collections.Generic;
 using Common;
 using Common.Defines;
@@ -260,17 +261,22 @@ namespace Module.View
                                 new Vector2(
                                     (_cardActionQueue.GetCurrentActionCount()) * (item.CardWidth * 0.8f + 12f), 0);
             
-            bool isQueueFull = _cardActionQueue.PlayCard(item.BattleCardData, index);
-            
-            item.PlayToQueueAnim(targetPos, () =>
-            {
-                if (isQueueFull)
-                    GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
-            });
+            item.PlayToQueueAnim(targetPos);
             item.IsInQueue = true;
             item.SetBlockRaycasts(false);
-
+            
             CheckAndTriggerComposite();
+            
+            bool isQueueFull = _cardActionQueue.PlayCard(item.BattleCardData, index);
+            if (isQueueFull)
+            {
+                DOVirtual.DelayedCall(2f, () =>
+                {
+                    GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
+                });
+            }
+            
+            
 
             //TODO: 将出牌逻辑通知控制器进行处理,通知CardActionQueue等进行管理
         }
