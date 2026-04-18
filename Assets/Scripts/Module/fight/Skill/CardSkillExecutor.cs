@@ -30,6 +30,7 @@ namespace Module.fight.Skill
             
             Debug.Log($"[{caster.CharacterData.Name}] 使用了卡牌 [{cardData.Name}] (星级: {starLevel})");
 
+            caster.ChangeState(CharacterStateType.Attack);
             foreach (var effect in cardData.Effects)
             {
                 List<BaseCharacter> targets = GetTargets(caster,effect, action.TargetInstanceId);

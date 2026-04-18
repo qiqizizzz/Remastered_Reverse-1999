@@ -1,6 +1,6 @@
 ﻿/*
 * ┌──────────────────────────────────┐
-* │  描    述:                       
+* │  描    述: 受伤状态                      
 * │  类    名: HurtState.cs       
 * │  创    建: By qiqizizzz
 * └──────────────────────────────────┘
@@ -19,9 +19,12 @@ namespace Module.Character.Components
             _character.PlayAnim(_character.AnimConfig.HurtAnim, false);
         }
 
-        public override void OnExit()
+        public override void OnAnimationComplete(string animName)
         {
-            _character.PlayAnim(_character.AnimConfig.IdleAnim, true);//感觉这里有问题
+            if (animName == _character.AnimConfig.HurtAnim)
+            {
+                _character.ChangeState(CharacterStateType.Idle);
+            }
         }
     }
 }
