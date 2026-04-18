@@ -6,6 +6,7 @@
 * └──────────────────────────────────────────────────────────────────────────────────────────────────────┘
 */
 
+using System;
 using System.Collections.Generic;
 using Common.Defines;
 using Data.level;
@@ -93,22 +94,26 @@ namespace Module.fight
             //TODO:...
         }
         
-        private void onPlayerTurnOutput(System.Object args)
+        private async void onPlayerTurnOutput(System.Object args)
         {
-            Debug.Log("==== 玩家出牌阶段结束，开始结算队列 ====");
-            
-            //TODO:禁用UI交互,播放出牌动画等...
-            
-            List<CardAction> actions = GameApp.CardManager.CardActionQueue.GetAllActionsAndClear();
-
-            foreach (var action in actions)
+            try
             {
-                CardSkillExecutor.ExecuteCardAction(action);
+                Debug.Log("==== 玩家出牌阶段结束，开始结算队列 ====");
+                //TODO:禁用UI交互,播放出牌动画等...
+                List<CardAction> actions = GameApp.CardManager.CardActionQueue.GetAllActionsAndClear();
+
+                foreach (var action in actions)
+                {
+                    await CardSkillExecutor.ExecuteCardActionAsync(action);
+                    //TODO:需要等待动画播完ing
+                }
                 
-                //TODO:需要等待动画播完ing
+                GameApp.MessageCenter.PostEvent(EventDefines.OnEnemyTurn);
             }
-            
-            GameApp.MessageCenter.PostEvent(EventDefines.OnEnemyTurn);
+            catch (Exception e)
+            {
+                throw; // TODO 处理异常
+            }
         }
 
         private void onEnemyTurn(System.Object args)

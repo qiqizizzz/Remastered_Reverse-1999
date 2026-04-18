@@ -32,6 +32,7 @@ namespace Common.Defines
         public const string UI_small_Box_searchedUser ="UI_small/Box_searchedUser";
         public const string UI_small_CommonCard = "UI_small/CommonCard";
         public const string UI_small_UltimateCard = "UI_small/UltimateCard";
+        public const string UI_small_Txt_Damage = "UI_small/Txt_Damage";
         
         //Data数据
         public const string Data_LoadingTextData = "Data/LoadingTextData";

@@ -11,12 +11,14 @@ using Data.card;
 using Module.Character;
 using Module.fight.CardMgr;
 using UnityEngine;
+using System.Threading.Tasks;
 
 namespace Module.fight.Skill
 {
     public abstract class CardSkillExecutor
     {
-        public static void ExecuteCardAction(CardAction action)
+        
+        public static async Task ExecuteCardActionAsync(CardAction action)
         {
             CardData cardData = action.BattleCardData.BaseData;
             int starLevel = action.BattleCardData.StarLevel;
@@ -30,7 +32,18 @@ namespace Module.fight.Skill
             
             Debug.Log($"[{caster.CharacterData.Name}] 使用了卡牌 [{cardData.Name}] (星级: {starLevel})");
 
+            //TODO:UI表现
+
+            await Task.Delay(300);
+            
             caster.ChangeState(CharacterStateType.Attack);
+            
+            //TODO:特效等
+            //施法前摇
+            float attackDuration = caster.GetAnimDuration(caster.AnimConfig.AttackAnim);
+            int preCastWaitMs = Mathf.RoundToInt(attackDuration * 0.5f * 1000);
+            if (preCastWaitMs > 0) await Task.Delay(preCastWaitMs);
+            
             foreach (var effect in cardData.Effects)
             {
                 List<BaseCharacter> targets = GetTargets(caster,effect, action.TargetInstanceId);
@@ -49,6 +62,9 @@ namespace Module.fight.Skill
                 }
             }
             
+            //施法后摇
+            int postCastWaitMs = Mathf.RoundToInt(attackDuration * 0.5f * 1000);
+            if (postCastWaitMs > 0) await Task.Delay(preCastWaitMs);
         }
 
         #region 卡牌效果执行
@@ -71,6 +87,8 @@ namespace Module.fight.Skill
                 }
 
                 target.TakeDamage(Mathf.RoundToInt(finalDamage));
+                
+                //TODO:伤害数字表现、特效等
             }
         }
         #endregion

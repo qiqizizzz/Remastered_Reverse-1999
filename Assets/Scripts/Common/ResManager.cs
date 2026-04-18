@@ -118,7 +118,7 @@ namespace Common
         //同步从对象池加载实例
         public static GameObject InstantiateFromPool(string keyName, Transform parent = null)
         {
-            if (_pool.ContainsKey(keyName))
+            if (_pool.ContainsKey(keyName) && _pool[keyName].Count > 0)
             {
                 GameObject obj = _pool[keyName].Dequeue();
                 obj.SetActive(true);
@@ -134,7 +134,7 @@ namespace Common
         public static void InstantiateFromPoolAsync(string keyName, Action<GameObject> onCompleted,
             Transform parent = null)
         {
-            if (_pool.ContainsKey(keyName))
+            if (_pool.ContainsKey(keyName) && _pool[keyName].Count > 0)
             {
                 GameObject obj = _pool[keyName].Dequeue();
                 obj.SetActive(true);

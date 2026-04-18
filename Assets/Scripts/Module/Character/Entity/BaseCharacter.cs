@@ -46,8 +46,11 @@ namespace Module.Character
         protected CharacterData _characterData;
         [SerializeField]protected SkeletonAnimation _skeAnim;
 
+        private CharacterHUD _HUD;
+        
         [Header("属性相关")]
         public float CurrentHp;
+        public float MaxHp;
         
         [Header("状态相关")]
         private Dictionary<CharacterStateType, BaseCharacterState> _stateMachine;
@@ -62,6 +65,7 @@ namespace Module.Character
         {
             _instanceId = Guid.NewGuid().ToString();
             _skeAnim = GetComponentInChildren<SkeletonAnimation>();
+            _HUD = GetComponentInChildren<CharacterHUD>();
             
             InitStateMachine();
         }
@@ -91,10 +95,11 @@ namespace Module.Character
         public void Init(CharacterData data)
         {
             _characterData = data;
-            CurrentHp = data.Property.Hp;
-
+            MaxHp = data.Property.Hp;
+            CurrentHp = MaxHp;
             gameObject.name = _characterData.Name;
             
+            _HUD?.UpdateHp(CurrentHp, MaxHp);
             ChangeState(CharacterStateType.Idle);
         }
         
@@ -136,14 +141,16 @@ namespace Module.Character
             _skeAnim.AnimationState.SetAnimation(trackIndex, animName, loop);
         }
 
-        public void TakeDamage(int damage)
+        public void TakeDamage(int damage, bool isCrit = false)
         {
             if(CurrentStateType == CharacterStateType.Die) return;
 
             CurrentHp -= damage;
             CurrentHp = Mathf.Max(0, CurrentHp);
+
+            _HUD?.ShowDamage(damage, isCrit);
+            _HUD?.UpdateHp(CurrentHp, MaxHp);
             
-            Debug.Log($"{_characterData.Name} 受到 {damage} 点伤害");
             if (CurrentHp <= 0)
             {
                 ChangeState(CharacterStateType.Die);
@@ -153,6 +160,14 @@ namespace Module.Character
             {
                 ChangeState(CharacterStateType.Hurt);
             }
+        }
+
+        public float GetAnimDuration(string animName)
+        {
+            if (_skeAnim == null || string.IsNullOrEmpty(animName)) return 0f;
+
+            var anim = _skeAnim.Skeleton.Data.FindAnimation(animName);
+            return anim?.Duration ?? 0f;
         }
 
         #region spine事件
