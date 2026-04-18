@@ -381,14 +381,13 @@ namespace Module.View
             executingCard.SetAsLastSibling();
 
             RectTransform rect = executingCard.GetComponent<RectTransform>();
-            
-            //动画序列
+
+            #region 动画序列
             Vector3 centerWorldPos = transform.position;
 
             Sequence seq = DOTween.Sequence();
 
             // 阶段 1：甩出卡牌 (抛物线 + 旋转 + 放大)
-            // X轴和Y轴用不同的Ease，就能组合出漂亮的抛物线弧度！
             seq.Append(rect.DOMoveX(centerWorldPos.x, 0.45f).SetEase(Ease.OutCirc)); // X轴平滑滑出
             seq.Join(rect.DOMoveY(centerWorldPos.y, 0.45f).SetEase(Ease.OutBack, 1.2f)); // Y轴带一点轻微超出再回弹
             seq.Join(rect.DOScale(Vector3.one * 1.5f, 0.45f).SetEase(Ease.OutQuad));
@@ -405,10 +404,11 @@ namespace Module.View
             {
                 executingCard.gameObject.SetActive(false);
                 
-                // 【重要】重置状态，防止卡牌下次回到手牌时还是歪的/缩小的
+                // 重置状态，防止卡牌下次回到手牌时还是歪的/缩小的
                 rect.localScale = Vector3.one;
                 rect.localRotation = Quaternion.identity;
             });
+            #endregion
         }
         #endregion
         #endregion
