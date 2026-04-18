@@ -18,5 +18,10 @@ namespace Module.Character.Components
         {
             _character.PlayAnim(_character.AnimConfig.HurtAnim, false);
         }
+
+        public override void OnExit()
+        {
+            _character.PlayAnim(_character.AnimConfig.IdleAnim, true);//感觉这里有问题
+        }
     }
 }

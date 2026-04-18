@@ -46,6 +46,9 @@ namespace Module.Character
         protected CharacterData _characterData;
         [SerializeField]protected SkeletonAnimation _skeAnim;
 
+        [Header("属性相关")]
+        public float CurrentHp;
+        
         [Header("状态相关")]
         private Dictionary<CharacterStateType, BaseCharacterState> _stateMachine;
         private BaseCharacterState _currentState;
@@ -88,6 +91,7 @@ namespace Module.Character
         public void Init(CharacterData data)
         {
             _characterData = data;
+            CurrentHp = data.Property.Hp;
 
             gameObject.name = _characterData.Name;
             
@@ -135,12 +139,20 @@ namespace Module.Character
         public void TakeDamage(int damage)
         {
             if(CurrentStateType == CharacterStateType.Die) return;
-            
-            //TODO:扣血,计算伤害,特效等
+
+            CurrentHp -= damage;
+            CurrentHp = Mathf.Max(0, CurrentHp);
             
             Debug.Log($"{_characterData.Name} 受到 {damage} 点伤害");
-            
-            ChangeState(CharacterStateType.Hurt);
+            if (CurrentHp <= 0)
+            {
+                ChangeState(CharacterStateType.Die);
+                //TODO:发送事件ing
+            }
+            else
+            {
+                ChangeState(CharacterStateType.Hurt);
+            }
         }
 
         #region spine事件

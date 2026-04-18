@@ -13,5 +13,10 @@ namespace Module.Character.Components
         public DieState(BaseCharacter character) : base(character)
         {
         }
+
+        public override void OnEnter()
+        {
+            _character.PlayAnim(_character.AnimConfig.DieAnim);
+        }
     }
 }
