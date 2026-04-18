@@ -60,12 +60,19 @@ namespace Module.View
             Controller.RegisterFunc(EventDefines.ExitLevel, onExitLevel);
             
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
             
             PreLoadCardItem();
         }
-
+        
         protected override void OnDestroy()
         {
+            Controller.UnRegisterFunc(EventDefines.UpdateHandCards, onUpdateHandCards);
+            Controller.UnRegisterFunc(EventDefines.ExitLevel, onExitLevel);
+                
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
+            
             foreach (var item in _cardPool)
             {
                 if (item != null)
@@ -120,7 +127,6 @@ namespace Module.View
         {
             //TODO:更新轮次,后面再说吧。。
         }
-
         #endregion
         
         #region 卡牌交互逻辑回调
@@ -353,6 +359,56 @@ namespace Module.View
             {
                 _handCardItems[i].MoveToIndex(i, _handCardItems.Count);
             }
+        }
+        
+        private void onCardExecuteUI(System.Object args = null)
+        {
+            Transform executingCard = null;
+
+            for (int i = 0; i < _cardActionTf.childCount; i++)
+            {
+                Transform child = _cardActionTf.GetChild(i);
+                if (child.GetComponent<UI_CommonCardItem>() != null)
+                {
+                    executingCard = child;
+                    break;
+                }
+            }
+            
+            if (executingCard == null) return;
+            
+            executingCard.SetParent(transform);
+            executingCard.SetAsLastSibling();
+
+            RectTransform rect = executingCard.GetComponent<RectTransform>();
+            
+            //动画序列
+            Vector3 centerWorldPos = transform.position;
+
+            Sequence seq = DOTween.Sequence();
+
+            // 阶段 1：甩出卡牌 (抛物线 + 旋转 + 放大)
+            // X轴和Y轴用不同的Ease，就能组合出漂亮的抛物线弧度！
+            seq.Append(rect.DOMoveX(centerWorldPos.x, 0.45f).SetEase(Ease.OutCirc)); // X轴平滑滑出
+            seq.Join(rect.DOMoveY(centerWorldPos.y, 0.45f).SetEase(Ease.OutBack, 1.2f)); // Y轴带一点轻微超出再回弹
+            seq.Join(rect.DOScale(Vector3.one * 1.5f, 0.45f).SetEase(Ease.OutQuad));
+            seq.Join(rect.DORotate(new Vector3(0, 0, -8f), 0.45f).SetEase(Ease.OutQuad)); // 稍微倾斜一点，模拟甩牌手感
+
+            // 阶段 2：悬停展示 (让玩家看清打出了什么)
+            seq.AppendInterval(0.5f);
+
+            // 阶段 3：爆发击出/消失 (急速收缩 + 回正)
+            seq.Append(rect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack));
+            seq.Join(rect.DORotate(Vector3.zero, 0.2f));
+
+            seq.OnComplete(() =>
+            {
+                executingCard.gameObject.SetActive(false);
+                
+                // 【重要】重置状态，防止卡牌下次回到手牌时还是歪的/缩小的
+                rect.localScale = Vector3.one;
+                rect.localRotation = Quaternion.identity;
+            });
         }
         #endregion
         #endregion

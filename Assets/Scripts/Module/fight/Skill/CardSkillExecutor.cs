@@ -12,6 +12,7 @@ using Module.Character;
 using Module.fight.CardMgr;
 using UnityEngine;
 using System.Threading.Tasks;
+using Common.Defines;
 
 namespace Module.fight.Skill
 {
@@ -31,8 +32,8 @@ namespace Module.fight.Skill
             }
             
             Debug.Log($"[{caster.CharacterData.Name}] 使用了卡牌 [{cardData.Name}] (星级: {starLevel})");
-
-            //TODO:UI表现
+            
+            GameApp.MessageCenter.PostEvent(EventDefines.OnCardExecuteUI);
 
             await Task.Delay(300);
             
@@ -80,13 +81,14 @@ namespace Module.fight.Skill
                 float finalDamage = Mathf.Max((casterProp.Attack * effect.Value * starMultiplier) - targetProp.Defense,
                     1f);
 
-                if (Random.value < casterProp.CritRate)
+                bool isCrit = Random.value < casterProp.CritRate;
+                if (isCrit)
                 {
                     finalDamage *= casterProp.CritDamage;
                     Debug.Log("暴击了！");
                 }
 
-                target.TakeDamage(Mathf.RoundToInt(finalDamage));
+                target.TakeDamage(Mathf.RoundToInt(finalDamage), isCrit);
                 
                 //TODO:伤害数字表现、特效等
             }
