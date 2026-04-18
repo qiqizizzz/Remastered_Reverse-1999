@@ -47,7 +47,7 @@ namespace Module.Character.Components
                 go.transform.position = FloatPoint.position;
                 txt.fontSize = 52;
                 
-                txt.text = $"- {damage}";
+                txt.text = $"-{damage}";
                 txt.color = isCrit ? Color.yellow : Color.white;
                 if (isCrit) txt.fontSize = Mathf.RoundToInt(txt.fontSize * 1.5f);
 
