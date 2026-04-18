@@ -19,8 +19,8 @@ namespace Module.Character
 {
     public class EntityManager
     {
-        private List<HeroEntity> AliveHeroes { get; set; }
-        private List<EnemyEntity> AliveEnemies { get; set; }
+        private readonly List<HeroEntity> AliveHeroes;
+        private readonly List<EnemyEntity> AliveEnemies;
         
         private Dictionary<int, Vector3> heroSpawnPositions = new Dictionary<int, Vector3>()
         {
@@ -48,7 +48,27 @@ namespace Module.Character
         }
 
         public int GetTotalRound() => totalRound;
+        public List<HeroEntity> GetAliveHeroes() => AliveHeroes;
+        public List<EnemyEntity> GetAliveEnemies() => AliveEnemies;
         
+        #region 查找实体
+        public BaseCharacter GetCharacterById(int id)
+        {
+            foreach (var hero in AliveHeroes)
+            {
+                if (hero.CharacterData.Id == id) return hero;
+            }
+
+            foreach (var enemy in AliveEnemies)
+            {
+                if (enemy.CharacterData.Id == id) return enemy;
+            }
+
+            return null;
+        }
+        #endregion
+        
+        #region 生成实体与配置数据
         //生成玩家与敌人等
         public void SpawnBattleEntities(LevelInitData levelInitData, Action onComplete)
         {
@@ -137,7 +157,7 @@ namespace Module.Character
             Debug.Log("生成玩家与敌人等，关卡id：" + levelInitData.LevelId);
         }
 
-        public void ClearBattleEntities()
+        private void ClearBattleEntities()
         {
             //TODO：销毁玩家与敌人等
             hasSpawnedHeroCount = 0;
@@ -171,5 +191,6 @@ namespace Module.Character
             if(hasSpawnedEnemyCount > 4)
                 go.SetActive(false);
         }
+        #endregion
     }
 }

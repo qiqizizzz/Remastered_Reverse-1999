@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 246631ec1ff854c419c2c7f75fcbb760
   m_SerializeEntries:
+  - m_GUID: 8e0dcab90dc003846a81c2d808ef8114
+    m_Address: Character/Enemy_OriginiumSlug
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: db33b1cb2f0a41a4f9480be990a5f58d
     m_Address: Character/Hero_LeiMiuan
     m_ReadOnly: 0

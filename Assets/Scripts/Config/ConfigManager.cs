@@ -170,7 +170,6 @@ namespace Config
         #region 敌人相关
         public CharacterData GetEnemyData(int enemyId)
         {
-            Debug.Log("查询敌人数据，id: " + enemyId);
             return enemyConfig.TryGetValue(enemyId, out CharacterData enemyData) ? enemyData : null;
         }
 

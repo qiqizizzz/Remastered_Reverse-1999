@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Common.Defines;
 using Data.level;
 using Module.fight.CardMgr;
+using Module.fight.Skill;
 using MVC;
 using MVC.Controller;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace Module.fight
         
         public FightController() : base()
         {
+            
             GameApp.ViewManager.Register(ViewType.FightingView, new ViewInfo()
             {
                 PrefabName = AddressDefines.UI_FightingView,

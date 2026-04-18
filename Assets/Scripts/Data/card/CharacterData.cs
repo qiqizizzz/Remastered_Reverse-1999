@@ -52,8 +52,8 @@ namespace Data.card
     [Serializable]
     public class Property
     {
-        public float Attack;//攻击
         public float Hp;//生命
+        public float Attack;//攻击
         public float Defense;//防御
         public float CritRate;//暴击率
         public float CritDamage;//暴击伤害

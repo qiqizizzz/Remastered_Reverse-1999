@@ -17,6 +17,11 @@ MonoBehaviour:
   Name: "\u857E\u7F2A\u5B89\u7684\u5361\u724C1"
   Description: "\u857E\u7F2A\u5B89\u7684\u5361\u724C1"
   OwnerId: 1002
-  Effects: []
+  Effects:
+  - EffectType: 0
+    Value: 1.2
+    Round: 1
+    Target: 1
+    TargetCount: 3
   CardSprite: {fileID: 21300000, guid: 801c6dd90e0b4c746a9015dd8aab12a7, type: 3}
   CardEffectPrefab: {fileID: 0}

@@ -18,9 +18,9 @@ MonoBehaviour:
   CharacterType: 1
   InspirationType: 0
   Property:
-    Attack: 0
-    Hp: 0
-    Defense: 0
-    CritRate: 0
-    CritDamage: 0
+    Hp: 800
+    Attack: 100
+    Defense: 40
+    CritRate: 0.05
+    CritDamage: 1.5
   Cards: 

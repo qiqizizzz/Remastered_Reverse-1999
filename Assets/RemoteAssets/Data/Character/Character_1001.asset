@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Character_1001
   m_EditorClassIdentifier: 
   Id: 1001
-  Name: Mortis
+  Name: "\u83AB\u63D0\u65AF"
   En_Name: Mortis
   CharacterType: 0
   InspirationType: 0
   Property:
-    Attack: 0
-    Hp: 0
-    Defense: 0
-    CritRate: 0
-    CritDamage: 0
+    Hp: 1200
+    Attack: 180
+    Defense: 80
+    CritRate: 0.15
+    CritDamage: 1.5
   Cards: d1070000d2070000d3070000

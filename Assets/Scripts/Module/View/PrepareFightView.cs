@@ -95,7 +95,6 @@ namespace Module.View
 
         private void onActionBtn()
         {
-            Debug.Log("进入战斗");
             ViewExtensions.LoadScene(this, SceneDefines.Fight,() =>
             {
                 ApplyControllerFunc(ControllerType.Fight, EventDefines.OpenFightingView, GetLevelInitData());

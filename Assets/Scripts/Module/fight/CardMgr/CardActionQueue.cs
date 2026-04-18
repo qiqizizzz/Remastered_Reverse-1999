@@ -15,7 +15,7 @@ namespace Module.fight.CardMgr
 {
     public class CardAction
     {
-        public BattleCardData CardData;
+        public BattleCardData BattleCardData;
         public int OriginalIndex;//卡牌在手牌中的原始位置
         public string TargetInstanceId;
     }
@@ -36,7 +36,7 @@ namespace Module.fight.CardMgr
         {
             var action = new CardAction()
             {
-                CardData = cardData,
+                BattleCardData = cardData,
                 OriginalIndex = originalIndex
             };
             

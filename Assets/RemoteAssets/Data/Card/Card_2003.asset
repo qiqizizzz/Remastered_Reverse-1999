@@ -17,6 +17,11 @@ MonoBehaviour:
   Name: "Mortis\u7684\u5927\u62DB"
   Description: "Mortis\u7684\u5927\u62DB"
   OwnerId: 1001
-  Effects: []
+  Effects:
+  - EffectType: 0
+    Value: 4
+    Round: 0
+    Target: 1
+    TargetCount: 1
   CardSprite: {fileID: 21300000, guid: b4791514f5ca4734eb7f6b74eeba07e8, type: 3}
   CardEffectPrefab: {fileID: 0}

@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Character_1002
   m_EditorClassIdentifier: 
   Id: 1002
-  Name: LeiMiuan
+  Name: "\u857E\u7F2A\u5B89"
   En_Name: LeiMiuan
   CharacterType: 0
   InspirationType: 0
   Property:
-    Attack: 0
-    Hp: 0
-    Defense: 0
-    CritRate: 0
-    CritDamage: 0
+    Hp: 950
+    Attack: 220
+    Defense: 60
+    CritRate: 0.3
+    CritDamage: 1.8
   Cards: d4070000d5070000d6070000
