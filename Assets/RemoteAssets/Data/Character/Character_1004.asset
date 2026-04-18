@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 1004
   Name: "\u82CF\u8299\u6BD4"
+  En_Name: "\u82CF\u8299\u6BD4"
   CharacterType: 0
   InspirationType: 0
   Property:

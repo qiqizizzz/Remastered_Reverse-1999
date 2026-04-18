@@ -22,6 +22,7 @@ namespace Config
     {
         private Dictionary<int, LevelData> levelConfig;
         private Dictionary<int, CharacterData> characterConfig;
+        private Dictionary<int, CharacterData> enemyConfig;
         private Dictionary<int, CardData> cardConfig;
         
         private Dictionary<string, CharacterData> characterConfigByName;
@@ -30,6 +31,7 @@ namespace Config
         {
             levelConfig = new Dictionary<int, LevelData>();
             characterConfig = new Dictionary<int, CharacterData>();
+            enemyConfig = new Dictionary<int, CharacterData>();
             cardConfig = new Dictionary<int, CardData>();
             characterConfigByName = new Dictionary<string, CharacterData>();
         }
@@ -67,6 +69,12 @@ namespace Config
                 if (character != null && !characterConfig.ContainsKey(character.Id))
                     characterConfig.Add(character.Id, character);
             }
+
+            foreach (var enemy in db.allEnemies)
+            {
+                if(enemy != null && !enemyConfig.ContainsKey(enemy.Id))
+                    enemyConfig.Add(enemy.Id, enemy);
+            }
             
             foreach (var card in db.allCards)
             {
@@ -77,8 +85,8 @@ namespace Config
             //根据角色名字建立一个快速查询的字典
             foreach (var kvp in characterConfig)
             {
-                if (!characterConfigByName.ContainsKey(kvp.Value.Name))
-                    characterConfigByName.Add(kvp.Value.Name, kvp.Value);
+                if (!characterConfigByName.ContainsKey(kvp.Value.En_Name))
+                    characterConfigByName.Add(kvp.Value.En_Name, kvp.Value);
             }
             
             Debug.Log($"加载完成: {cardConfig.Count}张卡牌, {characterConfig.Count}个角色, {levelConfig.Count}个关卡");
@@ -157,6 +165,15 @@ namespace Config
             return characterConfig.Values.ToList();
         }
         
+        #endregion
+
+        #region 敌人相关
+        public CharacterData GetEnemyData(int enemyId)
+        {
+            Debug.Log("查询敌人数据，id: " + enemyId);
+            return enemyConfig.TryGetValue(enemyId, out CharacterData enemyData) ? enemyData : null;
+        }
+
         #endregion
         
         #region 关卡相关

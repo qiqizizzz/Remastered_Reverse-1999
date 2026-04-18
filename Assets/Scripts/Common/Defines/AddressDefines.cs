@@ -39,6 +39,7 @@ namespace Common.Defines
         
         //Character角色
         public const string Character_Hero = "Character/Hero_";
+        public const string Character_Enemy = "Character/Enemy_";
         
         //Audio音频
         public const string Audio_BGM_Game = "Audio/Bgm_Game";

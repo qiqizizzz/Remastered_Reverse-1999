@@ -30,6 +30,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7c9739c06a4d32344bd837bd0592f74d, type: 2}
   - {fileID: 11400000, guid: 0788a82d6c176a548ab8531e8d07c94c, type: 2}
   - {fileID: 11400000, guid: c8f8537eae893124abe938f287572802, type: 2}
+  allEnemies:
+  - {fileID: 11400000, guid: bf5a2b01f7f77a24bbaae80fd1179d2d, type: 2}
   allLevels:
   - {fileID: 11400000, guid: a95769a493cf0c04ca135131f4728120, type: 2}
   - {fileID: 11400000, guid: 803ad20e2d07875488fa9cb2169a909a, type: 2}

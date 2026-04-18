@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fb9e1c1fe8b4703be743b5a85ce6929, type: 3}
-  m_Name: Character_1003
+  m_Name: Enemy_5001
   m_EditorClassIdentifier: 
-  Id: 1003
-  Name: "\u672A\u7EE3\u94E0"
-  En_Name: "\u672A\u7EE3\u94E0"
-  CharacterType: 0
+  Id: 5001
+  Name: "\u6E90\u77F3\u866B"
+  En_Name: OriginiumSlug
+  CharacterType: 1
   InspirationType: 0
   Property:
     Attack: 0

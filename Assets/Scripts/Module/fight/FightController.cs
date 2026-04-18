@@ -49,6 +49,7 @@ namespace Module.fight
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
             GameApp.MessageCenter.AddEvent(EventDefines.OnEnemyTurn, onEnemyTurn);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnSelectEnemyTarget, onSelectEnemyTarget);
         }
 
         public override void RemoveModuleEvent()
@@ -60,6 +61,7 @@ namespace Module.fight
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnEnemyTurn, onEnemyTurn);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnSelectEnemyTarget, onSelectEnemyTarget);
         }
 
         #region UI事件
@@ -114,6 +116,14 @@ namespace Module.fight
             //TODO:...
             
             GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnStart);
+        }
+
+        private void onSelectEnemyTarget(System.Object args)
+        {
+            string enemyInstanceId = args.ToString();
+            GameApp.CardManager.CurrentSelectedTargetId = enemyInstanceId;
+
+            Debug.Log($"选择了敌人目标，InstanceID：{enemyInstanceId}");
         }
 
         #endregion

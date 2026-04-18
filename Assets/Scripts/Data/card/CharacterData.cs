@@ -66,6 +66,7 @@ namespace Data.card
         [Header("基本信息")]
         public int Id;//角色id
         public string Name;//角色名字
+        public string En_Name;
         public CharacterType CharacterType;//角色种类
         public InspirationType InspirationType;//角色的灵感种类
         

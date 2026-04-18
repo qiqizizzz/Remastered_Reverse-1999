@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using Common.Defines;
 using Module.fight.Component;
+using UnityEngine;
 
 namespace Module.fight.CardMgr
 {
@@ -16,6 +17,7 @@ namespace Module.fight.CardMgr
     {
         public BattleCardData CardData;
         public int OriginalIndex;//卡牌在手牌中的原始位置
+        public string TargetInstanceId;
     }
     
     public class CardActionQueue
@@ -30,7 +32,7 @@ namespace Module.fight.CardMgr
 
         public bool CanPlayCard() => _actionStack.Count < MaxActionCount;
         
-        public bool PlayCard(BattleCardData cardData, int originalIndex)
+        public bool PlayCard(BattleCardData cardData, int originalIndex, string targetInstanceId)
         {
             var action = new CardAction()
             {

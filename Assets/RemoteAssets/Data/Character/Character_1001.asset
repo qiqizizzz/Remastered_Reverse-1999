@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 1001
   Name: Mortis
+  En_Name: Mortis
   CharacterType: 0
   InspirationType: 0
   Property:

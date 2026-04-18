@@ -17,6 +17,7 @@ namespace Module.fight.CardMgr
     public class CardManager
     {
         public readonly CardActionQueue CardActionQueue;
+        public string CurrentSelectedTargetId { get; set; }
         
         private readonly int singleCardMaxLimit = 3;//单张牌的最大限制数量
         private readonly Dictionary<CharacterData, List<CardData>> m_cards;

@@ -26,6 +26,9 @@ namespace Module.View
         private List<UI_CommonCardItem> _handCardItems;//当前手牌实例列表
         private Stack<UI_CommonCardItem> _uiActionStack;//出牌队列实例
 
+        [Header("关卡信息相关")]
+        private Text _turnInfoText;
+        
         [Header("队列区域相关")] 
         private Transform _cardActionTf;
         private float _cardActionWidth = 550f;
@@ -39,6 +42,7 @@ namespace Module.View
         {
             _cardActionTf = Find<Transform>("CardAction");
             _cardDeckTf = Find<Transform>("CardDeck");
+            _turnInfoText = Find<Text>("FightDetail/Round/Txt_turnNum");
 
             _cardPool = new List<UI_CommonCardItem>();
             _handCardItems = new List<UI_CommonCardItem>();
@@ -77,35 +81,8 @@ namespace Module.View
             if(_cardPool.Count == _maxHandCardCount)
                 ApplyFunc(EventDefines.FightingViewReady);
         }
-
-        private void PreLoadCardItem()
-        {
-            int loadedCount = 0;
-            for (int i = 0; i < _maxHandCardCount; i++)
-            {
-                ResManager.InstantiateAsync(AddressDefines.UI_small_CommonCard, (go) =>
-                {
-                    if (go == null)
-                    {
-                        Debug.LogError("加载卡牌预制体失败");
-                        return;
-                    }
-
-                    go.transform.SetParent(_cardDeckTf, false);
-                    UI_CommonCardItem item = go.GetComponent<UI_CommonCardItem>();
-                    
-                    item.SetVisible(false);
-                    _cardPool.Add(item);
-
-                    loadedCount++;
-                    if (loadedCount == _maxHandCardCount)
-                    {
-                        ApplyFunc(EventDefines.FightingViewReady);
-                    }
-                });
-            }
-        }
         
+        #region 按钮回调与UI文字绑定
         private void onPauseBtn()
         {
             ApplyFunc(EventDefines.OpenPauseFightView);
@@ -138,54 +115,14 @@ namespace Module.View
                     item.HideCard();
             }
         }
+
+        private void onUpdateLevelInfo(params object[] args)
+        {
+            //TODO:更新轮次,后面再说吧。。
+        }
+
+        #endregion
         
-        private void onUpdateHandCards(params object[] args)
-        {
-            //args[0] 手牌列表->本轮新抽的牌
-            List<BattleCardData> newCards = args[0] as List<BattleCardData>;
-            
-            if(newCards == null) return;
-
-            for (int i = 0; i < _maxHandCardCount; i++)
-            {
-                UI_CommonCardItem item = _cardPool[i];
-
-                if (i < newCards.Count)
-                {
-                    bool isNewCard = !item.gameObject.activeSelf;
-                    if(isNewCard)
-                        item.PrepareSpawn();
-                    
-                    item.InitCardUI(newCards[i]);
-                    _handCardItems.Add(item);
-                    
-                    item.OnBeginDragCallback = OnCardBeginDrag;
-                    item.OnDragCallback = OnCardDrag;
-                    item.OnEndDragCallback = OnCardEndDrag;
-                    item.OnClickCallback = OnCardClick;
-                    
-                    float delay = isNewCard ? (newCards.Count - 1 - i) * 0.05f : 0f;
-                    item.MoveToIndex(i, newCards.Count, delay);
-                }
-                else
-                {
-                    item.HideCard();
-                    item.OnBeginDragCallback = null;
-                    item.OnDragCallback = null;
-                    item.OnEndDragCallback = null;
-                    item.OnClickCallback = null;
-                }
-            }
-        }
-
-        private void onHideAllHands(System.Object args)
-        {
-            foreach (var item in _handCardItems)
-            {
-                item.HideCard();
-            }
-        }
-
         #region 卡牌交互逻辑回调
         private void OnCardBeginDrag(UI_CommonCardItem arg1, PointerEventData arg2)
         {
@@ -266,8 +203,9 @@ namespace Module.View
             item.SetBlockRaycasts(false);
             
             CheckAndTriggerComposite();
-            
-            bool isQueueFull = _cardActionQueue.PlayCard(item.BattleCardData, index);
+
+            bool isQueueFull =
+                _cardActionQueue.PlayCard(item.BattleCardData, index, GameApp.CardManager.CurrentSelectedTargetId);
             if (isQueueFull)
             {
                 DOVirtual.DelayedCall(2f, () =>
@@ -334,6 +272,81 @@ namespace Module.View
             }
         }
         
+        private void PreLoadCardItem()
+        {
+            int loadedCount = 0;
+            for (int i = 0; i < _maxHandCardCount; i++)
+            {
+                ResManager.InstantiateAsync(AddressDefines.UI_small_CommonCard, (go) =>
+                {
+                    if (go == null)
+                    {
+                        Debug.LogError("加载卡牌预制体失败");
+                        return;
+                    }
+
+                    go.transform.SetParent(_cardDeckTf, false);
+                    UI_CommonCardItem item = go.GetComponent<UI_CommonCardItem>();
+                    
+                    item.SetVisible(false);
+                    _cardPool.Add(item);
+
+                    loadedCount++;
+                    if (loadedCount == _maxHandCardCount)
+                    {
+                        ApplyFunc(EventDefines.FightingViewReady);
+                    }
+                });
+            }
+        }
+        #region 手牌UI事件
+        private void onUpdateHandCards(params object[] args)
+        {
+            //args[0] 手牌列表->本轮新抽的牌
+            List<BattleCardData> newCards = args[0] as List<BattleCardData>;
+            
+            if(newCards == null) return;
+
+            for (int i = 0; i < _maxHandCardCount; i++)
+            {
+                UI_CommonCardItem item = _cardPool[i];
+
+                if (i < newCards.Count)
+                {
+                    bool isNewCard = !item.gameObject.activeSelf;
+                    if(isNewCard)
+                        item.PrepareSpawn();
+                    
+                    item.InitCardUI(newCards[i]);
+                    _handCardItems.Add(item);
+                    
+                    item.OnBeginDragCallback = OnCardBeginDrag;
+                    item.OnDragCallback = OnCardDrag;
+                    item.OnEndDragCallback = OnCardEndDrag;
+                    item.OnClickCallback = OnCardClick;
+                    
+                    float delay = isNewCard ? (newCards.Count - 1 - i) * 0.05f : 0f;
+                    item.MoveToIndex(i, newCards.Count, delay);
+                }
+                else
+                {
+                    item.HideCard();
+                    item.OnBeginDragCallback = null;
+                    item.OnDragCallback = null;
+                    item.OnEndDragCallback = null;
+                    item.OnClickCallback = null;
+                }
+            }
+        }
+
+        private void onHideAllHands(System.Object args)
+        {
+            foreach (var item in _handCardItems)
+            {
+                item.HideCard();
+            }
+        }
+        
         private void RefreshHandCardLayout()
         {
             for (int i = 0; i < _handCardItems.Count; i++)
@@ -341,7 +354,7 @@ namespace Module.View
                 _handCardItems[i].MoveToIndex(i, _handCardItems.Count);
             }
         }
-        
+        #endregion
         #endregion
     }
 }

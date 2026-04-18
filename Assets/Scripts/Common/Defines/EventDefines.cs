@@ -45,5 +45,6 @@ namespace Common.Defines
         public const string OnPlayerTurnStart = "OnPlayerTurnStart";
         public const string OnPlayerTurnOutput = "OnPlayerTurnOutput";
         public const string OnEnemyTurn = "OnEnemyTurn";
+        public const string OnSelectEnemyTarget = "OnSelectEnemyTarget";
     }
 }

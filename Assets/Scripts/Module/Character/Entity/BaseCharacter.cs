@@ -42,6 +42,7 @@ namespace Module.Character
     
     public class BaseCharacter : MonoBehaviour
     {
+        private string _instanceId;
         protected CharacterData _characterData;
         [SerializeField]protected SkeletonAnimation _skeAnim;
 
@@ -56,6 +57,7 @@ namespace Module.Character
         #region 生命周期、初始化
         protected virtual void Awake()
         {
+            _instanceId = Guid.NewGuid().ToString();
             _skeAnim = GetComponentInChildren<SkeletonAnimation>();
             
             InitStateMachine();
@@ -104,6 +106,8 @@ namespace Module.Character
         }
         #endregion
         
+        public CharacterData CharacterData => _characterData;
+        public string InstanceID => _instanceId;
         public void ChangeState(CharacterStateType newStateType)
         {
             if(CurrentStateType == CharacterStateType.Die) return;

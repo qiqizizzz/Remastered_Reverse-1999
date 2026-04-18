@@ -20,6 +20,7 @@ namespace Data
 
         [Header("所有角色/怪物配置")]
         public List<CharacterData> allCharacters = new List<CharacterData>();
+        public List<CharacterData> allEnemies = new List<CharacterData>();
 
         [Header("所有关卡配置")]
         public List<LevelData> allLevels = new List<LevelData>();
