@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Character_1004
   m_EditorClassIdentifier: 
   Id: 1004
-  Name: "\u82CF\u8299\u6BD4"
-  En_Name: "\u82CF\u8299\u6BD4"
+  Name: "\u827E\u4E3D\u59AE"
+  En_Name: Ailini
   CharacterType: 0
   InspirationType: 0
   Property:
-    Attack: 0
-    Hp: 0
-    Defense: 0
-    CritRate: 0
-    CritDamage: 0
-  Cards: 
+    Hp: 2000
+    Attack: 230
+    Defense: 60
+    CritRate: 0.4
+    CritDamage: 2
+  Cards: da070000db070000dc070000

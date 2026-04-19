@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 246631ec1ff854c419c2c7f75fcbb760
   m_SerializeEntries:
+  - m_GUID: 4e4207c18b369da4aaf6ee836cb15cc6
+    m_Address: Character/Hero_Ailini
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 71ec5554b2cf0cd4385dc022ebcc0b94
     m_Address: Character/Hero_Miuersaisi
     m_ReadOnly: 0

@@ -18,5 +18,5 @@ MonoBehaviour:
   Description: "\u7F2A\u5C14\u8D5B\u601D\u7684\u5927\u62DB"
   OwnerId: 1003
   Effects: []
-  CardSprite: {fileID: 0}
+  CardSprite: {fileID: 21300000, guid: fc8dcbe3de75cde4da1593334d7c8c23, type: 3}
   CardEffectPrefab: {fileID: 0}
