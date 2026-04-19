@@ -404,6 +404,7 @@ namespace Module.View
             seq.OnComplete(() =>
             {
                 executingCard.gameObject.SetActive(false);
+                executingCard.SetParent(_cardDeckTf);
                 
                 // 重置状态，防止卡牌下次回到手牌时还是歪的/缩小的
                 rect.localScale = Vector3.one;

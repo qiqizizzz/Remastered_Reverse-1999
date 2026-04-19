@@ -164,6 +164,8 @@ namespace Module.fight
         {
             string enemyInstanceId = args.ToString();
             GameApp.CardManager.CurrentSelectedTargetId = enemyInstanceId;
+            
+            //TODO:高亮显示被选中的敌人等
 
             Debug.Log($"选择了敌人目标，InstanceID：{enemyInstanceId}");
         }

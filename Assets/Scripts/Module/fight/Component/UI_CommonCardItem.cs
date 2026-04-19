@@ -108,6 +108,10 @@ namespace Module.fight.Component
             _icon.sprite = BattleCardData.BaseData.CardSprite;
             showTypeUI((int)BattleCardData.BaseData.CardType);
             ShowStarUI(1);
+
+            Rect.localScale = Vector3.one;
+            _isDragging = false;
+            IsInQueue = false;
         }
         
         private void showTypeUI(int index)
