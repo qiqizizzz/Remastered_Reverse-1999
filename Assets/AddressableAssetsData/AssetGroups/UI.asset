@@ -87,6 +87,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b486a546e0857f5439d7f841ea77ec95
+    m_Address: UI_small/Txt_Damage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e7b390162a26846489a0e9cd2c258d8d
     m_Address: UI/CharacterView
     m_ReadOnly: 0

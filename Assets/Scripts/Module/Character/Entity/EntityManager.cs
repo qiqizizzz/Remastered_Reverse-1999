@@ -33,8 +33,7 @@ namespace Module.Character
         {
             {1, new Vector3(-8f, -1f, 0)},
             {2, new Vector3(-6.5f, -1.25f, 0)},
-            {3, new Vector3(-5f, -1f, 0)},
-            {4, new Vector3(-3.5f, -1.25f, 0)}
+            {3, new Vector3(-5f, -1f, 0)}
         };
         
         private int hasSpawnedHeroCount = 0;//已生成的英雄数量
@@ -182,13 +181,13 @@ namespace Module.Character
             enemyEntity.Init(enemyData);
             
             int temp = hasSpawnedEnemyCount;
-            go.transform.position = enemySpawnPositions[(temp % 4) + 1];
+            go.transform.position = enemySpawnPositions[(temp % 3) + 1];
             hasSpawnedEnemyCount++;
 
             AliveEnemies.Add(enemyEntity);
             
             //隐藏超过4只的敌人
-            if(hasSpawnedEnemyCount > 4)
+            if(hasSpawnedEnemyCount > 3)
                 go.SetActive(false);
         }
         #endregion

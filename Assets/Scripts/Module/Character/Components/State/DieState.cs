@@ -6,6 +6,8 @@
 * └──────────────────────────────────┘
 */
 
+using Common.Defines;
+
 namespace Module.Character.Components
 {
     public class DieState : BaseCharacterState
@@ -17,6 +19,15 @@ namespace Module.Character.Components
         public override void OnEnter()
         {
             _character.PlayAnim(_character.AnimConfig.DieAnim);
+            GameApp.MessageCenter.PostEvent(EventDefines.OnCharacterDie, _character);
+        }
+
+        public override void OnAnimationComplete(string animName)
+        {
+            if (animName == _character.AnimConfig.DieAnim)
+            {
+                _character.HandleDie();
+            }
         }
     }
 }

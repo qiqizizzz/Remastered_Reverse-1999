@@ -47,5 +47,6 @@ namespace Common.Defines
         public const string OnEnemyTurn = "OnEnemyTurn";
         public const string OnSelectEnemyTarget = "OnSelectEnemyTarget";
         public const string OnCardExecuteUI = "OnCardExecuteUI";
+        public const string OnCharacterDie = "OnCharacterDie";
     }
 }

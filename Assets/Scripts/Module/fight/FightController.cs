@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using Common.Defines;
 using Data.level;
+using Module.Character;
 using Module.fight.CardMgr;
 using Module.fight.Skill;
 using MVC;
@@ -53,6 +54,7 @@ namespace Module.fight
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
             GameApp.MessageCenter.AddEvent(EventDefines.OnEnemyTurn, onEnemyTurn);
             GameApp.MessageCenter.AddEvent(EventDefines.OnSelectEnemyTarget, onSelectEnemyTarget);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnCharacterDie, onCharacterDie);
         }
 
         public override void RemoveModuleEvent()
@@ -65,6 +67,7 @@ namespace Module.fight
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnEnemyTurn, onEnemyTurn);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnSelectEnemyTarget, onSelectEnemyTarget);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnCharacterDie, onCharacterDie);
         }
 
         #region UI事件
@@ -133,8 +136,31 @@ namespace Module.fight
             Debug.Log($"选择了敌人目标，InstanceID：{enemyInstanceId}");
         }
 
+        private void onCharacterDie(System.Object args)
+        {
+            BaseCharacter deadChar = args as BaseCharacter;
+            
+            if (deadChar == null) return;
+
+            if (deadChar is HeroEntity hero)
+                GameApp.EntityManager.GetAliveHeroes().Remove(hero);
+            else if (deadChar is EnemyEntity enemy)
+                GameApp.EntityManager.GetAliveEnemies().Remove(enemy);
+            
+            //判断胜负
+            if (GameApp.EntityManager.GetAliveHeroes().Count == 0)
+            {
+                Debug.Log("==== 全部英雄死亡，玩家失败 ====");
+                //TODO:打开失败界面等
+            }
+            else if (GameApp.EntityManager.GetAliveEnemies().Count == 0)
+            {
+                Debug.Log("==== 全部敌人死亡，玩家胜利 ====");
+                //TODO:打开胜利界面等
+            }
+        }
+
         #endregion
-        
         
         private void onSpawnBattleCallback()
         {

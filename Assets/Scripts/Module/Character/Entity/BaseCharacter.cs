@@ -170,6 +170,11 @@ namespace Module.Character
             return anim?.Duration ?? 0f;
         }
 
+        public void HandleDie()
+        {
+            gameObject.SetActive(false);
+        }
+
         #region spine事件
         private void onAnimComplete(TrackEntry trackEntry)
         {
