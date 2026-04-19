@@ -25,6 +25,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9b1c61dec988cb74697c12d2b02e8201, type: 2}
   - {fileID: 11400000, guid: 4b66b679161fadd4e994ce020f925389, type: 2}
   - {fileID: 11400000, guid: a8d3ae94b637f79428b1304ad66c8133, type: 2}
+  allEnemyCards:
+  - {fileID: 11400000, guid: 8ab74d1369a177b4393c32c3b708806c, type: 2}
   allCharacters:
   - {fileID: 11400000, guid: 22614d3eefdc69d4691ee197763b61fa, type: 2}
   - {fileID: 11400000, guid: 7c9739c06a4d32344bd837bd0592f74d, type: 2}

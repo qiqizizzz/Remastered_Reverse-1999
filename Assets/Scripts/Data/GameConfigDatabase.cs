@@ -17,6 +17,7 @@ namespace Data
     {
         [Header("所有卡牌配置")]
         public List<CardData> allCards = new List<CardData>();
+        public List<CardData> allEnemyCards = new List<CardData>();
 
         [Header("所有角色/怪物配置")]
         public List<CharacterData> allCharacters = new List<CharacterData>();

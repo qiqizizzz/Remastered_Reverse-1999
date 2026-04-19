@@ -11,14 +11,21 @@ using UnityEngine;
 using System.IO;
 using Data;
 using Data.card;
+using Data.level;
 
 public class GameDataEditorWindow : EditorWindow
 {
     private GameConfigDatabase database;
     private SerializedObject serializedDatabase;
 
-    private int currentTab = 0; 
-    private readonly string[] tabNames = { "💳 卡牌 (Cards)", "🦸 角色 (Characters)", "👿 敌人 (Enemies)", "🗺️ 关卡 (Levels)" };
+    // 分类页签状态
+    private int mainTab = 0; 
+    private int cardSubTab = 0;
+    private int entitySubTab = 0;
+
+    private readonly string[] mainTabNames = { "💳 卡牌管理", "🦸 实体管理", "🗺️ 关卡配置" };
+    private readonly string[] cardSubTabNames = { "🗡️ 玩家卡牌", "👿 敌人卡牌" };
+    private readonly string[] entitySubTabNames = { "🦸 玩家角色", "👿 敌人实体" };
     
     private int selectedIndex = -1;
     private Vector2 leftScrollPos;
@@ -31,7 +38,6 @@ public class GameDataEditorWindow : EditorWindow
     private GUIStyle headerStyle;
     private GUIStyle panelStyle;
 
-    // 新建数据存放的默认根目录，确保这个目录在你的工程里存在！
     private readonly string DATA_ROOT_PATH = "Assets/RemoteAssets/Data";
 
     [MenuItem("Tools/游戏数据编辑器", priority = 0)]
@@ -42,22 +48,15 @@ public class GameDataEditorWindow : EditorWindow
         window.Show();
     }
 
-    private void OnEnable()
-    {
-        LoadDatabase();
-    }
+    private void OnEnable() => LoadDatabase();
 
     private void LoadDatabase()
     {
         string[] guids = AssetDatabase.FindAssets("t:GameConfigDatabase");
         if (guids.Length > 0)
         {
-            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            database = AssetDatabase.LoadAssetAtPath<GameConfigDatabase>(path);
-            if (database != null)
-            {
-                serializedDatabase = new SerializedObject(database);
-            }
+            database = AssetDatabase.LoadAssetAtPath<GameConfigDatabase>(AssetDatabase.GUIDToAssetPath(guids[0]));
+            if (database != null) serializedDatabase = new SerializedObject(database);
         }
     }
 
@@ -92,19 +91,25 @@ public class GameDataEditorWindow : EditorWindow
     {
         EditorGUILayout.BeginVertical(panelStyle);
         GUILayout.Space(5);
+    
+        // 使用水平布局，将所有按钮排列靠左对齐
+        EditorGUILayout.BeginHorizontal();
         EditorGUI.BeginChangeCheck();
-        
-        // 美化 Toolbar
+    
         GUI.backgroundColor = new Color(0.9f, 0.9f, 0.9f);
-        currentTab = GUILayout.Toolbar(currentTab, tabNames, GUILayout.Height(35));
+        mainTab = GUILayout.Toolbar(mainTab, mainTabNames, GUILayout.Height(30), GUILayout.Width(400));
         GUI.backgroundColor = Color.white;
 
         if (EditorGUI.EndChangeCheck())
         {
             selectedIndex = -1;
-            GUI.FocusControl(null); 
+            GUI.FocusControl(null);
         }
+
+        GUILayout.FlexibleSpace(); // 添加弹簧，确保按钮不占满整个窗口
+        EditorGUILayout.EndHorizontal();
         GUILayout.Space(5);
+
         EditorGUILayout.EndVertical();
     }
 
@@ -112,9 +117,25 @@ public class GameDataEditorWindow : EditorWindow
     {
         EditorGUILayout.BeginVertical(sidebarStyle, GUILayout.Width(260), GUILayout.ExpandHeight(true));
         
+        // 下拉列表作为子分类选择
+        if (mainTab == 0 || mainTab == 1)
+        {
+            EditorGUI.BeginChangeCheck();
+            if (mainTab == 0)
+                cardSubTab = EditorGUILayout.Popup(cardSubTab, cardSubTabNames, EditorStyles.popup);
+            else if (mainTab == 1)
+                entitySubTab = EditorGUILayout.Popup(entitySubTab, entitySubTabNames, EditorStyles.popup);
+                
+            if (EditorGUI.EndChangeCheck())
+            {
+                selectedIndex = -1;
+                GUI.FocusControl(null);
+            }
+            GUILayout.Space(5);
+        }
+
         SerializedProperty listProperty = GetCurrentListProperty();
 
-        // 左侧工具栏
         EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
         GUILayout.Label($" 列表总数: {listProperty?.arraySize ?? 0}", EditorStyles.boldLabel);
         GUILayout.FlexibleSpace();
@@ -129,6 +150,7 @@ public class GameDataEditorWindow : EditorWindow
         if (GUILayout.Button("+ 新建", EditorStyles.toolbarButton, GUILayout.Width(50)))
         {
             CreateNewData();
+            GUIUtility.ExitGUI();
         }
         GUI.backgroundColor = Color.white;
         EditorGUILayout.EndHorizontal();
@@ -140,23 +162,15 @@ public class GameDataEditorWindow : EditorWindow
             return;
         }
 
-        // 列表主体
         leftScrollPos = EditorGUILayout.BeginScrollView(leftScrollPos);
         for (int i = 0; i < listProperty.arraySize; i++)
         {
             SerializedProperty elementProp = listProperty.GetArrayElementAtIndex(i);
             bool isNull = elementProp.objectReferenceValue == null;
             
-            // 隔行变色美化
             Rect rowRect = EditorGUILayout.BeginHorizontal();
-            if (i % 2 == 0)
-            {
-                EditorGUI.DrawRect(rowRect, new Color(0, 0, 0, 0.05f)); // 奇偶行底色
-            }
-            if (selectedIndex == i)
-            {
-                EditorGUI.DrawRect(rowRect, new Color(0.15f, 0.45f, 0.8f, 0.2f)); // 选中行底色
-            }
+            if (i % 2 == 0) EditorGUI.DrawRect(rowRect, new Color(0, 0, 0, 0.05f));
+            if (selectedIndex == i) EditorGUI.DrawRect(rowRect, new Color(0.15f, 0.45f, 0.8f, 0.2f));
 
             string displayName = isNull ? "⚠️ 空 (Null)" : $"[{i}]  {elementProp.objectReferenceValue.name}";
             GUIStyle btnStyle = (selectedIndex == i) ? selectedBtnStyle : normalBtnStyle;
@@ -179,7 +193,6 @@ public class GameDataEditorWindow : EditorWindow
                 }
                 GUI.backgroundColor = Color.white;
             }
-
             EditorGUILayout.EndHorizontal();
         }
 
@@ -191,13 +204,12 @@ public class GameDataEditorWindow : EditorWindow
     {
         Rect rect = EditorGUILayout.GetControlRect(false, GUILayout.Width(1));
         rect.height = position.height;
-        EditorGUI.DrawRect(rect, new Color(0.1f, 0.1f, 0.1f, 0.5f)); // 更柔和的分割线
+        EditorGUI.DrawRect(rect, new Color(0.1f, 0.1f, 0.1f, 0.5f)); 
     }
 
     private void DrawRightPanel()
     {
         EditorGUILayout.BeginVertical(panelStyle, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
-        
         SerializedProperty listProperty = GetCurrentListProperty();
 
         if (listProperty != null && selectedIndex >= 0 && selectedIndex < listProperty.arraySize)
@@ -206,31 +218,27 @@ public class GameDataEditorWindow : EditorWindow
             
             if (elementProp.objectReferenceValue != null)
             {
-                // 右侧标题栏
                 EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
                 GUILayout.Label($" 📝 当前编辑:  {elementProp.objectReferenceValue.name}", headerStyle);
                 GUILayout.FlexibleSpace(); 
                 
                 if (GUILayout.Button("🔍 定位", EditorStyles.toolbarButton, GUILayout.Width(50)))
-                {
                     EditorGUIUtility.PingObject(elementProp.objectReferenceValue); 
-                }
                 
                 GUI.backgroundColor = new Color(0.6f, 0.8f, 1f);
                 if (GUILayout.Button("💾 保存", EditorStyles.toolbarButton, GUILayout.Width(50)))
                 {
-                    SaveData();
+                    AssetDatabase.SaveAssets();
+                    Debug.Log("<color=green>数据保存成功！</color>");
                 }
                 
                 GUI.backgroundColor = new Color(1f, 0.4f, 0.4f); 
                 if (GUILayout.Button("🗑️ 删除", EditorStyles.toolbarButton, GUILayout.Width(50)))
-                {
-                    DeleteCurrentData();
-                }
+                    DeleteCurrentData(listProperty, elementProp.objectReferenceValue);
+                    
                 GUI.backgroundColor = Color.white; 
                 EditorGUILayout.EndHorizontal();
 
-                // 绘制属性详情
                 rightScrollPos = EditorGUILayout.BeginScrollView(rightScrollPos);
                 GUILayout.Space(10);
                 
@@ -244,7 +252,6 @@ public class GameDataEditorWindow : EditorWindow
                     enterChildren = false;
                     if (iterator.name == "m_Script") continue; 
                     
-                    // 加点内边距让属性看着不那么拥挤
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.Space(10);
                     EditorGUILayout.PropertyField(iterator, true);
@@ -257,19 +264,12 @@ public class GameDataEditorWindow : EditorWindow
                 GUILayout.Space(20);
                 EditorGUILayout.EndScrollView();
             }
-            else
-            {
-                DrawMissingDataWarning(listProperty);
-            }
+            else DrawMissingDataWarning(listProperty);
         }
         else
         {
             GUILayout.FlexibleSpace();
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.Label("👈 请在左侧选择或新建一个配置项", EditorStyles.largeLabel);
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
+            GUILayout.Label("👈 请在左侧选择或新建一个配置项", EditorStyles.largeLabel, GUILayout.ExpandWidth(false));
             GUILayout.FlexibleSpace();
         }
 
@@ -299,32 +299,42 @@ public class GameDataEditorWindow : EditorWindow
 
     #endregion
 
-    #region 功能逻辑
+    #region 数据配置映射与逻辑
+
+    private void GetCurrentContext(out string propName, out string folder, out System.Type type, out int defaultId)
+    {
+        if (mainTab == 0)
+        {
+            type = typeof(CardData);
+            if (cardSubTab == 0) { propName = "allCards"; folder = "CharacterCard"; defaultId = 2001; }
+            else                 { propName = "allEnemyCards"; folder = "EnemyCard"; defaultId = 3001; }
+        }
+        else if (mainTab == 1)
+        {
+            type = typeof(CharacterData);
+            if (entitySubTab == 0) { propName = "allCharacters"; folder = "Character"; defaultId = 1001; }
+            else                   { propName = "allEnemies"; folder = "Enemy"; defaultId = 5001; }
+        }
+        else
+        {
+            type = typeof(LevelData);
+            propName = "allLevels"; folder = "Level"; defaultId = 1;
+        }
+    }
 
     private SerializedProperty GetCurrentListProperty()
     {
-        // 增加了一个 allEnemies，对应你的 GameConfigDatabase 字段
-        string propertyName = currentTab switch
-        {
-            0 => "allCards",
-            1 => "allCharacters",
-            2 => "allEnemies", // 敌人独立列表
-            3 => "allLevels",
-            _ => "allCards"
-        };
-        return serializedDatabase.FindProperty(propertyName);
+        GetCurrentContext(out string propName, out _, out _, out _);
+        return serializedDatabase.FindProperty(propName);
     }
 
     private void CleanNullEntries(SerializedProperty listProp)
     {
         if (listProp == null) return;
         for (int i = listProp.arraySize - 1; i >= 0; i--)
-        {
             if (listProp.GetArrayElementAtIndex(i).objectReferenceValue == null)
-            {
                 listProp.DeleteArrayElementAtIndex(i);
-            }
-        }
+        
         serializedDatabase.ApplyModifiedProperties();
         selectedIndex = -1;
     }
@@ -334,63 +344,26 @@ public class GameDataEditorWindow : EditorWindow
         SerializedProperty listProp = GetCurrentListProperty();
         if (listProp == null) return;
         
-        int newId = 0;
+        GetCurrentContext(out _, out string folder, out System.Type type, out int newId);
         
-        // 倒序查找最后一个有效的 SO，获取它的 ID，递增生成新 ID
         for (int i = listProp.arraySize - 1; i >= 0; i--)
         {
-            SerializedProperty elementProp = listProp.GetArrayElementAtIndex(i);
-            if (elementProp.objectReferenceValue != null)
+            var element = listProp.GetArrayElementAtIndex(i).objectReferenceValue;
+            if (element != null)
             {
-                SerializedObject lastObj = new SerializedObject(elementProp.objectReferenceValue);
-                SerializedProperty idProp = lastObj.FindProperty("Id"); 
-                if (idProp != null)
-                {
-                    newId = idProp.intValue + 1;
-                    break;
-                }
+                SerializedProperty idProp = new SerializedObject(element).FindProperty("Id"); 
+                if (idProp != null) { newId = idProp.intValue + 1; break; }
             }
         }
 
-        // 默认起始 ID
-        if (newId <= 0)
-        {
-            newId = currentTab switch
-            {
-                0 => 2001,  // 卡牌
-                1 => 1001,  // 角色
-                2 => 5001,  // 敌人 (独立起始段，防止与角色混淆)
-                3 => 1,     // 关卡
-                _ => 1
-            };
-        }
-
-        // 确定文件夹名
-        string subFolder = currentTab switch
-        {
-            0 => "Card",
-            1 => "Character",
-            2 => "Enemy", // 新增敌人存放文件夹
-            3 => "Level",
-            _ => "Card"
-        };
-        
-        string folderPath = $"{DATA_ROOT_PATH}/{subFolder}";
-
+        string folderPath = $"{DATA_ROOT_PATH}/{folder}";
         if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
-        string fileName = $"{subFolder}_{newId}.asset";
-        string fullPath = $"{folderPath}/{fileName}";
+        string fullPath = $"{folderPath}/{folder}_{newId}.asset";
 
-        // 实例化数据对象（敌人和角色一样使用 CharacterData）
-        ScriptableObject newAsset = null;
-        if (currentTab == 0) newAsset = CreateInstance<CardData>();
-        else if (currentTab == 1 || currentTab == 2) newAsset = CreateInstance<CharacterData>();
-        else newAsset = CreateInstance<LevelData>();
-
+        ScriptableObject newAsset = CreateInstance(type);
         AssetDatabase.CreateAsset(newAsset, fullPath);
 
-        // 设置新生成的 ID
         SerializedObject newAssetObj = new SerializedObject(newAsset);
         SerializedProperty newIdProp = newAssetObj.FindProperty("Id"); 
         if (newIdProp != null)
@@ -399,95 +372,54 @@ public class GameDataEditorWindow : EditorWindow
             newAssetObj.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        // 添加到列表
         listProp.arraySize++;
-        SerializedProperty newElement = listProp.GetArrayElementAtIndex(listProp.arraySize - 1);
-        newElement.objectReferenceValue = newAsset;
+        listProp.GetArrayElementAtIndex(listProp.arraySize - 1).objectReferenceValue = newAsset;
 
         serializedDatabase.ApplyModifiedProperties();
         AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
 
         selectedIndex = listProp.arraySize - 1;
         GUI.FocusControl(null);
     }
 
-    private void DeleteCurrentData()
+    private void DeleteCurrentData(SerializedProperty listProp, Object assetToDelete)
     {
-        if (EditorUtility.DisplayDialog("⚠️ 危险操作", "确定要删除这条数据吗？对应的本地 .asset 文件也将被永久删除，且无法撤销！", "确认删除", "取消"))
+        if (EditorUtility.DisplayDialog("⚠️ 危险操作", "确定要删除这条数据吗？本地 .asset 文件将被永久删除！", "确认", "取消"))
         {
-            SerializedProperty listProp = GetCurrentListProperty();
-            SerializedProperty elementProp = listProp.GetArrayElementAtIndex(selectedIndex);
-            
-            Object assetToDelete = elementProp.objectReferenceValue;
-
-            elementProp.objectReferenceValue = null;
+            listProp.GetArrayElementAtIndex(selectedIndex).objectReferenceValue = null;
             listProp.DeleteArrayElementAtIndex(selectedIndex);
             serializedDatabase.ApplyModifiedProperties();
 
             if (assetToDelete != null)
-            {
-                string path = AssetDatabase.GetAssetPath(assetToDelete);
-                AssetDatabase.DeleteAsset(path);
-            }
+                AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(assetToDelete));
 
             AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
             selectedIndex = -1;
+            GUIUtility.ExitGUI();
         }
-    }
-
-    private void SaveData()
-    {
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-        Debug.Log("<color=green>数据保存成功！</color>");
     }
 
     #endregion
 
     #region 美化样式初始化
-
     private void InitStyles()
     {
         if (sidebarStyle == null)
-        {
-            sidebarStyle = new GUIStyle("box");
-            sidebarStyle.padding = new RectOffset(5, 5, 5, 5); 
-            sidebarStyle.margin = new RectOffset(0, 0, 0, 0);
-        }
+            sidebarStyle = new GUIStyle("box") { padding = new RectOffset(5, 5, 5, 5), margin = new RectOffset(0, 0, 0, 0) };
         if (panelStyle == null)
-        {
-            panelStyle = new GUIStyle();
-            panelStyle.padding = new RectOffset(5, 5, 5, 5);
-        }
+            panelStyle = new GUIStyle() { padding = new RectOffset(5, 5, 5, 5) };
         if (normalBtnStyle == null)
-        {
-            normalBtnStyle = new GUIStyle(GUI.skin.button);
-            normalBtnStyle.alignment = TextAnchor.MiddleLeft;
-            normalBtnStyle.fixedHeight = 32;
-            normalBtnStyle.margin = new RectOffset(2, 2, 2, 2);
-            normalBtnStyle.richText = true;
-        }
+            normalBtnStyle = new GUIStyle(GUI.skin.button) { alignment = TextAnchor.MiddleLeft, fixedHeight = 32, margin = new RectOffset(2, 2, 2, 2) };
         if (selectedBtnStyle == null)
         {
-            selectedBtnStyle = new GUIStyle(GUI.skin.button);
-            selectedBtnStyle.alignment = TextAnchor.MiddleLeft;
-            selectedBtnStyle.fixedHeight = 32;
-            // 选中状态字体变亮加粗
+            selectedBtnStyle = new GUIStyle(GUI.skin.button) 
+            { 
+                alignment = TextAnchor.MiddleLeft, fixedHeight = 32, margin = new RectOffset(2, 2, 2, 2), fontStyle = FontStyle.Bold 
+            };
             selectedBtnStyle.normal.textColor = EditorGUIUtility.isProSkin ? new Color(0.4f, 0.8f, 1f) : new Color(0.1f, 0.4f, 0.8f);
-            selectedBtnStyle.fontStyle = FontStyle.Bold;
-            selectedBtnStyle.margin = new RectOffset(2, 2, 2, 2);
-            selectedBtnStyle.richText = true;
         }
         if (headerStyle == null)
-        {
-            headerStyle = new GUIStyle(EditorStyles.boldLabel);
-            headerStyle.fontSize = 13;
-            headerStyle.alignment = TextAnchor.MiddleLeft;
-        }
+            headerStyle = new GUIStyle(EditorStyles.boldLabel) { fontSize = 13, alignment = TextAnchor.MiddleLeft };
     }
-
     #endregion
 }
