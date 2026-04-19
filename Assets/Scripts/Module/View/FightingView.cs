@@ -313,6 +313,8 @@ namespace Module.View
             List<BattleCardData> newCards = args[0] as List<BattleCardData>;
             
             if(newCards == null) return;
+            
+            _handCardItems.Clear();//清空当前手牌实例列表，准备重新分配
 
             for (int i = 0; i < _maxHandCardCount; i++)
             {
