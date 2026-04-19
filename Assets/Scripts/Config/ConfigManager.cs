@@ -76,7 +76,7 @@ namespace Config
                     enemyConfig.Add(enemy.Id, enemy);
             }
             
-            foreach (var card in db.allCards)
+            foreach (var card in db.allCharacterCards)
             {
                 if (card != null && !cardConfig.ContainsKey(card.Id))
                     cardConfig.Add(card.Id, card);

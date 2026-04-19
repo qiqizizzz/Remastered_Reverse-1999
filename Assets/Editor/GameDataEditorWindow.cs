@@ -306,7 +306,7 @@ public class GameDataEditorWindow : EditorWindow
         if (mainTab == 0)
         {
             type = typeof(CardData);
-            if (cardSubTab == 0) { propName = "allCards"; folder = "CharacterCard"; defaultId = 2001; }
+            if (cardSubTab == 0) { propName = "allCharacterCards"; folder = "CharacterCard"; defaultId = 2001; }
             else                 { propName = "allEnemyCards"; folder = "EnemyCard"; defaultId = 3001; }
         }
         else if (mainTab == 1)

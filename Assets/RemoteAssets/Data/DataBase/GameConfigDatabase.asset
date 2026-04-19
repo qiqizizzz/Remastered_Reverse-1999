@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3075090c15ed4246a2b5c2b53d6793c0, type: 3}
   m_Name: GameConfigDatabase
   m_EditorClassIdentifier: 
-  allCards:
+  allCharacterCards:
   - {fileID: 11400000, guid: 4962a23924e4e53408f3132b2fb267fa, type: 2}
   - {fileID: 11400000, guid: 8f3d62d49c22be54ead48708dc2398b5, type: 2}
   - {fileID: 11400000, guid: 7f00cc680bdb26b468dcbe53dca1f4d5, type: 2}
@@ -27,6 +27,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a8d3ae94b637f79428b1304ad66c8133, type: 2}
   allEnemyCards:
   - {fileID: 11400000, guid: 8ab74d1369a177b4393c32c3b708806c, type: 2}
+  - {fileID: 11400000, guid: d54f369f4c1098d4ab0412d551b2a8ee, type: 2}
+  - {fileID: 11400000, guid: 89107d988849d4542bbbb0ed36f399ac, type: 2}
   allCharacters:
   - {fileID: 11400000, guid: 22614d3eefdc69d4691ee197763b61fa, type: 2}
   - {fileID: 11400000, guid: 7c9739c06a4d32344bd837bd0592f74d, type: 2}

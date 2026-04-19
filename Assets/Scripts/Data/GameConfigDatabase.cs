@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using Data.card;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Data
 {
@@ -16,7 +17,8 @@ namespace Data
     public class GameConfigDatabase : ScriptableObject
     {
         [Header("所有卡牌配置")]
-        public List<CardData> allCards = new List<CardData>();
+        [FormerlySerializedAs("allCards")]
+        public List<CardData> allCharacterCards = new List<CardData>();
         public List<CardData> allEnemyCards = new List<CardData>();
 
         [Header("所有角色/怪物配置")]
