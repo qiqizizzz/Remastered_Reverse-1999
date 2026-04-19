@@ -108,10 +108,13 @@ namespace Module.fight.Component
             _icon.sprite = BattleCardData.BaseData.CardSprite;
             showTypeUI((int)BattleCardData.BaseData.CardType);
             ShowStarUI(1);
-
+            
             Rect.localScale = Vector3.one;
+            Rect.localRotation = Quaternion.identity;
             _isDragging = false;
             IsInQueue = false;
+            
+            SetBlockRaycasts(true);
         }
         
         private void showTypeUI(int index)
@@ -148,7 +151,7 @@ namespace Module.fight.Component
                 .SetEase(Ease.OutCubic)
                 .SetDelay(delay);
 
-            Rect.transform.eulerAngles = Vector3.one;
+            Rect.transform.eulerAngles = Vector3.zero; 
             
             transform.SetSiblingIndex(index);
         }

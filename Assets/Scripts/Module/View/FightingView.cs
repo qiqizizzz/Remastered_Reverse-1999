@@ -320,6 +320,7 @@ namespace Module.View
 
                 if (i < newCards.Count)
                 {
+                    item.transform.SetParent(_cardDeckTf, true);
                     bool isNewCard = !item.gameObject.activeSelf;
                     if(isNewCard)
                         item.PrepareSpawn();
