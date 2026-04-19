@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Common.Defines;
 using Data.card;
 using Data.level;
@@ -25,6 +26,7 @@ namespace Module.fight
     public class FightController : BaseController
     {
         private LevelInitData _currentInitData;
+        private bool _isBattleActive = false; //是否还在战斗中
         
         public FightController() : base()
         {
@@ -120,20 +122,20 @@ namespace Module.fight
             try
             {
                 Debug.Log("==== 玩家出牌阶段结束，开始结算队列 ====");
-                //TODO:禁用UI交互,播放出牌动画等...
                 List<CardAction> actions = GameApp.CardManager.CardActionQueue.GetAllActionsAndClear();
 
                 foreach (var action in actions)
                 {
+                    if(!_isBattleActive) break;
                     await CardSkillExecutor.ExecuteCardActionAsync(action);
-                    //TODO:需要等待动画播完ing
                 }
                 
-                GameApp.MessageCenter.PostEvent(EventDefines.OnEnemyTurn);
+                if (_isBattleActive)
+                    GameApp.MessageCenter.PostEvent(EventDefines.OnEnemyTurn);
             }
             catch (Exception e)
             {
-                throw; // TODO 处理异常
+                throw; 
             }
         }
 
@@ -145,12 +147,18 @@ namespace Module.fight
 
                 foreach (var enemy in GameApp.EntityManager.GetAliveEnemies())
                 {
+                    if (!_isBattleActive) break;
                     if(GameApp.EntityManager.GetAliveHeroes().Count == 0) break;
                     
-                    if(enemy.gameObject.activeSelf == false) continue;
+                    //TODO:生成剩下的敌人等
+                    if(!enemy.gameObject.activeSelf) continue;
 
-                    var cards = enemy.CharacterData.GetAllCards();
-                    if(cards == null || cards.Count == 0)
+                    //TODO:以后需要优化，另外选一个数组存敌人的卡牌等
+                    var cards = enemy.CharacterData.GetAllCards()
+                        .Where(card => card.CardType != CardType.Ultimate)
+                        .ToList();
+                    
+                    if(cards.Count == 0)
                     {
                         Debug.LogWarning($"[{enemy.CharacterData.Name}] 没有可用的卡牌！");
                         continue;
@@ -206,11 +214,13 @@ namespace Module.fight
             //判断胜负
             if (GameApp.EntityManager.GetAliveHeroes().Count == 0)
             {
+                _isBattleActive = false;
                 Debug.Log("==== 全部英雄死亡，玩家失败 ====");
                 ApplyFunc(EventDefines.OpenFightSettleView, false);
             }
             else if (GameApp.EntityManager.GetAliveEnemies().Count == 0)
             {
+                _isBattleActive = false;
                 Debug.Log("==== 全部敌人死亡，玩家胜利 ====");
                 ApplyFunc(EventDefines.OpenFightSettleView, true);
             }
@@ -221,6 +231,7 @@ namespace Module.fight
         #region 回合相关事件
         private void onSpawnBattleCallback()
         {
+            _isBattleActive = true;
             GameApp.CardManager.InitCards(_currentInitData);
 
             GameApp.ViewManager.CloseAll();

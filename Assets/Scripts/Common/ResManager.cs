@@ -118,13 +118,18 @@ namespace Common
         //同步从对象池加载实例
         public static GameObject InstantiateFromPool(string keyName, Transform parent = null)
         {
-            if (_pool.ContainsKey(keyName) && _pool[keyName].Count > 0)
+            if (_pool.ContainsKey(keyName))
             {
-                GameObject obj = _pool[keyName].Dequeue();
-                obj.SetActive(true);
-                if(parent != null)
-                    obj.transform.SetParent(parent);
-                return obj;
+                while (_pool[keyName].Count > 0)
+                {
+                    GameObject obj = _pool[keyName].Dequeue();
+                    if (obj == null) continue;
+                
+                    obj.SetActive(true);
+                    if(parent != null)
+                        obj.transform.SetParent(parent);
+                    return obj;
+                }
             }
 
             return Instantiate(keyName, parent);
@@ -134,14 +139,19 @@ namespace Common
         public static void InstantiateFromPoolAsync(string keyName, Action<GameObject> onCompleted,
             Transform parent = null)
         {
-            if (_pool.ContainsKey(keyName) && _pool[keyName].Count > 0)
+            if (_pool.ContainsKey(keyName))
             {
-                GameObject obj = _pool[keyName].Dequeue();
-                obj.SetActive(true);
-                if(parent != null)
-                    obj.transform.SetParent(parent);
-                onCompleted?.Invoke(obj);
-                return;
+                while (_pool[keyName].Count > 0)
+                {
+                    GameObject obj = _pool[keyName].Dequeue();
+                    if (obj == null) continue;
+                    
+                    obj.SetActive(true);
+                    if(parent != null)
+                        obj.transform.SetParent(parent);
+                    onCompleted?.Invoke(obj);
+                    return;
+                }
             }
             
             InstantiateAsync(keyName, onCompleted, parent);

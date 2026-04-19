@@ -40,6 +40,7 @@ namespace Module.fight.CardMgr
         
         public void InitCards(LevelInitData initData)
         {
+            CardActionQueue.Clear();
             m_cards.Clear();
             drawPile.Clear();
             handCards.Clear();

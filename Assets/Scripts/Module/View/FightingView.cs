@@ -117,10 +117,17 @@ namespace Module.View
         
         private void onExitLevel(params object[] args)
         {
+            _uiActionStack.Clear();
+            _handCardItems.Clear();
+            
             foreach (var item in _cardPool)
             {
                 if (item != null)
+                {
+                    item.transform.SetParent(_cardDeckTf);
                     item.HideCard();
+                    item.PrepareSpawn();
+                }
             }
         }
 

@@ -131,9 +131,12 @@ namespace Module.fight.Component
         public void PrepareSpawn()
         {
             SetVisible(false);
+            _isDragging = false;
             IsInQueue = false;
             Rect.anchoredPosition = _spawnPos;//放置在初始发牌点
             Rect.localScale = Vector3.one;
+
+            ShowStarUI(1);
         }
 
         public void MoveToIndex(int index,int totalCount ,float delay = 0f)
@@ -181,6 +184,10 @@ namespace Module.fight.Component
         public void HideCard()
         {
             Rect.DOKill();
+            Rect.localScale = Vector3.one;
+            Rect.localRotation = Quaternion.identity;
+            IsInQueue = false;
+            SetBlockRaycasts(true);
             SetVisible(false);
         }
         #endregion
