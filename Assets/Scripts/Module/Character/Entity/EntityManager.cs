@@ -24,16 +24,16 @@ namespace Module.Character
         
         private Dictionary<int, Vector3> heroSpawnPositions = new Dictionary<int, Vector3>()
         {
-            {1, new Vector3(7.5f, -1.25f, 0)},
-            {2, new Vector3(6, -1f, 0)},
-            {3, new Vector3(4.5f, -1.25f, 0)},
-            {4, new Vector3(3f, -1f, 0)}
+            {1, new Vector3(8f, -1.5f, 0)},
+            {2, new Vector3(6.5f, -1.25f, 0)},
+            {3, new Vector3(5f, -1.5f, 0)},
+            {4, new Vector3(3.5f, -1.25f, 0)}
         };
         private Dictionary<int, Vector3> enemySpawnPositions = new Dictionary<int, Vector3>()
         {
-            {1, new Vector3(-8f, -1f, 0)},
-            {2, new Vector3(-6.5f, -1.25f, 0)},
-            {3, new Vector3(-5f, -1f, 0)}
+            {1, new Vector3(-8f, -1.25f, 0)},
+            {2, new Vector3(-6.5f, -1.5f, 0)},
+            {3, new Vector3(-5f, -1.25f, 0)}
         };
         
         private int hasSpawnedHeroCount = 0;//已生成的英雄数量
