@@ -85,45 +85,10 @@ namespace Config
             //根据角色名字建立一个快速查询的字典
             foreach (var kvp in characterConfig)
             {
-                if (!characterConfigByName.ContainsKey(kvp.Value.En_Name))
-                    characterConfigByName.Add(kvp.Value.En_Name, kvp.Value);
+                if (!characterConfigByName.ContainsKey(kvp.Value.Name))
+                    characterConfigByName.Add(kvp.Value.Name, kvp.Value);
             }
             
-            Debug.Log($"加载完成: {cardConfig.Count}张卡牌, {characterConfig.Count}个角色, {levelConfig.Count}个关卡");
-        }
-        
-        public void LoadAllConfigs()
-        {
-            /*//加载关卡
-            var levelArray = JsonConfigLoader.Load<LevelDataArray>("LevelData");
-            if (levelArray != null)
-            {
-                foreach (var level in levelArray.levels)
-                {
-                    levelConfig.Add(level.id, level);
-                }
-            }*/
-            
-            /*//加载卡牌
-            var cardArray = JsonConfigLoader.Load<CardDataArray>("CardData");
-            if (cardArray != null)
-            {
-                foreach (var card in cardArray.cards)
-                {
-                    cardConfig.Add(card.id, card);
-                }
-            }*/
-            
-            /*//加载角色
-            var characterArray = JsonConfigLoader.Load<CharacterDataArray>("CharacterData");
-            if (characterArray != null)
-            {
-                foreach (var character in characterArray.characters)
-                {
-                    characterConfig.Add(character.id, character);
-                }
-            }*/
-
             Debug.Log($"加载完成: {cardConfig.Count}张卡牌, {characterConfig.Count}个角色, {levelConfig.Count}个关卡");
         }
 

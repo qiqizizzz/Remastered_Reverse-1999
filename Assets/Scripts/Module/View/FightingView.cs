@@ -36,7 +36,8 @@ namespace Module.View
         
         [Header("手牌区域相关")] 
         private Transform _cardDeckTf;
-        private readonly int _maxHandCardCount = 8;
+        private readonly int _maxHandCardCount = GameApp.CardManager.MaxHandCardCount;
+        
         
         protected override void OnAwake()
         {

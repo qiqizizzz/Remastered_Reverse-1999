@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd64f1787e34da79f7ffb88fe87571f, type: 3}
   m_Name: Card_2009
   m_EditorClassIdentifier: 
-  CardType: 0
+  CardType: 5
   Id: 2009
-  Name: 
-  Description: 
-  OwnerId: 0
+  Name: "\u7F2A\u5C14\u8D5B\u601D\u7684\u5927\u62DB"
+  Description: "\u7F2A\u5C14\u8D5B\u601D\u7684\u5927\u62DB"
+  OwnerId: 1003
   Effects: []
   CardSprite: {fileID: 0}
   CardEffectPrefab: {fileID: 0}

@@ -20,6 +20,7 @@ namespace Module.fight.CardMgr
         public string CurrentSelectedTargetId { get; set; }
         
         private readonly int singleCardMaxLimit = 3;//单张牌的最大限制数量
+        private readonly int _maxHandCardCount = 8;
         private readonly Dictionary<CharacterData, List<CardData>> m_cards;
         
         [Header("牌堆")]
@@ -135,6 +136,11 @@ namespace Module.fight.CardMgr
         public List<BattleCardData> GetHandCards()
         {
             return handCards;
+        }
+
+        public int MaxHandCardCount
+        {
+            get { return _maxHandCardCount; }
         }
         #endregion
     }

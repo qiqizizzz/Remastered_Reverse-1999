@@ -9,13 +9,16 @@
 using System;
 using System.Collections.Generic;
 using Common.Defines;
+using Data.card;
 using Data.level;
 using Module.Character;
 using Module.fight.CardMgr;
+using Module.fight.Component;
 using Module.fight.Skill;
 using MVC;
 using MVC.Controller;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Module.fight
 {
@@ -25,7 +28,6 @@ namespace Module.fight
         
         public FightController() : base()
         {
-            
             GameApp.ViewManager.Register(ViewType.FightingView, new ViewInfo()
             {
                 PrefabName = AddressDefines.UI_FightingView,
@@ -119,13 +121,43 @@ namespace Module.fight
             }
         }
 
-        private void onEnemyTurn(System.Object args)
+        private async void onEnemyTurn(System.Object args)
         {
-            Debug.Log("==== 敌人回合开始 ====");
-            
-            //TODO:...
-            
-            GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnStart);
+            try
+            {
+                Debug.Log("==== 敌人回合开始 ====");
+
+                foreach (var enemy in GameApp.EntityManager.GetAliveEnemies())
+                {
+                    if(GameApp.EntityManager.GetAliveHeroes().Count == 0) break;
+
+                    var cards = enemy.CharacterData.GetAllCards();
+                    if(cards == null || cards.Count == 0) continue;
+
+                    CardData randomCard = cards[Random.Range(0, cards.Count)];
+
+                    BattleCardData battleCard = new BattleCardData(randomCard);
+                    CardAction enemyAction = new CardAction()
+                    {
+                        BattleCardData = battleCard,
+                        OriginalIndex = -1,
+                        TargetInstanceId = ""
+                    };
+                    
+                    await CardSkillExecutor.ExecuteCardActionAsync(enemyAction);
+                }
+
+                if (GameApp.EntityManager.GetAliveHeroes().Count > 0 &&
+                    GameApp.EntityManager.GetAliveEnemies().Count > 0)
+                {
+                    GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnStart);
+                    StartNextRound();
+                }
+            }
+            catch (Exception e)
+            {
+                throw; // TODO 处理异常
+            }
         }
 
         private void onSelectEnemyTarget(System.Object args)
@@ -172,8 +204,15 @@ namespace Module.fight
         
         private void StartFirstRound()
         {
-            //GameApp.CardManager.PrepareHandsForNewLevel();后续需要改回来ing
-            GameApp.CardManager.DrawCard(8);
+            GameApp.CardManager.PrepareHandsForNewLevel();
+            
+            ApplyFunc(EventDefines.UpdateHandCards, GameApp.CardManager.GetHandCards());
+        }
+
+        private void StartNextRound()
+        {
+            int count = GameApp.CardManager.MaxHandCardCount - GameApp.CardManager.GetHandCards().Count;
+            GameApp.CardManager.DrawCard(count);
             
             ApplyFunc(EventDefines.UpdateHandCards, GameApp.CardManager.GetHandCards());
         }

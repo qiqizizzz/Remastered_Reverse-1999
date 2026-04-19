@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Character_1003
   m_EditorClassIdentifier: 
   Id: 1003
-  Name: "\u672A\u7EE3\u94E0"
-  En_Name: "\u672A\u7EE3\u94E0"
+  Name: "\u7F2A\u5C14\u8D5B\u601D"
+  En_Name: Miuersaisi
   CharacterType: 0
-  InspirationType: 0
+  InspirationType: 1
   Property:
-    Attack: 0
-    Hp: 0
-    Defense: 0
-    CritRate: 0
-    CritDamage: 0
-  Cards: 
+    Hp: 1300
+    Attack: 150
+    Defense: 30
+    CritRate: 0.2
+    CritDamage: 1.7
+  Cards: d7070000d8070000d9070000
