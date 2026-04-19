@@ -45,6 +45,12 @@ namespace Module.fight.Skill
             int preCastWaitMs = Mathf.RoundToInt(attackDuration * 0.5f * 1000);
             if (preCastWaitMs > 0) await Task.Delay(preCastWaitMs);
             
+            if (cardData.Effects == null || cardData.Effects.Length == 0)
+            {
+                // [验证目标] 检查卡牌本身是否没有配置效果
+                Debug.LogWarning($"卡牌 [{cardData.Name}] 没有配置任何 Effects！");
+            }
+            
             foreach (var effect in cardData.Effects)
             {
                 List<BaseCharacter> targets = GetTargets(caster,effect, action.TargetInstanceId);
@@ -65,7 +71,7 @@ namespace Module.fight.Skill
             
             //施法后摇
             int postCastWaitMs = Mathf.RoundToInt(attackDuration * 0.5f * 1000);
-            if (postCastWaitMs > 0) await Task.Delay(preCastWaitMs);
+            if (postCastWaitMs > 0) await Task.Delay(postCastWaitMs);
         }
 
         #region 卡牌效果执行

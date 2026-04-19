@@ -60,26 +60,32 @@ namespace Config
             //加载关卡、角色、卡牌数据
             foreach (var level in db.allLevels)
             {
-                if (level != null && !levelConfig.ContainsKey(level.Id))
-                    levelConfig.Add(level.Id, level);
+                if (level != null)
+                    levelConfig.TryAdd(level.Id, level);
             }
             
             foreach (var character in db.allCharacters)
             {
-                if (character != null && !characterConfig.ContainsKey(character.Id))
-                    characterConfig.Add(character.Id, character);
+                if (character != null)
+                    characterConfig.TryAdd(character.Id, character);
             }
 
             foreach (var enemy in db.allEnemies)
             {
-                if(enemy != null && !enemyConfig.ContainsKey(enemy.Id))
-                    enemyConfig.Add(enemy.Id, enemy);
+                if(enemy != null)
+                    enemyConfig.TryAdd(enemy.Id, enemy);
             }
             
             foreach (var card in db.allCharacterCards)
             {
-                if (card != null && !cardConfig.ContainsKey(card.Id))
-                    cardConfig.Add(card.Id, card);
+                if (card != null)
+                    cardConfig.TryAdd(card.Id, card);
+            }
+
+            foreach (var card in db.allEnemyCards)
+            {
+                if (card != null)
+                    cardConfig.TryAdd(card.Id, card);
             }
             
             //根据角色名字建立一个快速查询的字典

@@ -126,13 +126,18 @@ namespace Module.fight
             try
             {
                 Debug.Log("==== 敌人回合开始 ====");
+                //BUG:敌人无法输出,待修复ing
 
                 foreach (var enemy in GameApp.EntityManager.GetAliveEnemies())
                 {
                     if(GameApp.EntityManager.GetAliveHeroes().Count == 0) break;
 
                     var cards = enemy.CharacterData.GetAllCards();
-                    if(cards == null || cards.Count == 0) continue;
+                    if(cards == null || cards.Count == 0)
+                    {
+                        Debug.LogWarning($"[{enemy.CharacterData.Name}] 没有可用的卡牌！");
+                        continue;
+                    }
 
                     CardData randomCard = cards[Random.Range(0, cards.Count)];
 
@@ -156,7 +161,7 @@ namespace Module.fight
             }
             catch (Exception e)
             {
-                throw; // TODO 处理异常
+                Debug.LogError($"敌人回合发生异常: {e}"); 
             }
         }
 
