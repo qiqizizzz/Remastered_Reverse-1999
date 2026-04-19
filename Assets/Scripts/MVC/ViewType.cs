@@ -21,7 +21,8 @@ namespace MVC
         LevelView, //关卡界面
         CharacterView, //角色界面
         PrepareFightView, //准备战斗界面
-        FightingView,
+        FightingView, //战斗界面
         PauseFightView, //战斗暂停界面
+        FightSettleView, //战斗结算界面
     }
 }

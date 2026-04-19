@@ -23,6 +23,7 @@ namespace Common.Defines
         public const string OpenPrepareFightView = "OpenPrepareFightView";
         public const string OpenFightingView = "OpenFightingView";
         public const string OpenPauseFightView = "OpenPauseFightView";
+        public const string OpenFightSettleView = "OpenFightSettleView";
         public const string LoadingScene = "LoadingScene";
         public const string UpdateFriendList = "UpdateFriendList";
         public const string UpdateChatHistory = "UpdateChatHistory";

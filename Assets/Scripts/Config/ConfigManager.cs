@@ -22,7 +22,6 @@ namespace Config
     {
         private Dictionary<int, LevelData> levelConfig;
         private Dictionary<int, CharacterData> characterConfig;
-        private Dictionary<int, CharacterData> enemyConfig;
         private Dictionary<int, CardData> cardConfig;
         
         private Dictionary<string, CharacterData> characterConfigByName;
@@ -31,7 +30,6 @@ namespace Config
         {
             levelConfig = new Dictionary<int, LevelData>();
             characterConfig = new Dictionary<int, CharacterData>();
-            enemyConfig = new Dictionary<int, CharacterData>();
             cardConfig = new Dictionary<int, CardData>();
             characterConfigByName = new Dictionary<string, CharacterData>();
         }
@@ -73,7 +71,7 @@ namespace Config
             foreach (var enemy in db.allEnemies)
             {
                 if(enemy != null)
-                    enemyConfig.TryAdd(enemy.Id, enemy);
+                    characterConfig.TryAdd(enemy.Id, enemy);
             }
             
             foreach (var card in db.allCharacterCards)
@@ -133,7 +131,7 @@ namespace Config
         //得到所有角色
         public List<CharacterData> GetAllCharacters()
         {
-            return characterConfig.Values.ToList();
+            return characterConfig.Values.Where(c => c.CharacterType == CharacterType.Hero).ToList();
         }
         
         #endregion
@@ -141,7 +139,7 @@ namespace Config
         #region 敌人相关
         public CharacterData GetEnemyData(int enemyId)
         {
-            return enemyConfig.TryGetValue(enemyId, out CharacterData enemyData) ? enemyData : null;
+            return characterConfig.TryGetValue(enemyId, out CharacterData enemyData) ? enemyData : null;
         }
 
         #endregion

@@ -34,14 +34,21 @@ namespace Module.fight
                 controller = this,
                 parentTf = GameApp.ViewManager.canvasTf
             });
-            
             GameApp.ViewManager.Register(ViewType.PauseFightView, new ViewInfo()
             {
                 PrefabName =  AddressDefines.UI_PauseFightView,
                 controller = this,
                 parentTf = GameApp.ViewManager.canvasTf,
+                Sorting_Order = 5
+            });
+            GameApp.ViewManager.Register(ViewType.FightSettleView, new ViewInfo()
+            {
+                PrefabName =  AddressDefines.UI_FightSettleView,
+                controller = this,
+                parentTf = GameApp.ViewManager.canvasTf,
                 Sorting_Order = 10
             });
+            
             
             InitModuleEvent();
         }
@@ -51,6 +58,7 @@ namespace Module.fight
             RegisterFunc(EventDefines.OpenFightingView, onOpenFightView);
             RegisterFunc(EventDefines.OpenPauseFightView, onOpenPauseFightView);
             RegisterFunc(EventDefines.FightingViewReady,onFightingViewReady);
+            RegisterFunc(EventDefines.OpenFightSettleView, onOpenFightSettleView);
             
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
@@ -64,6 +72,7 @@ namespace Module.fight
             UnRegisterFunc(EventDefines.OpenFightingView, onOpenFightView);
             UnRegisterFunc(EventDefines.OpenPauseFightView, onOpenPauseFightView);
             UnRegisterFunc(EventDefines.FightingViewReady,onFightingViewReady);
+            UnRegisterFunc(EventDefines.OpenFightSettleView, onOpenFightSettleView);
             
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
@@ -78,6 +87,13 @@ namespace Module.fight
             _currentInitData = args[0] as LevelInitData;
             
             GameApp.EntityManager.SpawnBattleEntities(_currentInitData, onSpawnBattleCallback);//生成玩家与敌人等
+        }
+        
+        private void onOpenFightSettleView(System.Object[] args)
+        {
+            bool isWin = (bool)args[0];
+            
+            GameApp.ViewManager.Open(ViewType.FightSettleView, isWin);
         }
 
         private void onOpenPauseFightView(System.Object[] args)
@@ -126,11 +142,12 @@ namespace Module.fight
             try
             {
                 Debug.Log("==== 敌人回合开始 ====");
-                //BUG:敌人无法输出,待修复ing
 
                 foreach (var enemy in GameApp.EntityManager.GetAliveEnemies())
                 {
                     if(GameApp.EntityManager.GetAliveHeroes().Count == 0) break;
+                    
+                    if(enemy.gameObject.activeSelf == false) continue;
 
                     var cards = enemy.CharacterData.GetAllCards();
                     if(cards == null || cards.Count == 0)
@@ -190,17 +207,18 @@ namespace Module.fight
             if (GameApp.EntityManager.GetAliveHeroes().Count == 0)
             {
                 Debug.Log("==== 全部英雄死亡，玩家失败 ====");
-                //TODO:打开失败界面等
+                ApplyFunc(EventDefines.OpenFightSettleView, false);
             }
             else if (GameApp.EntityManager.GetAliveEnemies().Count == 0)
             {
                 Debug.Log("==== 全部敌人死亡，玩家胜利 ====");
-                //TODO:打开胜利界面等
+                ApplyFunc(EventDefines.OpenFightSettleView, true);
             }
         }
 
         #endregion
-        
+
+        #region 回合相关事件
         private void onSpawnBattleCallback()
         {
             GameApp.CardManager.InitCards(_currentInitData);
@@ -223,5 +241,6 @@ namespace Module.fight
             
             ApplyFunc(EventDefines.UpdateHandCards, GameApp.CardManager.GetHandCards());
         }
+        #endregion
     }
 }
