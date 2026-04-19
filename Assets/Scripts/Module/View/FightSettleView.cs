@@ -53,9 +53,8 @@ namespace Module.View
         {
             ViewExtensions.LoadScene(this,SceneDefines.Game, () =>
             {
-                ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenGameView);
-                GameApp.ViewManager.Open(ViewType.LevelView);
-                GameApp.ViewManager.Open(ViewType.PrepareFightView);
+                GameApp.ViewManager.CloseAll();
+                ApplyControllerFunc(ControllerType.Level, EventDefines.OpenLevelView);
             });
         }
     }

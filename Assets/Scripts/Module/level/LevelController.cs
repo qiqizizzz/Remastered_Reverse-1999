@@ -44,7 +44,13 @@ namespace Module.level
             RegisterFunc(EventDefines.OpenLevelView, onOpenLevelView);
             RegisterFunc(EventDefines.OpenPrepareFightView, onOpenPrepareFightView);
         }
-        
+
+        public override void RemoveModuleEvent()
+        {
+            UnRegisterFunc(EventDefines.OpenLevelView, onOpenLevelView);
+            UnRegisterFunc(EventDefines.OpenPrepareFightView, onOpenPrepareFightView);
+        }
+
         private void onOpenPrepareFightView(params object[] args)
         {
             GameApp.ViewManager.Open(ViewType.PrepareFightView, args);
