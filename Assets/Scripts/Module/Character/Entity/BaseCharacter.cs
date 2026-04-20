@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using Data.card;
+using DG.Tweening;
 using Module.Character.Components;
 using Spine;
 using Spine.Unity;
@@ -99,6 +100,8 @@ namespace Module.Character
             CurrentHp = MaxHp;
             gameObject.name = _characterData.Name;
             
+            _skeAnim.skeleton.A = 1f;
+            _HUD?.SetAlpha(1f);
             _HUD?.UpdateHp(CurrentHp, MaxHp);
             ChangeState(CharacterStateType.Idle);
         }
@@ -152,14 +155,9 @@ namespace Module.Character
             _HUD?.UpdateHp(CurrentHp, MaxHp);
             
             if (CurrentHp <= 0)
-            {
                 ChangeState(CharacterStateType.Die);
-                //TODO:发送事件ing
-            }
             else
-            {
                 ChangeState(CharacterStateType.Hurt);
-            }
         }
 
         public float GetAnimDuration(string animName)
@@ -169,10 +167,18 @@ namespace Module.Character
             var anim = _skeAnim.Skeleton.Data.FindAnimation(animName);
             return anim?.Duration ?? 0f;
         }
-
+        
         public void HandleDie()
         {
-            gameObject.SetActive(false);
+            Sequence seq = DOTween.Sequence();
+            
+            if (_skeAnim != null && _skeAnim.skeleton != null)
+                seq.Join(DOTween.To(() => _skeAnim.skeleton.A, x => _skeAnim.skeleton.A = x, 0f, 0.5f));
+                
+            if (_HUD != null)
+                seq.Join(_HUD.DOFade(0f, 0.5f));
+
+            seq.OnComplete(() => gameObject.SetActive(false));
         }
 
         #region spine事件

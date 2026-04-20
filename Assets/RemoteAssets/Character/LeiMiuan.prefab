@@ -344,6 +344,7 @@ GameObject:
   - component: {fileID: 7790564220842124312}
   - component: {fileID: 1874910384872124546}
   - component: {fileID: 5351439721954794876}
+  - component: {fileID: 1751003114728026634}
   m_Layer: 0
   m_Name: HUD
   m_TagString: Untagged
@@ -409,6 +410,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!225 &1751003114728026634
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6590927274613866032}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6856751005017243081
 GameObject:
   m_ObjectHideFlags: 0

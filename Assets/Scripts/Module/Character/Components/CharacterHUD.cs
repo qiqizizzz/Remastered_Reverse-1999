@@ -19,32 +19,35 @@ namespace Module.Character.Components
     public class CharacterHUD : MonoBehaviour
     {
         [Header("血条UI")] 
-        [SerializeField] private Slider HpSlider;
+        private Slider _hpSlider;
         
         [Header("飘字配置")]
-        [SerializeField] private Transform FloatPoint;
+        private Transform _floatPoint;
+        
+        private CanvasGroup _canvasGroup;
 
         private void Awake()
         {
-            HpSlider = GetComponentInChildren<Slider>();
-            FloatPoint = GetComponentInChildren<Transform>().Find("FloatPoint");
+            _hpSlider = GetComponentInChildren<Slider>();
+            _floatPoint = GetComponentInChildren<Transform>().Find("FloatPoint");
+            _canvasGroup = GetComponent<CanvasGroup>();
         }
 
         public void UpdateHp(float currentHp, float maxHp)
         {
-            HpSlider.value = currentHp / maxHp;
+            _hpSlider.value = currentHp / maxHp;
         }
 
         public void ShowDamage(int damage, bool isCrit)
         {
-            if (FloatPoint == null) return;
+            if (_floatPoint == null) return;
             
             ResManager.InstantiateFromPoolAsync(AddressDefines.UI_small_Txt_Damage, (go) =>
             {
                 //这个也许可以优化？
                 TextMeshProUGUI txt = go.GetComponentInChildren<TextMeshProUGUI>();
                 
-                go.transform.position = FloatPoint.position;
+                go.transform.position = _floatPoint.position;
                 txt.fontSize = 52;
                 
                 txt.text = $"-{damage}";
@@ -59,7 +62,11 @@ namespace Module.Character.Components
                 {
                     ResManager.ReleaseToPool(AddressDefines.UI_small_Txt_Damage, go);
                 });
-            }, FloatPoint);
+            }, _floatPoint);
         }
+        
+        public void SetAlpha(float alpha) => _canvasGroup.alpha = alpha;
+        
+        public Tween DOFade(float endValue, float duration) => _canvasGroup.DOFade(endValue, duration);
     }
 }
