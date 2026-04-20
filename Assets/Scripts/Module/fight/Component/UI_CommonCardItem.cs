@@ -130,11 +130,15 @@ namespace Module.fight.Component
         #region 表现与动画逻辑
         public void PrepareSpawn()
         {
+            Rect.DOKill();
+            transform.DOKill(); 
+            
             SetVisible(false);
             _isDragging = false;
             IsInQueue = false;
             Rect.anchoredPosition = _spawnPos;//放置在初始发牌点
             Rect.localScale = Vector3.one;
+            Rect.localRotation = Quaternion.identity; 
 
             ShowStarUI(1);
         }

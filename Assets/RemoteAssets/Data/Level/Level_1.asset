@@ -17,4 +17,4 @@ MonoBehaviour:
   Description: "\u51FB\u8D25\u6240\u6709\u654C\u4EBA-12\u56DE\u5408\u5185\u80DC\u5229"
   MonsterSpawns:
   - monsterId: 5001
-    count: 10
+    count: 3

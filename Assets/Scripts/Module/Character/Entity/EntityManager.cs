@@ -147,8 +147,8 @@ namespace Module.Character
                 return;
             }
             
-            totalRound = enemySpawnCount / 4;
-            if (enemySpawnCount % 4 != 0)
+            totalRound = enemySpawnCount / 3;
+            if (enemySpawnCount % 3 != 0)
             {
                 totalRound += 1;
             }
@@ -158,7 +158,13 @@ namespace Module.Character
 
         private void ClearBattleEntities()
         {
-            //TODO：销毁玩家与敌人等
+            // 回收敌人对象
+            foreach (var enemy in AliveEnemies)
+            {
+                string res = AddressDefines.Character_Enemy + enemy.CharacterData.En_Name;
+                ResManager.ReleaseToPool(res, enemy.gameObject);
+            }
+            
             hasSpawnedHeroCount = 0;
             hasSpawnedEnemyCount = 0;
             
@@ -186,7 +192,7 @@ namespace Module.Character
 
             AliveEnemies.Add(enemyEntity);
             
-            //隐藏超过4只的敌人
+            //隐藏超过3只的敌人
             if(hasSpawnedEnemyCount > 3)
                 go.SetActive(false);
         }

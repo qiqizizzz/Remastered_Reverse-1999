@@ -51,6 +51,8 @@ namespace Module.View
 
         private void onReturnBtn()
         {
+            ApplyFunc(EventDefines.ExitLevel);
+            
             ViewExtensions.LoadScene(this,SceneDefines.Game, () =>
             {
                 GameApp.ViewManager.CloseAll();

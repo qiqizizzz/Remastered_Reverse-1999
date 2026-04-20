@@ -117,6 +117,8 @@ namespace Module.View
         
         private void onExitLevel(params object[] args)
         {
+            //注意:所有离开关卡的行为都需要经过这个事件,不然动画UI等效果会出错
+            
             _uiActionStack.Clear();
             _handCardItems.Clear();
             
@@ -124,7 +126,7 @@ namespace Module.View
             {
                 if (item != null)
                 {
-                    item.transform.SetParent(_cardDeckTf);
+                    item.transform.SetParent(_cardDeckTf, false);
                     item.HideCard();
                     item.PrepareSpawn();
                 }
