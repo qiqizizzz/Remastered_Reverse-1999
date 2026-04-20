@@ -18,8 +18,9 @@ namespace Module.Character.Components
 {
     public class CharacterHUD : MonoBehaviour
     {
-        [Header("血条UI")] 
+        [Header("UI相关")] 
         private Slider _hpSlider;
+        private Image _selectImg;
         
         [Header("飘字配置")]
         private Transform _floatPoint;
@@ -29,6 +30,7 @@ namespace Module.Character.Components
         private void Awake()
         {
             _hpSlider = GetComponentInChildren<Slider>();
+            _selectImg = transform.Find("Select")?.GetComponent<Image>();
             _floatPoint = GetComponentInChildren<Transform>().Find("FloatPoint");
             _canvasGroup = GetComponent<CanvasGroup>();
         }
@@ -68,5 +70,13 @@ namespace Module.Character.Components
         public void SetAlpha(float alpha) => _canvasGroup.alpha = alpha;
         
         public Tween DOFade(float endValue, float duration) => _canvasGroup.DOFade(endValue, duration);
+
+        public void SetSelected(bool selected)
+        {
+            if (_selectImg == null)
+                return;
+            
+            _selectImg.enabled = selected;
+        }
     }
 }

@@ -85,8 +85,8 @@ namespace Module.View
         public override void Open(params object[] args)
         {
             SetVisible(true);
-            
-            if(_cardPool.Count == _maxHandCardCount)
+
+            if (_cardPool.Count == _maxHandCardCount)
                 ApplyFunc(EventDefines.FightingViewReady);
         }
         

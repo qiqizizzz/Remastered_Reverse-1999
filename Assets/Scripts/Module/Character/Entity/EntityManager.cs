@@ -65,6 +65,23 @@ namespace Module.Character
 
             return null;
         }
+        
+        public BaseCharacter GetCharacterByInstanceId(string instanceId)
+        {
+            foreach (var hero in AliveHeroes)
+            {
+                if (string.Equals(instanceId, hero.InstanceID)) 
+                    return hero;
+            }
+
+            foreach (var enemy in AliveEnemies)
+            {
+                if (string.Equals(instanceId, enemy.InstanceID))
+                    return enemy;
+            }
+
+            return null;
+        }
         #endregion
         
         #region 生成实体与配置数据

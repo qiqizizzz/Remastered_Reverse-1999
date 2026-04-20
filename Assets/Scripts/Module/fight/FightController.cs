@@ -27,6 +27,7 @@ namespace Module.fight
     {
         private LevelInitData _currentInitData;
         private bool _isBattleActive = false; //是否还在战斗中
+        private bool _isPlayerTurnStart = false; //是否是玩家回合开始（不包括输出回合）
         
         public FightController() : base()
         {
@@ -113,7 +114,8 @@ namespace Module.fight
         private void onPlayerTurnStart(System.Object args)
         {
             Debug.Log("==== 玩家回合开始 ====");
-            
+            _isPlayerTurnStart = true;
+
             //TODO:...
         }
         
@@ -122,6 +124,7 @@ namespace Module.fight
             try
             {
                 Debug.Log("==== 玩家出牌阶段结束，开始结算队列 ====");
+                _isPlayerTurnStart = false;
                 List<CardAction> actions = GameApp.CardManager.CardActionQueue.GetAllActionsAndClear();
 
                 foreach (var action in actions)
@@ -192,12 +195,17 @@ namespace Module.fight
 
         private void onSelectEnemyTarget(System.Object args)
         {
+            if(!_isPlayerTurnStart) return;
+            
             string enemyInstanceId = args.ToString();
             GameApp.CardManager.CurrentSelectedTargetId = enemyInstanceId;
+            Debug.Log("当前选中敌人InstanceID: " + enemyInstanceId);
             
-            //TODO:高亮显示被选中的敌人等
-
-            Debug.Log($"选择了敌人目标，InstanceID：{enemyInstanceId}");
+            foreach (var enemy in GameApp.EntityManager.GetAliveEnemies())
+            {
+                enemy.HUD?.SetSelected(string.Equals(enemy.InstanceID, enemyInstanceId));
+                Debug.Log("设置敌人 " + enemy.CharacterData.Name + " 选中状态: " + (enemy.InstanceID == enemyInstanceId));
+            }
         }
 
         private void onCharacterDie(System.Object args)
@@ -243,6 +251,7 @@ namespace Module.fight
             GameApp.CardManager.PrepareHandsForNewLevel();
             
             ApplyFunc(EventDefines.UpdateHandCards, GameApp.CardManager.GetHandCards());
+            GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnStart);
         }
 
         private void StartNextRound()

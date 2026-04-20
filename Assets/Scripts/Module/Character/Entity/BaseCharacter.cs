@@ -61,6 +61,10 @@ namespace Module.Character
         [Header("动画映射")] 
         public AnimationConfig AnimConfig;
 
+        public CharacterData CharacterData => _characterData;
+        public string InstanceID => _instanceId;
+        public CharacterHUD HUD => _HUD;
+        
         #region 生命周期、初始化
         protected virtual void Awake()
         {
@@ -103,6 +107,7 @@ namespace Module.Character
             _skeAnim.skeleton.A = 1f;
             _HUD?.SetAlpha(1f);
             _HUD?.UpdateHp(CurrentHp, MaxHp);
+            _HUD?.SetSelected(false);
             ChangeState(CharacterStateType.Idle);
         }
         
@@ -118,8 +123,6 @@ namespace Module.Character
         }
         #endregion
         
-        public CharacterData CharacterData => _characterData;
-        public string InstanceID => _instanceId;
         public void ChangeState(CharacterStateType newStateType)
         {
             if(CurrentStateType == CharacterStateType.Die) return;
