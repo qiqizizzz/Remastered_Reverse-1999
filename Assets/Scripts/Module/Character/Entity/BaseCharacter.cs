@@ -68,7 +68,6 @@ namespace Module.Character
         #region 生命周期、初始化
         protected virtual void Awake()
         {
-            _instanceId = Guid.NewGuid().ToString();
             _skeAnim = GetComponentInChildren<SkeletonAnimation>();
             _HUD = GetComponentInChildren<CharacterHUD>();
             
@@ -99,6 +98,7 @@ namespace Module.Character
 
         public void Init(CharacterData data)
         {
+            _instanceId = Guid.NewGuid().ToString();
             _characterData = data;
             MaxHp = data.Property.Hp;
             CurrentHp = MaxHp;

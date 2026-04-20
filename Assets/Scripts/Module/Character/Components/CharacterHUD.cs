@@ -76,7 +76,7 @@ namespace Module.Character.Components
             if (_selectImg == null)
                 return;
             
-            _selectImg.enabled = selected;
+            _selectImg.gameObject.SetActive(selected);
         }
     }
 }

@@ -199,12 +199,10 @@ namespace Module.fight
             
             string enemyInstanceId = args.ToString();
             GameApp.CardManager.CurrentSelectedTargetId = enemyInstanceId;
-            Debug.Log("当前选中敌人InstanceID: " + enemyInstanceId);
             
             foreach (var enemy in GameApp.EntityManager.GetAliveEnemies())
             {
                 enemy.HUD?.SetSelected(string.Equals(enemy.InstanceID, enemyInstanceId));
-                Debug.Log("设置敌人 " + enemy.CharacterData.Name + " 选中状态: " + (enemy.InstanceID == enemyInstanceId));
             }
         }
 
