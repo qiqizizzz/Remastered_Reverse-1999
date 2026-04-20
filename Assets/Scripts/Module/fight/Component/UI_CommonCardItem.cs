@@ -146,6 +146,13 @@ namespace Module.fight.Component
         public void MoveToIndex(int index,int totalCount ,float delay = 0f)
         {
             SetVisible(true);
+            
+            if (_isDragging)
+            {
+                transform.SetAsLastSibling();
+                return;
+            }
+            
             float targetX = -_startX - (totalCount - 1 - index) * (CardWidth + _cardSpacing);
             Vector2 targetPos = new Vector2(targetX, 0);
 
@@ -234,8 +241,8 @@ namespace Module.fight.Component
             Rect.DOScale(Vector3.one, _dragDuration);
             _canvasGroup.blocksRaycasts = true;
 
-            OnEndDragCallback?.Invoke(this, eventData);
             _isDragging = false;
+            OnEndDragCallback?.Invoke(this, eventData);
         }
         
         public void OnPointerClick(PointerEventData eventData)
