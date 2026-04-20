@@ -37,7 +37,8 @@ namespace Module.fight.CardMgr
             var action = new CardAction()
             {
                 BattleCardData = cardData,
-                OriginalIndex = originalIndex
+                OriginalIndex = originalIndex,
+                TargetInstanceId = targetInstanceId
             };
             
             _actionStack.Push(action);
