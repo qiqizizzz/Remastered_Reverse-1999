@@ -321,51 +321,66 @@ namespace Module.View
         #region 手牌UI事件
         private void onUpdateHandCards(params object[] args)
         {
-            //args[0] 手牌列表->本轮新抽的牌
             List<BattleCardData> newCards = args[0] as List<BattleCardData>;
-            
             if(newCards == null) return;
             
-            _handCardItems.Clear();//清空当前手牌实例列表，准备重新分配
-
+            List<UI_CommonCardItem> newHandItems = new List<UI_CommonCardItem>();
             float maxAnimTime = 0f;
-            for (int i = 0; i < _maxHandCardCount; i++)
-            {
-                UI_CommonCardItem item = _cardPool[i];
 
-                if (i < newCards.Count)
+            for (int i = 0; i < newCards.Count; i++)
+            {
+                BattleCardData cardData = newCards[i];
+                
+                UI_CommonCardItem item = _handCardItems.Find(x => ReferenceEquals(x.BattleCardData, cardData));
+                
+                bool isNewCard = false;
+                if (item == null)
                 {
-                    item.transform.SetParent(_cardDeckTf, true);
-                    bool isNewCard = !item.gameObject.activeSelf;
-                    if(isNewCard)
-                        item.PrepareSpawn();
-                    
-                    item.InitCardUI(newCards[i]);
-                    _handCardItems.Add(item);
-                    
+                    item = _cardPool.Find(x => !x.gameObject.activeSelf && !newHandItems.Contains(x));
+                    if (item != null)
+                    {
+                        isNewCard = true;
+                        item.transform.SetParent(_cardDeckTf, true);
+                        item.PrepareSpawn(); // 放回最左侧初始点
+                    }
+                }
+
+                if (item != null)
+                {
+                    item.InitCardUI(cardData);
+                    newHandItems.Add(item);
+
                     item.OnBeginDragCallback = OnCardBeginDrag;
                     item.OnDragCallback = OnCardDrag;
                     item.OnEndDragCallback = OnCardEndDrag;
                     item.OnClickCallback = OnCardClick;
                     
                     float delay = isNewCard ? (newCards.Count - 1 - i) * 0.05f : 0f;
+                    
+                    if (isNewCard) item.transform.SetAsLastSibling();
+                    
                     item.MoveToIndex(i, newCards.Count, delay);
 
-                    //计算动画时间
-                    float finishTime = delay + item.GetMoveDuration();
+                    float finishTime = delay + item.GetMoveDuration(); 
                     if (finishTime > maxAnimTime) maxAnimTime = finishTime;
                 }
-                else
+            }
+            
+            foreach (var oldItem in _cardPool)
+            {
+                if (!newHandItems.Contains(oldItem) && !oldItem.IsInQueue)
                 {
-                    item.HideCard();
-                    item.OnBeginDragCallback = null;
-                    item.OnDragCallback = null;
-                    item.OnEndDragCallback = null;
-                    item.OnClickCallback = null;
+                    oldItem.HideCard();
+                    oldItem.OnBeginDragCallback = null;
+                    oldItem.OnDragCallback = null;
+                    oldItem.OnEndDragCallback = null;
+                    oldItem.OnClickCallback = null;
                 }
             }
 
-            //延迟调用：等待卡牌全部发放完毕后再执行合成操作
+            _handCardItems = newHandItems;
+
+            // 延迟调用合成与补牌
             DOVirtual.DelayedCall(maxAnimTime, () =>
             {
                 CheckAndTriggerComposite(() =>
@@ -377,16 +392,11 @@ namespace Module.View
 
                         GameApp.CardManager.DrawCard(needCount);
                         
-                        //防死锁
                         if(GameApp.CardManager.GetHandCards().Count > beforeCount)
                             onUpdateHandCards(GameApp.CardManager.GetHandCards());
                     }
                 });
             });
-
-            
-            
-            //TODO:如果在发牌的时候合成牌了则需要继续发牌直到达到8张牌
         }
 
         private void onHideAllHands(System.Object args)

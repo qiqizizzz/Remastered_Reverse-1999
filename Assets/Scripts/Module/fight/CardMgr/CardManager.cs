@@ -119,7 +119,7 @@ namespace Module.fight.CardMgr
                 
                 BattleCardData drawnCard = drawPile[^1];
                 drawPile.RemoveAt(drawPile.Count - 1);
-                handCards.Insert(i, drawnCard);
+                handCards.Insert(0, drawnCard);
             }
         }
         
@@ -135,10 +135,11 @@ namespace Module.fight.CardMgr
         
         public void RemoveHandCard(BattleCardData card)
         {
-            if (handCards.Contains(card))
+            int index = handCards.FindIndex(x => ReferenceEquals(x, card));
+            if (index != -1)
             {
-                card.ClearData();
-                handCards.Remove(card);
+                handCards[index].ClearData();
+                handCards.RemoveAt(index);
             }
         }
 
