@@ -79,7 +79,7 @@ namespace Module.View
 
         private void onReturnMoreOptionBtn()
         {
-            GameApp.ViewManager.Close(ViewId);
+            GameApp.ViewManager.NavigateBack();
         }
 
         private void showPanel(int index)

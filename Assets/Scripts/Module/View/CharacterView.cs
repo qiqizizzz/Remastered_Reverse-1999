@@ -22,8 +22,7 @@ namespace Module.View
 
         private void onReturnBtn()
         {
-            GameApp.ViewManager.Close(ViewId);
-            ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenGameView);
+            GameApp.ViewManager.NavigateBack();
         }
     }
 }

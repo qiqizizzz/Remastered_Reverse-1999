@@ -121,7 +121,7 @@ namespace Module.View
         
         private void onReturnBtn()
         {
-            GameApp.ViewManager.Close(ViewId);
+            GameApp.ViewManager.NavigateBack();
         }
 
         #region 账号界面

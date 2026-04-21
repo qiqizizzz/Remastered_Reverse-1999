@@ -89,8 +89,7 @@ namespace Module.View
 
         private void onReturnBtn()
         {
-            GameApp.ViewManager.Close(ViewId);
-            GameApp.ViewManager.Open(ViewType.LevelView);
+            GameApp.ViewManager.NavigateBack();
         }
 
         private void onActionBtn()

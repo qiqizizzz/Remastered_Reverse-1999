@@ -39,8 +39,7 @@ namespace Module.View
         
         private void onReturnBtn()
         {
-            GameApp.ViewManager.Close(ViewId);
-            GameApp.ViewManager.Open(ViewType.GameView);
+            GameApp.ViewManager.NavigateBack();
         }
     }
 }

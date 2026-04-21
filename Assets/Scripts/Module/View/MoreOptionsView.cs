@@ -24,8 +24,7 @@ namespace Module.View
 
         private void onReturnGameViewBtn()
         {
-            GameApp.ViewManager.Close(ViewId);
-            GameApp.ViewManager.Open(ViewType.GameView);
+            GameApp.ViewManager.NavigateBack();
         }
 
         private void onOpenChatViewBtn()

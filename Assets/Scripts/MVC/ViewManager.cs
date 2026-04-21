@@ -40,6 +40,8 @@ namespace MVC
         private Dictionary<int, IBaseView> _viewCache;
         private Dictionary<int, ViewInfo> _viewInfos;//注册视图信息
         
+        private Stack<int> _viewStack;
+        
         public ViewManager()
         {
             canvasTf = GameObject.Find("Canvas").transform;
@@ -47,6 +49,7 @@ namespace MVC
             _opens = new Dictionary<int, IBaseView>();
             _viewCache = new Dictionary<int, IBaseView>();
             _viewInfos = new Dictionary<int, ViewInfo>();
+            _viewStack = new Stack<int>();
         }
 
         public bool IsOpen(int key) => _opens.ContainsKey(key);
@@ -136,6 +139,11 @@ namespace MVC
                 _opens.Remove(key);
                 view.Close(args);
                 _viewInfos[key].controller.CloseView(view);
+                
+                if (_viewStack.Count > 0 && _viewStack.Peek() == key)
+                {
+                    _viewStack.Pop();
+                }
             }
         }
         public void Close(ViewType viewType)
@@ -149,6 +157,8 @@ namespace MVC
             {
                 Close(list[i].ViewId);
             }
+            
+            _viewStack.Clear();
         }
         
         //打开某个视图面板
@@ -203,6 +213,8 @@ namespace MVC
             if(this._opens.ContainsKey(key) == true) return;
             this._opens.Add(key, view);
             
+            _viewStack.Push(key);
+            
             //已经初始化过
             if (view.IsInit())
             {
@@ -221,6 +233,25 @@ namespace MVC
         public void Open(ViewType viewType, params object[] args)
         {
             Open((int)viewType, args);
+        }
+        
+        public void NavigateBack()
+        {
+            if (_viewStack.Count > 1) 
+            {
+                int currentViewKey = _viewStack.Pop(); 
+                if (IsOpen(currentViewKey)) 
+                {
+                    Close(currentViewKey); 
+                }
+                
+                int previousViewKey = _viewStack.Peek(); 
+                
+                if (!IsOpen(previousViewKey))
+                {
+                    Open(previousViewKey); 
+                }
+            }
         }
         
         //查找对应类型的脚本 - 内存开销大
