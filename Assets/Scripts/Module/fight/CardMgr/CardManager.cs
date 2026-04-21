@@ -132,6 +132,15 @@ namespace Module.fight.CardMgr
             card.StarLevel = 1;
             discardPile.Add(card);
         }
+        
+        public void RemoveHandCard(BattleCardData card)
+        {
+            if (handCards.Contains(card))
+            {
+                card.ClearData();
+                handCards.Remove(card);
+            }
+        }
 
         #region 工具函数
         public List<BattleCardData> GetHandCards()

@@ -115,8 +115,6 @@ namespace Module.fight
         {
             Debug.Log("==== 玩家回合开始 ====");
             _isPlayerTurnStart = true;
-
-            //TODO:...
         }
         
         private async void onPlayerTurnOutput(System.Object args)
@@ -131,6 +129,9 @@ namespace Module.fight
                 {
                     if(!_isBattleActive) break;
                     await CardSkillExecutor.ExecuteCardActionAsync(action);
+
+                    GameApp.CardManager.RemoveHandCard(action.BattleCardData);
+                    GameApp.CardManager.DiscardCard(action.BattleCardData);
                 }
                 
                 if (_isBattleActive)

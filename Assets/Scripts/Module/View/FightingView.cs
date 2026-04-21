@@ -242,7 +242,7 @@ namespace Module.View
             RefreshHandCardLayout();
         }
         
-        private void CompositeCard(int indexA, int indexB)
+        private void CompositeCard(int indexA, int indexB, Action onCompleteAllMerges = null)
         {
             UI_CommonCardItem cardA = _handCardItems[indexA];
             UI_CommonCardItem cardB = _handCardItems[indexB];
@@ -252,6 +252,7 @@ namespace Module.View
             //保留cardA并升星,cardB销毁
             cardA.BattleCardData.StarLevel += 1;
             _handCardItems.Remove(cardB);
+            GameApp.CardManager.RemoveHandCard(cardB.BattleCardData);
             cardA.ShowStarUI(cardA.BattleCardData.StarLevel);
             
             cardA.PlayCompositeAnim(centerPos);
@@ -262,13 +263,13 @@ namespace Module.View
                 
                 RefreshHandCardLayout();
                 
-                CheckAndTriggerComposite();
+                CheckAndTriggerComposite(onCompleteAllMerges);
             });
             
             // TODO: 合成卡后角色的行动点数+1(这个先不做)
         }
         
-        private void CheckAndTriggerComposite()
+        private void CheckAndTriggerComposite(Action onCompleteAllMerges = null)
         {
             // 从左到右遍历手牌，寻找相邻且相同的牌
             for (int i = 0; i < _handCardItems.Count - 1; i++)
@@ -282,10 +283,12 @@ namespace Module.View
                 {
                     // 找到一对可以合成的牌，触发合成并立即中断循环
                     // 一次只处理一对，靠动画回调实现连锁反应
-                    CompositeCard(i, i + 1);
+                    CompositeCard(i, i + 1, onCompleteAllMerges);
                     return; 
                 }
             }
+            
+            onCompleteAllMerges?.Invoke();
         }
         
         private void PreLoadCardItem()
@@ -325,6 +328,7 @@ namespace Module.View
             
             _handCardItems.Clear();//清空当前手牌实例列表，准备重新分配
 
+            float maxAnimTime = 0f;
             for (int i = 0; i < _maxHandCardCount; i++)
             {
                 UI_CommonCardItem item = _cardPool[i];
@@ -346,6 +350,10 @@ namespace Module.View
                     
                     float delay = isNewCard ? (newCards.Count - 1 - i) * 0.05f : 0f;
                     item.MoveToIndex(i, newCards.Count, delay);
+
+                    //计算动画时间
+                    float finishTime = delay + item.GetMoveDuration();
+                    if (finishTime > maxAnimTime) maxAnimTime = finishTime;
                 }
                 else
                 {
@@ -356,6 +364,29 @@ namespace Module.View
                     item.OnClickCallback = null;
                 }
             }
+
+            //延迟调用：等待卡牌全部发放完毕后再执行合成操作
+            DOVirtual.DelayedCall(maxAnimTime, () =>
+            {
+                CheckAndTriggerComposite(() =>
+                {
+                    if (_handCardItems.Count < _maxHandCardCount)
+                    {
+                        int needCount = _maxHandCardCount - _handCardItems.Count;
+                        int beforeCount = GameApp.CardManager.GetHandCards().Count;
+
+                        GameApp.CardManager.DrawCard(needCount);
+                        
+                        //防死锁
+                        if(GameApp.CardManager.GetHandCards().Count > beforeCount)
+                            onUpdateHandCards(GameApp.CardManager.GetHandCards());
+                    }
+                });
+            });
+
+            
+            
+            //TODO:如果在发牌的时候合成牌了则需要继续发牌直到达到8张牌
         }
 
         private void onHideAllHands(System.Object args)

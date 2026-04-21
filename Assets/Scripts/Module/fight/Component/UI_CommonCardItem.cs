@@ -252,5 +252,9 @@ namespace Module.fight.Component
             OnClickCallback?.Invoke(this);
         }
         #endregion
+
+        #region 工具函数
+        public float GetMoveDuration() => _moveDuration;
+        #endregion
     }
 }

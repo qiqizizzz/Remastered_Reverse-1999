@@ -24,6 +24,11 @@ namespace Module.fight.Component
             StarLevel = 1;
         }
 
+        public void ClearData()
+        {
+            StarLevel = 1;
+        }
+
         #region 重写函数
         public override bool Equals(object obj)
         {
