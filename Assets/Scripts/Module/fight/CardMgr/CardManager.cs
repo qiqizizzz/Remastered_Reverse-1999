@@ -119,7 +119,7 @@ namespace Module.fight.CardMgr
                 
                 BattleCardData drawnCard = drawPile[^1];
                 drawPile.RemoveAt(drawPile.Count - 1);
-                handCards.Add(drawnCard);
+                handCards.Insert(i, drawnCard);
             }
         }
         

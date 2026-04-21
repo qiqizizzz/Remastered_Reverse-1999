@@ -107,7 +107,7 @@ namespace Module.fight.Component
 
             _icon.sprite = BattleCardData.BaseData.CardSprite;
             showTypeUI((int)BattleCardData.BaseData.CardType);
-            ShowStarUI(1);
+            ShowStarUI(BattleCardData.StarLevel);
             
             Rect.localScale = Vector3.one;
             Rect.localRotation = Quaternion.identity;
