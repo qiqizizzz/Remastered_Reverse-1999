@@ -178,6 +178,8 @@ namespace Module.Character
             // 回收敌人对象
             foreach (var enemy in AliveEnemies)
             {
+                if (enemy == null || enemy.gameObject == null) continue;
+                
                 string res = AddressDefines.Character_Enemy + enemy.CharacterData.En_Name;
                 ResManager.ReleaseToPool(res, enemy.gameObject);
             }
