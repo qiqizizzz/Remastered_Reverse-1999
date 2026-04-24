@@ -69,6 +69,7 @@ namespace Module.fight.CardMgr
             //TODO:敌人的牌堆暂时不做
         }
 
+        #region 主要操作
         //新关卡开始时准备手牌
         public void PrepareHandsForNewLevel()
         {
@@ -133,6 +134,16 @@ namespace Module.fight.CardMgr
             discardPile.Add(card);
         }
         
+        //移除死亡角色的卡牌
+        public void RemoveDiedCharacterCard(CharacterData character)
+        {
+            //TODO:通知UI销毁手牌UI，做一个渐隐的动画效果。并且修改手牌最大数量-2
+            //因为角色死亡是有一个事件的,所以直接在某个类里面再添加一个
+            //GameApp.MessageCenter.AddEvent(EventDefines.xxx, xxx);即可
+            
+            //TODO:三个牌库里面都需要移除死亡角色的卡牌
+        }
+        
         public void RemoveHandCard(BattleCardData card)
         {
             int index = handCards.FindIndex(x => ReferenceEquals(x, card));
@@ -142,6 +153,7 @@ namespace Module.fight.CardMgr
                 handCards.RemoveAt(index);
             }
         }
+        #endregion
 
         #region 工具函数
         public List<BattleCardData> GetHandCards()
