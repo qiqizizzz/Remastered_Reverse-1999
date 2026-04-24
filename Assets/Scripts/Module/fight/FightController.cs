@@ -214,7 +214,10 @@ namespace Module.fight
             if (deadChar == null) return;
 
             if (deadChar is HeroEntity hero)
+            {
                 GameApp.EntityManager.GetAliveHeroes().Remove(hero);
+                GameApp.CardManager.RemoveDiedCharacterCard(deadChar.CharacterData);
+            }
             else if (deadChar is EnemyEntity enemy)
                 GameApp.EntityManager.GetAliveEnemies().Remove(enemy);
             
@@ -255,7 +258,7 @@ namespace Module.fight
 
         private void StartNextRound()
         {
-            int count = GameApp.CardManager.MaxHandCardCount - GameApp.CardManager.GetHandCards().Count;
+            int count = GameApp.CardManager.mMaxHandCardCount - GameApp.CardManager.GetHandCards().Count;
             GameApp.CardManager.DrawCard(count);
             
             ApplyFunc(EventDefines.UpdateHandCards, GameApp.CardManager.GetHandCards());

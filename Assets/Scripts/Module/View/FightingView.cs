@@ -36,7 +36,6 @@ namespace Module.View
         
         [Header("手牌区域相关")] 
         private Transform _cardDeckTf;
-        private readonly int _maxHandCardCount = GameApp.CardManager.MaxHandCardCount;
         
         
         protected override void OnAwake()
@@ -49,30 +48,37 @@ namespace Module.View
             _handCardItems = new List<UI_CommonCardItem>();
             _uiActionStack = new Stack<UI_CommonCardItem>();
         }
-
+        
         protected override void OnStart()
         {
-            _cardActionQueue = GameApp.CardManager.CardActionQueue;
-            
-            Find<Button>("OperationBtns/Btn_pause").onClick.AddListener(onPauseBtn);
-            Find<Button>("CardAction/Btn_Undo").onClick.AddListener(onUndoBtn);
-            
             Controller.RegisterFunc(EventDefines.UpdateHandCards, onUpdateHandCards);
             Controller.RegisterFunc(EventDefines.ExitLevel, onExitLevel);
             
-            GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
-            GameApp.MessageCenter.AddEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
-            
+            _cardActionQueue = GameApp.CardManager.CardActionQueue;
             PreLoadCardItem();
         }
-        
+
+        protected override void OnEnable()
+        {
+            Find<Button>("OperationBtns/Btn_pause").onClick.AddListener(onPauseBtn);
+            Find<Button>("CardAction/Btn_Undo").onClick.AddListener(onUndoBtn);
+            
+            GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
+        }
+
+        protected override void OnDisable()
+        {
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
+        }
+
         protected override void OnDestroy()
         {
             Controller.UnRegisterFunc(EventDefines.UpdateHandCards, onUpdateHandCards);
             Controller.UnRegisterFunc(EventDefines.ExitLevel, onExitLevel);
-                
-            GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
-            GameApp.MessageCenter.RemoveEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
             
             foreach (var item in _cardPool)
             {
@@ -86,7 +92,7 @@ namespace Module.View
         {
             SetVisible(true);
 
-            if (_cardPool.Count == _maxHandCardCount)
+            if (_cardPool.Count == GameApp.CardManager.mMaxHandCardCount)
                 ApplyFunc(EventDefines.FightingViewReady);
         }
         
@@ -229,10 +235,6 @@ namespace Module.View
                     GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
                 });
             }
-            
-            
-
-            //TODO: 将出牌逻辑通知控制器进行处理,通知CardActionQueue等进行管理
         }
 
         private void SwapCard(int indexA, int indexB)
@@ -294,7 +296,7 @@ namespace Module.View
         private void PreLoadCardItem()
         {
             int loadedCount = 0;
-            for (int i = 0; i < _maxHandCardCount; i++)
+            for (int i = 0; i < GameApp.CardManager.mMaxHandCardCount; i++)
             {
                 ResManager.InstantiateAsync(AddressDefines.UI_small_CommonCard, (go) =>
                 {
@@ -311,7 +313,7 @@ namespace Module.View
                     _cardPool.Add(item);
 
                     loadedCount++;
-                    if (loadedCount == _maxHandCardCount)
+                    if (loadedCount == GameApp.CardManager.mMaxHandCardCount)
                     {
                         ApplyFunc(EventDefines.FightingViewReady);
                     }
@@ -385,9 +387,9 @@ namespace Module.View
             {
                 CheckAndTriggerComposite(() =>
                 {
-                    if (_handCardItems.Count < _maxHandCardCount)
+                    if (_handCardItems.Count < GameApp.CardManager.mMaxHandCardCount)
                     {
-                        int needCount = _maxHandCardCount - _handCardItems.Count;
+                        int needCount = GameApp.CardManager.mMaxHandCardCount - _handCardItems.Count;
                         int beforeCount = GameApp.CardManager.GetHandCards().Count;
 
                         GameApp.CardManager.DrawCard(needCount);
@@ -464,6 +466,32 @@ namespace Module.View
                 rect.localRotation = Quaternion.identity;
             });
             #endregion
+        }
+
+        private void onRemoveDiedCharacterCardsUI(System.Object args = null)
+        {
+            List<BattleCardData> removedCards = args as List<BattleCardData>;
+            if (removedCards == null || removedCards.Count == 0) return;
+
+            bool layoutChanged = false;
+            foreach (var cardData in removedCards)
+            {
+                UI_CommonCardItem item = _handCardItems.Find(x => ReferenceEquals(x.BattleCardData, cardData));
+                if (item != null)
+                {
+                    _handCardItems.Remove(item);
+                    item.PlayFadeOutAnim(() =>
+                    {
+                        item.transform.SetParent(_cardDeckTf, true);
+                    });
+                    layoutChanged = true;
+                }
+            }
+
+            if (layoutChanged)
+            {
+                RefreshHandCardLayout();
+            }
         }
         #endregion
         #endregion

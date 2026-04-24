@@ -58,8 +58,18 @@ namespace MVC.View
         {
             
         }
+        
+        protected virtual void OnEnable()
+        {
+            
+        }
 
         protected virtual void OnUpdate()
+        {
+            
+        }
+
+        protected virtual void OnDisable()
         {
             
         }

@@ -7,6 +7,7 @@
 */
 
 using System.Collections.Generic;
+using Common.Defines;
 using Data.card;
 using Data.level;
 using Module.fight.Component;
@@ -20,7 +21,7 @@ namespace Module.fight.CardMgr
         public string CurrentSelectedTargetId { get; set; }
         
         private readonly int singleCardMaxLimit = 3;//单张牌的最大限制数量
-        private readonly int _maxHandCardCount = 8;
+        private int m_maxHandCardCount = 8;
         private readonly Dictionary<CharacterData, List<CardData>> m_cards;
         
         [Header("牌堆")]
@@ -40,6 +41,7 @@ namespace Module.fight.CardMgr
         
         public void InitCards(LevelInitData initData)
         {
+            m_maxHandCardCount = 8;
             CardActionQueue.Clear();
             m_cards.Clear();
             drawPile.Clear();
@@ -137,11 +139,19 @@ namespace Module.fight.CardMgr
         //移除死亡角色的卡牌
         public void RemoveDiedCharacterCard(CharacterData character)
         {
-            //TODO:通知UI销毁手牌UI，做一个渐隐的动画效果。并且修改手牌最大数量-2
-            //因为角色死亡是有一个事件的,所以直接在某个类里面再添加一个
-            //GameApp.MessageCenter.AddEvent(EventDefines.xxx, xxx);即可
-            
-            //TODO:三个牌库里面都需要移除死亡角色的卡牌
+            m_maxHandCardCount = Mathf.Max(0, m_maxHandCardCount - 2);
+
+            drawPile.RemoveAll(card => card.BaseData.OwnerId == character.Id);
+            discardPile.RemoveAll(card => card.BaseData.OwnerId == character.Id);
+
+            List<BattleCardData> removedHandCards = handCards.FindAll(card => card.BaseData.OwnerId == character.Id);
+
+            //通知UI销毁手牌UI
+            if (removedHandCards.Count > 0)
+            {
+                handCards.RemoveAll(card => card.BaseData.OwnerId == character.Id);
+                GameApp.MessageCenter.PostEvent(EventDefines.OnRemoveDiedCharacterCard, removedHandCards);
+            }
         }
         
         public void RemoveHandCard(BattleCardData card)
@@ -161,9 +171,9 @@ namespace Module.fight.CardMgr
             return handCards;
         }
 
-        public int MaxHandCardCount
+        public int mMaxHandCardCount
         {
-            get { return _maxHandCardCount; }
+            get { return m_maxHandCardCount; }
         }
         #endregion
     }

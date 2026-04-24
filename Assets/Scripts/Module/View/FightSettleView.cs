@@ -11,6 +11,7 @@ using Module.Loading;
 using MVC;
 using MVC.Extensions;
 using MVC.View;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,11 +20,13 @@ namespace Module.View
     public class FightSettleView : BaseView
     {
         [Header("UI组件")]
+        private TextMeshProUGUI _titleTxt;
         private Transform _failDetail;
         private Transform _winDetail;
 
         protected override void OnAwake()
         {
+            _titleTxt = Find<TextMeshProUGUI>("Title/Txt");
             _failDetail = Find<Transform>("Content/FailDetail");
             _winDetail = Find<Transform>("Content/WinDetail");
         }
@@ -39,11 +42,13 @@ namespace Module.View
 
             if (isWin)
             {
+                _titleTxt.text = "战斗胜利";
                 _winDetail.gameObject.SetActive(true);
                 _failDetail.gameObject.SetActive(false);
             }
             else
             {
+                _titleTxt.text = "战斗失败";
                 _failDetail.gameObject.SetActive(true);
                 _winDetail.gameObject.SetActive(false);
             }

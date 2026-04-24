@@ -201,6 +201,20 @@ namespace Module.fight.Component
             SetBlockRaycasts(true);
             SetVisible(false);
         }
+        
+        public void PlayFadeOutAnim(Action onComplete = null)
+        {
+            Rect.DOKill();
+            _canvasGroup.DOKill();
+            
+            SetBlockRaycasts(false);
+            _canvasGroup.DOFade(0f, 0.3f).OnComplete(() =>
+            {
+                HideCard();
+                _canvasGroup.alpha = 1f; // 重置透明度以供对象池复用
+                onComplete?.Invoke();
+            });
+        }
         #endregion
 
         #region 拖拽、点击事件相关
