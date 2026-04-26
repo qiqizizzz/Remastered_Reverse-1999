@@ -25,6 +25,10 @@ namespace Module.View
     public class FightingView : BaseView
     {
         private List<UI_CommonCardItem> _cardPool;
+        private List<UI_CommonCardItem> _ultimateCardPool;//大招卡牌对象池
+        private int _totalPoolToLoad;
+        private int _loadedPoolCount;
+        
         private List<UI_CommonCardItem> _handCardItems;//当前手牌实例列表
         private Stack<UI_CommonCardItem> _uiActionStack;//出牌队列实例
 
@@ -51,6 +55,7 @@ namespace Module.View
             _cardDeckTf = Find<Transform>("CardDeck");
             _turnInfoText = Find<Text>("FightDetail/Round/Txt_turnNum");
 
+            _ultimateCardPool = new List<UI_CommonCardItem>();
             _cardPool = new List<UI_CommonCardItem>();
             _handCardItems = new List<UI_CommonCardItem>();
             _uiActionStack = new Stack<UI_CommonCardItem>();
@@ -81,6 +86,7 @@ namespace Module.View
             
             _cardActionQueue = GameApp.CardManager.CardActionQueue;
             PreLoadCardItem();
+            PreLoadUltimateCardItem();
         }
         
         protected override void OnDisable()
@@ -101,6 +107,13 @@ namespace Module.View
                     ResManager.UnLoadInstance(item.gameObject);
             }
             _cardPool.Clear();
+
+            foreach (var item in _ultimateCardPool)
+            {
+                if (item != null)
+                    ResManager.UnLoadInstance(item.gameObject);
+            }
+            _ultimateCardPool.Clear();
         }
         #endregion
 
@@ -116,8 +129,8 @@ namespace Module.View
                 }
             }
             
-            if (_cardPool.Count == GameApp.CardManager.mMaxHandCardCount + 4)
-                ApplyFunc(EventDefines.FightingViewReady);
+            //if (_cardPool.Count == GameApp.CardManager.mMaxHandCardCount)
+                //ApplyFunc(EventDefines.FightingViewReady);
         }
 
         #region UI事件
@@ -178,6 +191,9 @@ namespace Module.View
                 bool isNewCard = false;
                 if (item == null)
                 {
+                    bool isUltimate = cardData.BaseData.CardType == CardType.Ultimate;
+                    var pool = isUltimate ? _ultimateCardPool : _cardPool;
+                    
                     item = _cardPool.Find(x => !x.gameObject.activeSelf && !newHandItems.Contains(x));
                     if (item != null)
                     {
@@ -222,6 +238,18 @@ namespace Module.View
                 }
             }
 
+            foreach (var oldItem in _ultimateCardPool)
+            {
+                if(!newHandItems.Contains(oldItem) && !oldItem.IsInQueue)
+                {
+                    oldItem.HideCard();
+                    oldItem.OnBeginDragCallback = null;
+                    oldItem.OnDragCallback = null;
+                    oldItem.OnEndDragCallback = null;
+                    oldItem.OnClickCallback = null;
+                }
+            }
+
             _handCardItems = newHandItems;
 
             //撤销时不触发检查和补牌
@@ -233,7 +261,7 @@ namespace Module.View
                     CheckAndTriggerComposite(() =>
                     {
                         int normalCount = GameApp.CardManager.GetNormalHandCardCount();
-                        if (_handCardItems.Count < GameApp.CardManager.mMaxHandCardCount)
+                        if (normalCount < GameApp.CardManager.mMaxHandCardCount)
                         {
                             int needCount = GameApp.CardManager.mMaxHandCardCount - normalCount;
                             int beforeCount = GameApp.CardManager.GetHandCards().Count;
@@ -446,6 +474,16 @@ namespace Module.View
                 }
             }
             
+            foreach (var item in _ultimateCardPool)
+            {
+                if (item != null)
+                {
+                    item.transform.SetParent(_cardDeckTf, false);
+                    item.HideCard();
+                    item.PrepareSpawn();
+                }
+            }
+            
             onHideAllHands(null);
         }
         
@@ -590,6 +628,7 @@ namespace Module.View
                 
                 bool isQueueFull = _cardActionQueue.PushAction(action);
                 RefreshMoveIndicators();
+                AddActionPointToOwner(item.GetOwnerId());
                 
                 if (isQueueFull)
                 {
@@ -610,11 +649,17 @@ namespace Module.View
 
         private void SwapCard(int indexA, int indexB)
         {
+            var handCards = GameApp.CardManager.GetHandCards();
+            
+            //大招卡不参与交换
+            if (handCards[indexA].BaseData.CardType == CardType.Ultimate ||
+                handCards[indexB].BaseData.CardType == CardType.Ultimate)
+                return;
+            
             //UI层交换
             (_handCardItems[indexA], _handCardItems[indexB]) = (_handCardItems[indexB], _handCardItems[indexA]);
             
             //数据层同步交换
-            var handCards = GameApp.CardManager.GetHandCards();
             (handCards[indexA], handCards[indexB]) = (handCards[indexB], handCards[indexA]);
             RefreshHandCardLayout();
         }
@@ -669,15 +714,16 @@ namespace Module.View
         
         private void PreLoadCardItem()
         {
-            int loadedCount = 0;
-            int poolSize = GameApp.CardManager.mMaxHandCardCount + 4;
-            for (int i = 0; i < poolSize; i++)
+            _totalPoolToLoad = GameApp.CardManager.mMaxHandCardCount;
+            _loadedPoolCount = 0;
+            for (int i = 0; i < _totalPoolToLoad; i++)
             {
                 ResManager.InstantiateAsync(AddressDefines.UI_small_CommonCard, (go) =>
                 {
                     if (go == null)
                     {
                         Debug.LogError("加载卡牌预制体失败");
+                        CheckAllPoolLoaded();
                         return;
                     }
 
@@ -687,13 +733,39 @@ namespace Module.View
                     item.SetVisible(false);
                     _cardPool.Add(item);
 
-                    loadedCount++;
-                    if (loadedCount == poolSize)
-                    {
-                        ApplyFunc(EventDefines.FightingViewReady);
-                    }
+                    CheckAllPoolLoaded();
                 });
             }
+        }
+
+        private void PreLoadUltimateCardItem()
+        {
+            int maxUltimateCount = 4;
+            _totalPoolToLoad += maxUltimateCount;
+            for (int i = 0; i < maxUltimateCount; i++)
+            {
+                ResManager.InstantiateAsync(AddressDefines.UI_small_UltimateCard, (go) =>
+                {
+                    if (go == null)
+                    {
+                        Debug.LogError("加载大招卡牌预制体失败");
+                        CheckAllPoolLoaded();
+                        return;
+                    }
+
+                    go.transform.SetParent(_cardDeckTf, false);
+                    UI_CommonCardItem item = go.GetComponent<UI_CommonCardItem>();
+                    
+                    item.SetVisible(false);
+                    _ultimateCardPool.Add(item);
+                    CheckAllPoolLoaded();
+                });
+            }
+        }
+
+        private void CheckAllPoolLoaded()
+        {
+            
         }
 
         #region 行动点相关

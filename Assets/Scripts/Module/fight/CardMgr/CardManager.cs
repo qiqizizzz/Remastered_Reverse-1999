@@ -159,7 +159,7 @@ namespace Module.fight.CardMgr
                 {
                     if(cardData.CardType == CardType.Ultimate)
                     {
-                        handCards.Add(new BattleCardData(cardData));
+                        handCards.Insert(0, new BattleCardData(cardData));
                         return true;
                     }
                 }
