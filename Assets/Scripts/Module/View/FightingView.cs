@@ -33,6 +33,7 @@ namespace Module.View
         private Transform _cardActionTf;
         private float _cardActionWidth = 550f;
         private CardActionQueue _cardActionQueue;
+        private List<Transform> m_UIActions;
         
         [Header("手牌区域相关")] 
         private Transform _cardDeckTf;
@@ -47,6 +48,24 @@ namespace Module.View
             _cardPool = new List<UI_CommonCardItem>();
             _handCardItems = new List<UI_CommonCardItem>();
             _uiActionStack = new Stack<UI_CommonCardItem>();
+
+            #region 队列UI
+            m_UIActions = new List<Transform>();
+            m_UIActions.Add(Find<Transform>("CardAction/queue_1"));
+            m_UIActions.Add(Find<Transform>("CardAction/queue_2"));
+            m_UIActions.Add(Find<Transform>("CardAction/queue_3"));
+            m_UIActions.Add(Find<Transform>("CardAction/queue_4"));
+            #endregion
+        }
+        
+        protected override void OnEnable()
+        {
+            Find<Button>("OperationBtns/Btn_pause").onClick.AddListener(onPauseBtn);
+            Find<Button>("CardAction/Btn_Undo").onClick.AddListener(onUndoBtn);
+            
+            GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
         }
         
         protected override void OnStart()
@@ -57,17 +76,7 @@ namespace Module.View
             _cardActionQueue = GameApp.CardManager.CardActionQueue;
             PreLoadCardItem();
         }
-
-        protected override void OnEnable()
-        {
-            Find<Button>("OperationBtns/Btn_pause").onClick.AddListener(onPauseBtn);
-            Find<Button>("CardAction/Btn_Undo").onClick.AddListener(onUndoBtn);
-            
-            GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
-            GameApp.MessageCenter.AddEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
-            GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
-        }
-
+        
         protected override void OnDisable()
         {
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
@@ -92,6 +101,14 @@ namespace Module.View
         {
             SetVisible(true);
 
+            for (int i = m_UIActions.Count - 1; i >= 0; i--)
+            {
+                if (!m_UIActions[i].gameObject.activeSelf)
+                {
+                    m_UIActions[i].gameObject.SetActive(true);
+                }
+            }
+            
             if (_cardPool.Count == GameApp.CardManager.mMaxHandCardCount)
                 ApplyFunc(EventDefines.FightingViewReady);
         }
@@ -470,6 +487,7 @@ namespace Module.View
 
         private void onRemoveDiedCharacterCardsUI(System.Object args = null)
         {
+            #region 移除死亡角色卡牌
             List<BattleCardData> removedCards = args as List<BattleCardData>;
             if (removedCards == null || removedCards.Count == 0) return;
 
@@ -492,6 +510,19 @@ namespace Module.View
             {
                 RefreshHandCardLayout();
             }
+            #endregion
+            
+            #region 更新队列UI
+
+            for (int i = m_UIActions.Count - 1; i >= 0; i--)
+            {
+                if (m_UIActions[i].gameObject.activeSelf)
+                {
+                    m_UIActions[i].gameObject.SetActive(false);
+                    break;
+                }
+            }
+            #endregion
         }
         #endregion
         #endregion

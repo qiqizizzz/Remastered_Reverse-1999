@@ -23,13 +23,23 @@ namespace Module.fight.CardMgr
     public class CardActionQueue
     {
         private Stack<CardAction> _actionStack;
-        private readonly int MaxActionCount = 4;
+        private int MaxActionCount = 4;
 
         public CardActionQueue()
         {
             _actionStack = new Stack<CardAction>();
+            
+            //TODO:加了这个之后就有bug了,卡牌发牌不准确了（就算死了一个英雄也会发8张牌？？但是出牌数量是3，这是为什么
+            GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onReduceActionCount);
         }
 
+        #region 事件函数
+        private void onReduceActionCount(System.Object args)
+        {
+            MaxActionCount--;
+        }
+
+        #endregion
         public bool CanPlayCard() => _actionStack.Count < MaxActionCount;
         
         public bool PlayCard(BattleCardData cardData, int originalIndex, string targetInstanceId)
@@ -65,6 +75,7 @@ namespace Module.fight.CardMgr
         public void Clear()
         {
             _actionStack.Clear();
+            MaxActionCount = 4;
         }
         
         public int GetCurrentActionCount() => _actionStack.Count;

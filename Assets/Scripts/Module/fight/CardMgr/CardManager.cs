@@ -150,8 +150,9 @@ namespace Module.fight.CardMgr
             if (removedHandCards.Count > 0)
             {
                 handCards.RemoveAll(card => card.BaseData.OwnerId == character.Id);
-                GameApp.MessageCenter.PostEvent(EventDefines.OnRemoveDiedCharacterCard, removedHandCards);
             }
+            
+            GameApp.MessageCenter.PostEvent(EventDefines.OnRemoveDiedCharacterCard, removedHandCards);
         }
         
         public void RemoveHandCard(BattleCardData card)
