@@ -1890,6 +1890,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8016871410214943564}
+  - component: {fileID: 6849669792080632374}
   m_Layer: 0
   m_Name: queue_1
   m_TagString: Untagged
@@ -1917,6 +1918,18 @@ RectTransform:
   m_AnchoredPosition: {x: 70, y: 0}
   m_SizeDelta: {x: 180, y: 260}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &6849669792080632374
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6925638173374214119}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7002413242406263167
 GameObject:
   m_ObjectHideFlags: 0
@@ -1926,6 +1939,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1722947299983786972}
+  - component: {fileID: 3008507364376703039}
   m_Layer: 0
   m_Name: queue_4
   m_TagString: Untagged
@@ -1953,6 +1967,18 @@ RectTransform:
   m_AnchoredPosition: {x: 538, y: 0}
   m_SizeDelta: {x: 180, y: 260}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &3008507364376703039
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7002413242406263167}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7014655716604931824
 GameObject:
   m_ObjectHideFlags: 0
@@ -2217,6 +2243,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3894741429486141649}
+  - component: {fileID: 2342893313037770931}
   m_Layer: 0
   m_Name: queue_2
   m_TagString: Untagged
@@ -2244,6 +2271,18 @@ RectTransform:
   m_AnchoredPosition: {x: 224, y: 0}
   m_SizeDelta: {x: 180, y: 260}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &2342893313037770931
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8052762377244780332}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8355414710107748308
 GameObject:
   m_ObjectHideFlags: 0
@@ -2253,6 +2292,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4405356362120370153}
+  - component: {fileID: 245386779951441780}
   m_Layer: 0
   m_Name: queue_3
   m_TagString: Untagged
@@ -2280,3 +2320,15 @@ RectTransform:
   m_AnchoredPosition: {x: 381, y: 0}
   m_SizeDelta: {x: 180, y: 260}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &245386779951441780
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8355414710107748308}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

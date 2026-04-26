@@ -488,39 +488,55 @@ namespace Module.View
         private void onRemoveDiedCharacterCardsUI(System.Object args = null)
         {
             #region 移除死亡角色卡牌
-            List<BattleCardData> removedCards = args as List<BattleCardData>;
-            if (removedCards == null || removedCards.Count == 0) return;
-
-            bool layoutChanged = false;
-            foreach (var cardData in removedCards)
+            if (args is List<BattleCardData> { Count: >= 0 } removedCards)
             {
-                UI_CommonCardItem item = _handCardItems.Find(x => ReferenceEquals(x.BattleCardData, cardData));
-                if (item != null)
+                bool layoutChanged = false;
+                foreach (var cardData in removedCards)
                 {
-                    _handCardItems.Remove(item);
-                    item.PlayFadeOutAnim(() =>
+                    UI_CommonCardItem item = _handCardItems.Find(x => ReferenceEquals(x.BattleCardData, cardData));
+                    if (item != null)
                     {
-                        item.transform.SetParent(_cardDeckTf, true);
-                    });
-                    layoutChanged = true;
+                        _handCardItems.Remove(item);
+                        item.PlayFadeOutAnim(() =>
+                        {
+                            item.transform.SetParent(_cardDeckTf, true);
+                        });
+                        layoutChanged = true;
+                    }
                 }
+
+                if (layoutChanged) RefreshHandCardLayout();
             }
 
-            if (layoutChanged)
-            {
-                RefreshHandCardLayout();
-            }
+            
             #endregion
             
             #region 更新队列UI
-
-            for (int i = m_UIActions.Count - 1; i >= 0; i--)
+            int maxCount = _cardActionQueue.MaxActionCount;
+            for (int i = 0; i < m_UIActions.Count; i++)
             {
-                if (m_UIActions[i].gameObject.activeSelf)
+                int currentIndex = i;
+                bool shouldActive = currentIndex < maxCount;
+
+                if (m_UIActions[currentIndex].gameObject.activeSelf && !shouldActive)
                 {
-                    m_UIActions[i].gameObject.SetActive(false);
-                    break;
+                    CanvasGroup cg = m_UIActions[i].GetComponent<CanvasGroup>();
+                    if (cg != null)
+                    {
+                        cg.DOKill();
+                        cg.DOFade(0,0.5f).onComplete = () =>
+                        {
+                            m_UIActions[currentIndex].gameObject.SetActive(false);
+                            cg.alpha = 1f;
+                        };
+                    }
+                    else
+                    {
+                        m_UIActions[currentIndex].gameObject.SetActive(false);
+                    }
                 }
+                
+                
             }
             #endregion
         }
