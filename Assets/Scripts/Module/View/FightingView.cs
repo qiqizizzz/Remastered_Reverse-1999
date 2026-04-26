@@ -135,7 +135,7 @@ namespace Module.View
 
             for (int i = 0; i < m_UIActions.Count; i++)
             {
-                Transform imgMove = m_UIActions[i].Find("Img_Move");
+                Transform imgMove = m_UIActions[i].Find("Img_move");
                 if (imgMove != null)
                 {
                     bool isMove = i < actions.Length && actions[i].ActionType == CardActionType.MoveCard;
@@ -390,6 +390,9 @@ namespace Module.View
                     undoItem.Rect.DOKill();
                     undoItem.IsInQueue = false;
                     undoItem.SetBlockRaycasts(true);
+                    undoItem.transform.SetParent(_cardDeckTf, true);
+                    
+                    if(!_handCardItems.Contains(undoItem)) _handCardItems.Add(undoItem);
                 }
             }
 

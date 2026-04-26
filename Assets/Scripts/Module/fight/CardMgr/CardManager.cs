@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Common.Defines;
 using Data.card;
 using Data.level;
+using Module.Character;
 using Module.fight.Component;
 using UnityEngine;
 
@@ -132,6 +133,9 @@ namespace Module.fight.CardMgr
             if (card.BaseData.CardType == CardType.Ultimate)
                 return;
 
+            var owner = GameApp.EntityManager.GetCharacterById(card.BaseData.OwnerId);
+            if(owner == null || owner.CurrentStateType == CharacterStateType.Die) return;
+            
             card.StarLevel = 1;
             discardPile.Add(card);
         }
