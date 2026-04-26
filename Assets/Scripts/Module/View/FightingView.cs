@@ -160,6 +160,8 @@ namespace Module.View
         private void onUpdateHandCards(params object[] args)
         {
             List<BattleCardData> newCards = args[0] as List<BattleCardData>;
+            bool isUndo = args.Length > 1 && args[1] is true;
+            
             if(newCards == null) return;
             
             List<UI_CommonCardItem> newHandItems = new List<UI_CommonCardItem>();
@@ -179,7 +181,9 @@ namespace Module.View
                     {
                         isNewCard = true;
                         item.transform.SetParent(_cardDeckTf, true);
-                        item.PrepareSpawn(); // 放回最左侧初始点
+                        
+                        if(!isUndo)
+                            item.PrepareSpawn(); // 放回最左侧初始点
                     }
                 }
 
@@ -193,9 +197,9 @@ namespace Module.View
                     item.OnEndDragCallback = OnCardEndDrag;
                     item.OnClickCallback = OnCardClick;
                     
-                    float delay = isNewCard ? (newCards.Count - 1 - i) * 0.05f : 0f;
+                    float delay = (isNewCard && !isUndo) ? (newCards.Count - 1 - i) * 0.05f : 0f;
                     
-                    if (isNewCard) item.transform.SetAsLastSibling();
+                    if (isNewCard && !isUndo) item.transform.SetAsLastSibling();
                     
                     item.MoveToIndex(i, newCards.Count, delay);
 
@@ -218,23 +222,27 @@ namespace Module.View
 
             _handCardItems = newHandItems;
 
-            // 延迟调用合成与补牌
-            DOVirtual.DelayedCall(maxAnimTime, () =>
+            //撤销时不触发检查和补牌
+            if (!isUndo)
             {
-                CheckAndTriggerComposite(() =>
+                // 延迟调用合成与补牌
+                DOVirtual.DelayedCall(maxAnimTime, () =>
                 {
-                    if (_handCardItems.Count < GameApp.CardManager.mMaxHandCardCount)
+                    CheckAndTriggerComposite(() =>
                     {
-                        int needCount = GameApp.CardManager.mMaxHandCardCount - _handCardItems.Count;
-                        int beforeCount = GameApp.CardManager.GetHandCards().Count;
+                        if (_handCardItems.Count < GameApp.CardManager.mMaxHandCardCount)
+                        {
+                            int needCount = GameApp.CardManager.mMaxHandCardCount - _handCardItems.Count;
+                            int beforeCount = GameApp.CardManager.GetHandCards().Count;
 
-                        GameApp.CardManager.DrawCard(needCount);
-                        
-                        if(GameApp.CardManager.GetHandCards().Count > beforeCount)
-                            onUpdateHandCards(GameApp.CardManager.GetHandCards());
-                    }
+                            GameApp.CardManager.DrawCard(needCount);
+                            
+                            if(GameApp.CardManager.GetHandCards().Count > beforeCount)
+                                onUpdateHandCards(GameApp.CardManager.GetHandCards());
+                        }
+                    });
                 });
-            });
+            }
         }
 
         private void onHideAllHands(System.Object args)
@@ -391,16 +399,25 @@ namespace Module.View
                     undoItem.IsInQueue = false;
                     undoItem.SetBlockRaycasts(true);
                     undoItem.transform.SetParent(_cardDeckTf, true);
-                    
-                    if(!_handCardItems.Contains(undoItem)) _handCardItems.Add(undoItem);
+                    undoItem.HideCard();
                 }
             }
 
+            foreach (var item in _handCardItems)
+            {
+                if (!item.IsInQueue)
+                {
+                    item.HideCard();
+                    item.transform.SetParent(_cardDeckTf, true);
+                }
+            }
+            _handCardItems.Clear();
+            
             // 统一刷新移动占位符 UI
             RefreshMoveIndicators();
 
             // 全量重建当前手牌 UI
-            onUpdateHandCards(GameApp.CardManager.GetHandCards());
+            onUpdateHandCards(GameApp.CardManager.GetHandCards(), true);
         }
         
         private void onExitLevel(params object[] args)
