@@ -166,6 +166,44 @@ namespace Module.fight.CardMgr
         }
         #endregion
 
+        #region 快照与撤销机制
+        //记录快照
+        public CardSnapshot TakeSnapshot()
+        {
+            var snapshot = new CardSnapshot()
+            {
+                HandCards = new List<BattleCardData>(handCards),
+                DrawPile = new List<BattleCardData>(drawPile),
+                DiscardPile = new List<BattleCardData>(discardPile),
+                CardStarLevels = new Dictionary<BattleCardData, int>()
+            };
+
+            //记录星级
+            foreach (var card in handCards) snapshot.CardStarLevels[card] = card.StarLevel;
+            foreach (var card in drawPile) snapshot.CardStarLevels[card] = card.StarLevel;
+            foreach (var card in discardPile) snapshot.CardStarLevels[card] = card.StarLevel;
+
+            return snapshot;
+        }
+        
+        //恢复快照
+        public void RestoreSnapshot(CardSnapshot snapshot)
+        {
+            if(snapshot == null) return;
+            
+            handCards = new List<BattleCardData>(snapshot.HandCards);
+            drawPile = new List<BattleCardData>(snapshot.DrawPile);
+            discardPile = new List<BattleCardData>(snapshot.DiscardPile);
+
+            //恢复星级
+            foreach (var kvp in snapshot.CardStarLevels)
+            {
+                kvp.Key.StarLevel = kvp.Value;
+            }
+        }
+
+        #endregion
+
         #region 工具函数
         public List<BattleCardData> GetHandCards()
         {

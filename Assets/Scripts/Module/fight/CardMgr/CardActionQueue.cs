@@ -6,6 +6,7 @@
 * └──────────────────────────────────────────────────────┘
 */
 
+using System;
 using System.Collections.Generic;
 using Common.Defines;
 using Module.fight.Component;
@@ -13,11 +14,35 @@ using UnityEngine;
 
 namespace Module.fight.CardMgr
 {
+    //卡牌操作类型
+    public enum CardActionType
+    {
+        PlayCard, // 出牌
+        MoveCard  // 移动卡牌
+    }
+
+    //状态快照
+    public class CardSnapshot
+    {
+        public List<BattleCardData> HandCards;
+        public List<BattleCardData> DrawPile;
+        public List<BattleCardData> DiscardPile;
+        public Dictionary<BattleCardData, int> CardStarLevels;
+    }
+    
     public class CardAction
     {
+        public CardActionType ActionType;
+        public CardSnapshot Snapshot;
+        
+        [Header("PlayCard相关数据")]
         public BattleCardData BattleCardData;
         public int OriginalIndex;//卡牌在手牌中的原始位置
         public string TargetInstanceId;
+        
+        [Header("MoveCard相关数据")]
+        public int MoveFromIndex;
+        public int MoveToIndex;
     }
     
     public class CardActionQueue
@@ -29,39 +54,22 @@ namespace Module.fight.CardMgr
         {
             _actionStack = new Stack<CardAction>();
             
-            //TODO:加了这个之后就有bug了,卡牌发牌不准确了（就算死了一个英雄也会发8张牌？？但是出牌数量是3，这是为什么
             GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onReduceActionCount);
         }
 
         #region 事件函数
         private void onReduceActionCount(System.Object args)
         {
-            MaxActionCount--;
+            MaxActionCount = Mathf.Max(0, MaxActionCount - 1);
         }
 
         #endregion
-        public bool CanPlayCard() => _actionStack.Count < MaxActionCount;
         
-        public bool PlayCard(BattleCardData cardData, int originalIndex, string targetInstanceId)
+        #region 主要函数
+        public bool PushAction(CardAction action)
         {
-            var action = new CardAction()
-            {
-                BattleCardData = cardData,
-                OriginalIndex = originalIndex,
-                TargetInstanceId = targetInstanceId
-            };
-            
             _actionStack.Push(action);
-            
-            return _actionStack.Count == MaxActionCount;//返回 true 表示队列已满,可以进入战斗结算了
-        }
-
-        public List<CardAction> GetAllActionsAndClear()
-        {
-            List<CardAction> actions = new List<CardAction>(_actionStack);
-            actions.Reverse();
-            _actionStack.Clear();
-            return actions;
+            return _actionStack.Count >= MaxActionCount;
         }
         
         public CardAction UndoLastAction()
@@ -71,6 +79,11 @@ namespace Module.fight.CardMgr
             
             return _actionStack.Pop();
         }
+        #endregion
+        
+        #region 工具函数
+        public int GetCurrentActionCount() => _actionStack.Count;
+        public bool CanPlayCard() => _actionStack.Count < MaxActionCount;
         
         public void Clear()
         {
@@ -78,6 +91,20 @@ namespace Module.fight.CardMgr
             MaxActionCount = 4;
         }
         
-        public int GetCurrentActionCount() => _actionStack.Count;
+        public List<CardAction> GetAllActionsAndClear()
+        {
+            List<CardAction> actions = new List<CardAction>(_actionStack);
+            actions.Reverse();
+            _actionStack.Clear();
+            return actions;
+        }
+
+        public CardAction[] GetAction()
+        {
+            CardAction[] arr = _actionStack.ToArray();
+            Array.Reverse(arr);
+            return arr;
+        }
+        #endregion
     }
 }

@@ -128,6 +128,8 @@ namespace Module.fight
                 foreach (var action in actions)
                 {
                     if(!_isBattleActive) break;
+                    if(action.ActionType == CardActionType.MoveCard) continue;
+                    
                     await CardSkillExecutor.ExecuteCardActionAsync(action);
 
                     GameApp.CardManager.RemoveHandCard(action.BattleCardData);
