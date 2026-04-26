@@ -269,6 +269,11 @@ namespace Module.fight.Component
 
         #region 工具函数
         public float GetMoveDuration() => _moveDuration;
+
+        public int GetOwnerId() => BattleCardData.BaseData.OwnerId;
+        
+        public bool IsUltimateCard() => BattleCardData.BaseData.CardType == CardType.Ultimate;
+
         #endregion
     }
 }

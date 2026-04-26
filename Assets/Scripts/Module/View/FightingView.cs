@@ -10,7 +10,9 @@ using System;
 using System.Collections.Generic;
 using Common;
 using Common.Defines;
+using Data.card;
 using DG.Tweening;
+using Module.Character;
 using Module.fight.CardMgr;
 using Module.fight.Component;
 using MVC.View;
@@ -114,7 +116,7 @@ namespace Module.View
                 }
             }
             
-            if (_cardPool.Count == GameApp.CardManager.mMaxHandCardCount)
+            if (_cardPool.Count == GameApp.CardManager.mMaxHandCardCount + 4)
                 ApplyFunc(EventDefines.FightingViewReady);
         }
 
@@ -230,9 +232,10 @@ namespace Module.View
                 {
                     CheckAndTriggerComposite(() =>
                     {
+                        int normalCount = GameApp.CardManager.GetNormalHandCardCount();
                         if (_handCardItems.Count < GameApp.CardManager.mMaxHandCardCount)
                         {
-                            int needCount = GameApp.CardManager.mMaxHandCardCount - _handCardItems.Count;
+                            int needCount = GameApp.CardManager.mMaxHandCardCount - normalCount;
                             int beforeCount = GameApp.CardManager.GetHandCards().Count;
 
                             GameApp.CardManager.DrawCard(needCount);
@@ -413,6 +416,12 @@ namespace Module.View
             }
             _handCardItems.Clear();
             
+            //更新玩家行动点UI
+            foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
+            {
+                hero.HUD?.UpdateActionPoint(hero.ActionPoint);
+            }
+            
             // 统一刷新移动占位符 UI
             RefreshMoveIndicators();
 
@@ -445,7 +454,7 @@ namespace Module.View
         #region 卡牌交互逻辑回调
         private void OnCardBeginDrag(UI_CommonCardItem item, PointerEventData eventData)
         {
-            if(item.IsInQueue) return;
+            if (item.BattleCardData.BaseData.CardType == CardType.Ultimate || item.IsInQueue) return;
 
             _dragStartIndex = _handCardItems.IndexOf(item);
             if (_cardActionQueue.CanPlayCard())
@@ -523,10 +532,9 @@ namespace Module.View
                 RefreshHandCardLayout();
             }
 
+            AddActionPointToOwner(item.GetOwnerId());//行动点+1
             _dragStartIndex = -1;
             m_tempSnapshot = null;
-            
-            //TODO:玩家行动点+1等逻辑
         }
         
         private void OnCardClick(UI_CommonCardItem item)
@@ -540,7 +548,9 @@ namespace Module.View
         #region 卡牌具体逻辑
         private void PlayCard(UI_CommonCardItem item, int index)
         {
-            if (!_cardActionQueue.CanPlayCard())
+            bool isUltimate = item.IsUltimateCard();
+            
+            if (!isUltimate && !_cardActionQueue.CanPlayCard())
             {
                 Debug.Log("已达到本轮出牌上限");
                 return;
@@ -551,41 +561,50 @@ namespace Module.View
             
             _handCardItems.RemoveAt(index);
             GameApp.CardManager.GetHandCards().Remove(item.BattleCardData);
-            
-            _uiActionStack.Push(item);
-            RefreshHandCardLayout();
 
-            item.transform.SetParent(_cardActionTf, true);
-
-            Vector2 targetPos = new Vector2(-_cardActionWidth, 0) +
-                                new Vector2(
-                                    (_cardActionQueue.GetCurrentActionCount()) * (item.CardWidth * 0.8f + 12f), 0);
-            
-            item.PlayToQueueAnim(targetPos);
-            item.IsInQueue = true;
-            item.SetBlockRaycasts(false);
-            
-            CheckAndTriggerComposite();
-
-            CardAction action = new CardAction()
+            if (!isUltimate)
             {
-                ActionType = CardActionType.PlayCard,
-                Snapshot = snapshot,
-                BattleCardData = item.BattleCardData,
-                OriginalIndex = index,
-                TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId
-            };
+                _uiActionStack.Push(item);
+                RefreshHandCardLayout();
+                
+                item.transform.SetParent(_cardActionTf, true);
 
-            bool isQueueFull = _cardActionQueue.PushAction(action);
+                Vector2 targetPos = new Vector2(-_cardActionWidth, 0) +
+                                    new Vector2(
+                                        (_cardActionQueue.GetCurrentActionCount()) * (item.CardWidth * 0.8f + 12f), 0);
+                
+                item.PlayToQueueAnim(targetPos);
+                item.IsInQueue = true;
+                item.SetBlockRaycasts(false);
             
-            RefreshMoveIndicators();
-            
-            if (isQueueFull)
-            {
-                DOVirtual.DelayedCall(2f, () =>
+                CheckAndTriggerComposite();
+
+                CardAction action = new CardAction()
                 {
-                    GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
-                });
+                    ActionType = CardActionType.PlayCard,
+                    Snapshot = snapshot,
+                    BattleCardData = item.BattleCardData,
+                    OriginalIndex = index,
+                    TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId
+                };
+                
+                bool isQueueFull = _cardActionQueue.PushAction(action);
+                RefreshMoveIndicators();
+                
+                if (isQueueFull)
+                {
+                    DOVirtual.DelayedCall(2f, () =>
+                    {
+                        GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
+                    });
+                }
+            }
+            else
+            {
+                item.HideCard();
+                CheckAndTriggerComposite();
+                
+                ClearActionPointOfOwner(item.GetOwnerId());
             }
         }
 
@@ -620,11 +639,10 @@ namespace Module.View
                 cardB.transform.SetParent(_cardDeckTf, true); // 确保父节点归位
                 
                 RefreshHandCardLayout();
+                AddActionPointToOwner(cardA.GetOwnerId());//角色的行动点数+1
                 
                 CheckAndTriggerComposite(onCompleteAllMerges);
             });
-            
-            // TODO: 合成卡后角色的行动点数+1(这个先不做)
         }
         
         private void CheckAndTriggerComposite(Action onCompleteAllMerges = null)
@@ -652,7 +670,8 @@ namespace Module.View
         private void PreLoadCardItem()
         {
             int loadedCount = 0;
-            for (int i = 0; i < GameApp.CardManager.mMaxHandCardCount; i++)
+            int poolSize = GameApp.CardManager.mMaxHandCardCount + 4;
+            for (int i = 0; i < poolSize; i++)
             {
                 ResManager.InstantiateAsync(AddressDefines.UI_small_CommonCard, (go) =>
                 {
@@ -669,13 +688,40 @@ namespace Module.View
                     _cardPool.Add(item);
 
                     loadedCount++;
-                    if (loadedCount == GameApp.CardManager.mMaxHandCardCount)
+                    if (loadedCount == poolSize)
                     {
                         ApplyFunc(EventDefines.FightingViewReady);
                     }
                 });
             }
         }
+
+        #region 行动点相关
+        private void AddActionPointToOwner(int ownerId)
+        {
+            var hero = GameApp.EntityManager.GetCharacterById(ownerId) as HeroEntity;
+            if(hero == null) return;
+
+            int oldAp = hero.ActionPoint;
+            hero.AddActionPoint();
+
+            if (oldAp < HeroEntity.MaxActionPoint && hero.ActionPoint >= HeroEntity.MaxActionPoint)
+            {
+                bool given = GameApp.CardManager.TryGiveUltimateCard(ownerId);
+                if (given)
+                {
+                    DOVirtual.DelayedCall(0.05f, () => onUpdateHandCards(GameApp.CardManager.GetHandCards()));
+                }
+            }
+        }
+        
+        private void ClearActionPointOfOwner(int ownerId)
+        {
+            var hero = GameApp.EntityManager.GetCharacterById(ownerId) as HeroEntity;
+            if(hero == null) return;
+            hero.SetActionPoint(0);
+        }
+        #endregion
         #endregion
     }
 }

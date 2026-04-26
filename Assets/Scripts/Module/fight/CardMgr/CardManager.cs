@@ -140,6 +140,34 @@ namespace Module.fight.CardMgr
             discardPile.Add(card);
         }
         
+        //发放大招牌
+        public bool TryGiveUltimateCard(int ownerId)
+        {
+            foreach (var card in handCards)
+            {
+                //该角色大招已经在手牌了
+                if(card.BaseData.CardType == CardType.Ultimate && card.BaseData.OwnerId == ownerId)
+                    return false;
+            }
+
+            //寻找大招
+            foreach (var kv in m_cards)
+            {
+                if(kv.Key.Id != ownerId) continue;
+
+                foreach (var cardData in kv.Value)
+                {
+                    if(cardData.CardType == CardType.Ultimate)
+                    {
+                        handCards.Add(new BattleCardData(cardData));
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+        
         //移除死亡角色的卡牌
         public void RemoveDiedCharacterCard(CharacterData character)
         {
@@ -176,12 +204,17 @@ namespace Module.fight.CardMgr
         {
             var snapshot = new CardSnapshot()
             {
+                HeroActionPoints = new Dictionary<string, int>(),
                 HandCards = new List<BattleCardData>(handCards),
                 DrawPile = new List<BattleCardData>(drawPile),
                 DiscardPile = new List<BattleCardData>(discardPile),
                 CardStarLevels = new Dictionary<BattleCardData, int>()
             };
 
+            //记录行动点
+            foreach (var hero in GameApp.EntityManager.GetAliveHeroes()) 
+                snapshot.HeroActionPoints[hero.InstanceID] = hero.ActionPoint;
+            
             //记录星级
             foreach (var card in handCards) snapshot.CardStarLevels[card] = card.StarLevel;
             foreach (var card in drawPile) snapshot.CardStarLevels[card] = card.StarLevel;
@@ -199,6 +232,12 @@ namespace Module.fight.CardMgr
             drawPile = new List<BattleCardData>(snapshot.DrawPile);
             discardPile = new List<BattleCardData>(snapshot.DiscardPile);
 
+            //恢复行动点
+            foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
+            {
+                hero.SetActionPoint(snapshot.HeroActionPoints[hero.InstanceID]);
+            }
+            
             //恢复星级
             foreach (var kvp in snapshot.CardStarLevels)
             {
@@ -209,6 +248,17 @@ namespace Module.fight.CardMgr
         #endregion
 
         #region 工具函数
+        public int GetNormalHandCardCount()
+        {
+            int count = 0;
+            foreach (var card in handCards)
+            {
+                if(card.BaseData.CardType != CardType.Ultimate)
+                    count++;
+            }
+            return count;
+        }
+        
         public List<BattleCardData> GetHandCards()
         {
             return handCards;

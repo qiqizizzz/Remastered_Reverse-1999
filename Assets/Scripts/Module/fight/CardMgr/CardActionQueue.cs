@@ -24,6 +24,10 @@ namespace Module.fight.CardMgr
     //状态快照
     public class CardSnapshot
     {
+        [Header("行动点")] 
+        public Dictionary<string, int> HeroActionPoints;
+        
+        [Header("手牌数据相关")]
         public List<BattleCardData> HandCards;
         public List<BattleCardData> DrawPile;
         public List<BattleCardData> DiscardPile;

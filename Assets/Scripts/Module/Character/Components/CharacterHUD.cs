@@ -40,6 +40,11 @@ namespace Module.Character.Components
             _hpSlider.value = currentHp / maxHp;
         }
 
+        public void UpdateActionPoint(int value)
+        {
+            Debug.Log("UpdateActionPoint");
+        }
+
         public void ShowDamage(int damage, bool isCrit)
         {
             if (_floatPoint == null) return;
