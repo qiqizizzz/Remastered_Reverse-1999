@@ -574,8 +574,12 @@ namespace Module.View
 
         private void SwapCard(int indexA, int indexB)
         {
+            //UI层交换
             (_handCardItems[indexA], _handCardItems[indexB]) = (_handCardItems[indexB], _handCardItems[indexA]);
-
+            
+            //数据层同步交换
+            var handCards = GameApp.CardManager.GetHandCards();
+            (handCards[indexA], handCards[indexB]) = (handCards[indexB], handCards[indexA]);
             RefreshHandCardLayout();
         }
         
