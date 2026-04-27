@@ -761,7 +761,11 @@ namespace Module.View
 
         private void CheckAllPoolLoaded()
         {
-            
+            _loadedPoolCount++;
+            if (_loadedPoolCount >= _totalPoolToLoad)
+            {
+                ApplyFunc(EventDefines.FightingViewReady);
+            }
         }
 
         #region 行动点相关
