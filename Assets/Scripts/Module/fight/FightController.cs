@@ -60,9 +60,9 @@ namespace Module.fight
         {
             RegisterFunc(EventDefines.OpenFightingView, onOpenFightView);
             RegisterFunc(EventDefines.OpenPauseFightView, onOpenPauseFightView);
-            RegisterFunc(EventDefines.FightingViewReady,onFightingViewReady);
             RegisterFunc(EventDefines.OpenFightSettleView, onOpenFightSettleView);
             
+            GameApp.MessageCenter.AddEvent(EventDefines.FightingViewReady, onFightingViewReady);
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
             GameApp.MessageCenter.AddEvent(EventDefines.OnEnemyTurn, onEnemyTurn);
@@ -74,9 +74,9 @@ namespace Module.fight
         {
             UnRegisterFunc(EventDefines.OpenFightingView, onOpenFightView);
             UnRegisterFunc(EventDefines.OpenPauseFightView, onOpenPauseFightView);
-            UnRegisterFunc(EventDefines.FightingViewReady,onFightingViewReady);
             UnRegisterFunc(EventDefines.OpenFightSettleView, onOpenFightSettleView);
             
+            GameApp.MessageCenter.RemoveEvent(EventDefines.FightingViewReady, onFightingViewReady);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnEnemyTurn, onEnemyTurn);
@@ -104,7 +104,7 @@ namespace Module.fight
             GameApp.ViewManager.Open(ViewType.PauseFightView);
         }
         
-        private void onFightingViewReady(System.Object[] args)
+        private void onFightingViewReady(System.Object args)
         {
             StartFirstRound();
         }
