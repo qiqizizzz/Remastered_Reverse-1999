@@ -40,7 +40,7 @@ namespace Module.fight.CardMgr
             discardPile = new List<BattleCardData>();
         }
         
-        public void InitCards(LevelInitData initData)
+        public void InitCards(LevelModel model)
         {
             m_maxHandCardCount = 8;
             CardActionQueue.Clear();
@@ -49,7 +49,7 @@ namespace Module.fight.CardMgr
             handCards.Clear();
             discardPile.Clear();
 
-            foreach (var character in initData.Characters)
+            foreach (var character in model.Characters)
             {
                 if(character == null) continue;
                 

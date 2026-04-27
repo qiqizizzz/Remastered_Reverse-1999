@@ -86,12 +86,12 @@ namespace Module.Character
         
         #region 生成实体与配置数据
         //生成玩家与敌人等
-        public void SpawnBattleEntities(LevelInitData levelInitData, Action onComplete)
+        public void SpawnBattleEntities(LevelModel levelModel, Action onComplete)
         {
             ClearBattleEntities();//清理上一轮数据
             
-            List<CharacterData> heroDataList = levelInitData.Characters;
-            List<MonsterSpawnData> monsterSpawnList = levelInitData.MonsterSpawnList;
+            List<CharacterData> heroDataList = levelModel.Characters;
+            List<MonsterSpawnData> monsterSpawnList = levelModel.MonsterSpawnList;
 
             #region 获取生成数目
             int heroSpawnCount = 0;
@@ -170,7 +170,7 @@ namespace Module.Character
                 totalRound += 1;
             }
             
-            Debug.Log("生成玩家与敌人等，关卡id：" + levelInitData.LevelId);
+            Debug.Log("生成玩家与敌人等，关卡id：" + levelModel.LevelId);
         }
 
         private void ClearBattleEntities()

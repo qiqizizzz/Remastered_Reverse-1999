@@ -25,7 +25,7 @@ namespace Module.fight
 {
     public class FightController : BaseController
     {
-        private LevelInitData _currentInitData;
+        private LevelModel _currentModel;
         private bool _isBattleActive = false; //是否还在战斗中
         private bool _isPlayerTurnStart = false; //是否是玩家回合开始（不包括输出回合）
         
@@ -87,9 +87,9 @@ namespace Module.fight
         #region UI事件
         private void onOpenFightView(System.Object[] args)
         {
-            _currentInitData = args[0] as LevelInitData;
+            _currentModel = args[0] as LevelModel;
             
-            GameApp.EntityManager.SpawnBattleEntities(_currentInitData, onSpawnBattleCallback);//生成玩家与敌人等
+            GameApp.EntityManager.SpawnBattleEntities(_currentModel, onSpawnBattleCallback);//生成玩家与敌人等
         }
         
         private void onOpenFightSettleView(System.Object[] args)
@@ -244,7 +244,7 @@ namespace Module.fight
         private void onSpawnBattleCallback()
         {
             _isBattleActive = true;
-            GameApp.CardManager.InitCards(_currentInitData);
+            GameApp.CardManager.InitCards(_currentModel);
 
             GameApp.ViewManager.CloseAll();
             GameApp.ViewManager.Open(ViewType.FightingView);

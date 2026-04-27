@@ -22,10 +22,10 @@ namespace Module.fight.Component
         public BattleCardData BattleCardData;
         
         [Header("事件回调相关")] 
-        public Action<UI_BaseCardItem, PointerEventData> OnBeginDragCallback;
-        public Action<UI_BaseCardItem, PointerEventData> OnDragCallback;
-        public Action<UI_BaseCardItem, PointerEventData> OnEndDragCallback;
-        public Action<UI_BaseCardItem> OnClickCallback;
+        private Action<UI_BaseCardItem, PointerEventData> OnBeginDragCallback;
+        private Action<UI_BaseCardItem, PointerEventData> OnDragCallback;
+        private Action<UI_BaseCardItem, PointerEventData> OnEndDragCallback;
+        private Action<UI_BaseCardItem> OnClickCallback;
 
         [Header("动画配置")] 
         public CardAnimConfigSO AnimConfig;
@@ -33,11 +33,11 @@ namespace Module.fight.Component
         [Header("UI组件")] 
         public  RectTransform Rect;
         protected Image _icon;
-        protected CanvasGroup _canvasGroup;
-        
-        [Header("其他参数")]
-        protected bool _isDragging = false;
-        public bool IsInQueue = false;
+        private CanvasGroup _canvasGroup;
+
+        [Header("其他参数")] 
+        private bool _isDragging;
+        public bool IsInQueue;
         
         public void SetBlockRaycasts(bool value) => _canvasGroup.blocksRaycasts = value;
 
@@ -209,8 +209,6 @@ namespace Module.fight.Component
         #endregion
         
         #region 工具函数
-        //public float GetMoveDuration() => m_animConfig.MoveDuration;
-
         public int GetOwnerId() => BattleCardData.BaseData.OwnerId;
         
         public bool IsUltimateCard() => BattleCardData.BaseData.CardType == CardType.Ultimate;

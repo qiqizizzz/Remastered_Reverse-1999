@@ -7,6 +7,7 @@
 */
 
 using Common.Defines;
+using Data.level;
 using MVC;
 using MVC.Controller;
 
@@ -16,8 +17,6 @@ namespace Module.level
     {
         public LevelController() : base()
         {
-            SetModel(new LevelModel());
-            
             GameApp.ViewManager.Register(ViewType.LevelView, new ViewInfo()
             {
                 PrefabName = AddressDefines.UI_LevelView,
@@ -36,7 +35,7 @@ namespace Module.level
 
         public override void Init()
         {
-            model.Init();
+            //model.Init();
         }
 
         public override void InitModuleEvent()

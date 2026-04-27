@@ -1,18 +1,17 @@
 ﻿/*
-* ┌──────────────────────────────────────────┐
-* │  描    述: 关卡数据(记录会出现的怪物种类和数量等)                      
-* │  类    名: LevelModel.cs       
+* ┌──────────────────────────────────┐
+* │  描    述: 关卡初始化数据                      
+* │  类    名: LevelInitData.cs       
 * │  创    建: By qiqizizzz
-* └──────────────────────────────────────────┘
+* └──────────────────────────────────┘
 */
 
 using System;
 using System.Collections.Generic;
 using Data.card;
 using MVC.Model;
-using UnityEngine;
 
-namespace Module.level
+namespace Data.level
 {
     /// <summary>
     /// 怪物生成数据(种类与数量
@@ -23,12 +22,17 @@ namespace Module.level
         public int monsterId;
         public int count;
     }
-    
     public class LevelModel : BaseModel
     {
-        public LevelModel()
+        public List<CharacterData> Characters { get; private set; }
+        public List<MonsterSpawnData> MonsterSpawnList { get; private set; }
+        public int LevelId { get; private set; }
+
+        public LevelModel(List<CharacterData> characters, List<MonsterSpawnData> monsterSpawnData, int levelId)
         {
-            
+            Characters = characters ?? new List<CharacterData>();
+            MonsterSpawnList = monsterSpawnData ?? new List<MonsterSpawnData>();
+            LevelId = levelId;
         }
     }
 }

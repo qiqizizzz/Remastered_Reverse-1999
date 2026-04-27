@@ -100,7 +100,7 @@ namespace Module.View
             });
         }
 
-        private LevelInitData GetLevelInitData()
+        private LevelModel GetLevelInitData()
         {
             List<CharacterData> characters = new List<CharacterData>();
             List<MonsterSpawnData> monsterSpawnData = new List<MonsterSpawnData>();
@@ -115,9 +115,9 @@ namespace Module.View
 
             monsterSpawnData = GameApp.ConfigManager.GetLevelMonsterSpawnData(_currentLevelId);
             
-            LevelInitData initData = new LevelInitData(characters, monsterSpawnData, _currentLevelId);
+            LevelModel model = new LevelModel(characters, monsterSpawnData, _currentLevelId);
 
-            return initData;
+            return model;
         }
 
         #region 编队相关
