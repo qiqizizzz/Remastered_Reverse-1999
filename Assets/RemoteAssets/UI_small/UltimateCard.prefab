@@ -100,7 +100,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7251900009344990469}
   - component: {fileID: 2075125212037483155}
-  - component: {fileID: 681548999209972295}
+  - component: {fileID: 597724817799183189}
   m_Layer: 0
   m_Name: UltimateCard
   m_TagString: Untagged
@@ -141,7 +141,7 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &681548999209972295
+--- !u!114 &597724817799183189
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3616124645170449171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80407178d5d140f8aabd617535939959, type: 3}
+  m_Script: {fileID: 11500000, guid: 79e3d53563154dd5b8b07abe1c0011e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Rect: {fileID: 0}

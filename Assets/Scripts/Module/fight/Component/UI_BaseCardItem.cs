@@ -236,17 +236,15 @@ namespace Module.fight.Component
         
         public bool IsUltimateCard() => BattleCardData.BaseData.CardType == CardType.Ultimate;
 
-        private static T GetCallback<T>(object[] args, int index) where T : class
+        public void RegisterDragAndClickEvent(Action<UI_BaseCardItem, PointerEventData> onBeginDrag,
+            Action<UI_BaseCardItem, PointerEventData> onDrag,
+            Action<UI_BaseCardItem, PointerEventData> onEndDrag,
+            Action<UI_BaseCardItem> onClick)
         {
-            return args.Length > index && args[index] is T callback ? callback : null;
-        }
-        
-        public void RegisterDragAndClickEvent(params object[] args)
-        {
-            OnBeginDragCallback = GetCallback<Action<UI_BaseCardItem, PointerEventData>>(args, 1);
-            OnDragCallback = GetCallback<Action<UI_BaseCardItem, PointerEventData>>(args, 2);
-            OnEndDragCallback = GetCallback<Action<UI_BaseCardItem, PointerEventData>>(args, 3);
-            OnClickCallback = GetCallback<Action<UI_BaseCardItem>>(args, 4);
+            OnBeginDragCallback = onBeginDrag;
+            OnDragCallback = onDrag;
+            OnEndDragCallback = onEndDrag;
+            OnClickCallback = onClick;
         }
         #endregion
     }

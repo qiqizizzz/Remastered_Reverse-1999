@@ -24,13 +24,13 @@ namespace Module.View
 {
     public class FightingView : BaseView
     {
-        private List<UI_CommonCardItem> _cardPool;
-        private List<UI_CommonCardItem> _ultimateCardPool;//大招卡牌对象池
+        private List<UI_CommonCardItem> m_commonCardPool;
+        private List<UI_UltimateCardItem> m_ultimateCardPool;//大招卡牌对象池
         private int _totalPoolToLoad;
         private int _loadedPoolCount;
         
-        private List<UI_CommonCardItem> _handCardItems;//当前手牌实例列表
-        private Stack<UI_CommonCardItem> _uiActionStack;//出牌队列实例
+        private List<UI_BaseCardItem> _handCardItems;//当前手牌实例列表
+        private Stack<UI_BaseCardItem> _uiActionStack;//出牌队列实例
 
         [Header("关卡信息相关")]
         private Text _turnInfoText;
@@ -55,10 +55,10 @@ namespace Module.View
             _cardDeckTf = Find<Transform>("CardDeck");
             _turnInfoText = Find<Text>("FightDetail/Round/Txt_turnNum");
 
-            _ultimateCardPool = new List<UI_CommonCardItem>();
-            _cardPool = new List<UI_CommonCardItem>();
-            _handCardItems = new List<UI_CommonCardItem>();
-            _uiActionStack = new Stack<UI_CommonCardItem>();
+            m_ultimateCardPool = new List<UI_UltimateCardItem>();
+            m_commonCardPool = new List<UI_CommonCardItem>();
+            _handCardItems = new List<UI_BaseCardItem>();
+            _uiActionStack = new Stack<UI_BaseCardItem>();
 
             #region 队列UI
             m_UIActions = new List<Transform>();
@@ -101,19 +101,19 @@ namespace Module.View
             Controller.UnRegisterFunc(EventDefines.UpdateHandCards, onUpdateHandCards);
             Controller.UnRegisterFunc(EventDefines.ExitLevel, onExitLevel);
             
-            foreach (var item in _cardPool)
+            foreach (var item in m_commonCardPool)
             {
                 if (item != null)
                     ResManager.UnLoadInstance(item.gameObject);
             }
-            _cardPool.Clear();
+            m_commonCardPool.Clear();
 
-            foreach (var item in _ultimateCardPool)
+            foreach (var item in m_ultimateCardPool)
             {
                 if (item != null)
                     ResManager.UnLoadInstance(item.gameObject);
             }
-            _ultimateCardPool.Clear();
+            m_ultimateCardPool.Clear();
         }
         #endregion
 
@@ -179,22 +179,25 @@ namespace Module.View
             
             if(newCards == null) return;
             
-            List<UI_CommonCardItem> newHandItems = new List<UI_CommonCardItem>();
+            List<UI_BaseCardItem> newHandItems = new List<UI_BaseCardItem>();
             float maxAnimTime = 0f;
 
             for (int i = 0; i < newCards.Count; i++)
             {
                 BattleCardData cardData = newCards[i];
                 
-                UI_CommonCardItem item = _handCardItems.Find(x => ReferenceEquals(x.BattleCardData, cardData));
+                UI_BaseCardItem item = _handCardItems.Find(x => ReferenceEquals(x.BattleCardData, cardData));
                 
                 bool isNewCard = false;
                 if (item == null)
                 {
                     bool isUltimate = cardData.BaseData.CardType == CardType.Ultimate;
-                    var pool = isUltimate ? _ultimateCardPool : _cardPool;
+
+                    if (isUltimate)
+                        item = m_ultimateCardPool.Find(x => !x.gameObject.activeSelf && !newHandItems.Contains(x));
+                    else
+                        item = m_commonCardPool.Find(x => !x.gameObject.activeSelf && !newHandItems.Contains(x));
                     
-                    item = _cardPool.Find(x => !x.gameObject.activeSelf && !newHandItems.Contains(x));
                     if (item != null)
                     {
                         isNewCard = true;
@@ -223,27 +226,21 @@ namespace Module.View
                 }
             }
             
-            foreach (var oldItem in _cardPool)
+            foreach (var oldItem in m_commonCardPool)
             {
                 if (!newHandItems.Contains(oldItem) && !oldItem.IsInQueue)
                 {
                     oldItem.HideCard();
-                    oldItem.OnBeginDragCallback = null;
-                    oldItem.OnDragCallback = null;
-                    oldItem.OnEndDragCallback = null;
-                    oldItem.OnClickCallback = null;
+                    oldItem.RegisterDragAndClickEvent(null, null, null, null);
                 }
             }
 
-            foreach (var oldItem in _ultimateCardPool)
+            foreach (var oldItem in m_ultimateCardPool)
             {
                 if(!newHandItems.Contains(oldItem) && !oldItem.IsInQueue)
                 {
                     oldItem.HideCard();
-                    oldItem.OnBeginDragCallback = null;
-                    oldItem.OnDragCallback = null;
-                    oldItem.OnEndDragCallback = null;
-                    oldItem.OnClickCallback = null;
+                    oldItem.RegisterDragAndClickEvent(null, null, null, null);
                 }
             }
 
@@ -302,7 +299,7 @@ namespace Module.View
             for (int i = 0; i < _cardActionTf.childCount; i++)
             {
                 Transform child = _cardActionTf.GetChild(i);
-                if (child.GetComponent<UI_CommonCardItem>() != null)
+                if (child.GetComponent<UI_BaseCardItem>() != null)
                 {
                     executingCard = child;
                     break;
@@ -354,7 +351,7 @@ namespace Module.View
                 bool layoutChanged = false;
                 foreach (var cardData in removedCards)
                 {
-                    UI_CommonCardItem item = _handCardItems.Find(x => ReferenceEquals(x.BattleCardData, cardData));
+                    UI_BaseCardItem item = _handCardItems.Find(x => ReferenceEquals(x.BattleCardData, cardData));
                     if (item != null)
                     {
                         _handCardItems.Remove(item);
@@ -422,7 +419,7 @@ namespace Module.View
             {
                 if (_uiActionStack.Count > 0)
                 {
-                    UI_CommonCardItem undoItem = _uiActionStack.Pop();
+                    UI_BaseCardItem undoItem = _uiActionStack.Pop();
                     undoItem.Rect.DOKill();
                     undoItem.IsInQueue = false;
                     undoItem.SetBlockRaycasts(true);
@@ -461,7 +458,7 @@ namespace Module.View
             _uiActionStack.Clear();
             _handCardItems.Clear();
             
-            foreach (var item in _cardPool)
+            foreach (var item in m_commonCardPool)
             {
                 if (item != null)
                 {
@@ -471,7 +468,7 @@ namespace Module.View
                 }
             }
             
-            foreach (var item in _ultimateCardPool)
+            foreach (var item in m_ultimateCardPool)
             {
                 if (item != null)
                 {
@@ -581,7 +578,7 @@ namespace Module.View
         #endregion
 
         #region 卡牌具体逻辑
-        private void PlayCard(UI_CommonCardItem item, int index)
+        private void PlayCard(UI_BaseCardItem item, int index)
         {
             bool isUltimate = item.IsUltimateCard();
             
@@ -663,8 +660,8 @@ namespace Module.View
         
         private void CompositeCard(int indexA, int indexB, Action onCompleteAllMerges = null)
         {
-            UI_CommonCardItem cardA = _handCardItems[indexA];
-            UI_CommonCardItem cardB = _handCardItems[indexB];
+            UI_BaseCardItem cardA = _handCardItems[indexA];
+            UI_BaseCardItem cardB = _handCardItems[indexB];
             
             Vector2 centerPos = (cardA.Rect.anchoredPosition + cardB.Rect.anchoredPosition) / 2f;
             
@@ -672,7 +669,9 @@ namespace Module.View
             cardA.BattleCardData.StarLevel += 1;
             _handCardItems.Remove(cardB);
             GameApp.CardManager.RemoveHandCard(cardB.BattleCardData);
-            cardA.ShowStarUI(cardA.BattleCardData.StarLevel);
+            
+            if(cardA is UI_CommonCardItem commonCardA)
+                commonCardA.ShowStarUI(cardA.BattleCardData.StarLevel);
             
             cardA.PlayCompositeAnim(centerPos);
             cardB.PlayCompositeAnim(centerPos, () =>
@@ -728,7 +727,7 @@ namespace Module.View
                     UI_CommonCardItem item = go.GetComponent<UI_CommonCardItem>();
                     
                     item.SetVisible(false);
-                    _cardPool.Add(item);
+                    m_commonCardPool.Add(item);
 
                     CheckAllPoolLoaded();
                 });
@@ -751,10 +750,10 @@ namespace Module.View
                     }
 
                     go.transform.SetParent(_cardDeckTf, false);
-                    UI_CommonCardItem item = go.GetComponent<UI_CommonCardItem>();
+                    UI_UltimateCardItem item = go.GetComponent<UI_UltimateCardItem>();
                     
                     item.SetVisible(false);
-                    _ultimateCardPool.Add(item);
+                    m_ultimateCardPool.Add(item);
                     CheckAllPoolLoaded();
                 });
             }
