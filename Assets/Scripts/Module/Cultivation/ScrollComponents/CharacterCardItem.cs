@@ -25,7 +25,7 @@ namespace Module.Cultivation.ScrollComponents
 
         void ScrollCellIndex(int idx)
         {
-            CharacterData data = GameApp.ConfigManager.GetCharacterData(startIndex + idx);
+            CharacterDataSO data = GameApp.ConfigManager.GetCharacterData(startIndex + idx);
             
             gameObject.name = "Card_" + data.Id;
             txt.text = data.Name;

@@ -21,7 +21,7 @@ namespace Module.fight.Skill
         
         public static async Task ExecuteCardActionAsync(CardAction action)
         {
-            CardData cardData = action.BattleCardData.BaseData;
+            CardDataSO cardData = action.BattleCardData.BaseData;
             int starLevel = action.BattleCardData.StarLevel;
 
             BaseCharacter caster = GameApp.EntityManager.GetCharacterById(cardData.OwnerId);

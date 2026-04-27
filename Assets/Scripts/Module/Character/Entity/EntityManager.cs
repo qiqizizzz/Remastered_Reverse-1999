@@ -90,7 +90,7 @@ namespace Module.Character
         {
             ClearBattleEntities();//清理上一轮数据
             
-            List<CharacterData> heroDataList = levelModel.Characters;
+            List<CharacterDataSO> heroDataList = levelModel.Characters;
             List<MonsterSpawnData> monsterSpawnList = levelModel.MonsterSpawnList;
 
             #region 获取生成数目
@@ -104,7 +104,7 @@ namespace Module.Character
             }
             
             int enemySpawnCount = 0;
-            List<CharacterData> enemyDataList = new List<CharacterData>();
+            List<CharacterDataSO> enemyDataList = new List<CharacterDataSO>();
             for (int i = 0; i < monsterSpawnList.Count; i++)
             {
                 if (monsterSpawnList[i] != null)
@@ -191,7 +191,7 @@ namespace Module.Character
             AliveEnemies.Clear();
         }
 
-        private void setHeroEntityData(GameObject go, CharacterData heroData)
+        private void setHeroEntityData(GameObject go, CharacterDataSO heroData)
         {
             HeroEntity heroEntity = go.GetComponent<HeroEntity>();
             heroEntity.Init(heroData);
@@ -200,7 +200,7 @@ namespace Module.Character
             AliveHeroes.Add(heroEntity);
         }
 
-        private void setEnemyEntityData(GameObject go, CharacterData enemyData)
+        private void setEnemyEntityData(GameObject go, CharacterDataSO enemyData)
         {
             EnemyEntity enemyEntity = go.GetComponent<EnemyEntity>();
             enemyEntity.Init(enemyData);

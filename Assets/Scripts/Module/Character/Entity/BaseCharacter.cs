@@ -44,7 +44,7 @@ namespace Module.Character
     public class BaseCharacter : MonoBehaviour
     {
         private string _instanceId;
-        protected CharacterData _characterData;
+        protected CharacterDataSO _characterData;
         [SerializeField]protected SkeletonAnimation _skeAnim;
 
         private CharacterHUD _HUD;
@@ -61,7 +61,7 @@ namespace Module.Character
         [Header("动画映射")] 
         public AnimationConfig AnimConfig;
 
-        public CharacterData CharacterData => _characterData;
+        public CharacterDataSO CharacterData => _characterData;
         public string InstanceID => _instanceId;
         public CharacterHUD HUD => _HUD;
         
@@ -96,7 +96,7 @@ namespace Module.Character
             }
         }
 
-        public void Init(CharacterData data)
+        public void Init(CharacterDataSO data)
         {
             _instanceId = Guid.NewGuid().ToString();
             _characterData = data;

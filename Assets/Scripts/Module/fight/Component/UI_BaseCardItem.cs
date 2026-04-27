@@ -8,7 +8,6 @@
 
 using System;
 using Data.card;
-using Data.card.SO;
 using DG.Tweening;
 using MVC.View;
 using UnityEngine;

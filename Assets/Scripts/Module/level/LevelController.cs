@@ -35,7 +35,7 @@ namespace Module.level
 
         public override void Init()
         {
-            //model.Init();
+            
         }
 
         public override void InitModuleEvent()

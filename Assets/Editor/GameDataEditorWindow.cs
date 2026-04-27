@@ -305,19 +305,19 @@ public class GameDataEditorWindow : EditorWindow
     {
         if (mainTab == 0)
         {
-            type = typeof(CardData);
+            type = typeof(CardDataSO);
             if (cardSubTab == 0) { propName = "allCharacterCards"; folder = "CharacterCard"; defaultId = 2001; }
             else                 { propName = "allEnemyCards"; folder = "EnemyCard"; defaultId = 3001; }
         }
         else if (mainTab == 1)
         {
-            type = typeof(CharacterData);
+            type = typeof(CharacterDataSO);
             if (entitySubTab == 0) { propName = "allCharacters"; folder = "Character"; defaultId = 1001; }
             else                   { propName = "allEnemies"; folder = "Enemy"; defaultId = 5001; }
         }
         else
         {
-            type = typeof(LevelData);
+            type = typeof(LevelDataSO);
             propName = "allLevels"; folder = "Level"; defaultId = 1;
         }
     }

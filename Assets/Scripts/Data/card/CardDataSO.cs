@@ -62,7 +62,7 @@ namespace Data.card
     
     [Serializable]
     [CreateAssetMenu(fileName = "NewCardData", menuName = "数据配置/Data/Card")]
-    public class CardData : ScriptableObject
+    public class CardDataSO : ScriptableObject
     {
         [Header("基本信息")]
         public CardType CardType;
@@ -83,7 +83,7 @@ namespace Data.card
         {
             if (ReferenceEquals(this, obj)) return true;
             
-            if (obj is CardData otherCard)
+            if (obj is CardDataSO otherCard)
             {
                 return Id == otherCard.Id;
             }
@@ -95,7 +95,7 @@ namespace Data.card
             return Id.GetHashCode();
         }
 
-        public static bool operator ==(CardData left, CardData right)
+        public static bool operator ==(CardDataSO left, CardDataSO right)
         {
             if (ReferenceEquals(left, null))
             {
@@ -105,7 +105,7 @@ namespace Data.card
             return left.Equals(right);
         }
 
-        public static bool operator !=(CardData left, CardData right)
+        public static bool operator !=(CardDataSO left, CardDataSO right)
         {
             return !(left == right);
         }

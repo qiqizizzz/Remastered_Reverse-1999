@@ -61,7 +61,7 @@ namespace Data.card
     
     [Serializable]
     [CreateAssetMenu(fileName = "NewCharacterData", menuName = "数据配置/Data/Character")]
-    public class CharacterData : ScriptableObject
+    public class CharacterDataSO : ScriptableObject
     {
         [Header("基本信息")]
         public int Id;//角色id
@@ -74,7 +74,7 @@ namespace Data.card
         public Property Property;//角色属性
         public List<int> Cards;//角色拥有的卡牌(一张大招牌和两张普通牌)
         
-        public List<CardData> GetAllCards()
+        public List<CardDataSO> GetAllCards()
         {
             return GameApp.ConfigManager.GetCharacterCards(Id);
         }

@@ -170,7 +170,7 @@ namespace Module.fight
                         continue;
                     }
 
-                    CardData randomCard = cards[Random.Range(0, cards.Count)];
+                    CardDataSO randomCard = cards[Random.Range(0, cards.Count)];
 
                     BattleCardData battleCard = new BattleCardData(randomCard);
                     CardAction enemyAction = new CardAction()

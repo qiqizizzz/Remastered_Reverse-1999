@@ -21,18 +21,18 @@ namespace Config
 {
     public class ConfigManager
     {
-        private Dictionary<int, LevelData> levelConfig;
-        private Dictionary<int, CharacterData> characterConfig;
-        private Dictionary<int, CardData> cardConfig;
+        private Dictionary<int, LevelDataSO> levelConfig;
+        private Dictionary<int, CharacterDataSO> characterConfig;
+        private Dictionary<int, CardDataSO> cardConfig;
         
-        private Dictionary<string, CharacterData> characterConfigByName;
+        private Dictionary<string, CharacterDataSO> characterConfigByName;
 
         public ConfigManager()
         {
-            levelConfig = new Dictionary<int, LevelData>();
-            characterConfig = new Dictionary<int, CharacterData>();
-            cardConfig = new Dictionary<int, CardData>();
-            characterConfigByName = new Dictionary<string, CharacterData>();
+            levelConfig = new Dictionary<int, LevelDataSO>();
+            characterConfig = new Dictionary<int, CharacterDataSO>();
+            cardConfig = new Dictionary<int, CardDataSO>();
+            characterConfigByName = new Dictionary<string, CharacterDataSO>();
         }
 
         public async Task LoadAllConfigsAsync()
@@ -98,25 +98,25 @@ namespace Config
         }
 
         #region 角色/卡牌相关
-        public CardData GetCardData(int cardId)
+        public CardDataSO GetCardData(int cardId)
         {
-            return cardConfig.TryGetValue(cardId, out CardData cardData) ? cardData : null;
+            return cardConfig.TryGetValue(cardId, out CardDataSO cardData) ? cardData : null;
         }
 
-        public CharacterData GetCharacterData(int characterId)
+        public CharacterDataSO GetCharacterData(int characterId)
         {
-            return characterConfig.TryGetValue(characterId, out CharacterData characterData) ? characterData : null;
+            return characterConfig.TryGetValue(characterId, out CharacterDataSO characterData) ? characterData : null;
         }
 
-        public CharacterData GetCharacterData(string characterName)
+        public CharacterDataSO GetCharacterData(string characterName)
         {
-            return characterConfigByName.TryGetValue(characterName, out CharacterData characterData) ? characterData : null;
+            return characterConfigByName.TryGetValue(characterName, out CharacterDataSO characterData) ? characterData : null;
         }
         
         //得到某角色的全部卡牌
-        public List<CardData> GetCharacterCards(int characterId)
+        public List<CardDataSO> GetCharacterCards(int characterId)
         {
-            List<CardData> cards = new List<CardData>();
+            List<CardDataSO> cards = new List<CardDataSO>();
 
             foreach (var card in cardConfig)
             {
@@ -130,7 +130,7 @@ namespace Config
         }
         
         //得到所有角色
-        public List<CharacterData> GetAllCharacters()
+        public List<CharacterDataSO> GetAllCharacters()
         {
             return characterConfig.Values.Where(c => c.CharacterType == CharacterType.Hero).ToList();
         }
@@ -138,22 +138,22 @@ namespace Config
         #endregion
 
         #region 敌人相关
-        public CharacterData GetEnemyData(int enemyId)
+        public CharacterDataSO GetEnemyData(int enemyId)
         {
-            return characterConfig.TryGetValue(enemyId, out CharacterData enemyData) ? enemyData : null;
+            return characterConfig.TryGetValue(enemyId, out CharacterDataSO enemyData) ? enemyData : null;
         }
 
         #endregion
         
         #region 关卡相关
-        public LevelData GetLevelData(int levelId)
+        public LevelDataSO GetLevelData(int levelId)
         {
-            return levelConfig.TryGetValue(levelId, out LevelData levelData) ? levelData : null;
+            return levelConfig.TryGetValue(levelId, out LevelDataSO levelData) ? levelData : null;
         }
         
         public List<MonsterSpawnData> GetLevelMonsterSpawnData(int levelId)
         {
-            if (levelConfig.TryGetValue(levelId, out LevelData levelData))
+            if (levelConfig.TryGetValue(levelId, out LevelDataSO levelData))
             {
                 return levelData.MonsterSpawns;
             }

@@ -14,10 +14,10 @@ namespace Module.fight.Component
     public class BattleCardData
     {
         private readonly string InstanceId;
-        public readonly CardData BaseData;
+        public readonly CardDataSO BaseData;
         public int StarLevel;//星级
 
-        public BattleCardData(CardData baseData)
+        public BattleCardData(CardDataSO baseData)
         {
             InstanceId = System.Guid.NewGuid().ToString();
             BaseData = baseData;

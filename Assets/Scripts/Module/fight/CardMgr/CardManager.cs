@@ -23,7 +23,7 @@ namespace Module.fight.CardMgr
         
         private readonly int singleCardMaxLimit = 3;//单张牌的最大限制数量
         private int m_maxHandCardCount = 8;
-        private readonly Dictionary<CharacterData, List<CardData>> m_cards;
+        private readonly Dictionary<CharacterDataSO, List<CardDataSO>> m_cards;
         
         [Header("牌堆")]
         private List<BattleCardData> drawPile; //抽牌堆
@@ -34,7 +34,7 @@ namespace Module.fight.CardMgr
         {
             CardActionQueue = new CardActionQueue();
             
-            m_cards = new Dictionary<CharacterData, List<CardData>>();
+            m_cards = new Dictionary<CharacterDataSO, List<CardDataSO>>();
             drawPile = new List<BattleCardData>();
             handCards = new List<BattleCardData>();
             discardPile = new List<BattleCardData>();
@@ -53,7 +53,7 @@ namespace Module.fight.CardMgr
             {
                 if(character == null) continue;
                 
-                List<CardData> characterCards = character.GetAllCards();
+                List<CardDataSO> characterCards = character.GetAllCards();
                 m_cards.Add(character, characterCards);
 
                 foreach (var card in characterCards)
@@ -80,7 +80,7 @@ namespace Module.fight.CardMgr
 
             foreach (var kv in m_cards)
             {
-                List<CardData> cards = kv.Value;
+                List<CardDataSO> cards = kv.Value;
 
                 foreach (var card in cards)
                 {
@@ -169,7 +169,7 @@ namespace Module.fight.CardMgr
         }
         
         //移除死亡角色的卡牌
-        public void RemoveDiedCharacterCard(CharacterData character)
+        public void RemoveDiedCharacterCard(CharacterDataSO character)
         {
             m_maxHandCardCount = Mathf.Max(0, m_maxHandCardCount - 2);
 

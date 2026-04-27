@@ -16,7 +16,7 @@ namespace Data.card
 {
     [Serializable]
     [CreateAssetMenu(fileName = "NewLevelData", menuName = "数据配置/Data/Level")]
-    public class LevelData : ScriptableObject
+    public class LevelDataSO : ScriptableObject
     {
         public int Id;
         public string Name;

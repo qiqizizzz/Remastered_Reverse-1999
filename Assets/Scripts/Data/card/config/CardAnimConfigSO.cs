@@ -8,7 +8,7 @@
 
 using UnityEngine;
 
-namespace Data.card.SO
+namespace Data.card
 {
     [CreateAssetMenu(fileName = "CardAnimConfig", menuName = "数据配置/Config/CardAnimConfig")]
     public class CardAnimConfigSO : ScriptableObject

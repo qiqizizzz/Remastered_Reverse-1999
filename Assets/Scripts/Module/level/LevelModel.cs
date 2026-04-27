@@ -24,13 +24,13 @@ namespace Data.level
     }
     public class LevelModel : BaseModel
     {
-        public List<CharacterData> Characters { get; private set; }
+        public List<CharacterDataSO> Characters { get; private set; }
         public List<MonsterSpawnData> MonsterSpawnList { get; private set; }
         public int LevelId { get; private set; }
 
-        public LevelModel(List<CharacterData> characters, List<MonsterSpawnData> monsterSpawnData, int levelId)
+        public LevelModel(List<CharacterDataSO> characters, List<MonsterSpawnData> monsterSpawnData, int levelId)
         {
-            Characters = characters ?? new List<CharacterData>();
+            Characters = characters ?? new List<CharacterDataSO>();
             MonsterSpawnList = monsterSpawnData ?? new List<MonsterSpawnData>();
             LevelId = levelId;
         }

@@ -18,7 +18,7 @@ namespace Module.level.Component
     public class CharacterSelectItem : MonoBehaviour
     {
         private int startIndex = 1001;
-        public CharacterData _characterData;
+        public CharacterDataSO _characterData;
 
         [Header("UI组件")] 
         private PrepareFightView _prepareFightView;
