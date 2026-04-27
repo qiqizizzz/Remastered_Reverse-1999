@@ -8,6 +8,7 @@
 
 using System;
 using Data.card;
+using Data.card.SO;
 using DG.Tweening;
 using MVC.View;
 using UnityEngine;
@@ -26,31 +27,8 @@ namespace Module.fight.Component
         public Action<UI_BaseCardItem, PointerEventData> OnEndDragCallback;
         public Action<UI_BaseCardItem> OnClickCallback;
 
-        [Header("动画参数相关")]
-        #region 卡牌移动相关
-        public readonly float CardWidth = 180f;
-        protected readonly float _cardSpacing = 10f;
-        protected readonly float _startX = 90f;
-        protected readonly float _moveDuration = 0.4f;
-        protected Vector2 _spawnPos = new Vector2(-2200f, 0);
-        #endregion
-        #region 卡牌拖拽相关
-        protected readonly float _dragScale = 1.15f;
-        protected readonly float _dragDuration = 0.4f;
-        #endregion
-        #region 卡牌出牌相关
-        protected readonly float _playCommonDuration = 0.2f;
-        protected readonly float _playMoveDuration = 0.5f;
-        protected readonly Vector3 _playRotation = new Vector3(0, 0, -10f);
-        protected readonly float _playQueueScale = 0.8f;
-        protected readonly int _playRotationLoop = 2;
-        #endregion
-        #region 卡牌合成相关
-        protected readonly float _compositeCommonDuration = 0.2f;
-        protected readonly float _compositeStrength = 25f;
-        protected readonly int _compositeVibrato = 25;
-        protected readonly float _compositeRandomMess = 45f;
-        #endregion
+        [Header("动画配置")] 
+        public CardAnimConfigSO AnimConfig;
         
         [Header("UI组件")] 
         public  RectTransform Rect;
@@ -99,7 +77,7 @@ namespace Module.fight.Component
             SetVisible(false);
             _isDragging = false;
             IsInQueue = false;
-            Rect.anchoredPosition = _spawnPos;//放置在初始发牌点
+            Rect.anchoredPosition = AnimConfig.SpawnPos;//放置在初始发牌点
             Rect.localScale = Vector3.one;
             Rect.localRotation = Quaternion.identity; 
         }
@@ -114,15 +92,15 @@ namespace Module.fight.Component
                 return;
             }
             
-            float targetX = -_startX - (totalCount - 1 - index) * (CardWidth + _cardSpacing);
+            float targetX = -AnimConfig.StartX - (totalCount - 1 - index) * (AnimConfig.CardWidth + AnimConfig.CardSpacing);
             Vector2 targetPos = new Vector2(targetX, 0);
 
             Rect.DOKill();
-            Rect.DOAnchorPos(targetPos, _moveDuration)
+            Rect.DOAnchorPos(targetPos, AnimConfig.MoveDuration)
                 .SetEase(Ease.OutCubic)
                 .SetDelay(delay);
             
-            Rect.DOScale(Vector3.one, _moveDuration)
+            Rect.DOScale(Vector3.one, AnimConfig.MoveDuration)
                 .SetEase(Ease.OutCubic)
                 .SetDelay(delay);
 
@@ -134,11 +112,11 @@ namespace Module.fight.Component
         public void PlayToQueueAnim(Vector2 targetPos, Action onComplete = null)
         {
             Rect.DOKill();
-            Rect.DOScale(Vector3.one, _playCommonDuration);
-            Rect.DOAnchorPos(targetPos, _playMoveDuration).SetEase(Ease.OutQuad).OnComplete(() => onComplete?.Invoke());
-            Rect.DOScale(Vector3.one * _playQueueScale, _playCommonDuration).SetEase(Ease.OutQuad);
-            Rect.DOBlendableLocalRotateBy(_playRotation, _playCommonDuration)
-                .SetLoops(_playRotationLoop, LoopType.Yoyo);
+            Rect.DOScale(Vector3.one, AnimConfig.PlayCommonDuration);
+            Rect.DOAnchorPos(targetPos, AnimConfig.PlayMoveDuration).SetEase(Ease.OutQuad).OnComplete(() => onComplete?.Invoke());
+            Rect.DOScale(Vector3.one * AnimConfig.PlayQueueScale, AnimConfig.PlayCommonDuration).SetEase(Ease.OutQuad);
+            Rect.DOBlendableLocalRotateBy(AnimConfig.PlayRotation, AnimConfig.PlayCommonDuration)
+                .SetLoops(AnimConfig.PlayRotationLoop, LoopType.Yoyo);
         }
 
         public void PlayCompositeAnim(Vector2 targetPos, Action onComplete = null)
@@ -147,9 +125,10 @@ namespace Module.fight.Component
             transform.SetAsLastSibling();
 
             Sequence seq = DOTween.Sequence();
-            seq.Append(Rect.DOAnchorPos(targetPos,_compositeCommonDuration).SetEase(Ease.OutQuad));
-            seq.Append(Rect.DOShakeAnchorPos(_compositeCommonDuration, _compositeStrength, _compositeVibrato,
-                _compositeRandomMess));//抖动
+            seq.Append(Rect.DOAnchorPos(targetPos,AnimConfig.CompositeCommonDuration).SetEase(Ease.OutQuad));
+            seq.Append(Rect.DOShakeAnchorPos(AnimConfig.CompositeCommonDuration, AnimConfig.CompositeStrength,
+                AnimConfig.CompositeVibrato,
+                AnimConfig.CompositeRandomMess));//抖动
             seq.OnComplete(() => onComplete?.Invoke());
         }
         
@@ -188,7 +167,7 @@ namespace Module.fight.Component
             transform.SetAsLastSibling();//拖动时置于最上层
             
             Rect.DOKill();
-            Rect.DOScale(Vector3.one * _dragScale, _dragDuration);
+            Rect.DOScale(Vector3.one * AnimConfig.DragScale, AnimConfig.DragDuration);
             _canvasGroup.blocksRaycasts = false;//拖动时允许穿透事件
 
             OnBeginDragCallback?.Invoke(this, eventData);
@@ -214,7 +193,7 @@ namespace Module.fight.Component
             if(IsInQueue) return;
             
             Rect.DOKill();
-            Rect.DOScale(Vector3.one, _dragDuration);
+            Rect.DOScale(Vector3.one, AnimConfig.DragDuration);
             _canvasGroup.blocksRaycasts = true;
 
             _isDragging = false;
@@ -230,7 +209,7 @@ namespace Module.fight.Component
         #endregion
         
         #region 工具函数
-        public float GetMoveDuration() => _moveDuration;
+        //public float GetMoveDuration() => m_animConfig.MoveDuration;
 
         public int GetOwnerId() => BattleCardData.BaseData.OwnerId;
         

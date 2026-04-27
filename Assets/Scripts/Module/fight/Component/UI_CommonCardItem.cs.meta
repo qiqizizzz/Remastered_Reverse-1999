@@ -1,3 +1,13 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: 80407178d5d140f8aabd617535939959
-timeCreated: 1776064147
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - AnimConfig: {fileID: 11400000, guid: 511dcdfc7671156479911e7924871adb, type: 2}
+  - Rect: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -221,7 +221,7 @@ namespace Module.View
                     
                     item.MoveToIndex(i, newCards.Count, delay);
 
-                    float finishTime = delay + item.GetMoveDuration(); 
+                    float finishTime = delay + item.AnimConfig.MoveDuration;
                     if (finishTime > maxAnimTime) maxAnimTime = finishTime;
                 }
             }
@@ -507,7 +507,7 @@ namespace Module.View
             {
                 float rightX = _handCardItems[currentIndex + 1].Rect.anchoredPosition.x;
 
-                if (currentX > rightX - (item.CardWidth / 2))
+                if (currentX > rightX - (item.AnimConfig.CardWidth / 2))
                 {
                     SwapCard(currentIndex, currentIndex + 1);
                     return;
@@ -518,7 +518,7 @@ namespace Module.View
             if (currentIndex > 0)
             {
                 float leftX = _handCardItems[currentIndex - 1].Rect.anchoredPosition.x;
-                if (currentX < leftX + (item.CardWidth / 2))
+                if (currentX < leftX + (item.AnimConfig.CardWidth / 2))
                 {
                     SwapCard(currentIndex, currentIndex - 1);
                     return;
@@ -603,7 +603,7 @@ namespace Module.View
 
                 Vector2 targetPos = new Vector2(-_cardActionWidth, 0) +
                                     new Vector2(
-                                        (_cardActionQueue.GetCurrentActionCount()) * (item.CardWidth * 0.8f + 12f), 0);
+                                        (_cardActionQueue.GetCurrentActionCount()) * (item.AnimConfig.CardWidth * 0.8f + 12f), 0);
                 
                 item.PlayToQueueAnim(targetPos);
                 item.IsInQueue = true;
