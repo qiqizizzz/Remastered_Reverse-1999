@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 1f1b2c9ed79f64541b8af8b66f1663fc
   m_SerializeEntries:
+  - m_GUID: 04a68c47a6d1f60409f3ce9ce0e9e175
+    m_Address: UI_small/UltimateCard
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 09aa1989884f07a40b6e048161f8016a
     m_Address: UI/FightSettleView
     m_ReadOnly: 0

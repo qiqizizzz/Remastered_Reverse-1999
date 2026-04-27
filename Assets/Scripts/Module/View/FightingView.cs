@@ -210,10 +210,7 @@ namespace Module.View
                     item.InitCardUI(cardData);
                     newHandItems.Add(item);
 
-                    item.OnBeginDragCallback = OnCardBeginDrag;
-                    item.OnDragCallback = OnCardDrag;
-                    item.OnEndDragCallback = OnCardEndDrag;
-                    item.OnClickCallback = OnCardClick;
+                    item.RegisterDragAndClickEvent(OnCardBeginDrag, OnCardDrag, OnCardEndDrag, OnCardClick);
                     
                     float delay = (isNewCard && !isUndo) ? (newCards.Count - 1 - i) * 0.05f : 0f;
                     
@@ -490,7 +487,7 @@ namespace Module.View
         #endregion
         
         #region 卡牌交互逻辑回调
-        private void OnCardBeginDrag(UI_CommonCardItem item, PointerEventData eventData)
+        private void OnCardBeginDrag(UI_BaseCardItem item, PointerEventData eventData)
         {
             if (item.BattleCardData.BaseData.CardType == CardType.Ultimate || item.IsInQueue) return;
 
@@ -499,7 +496,7 @@ namespace Module.View
                 m_tempSnapshot = GameApp.CardManager.TakeSnapshot();
         }
         
-        private void OnCardDrag(UI_CommonCardItem item, PointerEventData eventData)
+        private void OnCardDrag(UI_BaseCardItem item, PointerEventData eventData)
         {
             if(!_cardActionQueue.CanPlayCard()) return;
             
@@ -532,7 +529,7 @@ namespace Module.View
             }
         }
         
-        private void OnCardEndDrag(UI_CommonCardItem item, PointerEventData eventData)
+        private void OnCardEndDrag(UI_BaseCardItem item, PointerEventData eventData)
         {
             if(item.IsInQueue) return;
             
@@ -575,7 +572,7 @@ namespace Module.View
             m_tempSnapshot = null;
         }
         
-        private void OnCardClick(UI_CommonCardItem item)
+        private void OnCardClick(UI_BaseCardItem item)
         {
             int index = _handCardItems.IndexOf(item);
             if (index != -1)

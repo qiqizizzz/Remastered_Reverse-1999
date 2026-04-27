@@ -19,7 +19,7 @@ MonoBehaviour:
   InspirationType: 0
   Property:
     Hp: 20000
-    Attack: 500
+    Attack: 100
     Defense: 40
     CritRate: 0.05
     CritDamage: 1.5

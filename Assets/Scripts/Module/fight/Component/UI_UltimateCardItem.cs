@@ -6,10 +6,17 @@
 * └──────────────────────────────────┘
 */
 
+using UnityEngine.UI;
+
 namespace Module.fight.Component
 {
-    public class UI_UltimateCardItem
+    public class UI_UltimateCardItem : UI_BaseCardItem
     {
-        
+        protected override void OnAwake()
+        {
+            base.OnAwake();
+            
+            _icon = Find<Image>("mask/Img_card");
+        }
     }
 }
