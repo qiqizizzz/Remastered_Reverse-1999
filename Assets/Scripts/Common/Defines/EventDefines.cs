@@ -50,5 +50,6 @@ namespace Common.Defines
         public const string OnCardExecuteUI = "OnCardExecuteUI";
         public const string OnCharacterDie = "OnCharacterDie";
         public const string OnRemoveDiedCharacterCard = "OnRemoveDiedCharacterCard";
+        public const string OnHandCardChanged = "OnHandCardChanged";
     }
 }

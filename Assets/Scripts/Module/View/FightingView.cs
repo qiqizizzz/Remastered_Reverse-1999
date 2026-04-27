@@ -68,6 +68,7 @@ namespace Module.View
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
             GameApp.MessageCenter.AddEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
             GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnHandCardChanged, onHandCardChanged);
         }
 
         protected override void OnStart()
@@ -88,8 +89,6 @@ namespace Module.View
 
             m_refreshMoveIndicatorsHandler = () => m_actionQueueUIManager.RefreshMoveIndicators();
             m_handCardOperator.OnRefreshMoveIndicators += m_refreshMoveIndicatorsHandler;
-            m_handCardOperator.OnAddActionPoint += AddActionPointToOwner;
-            m_handCardOperator.OnClearActionPoint += ClearActionPointOfOwner;
             m_handCardOperator.OnQueueFull += onQueueFull;
         }
 
@@ -98,6 +97,7 @@ namespace Module.View
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnHandCardChanged, onHandCardChanged);
         }
 
         protected override void OnDestroy()
@@ -110,8 +110,6 @@ namespace Module.View
             if (m_handCardOperator != null)
             {
                 m_handCardOperator.OnRefreshMoveIndicators -= m_refreshMoveIndicatorsHandler;
-                m_handCardOperator.OnAddActionPoint -= AddActionPointToOwner;
-                m_handCardOperator.OnClearActionPoint -= ClearActionPointOfOwner;
                 m_handCardOperator.OnQueueFull -= onQueueFull;
             }
         }
@@ -129,6 +127,11 @@ namespace Module.View
             m_actionQueueUIManager.HideAllMoveIndicators();
         }
 
+        private void onHandCardChanged(System.Object args = null)
+        {
+            onUpdateHandCards(GameApp.CardManager.GetHandCards());
+        }
+        
         private void onUpdateLevelInfo(params object[] args)
         {
             //TODO:更新轮次,后面再说吧。。
@@ -262,33 +265,6 @@ namespace Module.View
             m_handCardUIManager.Clear();
             m_cardPoolManager.RecycleAllCards();
             onHideAllHands(null);
-        }
-        #endregion
-
-        #region 行动点相关
-        private void AddActionPointToOwner(int ownerId)
-        {
-            var hero = GameApp.EntityManager.GetCharacterById(ownerId) as HeroEntity;
-            if (hero == null) return;
-
-            int oldAp = hero.ActionPoint;
-            hero.AddActionPoint();
-
-            if (oldAp < HeroEntity.MaxActionPoint && hero.ActionPoint >= HeroEntity.MaxActionPoint)
-            {
-                bool given = GameApp.CardManager.TryGiveUltimateCard(ownerId);
-                if (given)
-                {
-                    DOVirtual.DelayedCall(0.05f, () => onUpdateHandCards(GameApp.CardManager.GetHandCards()));
-                }
-            }
-        }
-
-        private void ClearActionPointOfOwner(int ownerId)
-        {
-            var hero = GameApp.EntityManager.GetCharacterById(ownerId) as HeroEntity;
-            if (hero == null) return;
-            hero.SetActionPoint(0);
         }
         #endregion
         

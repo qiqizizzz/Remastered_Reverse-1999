@@ -115,7 +115,7 @@ namespace Module.fight.CardMgr
         
         private void PreLoadCardItem()
         {
-            _totalPoolToLoad = GameApp.CardManager.mMaxHandCardCount;
+            _totalPoolToLoad = GameApp.CardManager.mMaxHandCardCount + 8;
             _loadedPoolCount = 0;
             for (int i = 0; i < _totalPoolToLoad; i++)
             {
@@ -141,7 +141,7 @@ namespace Module.fight.CardMgr
         
         private void PreLoadUltimateCardItem()
         { 
-            int maxUltimateCount = 4;
+            int maxUltimateCount = 6;
             _totalPoolToLoad += maxUltimateCount;
             for (int i = 0; i < maxUltimateCount; i++)
             {

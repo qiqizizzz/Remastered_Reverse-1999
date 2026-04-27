@@ -30,8 +30,6 @@ namespace Module.fight.CardMgr
         private int m_dragStartIndex = -1;
         private CardSnapshot m_tempSnapshot;
 
-        public event Action<int> OnAddActionPoint;
-        public event Action<int> OnClearActionPoint;
         public event Action OnQueueFull;
         public event Action OnRefreshMoveIndicators;
 
@@ -192,7 +190,7 @@ namespace Module.fight.CardMgr
                 m_handCardUIManager.RefreshHandCardLayout();
             }
 
-            OnAddActionPoint?.Invoke(item.GetOwnerId());
+            GameApp.CardManager.AddActionPointToOwner(item.GetOwnerId());
             m_dragStartIndex = -1;
             m_tempSnapshot = null;
         }
@@ -252,7 +250,7 @@ namespace Module.fight.CardMgr
 
                 bool isQueueFull = m_actionQueue.PushAction(action);
                 OnRefreshMoveIndicators?.Invoke();
-                OnAddActionPoint?.Invoke(item.GetOwnerId());
+                GameApp.CardManager.AddActionPointToOwner(item.GetOwnerId());
 
                 if (isQueueFull)
                 {
@@ -264,7 +262,7 @@ namespace Module.fight.CardMgr
                 item.HideCard();
                 CheckAndTriggerComposite();
 
-                OnClearActionPoint?.Invoke(item.GetOwnerId());
+                GameApp.CardManager.AddActionPointToOwner(item.GetOwnerId());
             }
         }
 
@@ -308,7 +306,7 @@ namespace Module.fight.CardMgr
                 cardB.transform.SetParent(m_cardDeckTf, true);
 
                 m_handCardUIManager.RefreshHandCardLayout();
-                OnAddActionPoint?.Invoke(cardA.GetOwnerId());
+                GameApp.CardManager.AddActionPointToOwner(cardA.GetOwnerId());
 
                 CheckAndTriggerComposite(onCompleteAllMerges);
             });

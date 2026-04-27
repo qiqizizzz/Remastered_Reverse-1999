@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Common.Defines;
 using Data.card;
 using Data.level;
+using DG.Tweening;
 using Module.Character;
 using Module.fight.Component;
 using UnityEngine;
@@ -245,6 +246,33 @@ namespace Module.fight.CardMgr
             }
         }
 
+        #endregion
+        
+        #region 行动点相关
+        public void AddActionPointToOwner(int ownerId)
+        {
+            var hero = GameApp.EntityManager.GetCharacterById(ownerId) as HeroEntity;
+            if (hero == null) return;
+
+            int oldAp = hero.ActionPoint;
+            hero.AddActionPoint();
+
+            if (oldAp < HeroEntity.MaxActionPoint && hero.ActionPoint >= HeroEntity.MaxActionPoint)
+            {
+                bool given = GameApp.CardManager.TryGiveUltimateCard(ownerId);
+                if (given)
+                {
+                    GameApp.MessageCenter.PostEvent(EventDefines.OnHandCardChanged); 
+                }
+            }
+        }
+
+        public void ClearActionPointOfOwner(int ownerId)
+        {
+            var hero = GameApp.EntityManager.GetCharacterById(ownerId) as HeroEntity;
+            if (hero == null) return;
+            hero.SetActionPoint(0);
+        }
         #endregion
 
         #region 工具函数
