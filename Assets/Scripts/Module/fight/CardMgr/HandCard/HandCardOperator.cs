@@ -69,22 +69,7 @@ namespace Module.fight.CardMgr
             undoItem.IsInQueue = false;
             undoItem.SetBlockRaycasts(true);
             undoItem.transform.SetParent(m_cardDeckTf, true);
-            undoItem.HideCard();
-        }
-
-        /// <summary>
-        /// 为撤销/重建做准备，清理手牌区显示
-        /// </summary>
-        public void PrepareForRebuild()
-        {
-            foreach (var item in m_handCardUIManager.GetHandItems())
-            {
-                if (item.IsInQueue) continue;
-
-                item.HideCard();
-                item.transform.SetParent(m_cardDeckTf, true);
-            }
-            m_handCardUIManager.Clear();
+            m_handCardUIManager.InsertCard(0, undoItem);
         }
 
         /// <summary>

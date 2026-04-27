@@ -41,6 +41,7 @@ namespace Module.View
 
         private Action m_refreshMoveIndicatorsHandler;
 
+        #region 生命周期
         protected override void OnAwake()
         {
             _cardActionTf = Find<Transform>("CardAction");
@@ -113,6 +114,7 @@ namespace Module.View
                 m_handCardOperator.OnQueueFull -= onQueueFull;
             }
         }
+        #endregion
 
         public override void Open(params object[] args)
         {
@@ -242,8 +244,6 @@ namespace Module.View
                 m_handCardOperator.UndoLastPlayCard();
             }
 
-            m_handCardOperator.PrepareForRebuild();
-
             // 更新玩家行动点UI
             foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
             {
@@ -251,7 +251,7 @@ namespace Module.View
             }
 
             // 统一刷新移动占位符 UI
-            m_handCardUIManager.RefreshHandCardLayout();
+            m_actionQueueUIManager.RefreshMoveIndicators();
 
             // 全量重建当前手牌 UI
             onUpdateHandCards(GameApp.CardManager.GetHandCards(), true);

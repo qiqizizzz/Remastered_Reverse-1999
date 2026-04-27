@@ -72,14 +72,12 @@ namespace Module.fight.CardMgr
                 if (item == null)
                 {
                     item = _poolManager.GetCard(cardData.BaseData.CardType);
-                    
+
                     if (item != null)
                     {
                         isNewCard = true;
                         item.transform.SetParent(_cardDeckTf, true);
-                        
-                        if(!isUndo)
-                            item.PrepareSpawn(); // 放回最左侧初始点
+                        item.PrepareSpawn(); // 总是放回最左侧初始点
                     }
                 }
 
@@ -112,7 +110,7 @@ namespace Module.fight.CardMgr
             
             if (onLayoutStable != null)
             {
-                if (maxAnimTime > 0f && !isUndo)
+                if (maxAnimTime > 0f)
                     DOVirtual.DelayedCall(maxAnimTime, () => onLayoutStable());
                 else
                     onLayoutStable();
