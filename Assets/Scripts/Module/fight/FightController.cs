@@ -121,6 +121,11 @@ namespace Module.fight
         {
             try
             {
+                foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
+                {
+                    hero.HUD?.UpdateActionPoint(hero.ActionPoint);
+                }
+                
                 Debug.Log("==== 玩家出牌阶段结束，开始结算队列 ====");
                 _isPlayerTurnStart = false;
                 List<CardAction> actions = GameApp.CardManager.CardActionQueue.GetAllActionsAndClear();

@@ -7,6 +7,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using Common;
 using Common.Defines;
 using DG.Tweening;
@@ -21,6 +22,7 @@ namespace Module.Character.Components
         [Header("UI相关")] 
         private Slider _hpSlider;
         private Image _selectImg;
+        private List<Image> _actionPoints;
         
         [Header("飘字配置")]
         private Transform _floatPoint;
@@ -33,6 +35,9 @@ namespace Module.Character.Components
             _selectImg = transform.Find("Select")?.GetComponent<Image>();
             _floatPoint = GetComponentInChildren<Transform>().Find("FloatPoint");
             _canvasGroup = GetComponent<CanvasGroup>();
+            
+            _actionPoints = new List<Image>();
+            _actionPoints.AddRange(transform.Find("ActionPoint").GetComponentsInChildren<Image>());
         }
 
         public void UpdateHp(float currentHp, float maxHp)
@@ -40,9 +45,42 @@ namespace Module.Character.Components
             _hpSlider.value = currentHp / maxHp;
         }
 
-        public void UpdateActionPoint(int value)
+        /// <summary>
+        /// 更新行动点显示
+        /// </summary>
+        /// <param name="confirmedValue">当前已拥有的点数</param>
+        /// <param name="previewGain">因卡牌放入队列中而即将增加的点数</param>
+        public void UpdateActionPoint(int confirmedValue, int previewGain)
         {
-            Debug.Log("UpdateActionPoint");
+            Debug.Log($"更新行动点显示: 已拥有{confirmedValue}点, 预览增加{previewGain}点");
+            
+            //思路：
+            //1.玩家回合时,若 选择卡牌进入队列, 则为闪烁状态
+            //2.玩家输出回合时,行动点常量（取消动画状态）
+            int totalValue = Mathf.Min(confirmedValue + previewGain, _actionPoints.Count);
+            
+            for (int i = 0; i < _actionPoints.Count; i++)
+            {
+                Image pointImg = _actionPoints[i];
+
+                pointImg.DOKill();
+                
+                if (i < confirmedValue) //常量状态
+                {
+                    pointImg.color = Color.yellow;
+                    pointImg.DOFade(1f, 0f);
+                }
+                else if (i < totalValue) //闪烁状态
+                {
+                    pointImg.color = Color.yellow;
+                    pointImg.DOFade(0.3f, 0.5f).SetLoops(-1, LoopType.Yoyo);
+                }
+                else //空点位
+                {
+                    pointImg.color = Color.gray; 
+                    pointImg.DOFade(1f, 0f);
+                }
+            }
         }
 
         public void ShowDamage(int damage, bool isCrit)

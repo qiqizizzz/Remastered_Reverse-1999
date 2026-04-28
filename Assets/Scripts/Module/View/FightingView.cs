@@ -176,48 +176,7 @@ namespace Module.View
 
         private void onCardExecuteUI(System.Object args = null)
         {
-            Transform executingCard = null;
-
-            for (int i = 0; i < _cardActionTf.childCount; i++)
-            {
-                Transform child = _cardActionTf.GetChild(i);
-                if (child.GetComponent<UI_BaseCardItem>() != null)
-                {
-                    executingCard = child;
-                    break;
-                }
-            }
-
-            if (executingCard == null) return;
-
-            executingCard.SetParent(transform);
-            executingCard.SetAsLastSibling();
-
-            RectTransform rect = executingCard.GetComponent<RectTransform>();
-
-            // 阶段 1：甩出卡牌 (抛物线 + 旋转 + 放大)
-            Sequence seq = DOTween.Sequence();
-            seq.Append(rect.DOMoveX(transform.position.x, 0.45f).SetEase(Ease.OutCirc));
-            seq.Join(rect.DOMoveY(transform.position.y, 0.45f).SetEase(Ease.OutBack, 1.2f));
-            seq.Join(rect.DOScale(Vector3.one * 1.5f, 0.45f).SetEase(Ease.OutQuad));
-            seq.Join(rect.DORotate(new Vector3(0, 0, -8f), 0.45f).SetEase(Ease.OutQuad));
-
-            // 阶段 2：悬停展示 (让玩家看清打出了什么)
-            seq.AppendInterval(0.5f);
-
-            // 阶段 3：爆发击出/消失 (急速收缩 + 回正)
-            seq.Append(rect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack));
-            seq.Join(rect.DORotate(Vector3.zero, 0.2f));
-
-            seq.OnComplete(() =>
-            {
-                executingCard.gameObject.SetActive(false);
-                executingCard.SetParent(_cardDeckTf);
-
-                // 重置状态，防止卡牌下次回到手牌时还是歪的/缩小的
-                rect.localScale = Vector3.one;
-                rect.localRotation = Quaternion.identity;
-            });
+            m_actionQueueUIManager.CardExecuteUI(transform, _cardActionTf, _cardDeckTf);
         }
 
         private void onRemoveDiedCharacterCardsUI(System.Object args = null)
