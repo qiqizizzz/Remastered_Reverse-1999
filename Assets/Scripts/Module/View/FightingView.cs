@@ -91,6 +91,7 @@ namespace Module.View
             m_refreshMoveIndicatorsHandler = () => m_actionQueueUIManager.RefreshMoveIndicators();
             m_handCardOperator.OnRefreshMoveIndicators += m_refreshMoveIndicatorsHandler;
             m_handCardOperator.OnQueueFull += onQueueFull;
+            m_handCardOperator.OnRefreshActionPointUI +=  m_actionQueueUIManager.RefreshHeroActionPointUI;
         }
 
         protected override void OnDisable()
@@ -112,6 +113,7 @@ namespace Module.View
             {
                 m_handCardOperator.OnRefreshMoveIndicators -= m_refreshMoveIndicatorsHandler;
                 m_handCardOperator.OnQueueFull -= onQueueFull;
+                m_handCardOperator.OnRefreshActionPointUI -=  m_actionQueueUIManager.RefreshHeroActionPointUI;
             }
         }
         #endregion
@@ -203,11 +205,14 @@ namespace Module.View
                 m_handCardOperator.UndoLastPlayCard();
             }
 
+            m_actionQueueUIManager.RefreshHeroActionPointUI();
+            
             // 更新玩家行动点UI
-            foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
+            /*foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
             {
-                hero.HUD?.UpdateActionPoint(hero.ActionPoint);
-            }
+                
+                //hero.HUD?.UpdateActionPoint(hero.ActionPoint);
+            }*/
 
             // 统一刷新移动占位符 UI
             m_actionQueueUIManager.RefreshMoveIndicators();

@@ -32,6 +32,7 @@ namespace Module.fight.CardMgr
 
         public event Action OnQueueFull;
         public event Action OnRefreshMoveIndicators;
+        public event Action OnRefreshActionPointUI;
 
         public HandCardOperator(HandCardUIManager handMgr, CardActionQueue actionQueue,
             Transform cardActionTf, Transform cardDeckTf, float cardActionWidth)
@@ -162,6 +163,11 @@ namespace Module.fight.CardMgr
                 bool isQueueFull = m_actionQueue.PushAction(action);
 
                 OnRefreshMoveIndicators?.Invoke();
+                
+                //只有位置真实改变了才增加行动点
+                GameApp.CardManager.AddActionPointToOwner(item.GetOwnerId());
+                OnRefreshActionPointUI?.Invoke();
+                
                 CheckAndTriggerComposite();
 
                 if (isQueueFull)
@@ -175,9 +181,10 @@ namespace Module.fight.CardMgr
                 m_handCardUIManager.RefreshHandCardLayout();
             }
 
-            GameApp.CardManager.AddActionPointToOwner(item.GetOwnerId());
+            
             m_dragStartIndex = -1;
             m_tempSnapshot = null;
+            
         }
 
         // 卡牌点击
@@ -236,6 +243,7 @@ namespace Module.fight.CardMgr
                 bool isQueueFull = m_actionQueue.PushAction(action);
                 OnRefreshMoveIndicators?.Invoke();
                 GameApp.CardManager.AddActionPointToOwner(item.GetOwnerId());
+                OnRefreshActionPointUI?.Invoke();
 
                 if (isQueueFull)
                 {
@@ -292,6 +300,7 @@ namespace Module.fight.CardMgr
 
                 m_handCardUIManager.RefreshHandCardLayout();
                 GameApp.CardManager.AddActionPointToOwner(cardA.GetOwnerId());
+                OnRefreshActionPointUI?.Invoke();
 
                 CheckAndTriggerComposite(onCompleteAllMerges);
             });

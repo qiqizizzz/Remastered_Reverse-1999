@@ -48,16 +48,17 @@ namespace Module.Character.Components
         /// <summary>
         /// 更新行动点显示
         /// </summary>
-        /// <param name="confirmedValue">当前已拥有的点数</param>
+        /// <param name="currentTotalAP">当前已拥有的点数</param>
         /// <param name="previewGain">因卡牌放入队列中而即将增加的点数</param>
-        public void UpdateActionPoint(int confirmedValue, int previewGain)
+        public void UpdateActionPoint(int currentTotalAP, int previewGain = 0)
         {
-            Debug.Log($"更新行动点显示: 已拥有{confirmedValue}点, 预览增加{previewGain}点");
+            Debug.Log($"更新行动点显示: 当前点数={currentTotalAP}, 预览增加={previewGain}");
             
             //思路：
             //1.玩家回合时,若 选择卡牌进入队列, 则为闪烁状态
             //2.玩家输出回合时,行动点常量（取消动画状态）
-            int totalValue = Mathf.Min(confirmedValue + previewGain, _actionPoints.Count);
+            int confirmedValue = Mathf.Max(0, currentTotalAP - previewGain);
+            int totalValue = currentTotalAP;
             
             for (int i = 0; i < _actionPoints.Count; i++)
             {

@@ -16,7 +16,6 @@ namespace Module.fight.CardMgr
     public class ActionQueueUIManager
     {
         private List<Transform> m_UIActions;
-        private CardActionQueue _cardActionQueue;
         
         public ActionQueueUIManager(List<Transform> uiActions)
         {
@@ -25,7 +24,7 @@ namespace Module.fight.CardMgr
 
         public void Init()
         {
-            _cardActionQueue = GameApp.CardManager.CardActionQueue;
+            //暂无
         }
 
         public void SetVisible(bool value)
@@ -50,7 +49,7 @@ namespace Module.fight.CardMgr
 
         public void UpdateCardQueueUI()
         {
-            int maxCount = _cardActionQueue.MaxActionCount;
+            int maxCount =  GameApp.CardManager.CardActionQueue.MaxActionCount;
             for (int i = 0; i < m_UIActions.Count; i++)
             {
                 int currentIndex = i;
@@ -80,7 +79,7 @@ namespace Module.fight.CardMgr
         //刷新Move占位符
         public void RefreshMoveIndicators()
         {
-            CardAction[] actions = _cardActionQueue.GetAction();
+            CardAction[] actions = GameApp.CardManager.CardActionQueue.GetAction();
 
             for (int i = 0; i < m_UIActions.Count; i++)
             {
@@ -104,6 +103,29 @@ namespace Module.fight.CardMgr
             }
         }
 
+        //刷新英雄行动点
+        public void RefreshHeroActionPointUI()
+        {
+            var currentActions = GameApp.CardManager.CardActionQueue.GetAction();
+            
+            CardAction firstAction = currentActions.Length > 0 ? currentActions[0] : null;
+
+            foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
+            {
+                int previewGain = 0;
+
+                if (firstAction != null && firstAction.Snapshot != null)
+                {
+                    if(firstAction.Snapshot.HeroActionPoints.TryGetValue(hero.InstanceID, out int baseActionPoint))
+                    {
+                        previewGain = hero.ActionPoint - baseActionPoint;
+                    }
+                }
+                
+                hero.HUD?.UpdateActionPoint(hero.ActionPoint, previewGain);
+            }
+        }
+        
         public void CardExecuteUI(Transform transform, Transform _cardActionTf, Transform _cardDeckTf)
         {
             Transform executingCard = null;
