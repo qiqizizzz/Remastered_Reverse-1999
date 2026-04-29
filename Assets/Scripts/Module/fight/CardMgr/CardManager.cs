@@ -254,17 +254,7 @@ namespace Module.fight.CardMgr
             var hero = GameApp.EntityManager.GetCharacterById(ownerId) as HeroEntity;
             if (hero == null) return;
 
-            int oldAp = hero.ActionPoint;
             hero.AddActionPoint();
-
-            if (oldAp < HeroEntity.MaxActionPoint && hero.ActionPoint >= HeroEntity.MaxActionPoint)
-            {
-                bool given = GameApp.CardManager.TryGiveUltimateCard(ownerId);
-                if (given)
-                {
-                    GameApp.MessageCenter.PostEvent(EventDefines.OnHandCardChanged); 
-                }
-            }
         }
 
         public void ClearActionPointOfOwner(int ownerId)

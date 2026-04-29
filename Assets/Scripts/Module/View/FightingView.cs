@@ -173,6 +173,21 @@ namespace Module.View
                     if (GameApp.CardManager.GetHandCards().Count > beforeCount)
                         onUpdateHandCards(GameApp.CardManager.GetHandCards());
                 }
+                else
+                {
+                    bool needUpdateHand = false;
+                    foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
+                    {
+                        if (hero.ActionPoint >= HeroEntity.MaxActionPoint)
+                        {
+                            if(GameApp.CardManager.TryGiveUltimateCard(hero.CharacterData.Id))
+                                needUpdateHand = true;
+                        }
+                    }
+                    
+                    if(needUpdateHand)
+                        onUpdateHandCards(GameApp.CardManager.GetHandCards());
+                }
             });
         }
 

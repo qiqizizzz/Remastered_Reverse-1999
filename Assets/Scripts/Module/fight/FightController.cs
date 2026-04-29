@@ -268,14 +268,6 @@ namespace Module.fight
             int count = GameApp.CardManager.mMaxHandCardCount - GameApp.CardManager.GetNormalHandCardCount();
             GameApp.CardManager.DrawCard(count);
             
-            foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
-            {
-                if (hero.ActionPoint >= HeroEntity.MaxActionPoint)
-                {
-                    GameApp.CardManager.TryGiveUltimateCard(hero.CharacterData.Id);
-                }
-            }
-            
             ApplyFunc(EventDefines.UpdateHandCards, GameApp.CardManager.GetHandCards());
         }
         #endregion
