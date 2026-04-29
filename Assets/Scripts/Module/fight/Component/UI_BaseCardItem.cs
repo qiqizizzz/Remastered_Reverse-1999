@@ -61,9 +61,6 @@ namespace Module.fight.Component
 
             _icon.sprite = BattleCardData.BaseData.CardSprite;
             
-            Rect.localScale = Vector3.one;
-            Rect.localRotation = Quaternion.identity;
-            
             _isDragging = false;
             IsInQueue = false;
         }
@@ -99,7 +96,7 @@ namespace Module.fight.Component
 
             float targetX = -AnimConfig.StartX - (totalCount - 1 - index) * (currentWidth + spacing);
             
-            float targetY = (scale - 1f) * (Rect.rect.height / 2f);
+            float targetY = GetMoveTargetY();
             
             Vector2 targetPos = new Vector2(targetX, targetY);
 
@@ -117,7 +114,14 @@ namespace Module.fight.Component
             transform.SetSiblingIndex(index);
         }
 
-        public void PlayToQueueAnim(Vector2 targetPos, Action onComplete = null)
+        // 子类可重写 Y 轴偏移，避免同时启动两个 DOAnchorPos 动画导致竞争
+        protected virtual float GetMoveTargetY()
+        {
+            float scale = 0.8f;
+            return (scale - 1f) * (Rect.rect.height / 2f);
+        }
+
+        public virtual void PlayToQueueAnim(Vector2 targetPos, Action onComplete = null)
         {
             Rect.DOKill();
             Rect.DOScale(Vector3.one, AnimConfig.PlayCommonDuration);

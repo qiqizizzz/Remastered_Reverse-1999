@@ -202,60 +202,60 @@ namespace Module.fight.CardMgr
         {
             bool isUltimate = item.IsUltimateCard();
 
-            if (!isUltimate && !m_actionQueue.CanPlayCard())
+            if (!m_actionQueue.CanPlayCard())
             {
                 Debug.Log("已达到本轮出牌上限");
                 return;
             }
 
-            // 在数据修改前记录快照
             CardSnapshot snapshot = GameApp.CardManager.TakeSnapshot();
 
             m_handCardUIManager.RemoveCardAt(index);
             GameApp.CardManager.GetHandCards().Remove(item.BattleCardData);
 
-            if (!isUltimate)
+            m_uiActionStack.Push(item);
+            m_handCardUIManager.RefreshHandCardLayout();
+
+            item.transform.SetParent(m_cardActionTf, true);
+
+            Vector2 targetPos = new Vector2(-m_cardActionWidth, 0) +
+                                new Vector2(
+                                    (m_actionQueue.GetCurrentActionCount()) * (item.AnimConfig.CardWidth * 0.8f + 12f), 0);
+
+            item.PlayToQueueAnim(targetPos);
+            item.IsInQueue = true;
+            item.SetBlockRaycasts(false);
+
+            CheckAndTriggerComposite();
+
+            CardAction action = new CardAction()
             {
-                m_uiActionStack.Push(item);
-                m_handCardUIManager.RefreshHandCardLayout();
+                ActionType = CardActionType.PlayCard,
+                Snapshot = snapshot,
+                BattleCardData = item.BattleCardData,
+                OriginalIndex = index,
+                TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId
+            };
 
-                item.transform.SetParent(m_cardActionTf, true);
+            bool isQueueFull = m_actionQueue.PushAction(action);
+            OnRefreshMoveIndicators?.Invoke();
 
-                Vector2 targetPos = new Vector2(-m_cardActionWidth, 0) +
-                                    new Vector2(
-                                        (m_actionQueue.GetCurrentActionCount()) * (item.AnimConfig.CardWidth * 0.8f + 12f), 0);
-
-                item.PlayToQueueAnim(targetPos);
-                item.IsInQueue = true;
-                item.SetBlockRaycasts(false);
-
-                CheckAndTriggerComposite();
-
-                CardAction action = new CardAction()
-                {
-                    ActionType = CardActionType.PlayCard,
-                    Snapshot = snapshot,
-                    BattleCardData = item.BattleCardData,
-                    OriginalIndex = index,
-                    TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId
-                };
-
-                bool isQueueFull = m_actionQueue.PushAction(action);
-                OnRefreshMoveIndicators?.Invoke();
-                GameApp.CardManager.AddActionPointToOwner(item.GetOwnerId());
-                OnRefreshActionPointUI?.Invoke();
-
-                if (isQueueFull)
-                {
-                    OnQueueFull?.Invoke();
-                }
+            if (isUltimate)
+            {
+                // 打出大招后，清空该玩家的行动点
+                GameApp.CardManager.ClearActionPointOfOwner(item.GetOwnerId());
             }
             else
             {
-                item.HideCard();
-                CheckAndTriggerComposite();
-
+                // 打出普通卡牌，增加行动点
                 GameApp.CardManager.AddActionPointToOwner(item.GetOwnerId());
+            }
+            
+            OnRefreshActionPointUI?.Invoke();
+
+            if (isQueueFull)
+            {
+                OnQueueFull?.Invoke();
             }
         }
 
