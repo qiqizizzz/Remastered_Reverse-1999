@@ -35,6 +35,7 @@ namespace Module.fight.Component
         private CanvasGroup _canvasGroup;
 
         [Header("其他参数")] 
+        private float MinScale = 0.75f;
         private bool _isDragging;
         public bool IsInQueue;
         
@@ -81,30 +82,38 @@ namespace Module.fight.Component
             Rect.localRotation = Quaternion.identity; 
         }
         
-        public void MoveToIndex(int index,int totalCount ,float delay = 0f)
+        public virtual void MoveToIndex(int index, int totalCount, float delay = 0f)
         {
             SetVisible(true);
-            
+
             if (_isDragging)
             {
                 transform.SetAsLastSibling();
                 return;
             }
+
+            float scale = 0.8f; 
+
+            float currentWidth = AnimConfig.CardWidth * scale;
+            float spacing = AnimConfig.CardSpacing * scale;
+
+            float targetX = -AnimConfig.StartX - (totalCount - 1 - index) * (currentWidth + spacing);
             
-            float targetX = -AnimConfig.StartX - (totalCount - 1 - index) * (AnimConfig.CardWidth + AnimConfig.CardSpacing);
-            Vector2 targetPos = new Vector2(targetX, 0);
+            float targetY = (scale - 1f) * (Rect.rect.height / 2f);
+            
+            Vector2 targetPos = new Vector2(targetX, targetY);
 
             Rect.DOKill();
             Rect.DOAnchorPos(targetPos, AnimConfig.MoveDuration)
                 .SetEase(Ease.OutCubic)
                 .SetDelay(delay);
-            
-            Rect.DOScale(Vector3.one, AnimConfig.MoveDuration)
+
+            Rect.DOScale(Vector3.one * scale, AnimConfig.MoveDuration)
                 .SetEase(Ease.OutCubic)
                 .SetDelay(delay);
 
-            Rect.transform.eulerAngles = Vector3.zero; 
-            
+            Rect.transform.eulerAngles = Vector3.zero;
+
             transform.SetSiblingIndex(index);
         }
 

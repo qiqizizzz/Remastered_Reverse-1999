@@ -21,10 +21,10 @@ namespace Module.fight.CardMgr
         private Transform _cardDeckTf;
         private CardPoolManager _poolManager;
         
-        private Action<UI_BaseCardItem, PointerEventData> m_onBeginDrag;
-        private Action<UI_BaseCardItem, PointerEventData> m_onDrag;
-        private Action<UI_BaseCardItem, PointerEventData> m_onEndDrag;
-        private Action<UI_BaseCardItem> m_onClick;
+        private event Action<UI_BaseCardItem, PointerEventData> m_onBeginDrag;
+        private event Action<UI_BaseCardItem, PointerEventData> m_onDrag;
+        private event Action<UI_BaseCardItem, PointerEventData> m_onEndDrag;
+        private event Action<UI_BaseCardItem> m_onClick;
 
         public HandCardUIManager(Transform cardDeckTf ,CardPoolManager poolManager)
         {

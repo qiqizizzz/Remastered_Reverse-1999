@@ -21,7 +21,7 @@ namespace Data.card
         public Vector2 SpawnPos = new Vector2(-2200f, 0);
         
         [Header("卡牌拖拽相关")]
-        public float DragScale = 1.15f;
+        public float DragScale = 1f;
         public float DragDuration = 0.4f;
         
         [Header("卡牌出牌相关")]
