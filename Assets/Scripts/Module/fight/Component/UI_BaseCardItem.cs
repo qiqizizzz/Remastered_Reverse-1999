@@ -35,7 +35,7 @@ namespace Module.fight.Component
         private CanvasGroup _canvasGroup;
 
         [Header("其他参数")] 
-        private float MinScale = 0.75f;
+        protected readonly float MinScale = 0.75f;
         private bool _isDragging;
         public bool IsInQueue;
         
@@ -113,11 +113,10 @@ namespace Module.fight.Component
 
             transform.SetSiblingIndex(index);
         }
-
-        // 子类可重写 Y 轴偏移，避免同时启动两个 DOAnchorPos 动画导致竞争
+        
         protected virtual float GetMoveTargetY()
         {
-            float scale = 0.8f;
+            float scale = MinScale;
             return (scale - 1f) * (Rect.rect.height / 2f);
         }
 

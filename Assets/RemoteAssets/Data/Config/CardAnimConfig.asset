@@ -17,7 +17,7 @@ MonoBehaviour:
   StartX: 90
   MoveDuration: 0.4
   SpawnPos: {x: -2200, y: 0}
-  DragScale: 1.15
+  DragScale: 1
   DragDuration: 0.4
   PlayCommonDuration: 0.2
   PlayMoveDuration: 0.5

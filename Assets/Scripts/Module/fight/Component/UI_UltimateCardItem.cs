@@ -21,20 +21,17 @@ namespace Module.fight.Component
             
             _icon = Find<Image>("mask/Img_card");
         }
-
-        // 通过重写 GetMoveTargetY 来修改 Y 轴偏移，避免同时启动两个 DOAnchorPos 动画导致竞争
+        
         protected override float GetMoveTargetY()
         {
-            float scale = 0.8f;
+            float scale = MinScale;
             return (scale - 1f) * (Rect.rect.height / 2f) + 30f;
         }
-
-        // 大招卡牌预制体锚点可能与普通卡不一致，使用世界坐标动画绕过锚点差异
+        
         public override void PlayToQueueAnim(Vector2 targetPos, Action onComplete = null)
         {
             Rect.DOKill();
-
-            // 临时设置目标 anchoredPosition，让 Unity 自动算出正确的世界坐标，然后立即恢复
+            
             Vector2 originalAnchorPos = Rect.anchoredPosition;
             Rect.anchoredPosition = targetPos;
             Vector3 targetWorldPos = Rect.position;
