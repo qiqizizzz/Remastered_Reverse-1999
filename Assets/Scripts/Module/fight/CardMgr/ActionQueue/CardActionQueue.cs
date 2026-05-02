@@ -34,6 +34,7 @@ namespace Module.fight.CardMgr
         public Dictionary<BattleCardData, int> CardStarLevels;
     }
     
+    //卡牌行动
     public class CardAction
     {
         public CardActionType ActionType;
@@ -51,8 +52,8 @@ namespace Module.fight.CardMgr
     
     public class CardActionQueue
     {
-        private Stack<CardAction> _actionStack;
-        public int MaxActionCount { get; set; } = 4;
+        private readonly Stack<CardAction> _actionStack;
+        public int MaxActionCount { get; private set; } = 4;
 
         public CardActionQueue()
         {
@@ -61,14 +62,6 @@ namespace Module.fight.CardMgr
             GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onReduceActionCount);
         }
 
-        #region 事件函数
-        private void onReduceActionCount(System.Object args)
-        {
-            MaxActionCount = Mathf.Max(0, MaxActionCount - 1);
-        }
-
-        #endregion
-        
         #region 主要函数
         public bool PushAction(CardAction action)
         {
@@ -85,8 +78,15 @@ namespace Module.fight.CardMgr
         }
         #endregion
         
+        #region 事件函数
+        private void onReduceActionCount(System.Object args)
+        {
+            MaxActionCount = Mathf.Max(0, MaxActionCount - 1);
+        }
+
+        #endregion
+        
         #region 工具函数
-        public int GetCurrentActionCount() => _actionStack.Count;
         public bool CanPlayCard() => _actionStack.Count < MaxActionCount;
         
         public void Clear()
@@ -94,6 +94,8 @@ namespace Module.fight.CardMgr
             _actionStack.Clear();
             MaxActionCount = 4;
         }
+        
+        public int GetCurrentActionCount() => _actionStack.Count;
         
         public List<CardAction> GetAllActionsAndClear()
         {

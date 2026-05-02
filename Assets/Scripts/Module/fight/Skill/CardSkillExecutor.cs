@@ -49,6 +49,7 @@ namespace Module.fight.Skill
             {
                 // [验证目标] 检查卡牌本身是否没有配置效果
                 Debug.LogWarning($"卡牌 [{cardData.Name}] 没有配置任何 Effects！");
+                return; 
             }
             
             foreach (var effect in cardData.Effects)

@@ -15,118 +15,20 @@ namespace Module.fight.CardMgr
 {
     public class ActionQueueUIManager
     {
-        private List<Transform> m_UIActions;
+        private readonly List<Transform> _uiActions;
         
         public ActionQueueUIManager(List<Transform> uiActions)
         {
-            m_UIActions = uiActions;
+            _uiActions = uiActions;
         }
 
         public void Init()
         {
             //暂无
         }
-
-        public void SetVisible(bool value)
-        {
-            for (int i = m_UIActions.Count - 1; i >= 0; i--)
-            {
-                if (!m_UIActions[i].gameObject.activeSelf)
-                {
-                    m_UIActions[i].gameObject.SetActive(value);
-                }
-            }
-        }
         
-        public void HideAllMoveIndicators()
-        {
-            for (int i = 0; i < m_UIActions.Count; i++)
-            {
-                Transform imgMove = m_UIActions[i].Find("Img_move");
-                if(imgMove != null) imgMove.gameObject.SetActive(false);
-            }
-        }
-
-        public void UpdateCardQueueUI()
-        {
-            int maxCount =  GameApp.CardManager.CardActionQueue.MaxActionCount;
-            for (int i = 0; i < m_UIActions.Count; i++)
-            {
-                int currentIndex = i;
-                bool shouldActive = currentIndex < maxCount;
-
-                if (m_UIActions[currentIndex].gameObject.activeSelf && !shouldActive)
-                {
-                    CanvasGroup cg = m_UIActions[i].GetComponent<CanvasGroup>();
-                    if (cg != null)
-                    {
-                        cg.DOKill();
-                        cg.DOFade(0, 0.5f).onComplete = () =>
-                        {
-                            m_UIActions[currentIndex].gameObject.SetActive(false);
-                            cg.alpha = 1f;
-                        };
-                    }
-                    else
-                    {
-                        m_UIActions[currentIndex].gameObject.SetActive(false);
-                    }
-
-                }
-            }
-        }
-
-        //刷新Move占位符
-        public void RefreshMoveIndicators()
-        {
-            CardAction[] actions = GameApp.CardManager.CardActionQueue.GetAction();
-
-            for (int i = 0; i < m_UIActions.Count; i++)
-            {
-                Transform imgMove = m_UIActions[i].Find("Img_move");
-                if (imgMove != null)
-                {
-                    bool isMove = i < actions.Length && actions[i].ActionType == CardActionType.MoveCard;
-
-                    if (imgMove.gameObject.activeSelf != isMove)
-                    {
-                        imgMove.gameObject.SetActive(isMove);
-                        
-                        CanvasGroup cg = imgMove.GetComponent<CanvasGroup>();
-                        if (cg != null && isMove)
-                        {
-                            cg.alpha = 0f;
-                            cg.DOFade(1f, 0.2f);
-                        }
-                    }
-                }
-            }
-        }
-
-        //刷新英雄行动点
-        public void RefreshHeroActionPointUI()
-        {
-            var currentActions = GameApp.CardManager.CardActionQueue.GetAction();
-            
-            CardAction firstAction = currentActions.Length > 0 ? currentActions[0] : null;
-
-            foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
-            {
-                int previewGain = 0;
-
-                if (firstAction != null && firstAction.Snapshot != null)
-                {
-                    if(firstAction.Snapshot.HeroActionPoints.TryGetValue(hero.InstanceID, out int baseActionPoint))
-                    {
-                        previewGain = hero.ActionPoint - baseActionPoint;
-                    }
-                }
-                
-                hero.HUD?.UpdateActionPoint(hero.ActionPoint, previewGain);
-            }
-        }
-        
-        public void CardExecuteUI(Transform transform, Transform _cardActionTf, Transform _cardDeckTf)
+        //执行<打出卡牌>动画
+        public void ExecuteCardUI(Transform transform, Transform _cardActionTf, Transform _cardDeckTf)
         {
             Transform executingCard = null;
 
@@ -171,5 +73,112 @@ namespace Module.fight.CardMgr
                 rect.localRotation = Quaternion.identity;
             });
         }
+
+        //更新卡牌队列背景UI
+        public void UpdateCardQueueUI()
+        {
+            int maxCount =  GameApp.CardManager.CardActionQueue.MaxActionCount;
+            for (int i = 0; i < _uiActions.Count; i++)
+            {
+                int currentIndex = i;
+                bool shouldActive = currentIndex < maxCount;
+
+                if (_uiActions[currentIndex].gameObject.activeSelf && !shouldActive)
+                {
+                    CanvasGroup cg = _uiActions[i].GetComponent<CanvasGroup>();
+                    if (cg != null)
+                    {
+                        cg.DOKill();
+                        cg.DOFade(0, 0.5f).onComplete = () =>
+                        {
+                            _uiActions[currentIndex].gameObject.SetActive(false);
+                            cg.alpha = 1f;
+                        };
+                    }
+                    else
+                    {
+                        _uiActions[currentIndex].gameObject.SetActive(false);
+                    }
+
+                }
+            }
+        }
+        
+        #region Move占位符
+        //隐藏所有Move占位符
+        public void HideAllMoveIndicators()
+        {
+            for (int i = 0; i < _uiActions.Count; i++)
+            {
+                Transform imgMove = _uiActions[i].Find("Img_move");
+                if(imgMove != null) imgMove.gameObject.SetActive(false);
+            }
+        }
+        
+        //刷新Move占位符
+        public void RefreshMoveIndicators()
+        {
+            CardAction[] actions = GameApp.CardManager.CardActionQueue.GetAction();
+
+            for (int i = 0; i < _uiActions.Count; i++)
+            {
+                Transform imgMove = _uiActions[i].Find("Img_move");
+                if (imgMove != null)
+                {
+                    bool isMove = i < actions.Length && actions[i].ActionType == CardActionType.MoveCard;
+
+                    if (imgMove.gameObject.activeSelf != isMove)
+                    {
+                        imgMove.gameObject.SetActive(isMove);
+                        
+                        CanvasGroup cg = imgMove.GetComponent<CanvasGroup>();
+                        if (cg != null && isMove)
+                        {
+                            cg.alpha = 0f;
+                            cg.DOFade(1f, 0.2f);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region 工具函数
+        public void SetVisible(bool value)
+        {
+            for (int i = _uiActions.Count - 1; i >= 0; i--)
+            {
+                if (!_uiActions[i].gameObject.activeSelf)
+                {
+                    _uiActions[i].gameObject.SetActive(value);
+                }
+            }
+        }
+        #endregion
+        
+        #region 其他事件操作
+        //刷新英雄行动点
+        public void RefreshHeroActionPointUI()
+        {
+            var currentActions = GameApp.CardManager.CardActionQueue.GetAction();
+            
+            CardAction firstAction = currentActions.Length > 0 ? currentActions[0] : null;
+
+            foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
+            {
+                int previewGain = 0;
+
+                if (firstAction != null && firstAction.Snapshot != null)
+                {
+                    if(firstAction.Snapshot.HeroActionPoints.TryGetValue(hero.InstanceID, out int baseActionPoint))
+                    {
+                        previewGain = hero.ActionPoint - baseActionPoint;
+                    }
+                }
+                
+                hero.HUD?.UpdateActionPoint(hero.ActionPoint, previewGain);
+            }
+        }
+        #endregion
     }
 }

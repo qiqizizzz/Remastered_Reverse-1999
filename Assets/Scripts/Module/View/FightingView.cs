@@ -34,7 +34,7 @@ namespace Module.View
 
         [Header("队列区域相关")]
         private Transform _cardActionTf;
-        private float _cardActionWidth = 550f;
+        //private float _cardActionWidth = 550f;
 
         [Header("手牌区域相关")]
         private Transform _cardDeckTf;
@@ -67,7 +67,7 @@ namespace Module.View
             Find<Button>("CardAction/Btn_Undo").onClick.AddListener(onUndoBtn);
 
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
-            GameApp.MessageCenter.AddEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnCardExecuteUI, onExecuteCardUI);
             GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
             GameApp.MessageCenter.AddEvent(EventDefines.OnHandCardChanged, onHandCardChanged);
         }
@@ -80,12 +80,7 @@ namespace Module.View
             m_actionQueueUIManager.Init();
             m_cardPoolManager.Init();
 
-            m_handCardOperator = new HandCardOperator(
-                m_handCardUIManager,
-                GameApp.CardManager.CardActionQueue,
-                _cardActionTf,
-                _cardDeckTf,
-                _cardActionWidth);
+            m_handCardOperator = new HandCardOperator(m_handCardUIManager, GameApp.CardManager.CardActionQueue);
             m_handCardOperator.Init();
 
             m_refreshMoveIndicatorsHandler = () => m_actionQueueUIManager.RefreshMoveIndicators();
@@ -97,7 +92,7 @@ namespace Module.View
         protected override void OnDisable()
         {
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
-            GameApp.MessageCenter.RemoveEvent(EventDefines.OnCardExecuteUI, onCardExecuteUI);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnCardExecuteUI, onExecuteCardUI);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnHandCardChanged, onHandCardChanged);
         }
@@ -124,23 +119,18 @@ namespace Module.View
 
             m_actionQueueUIManager.SetVisible(true);
         }
-        
+
+        #region UI事件
+        #region 手牌事件
         private void onHideAllHands(System.Object args)
         {
             m_handCardUIManager.HideAllHands(args);
             m_actionQueueUIManager.HideAllMoveIndicators();
         }
-
         private void onHandCardChanged(System.Object args = null)
         {
             onUpdateHandCards(GameApp.CardManager.GetHandCards());
         }
-        
-        private void onUpdateLevelInfo(params object[] args)
-        {
-            //TODO:更新轮次,后面再说吧。。
-        }
-
         private void onUpdateHandCards(params object[] args)
         {
             List<BattleCardData> newCards = args[0] as List<BattleCardData>;
@@ -154,10 +144,8 @@ namespace Module.View
                     processPostHandUpdate();
             });
         }
-
-        /// <summary>
-        /// 手牌布局稳定后的后置处理：合成检查 → 补牌
-        /// </summary>
+        
+        //手牌布局稳定后的后置处理：合成检查 → 补牌
         private void processPostHandUpdate()
         {
             m_handCardOperator.CheckAndTriggerComposite(() =>
@@ -190,18 +178,35 @@ namespace Module.View
                 }
             });
         }
+        #endregion
 
-        private void onCardExecuteUI(System.Object args = null)
+        #region 队列事件
+        private void onExecuteCardUI(System.Object args = null)
         {
-            m_actionQueueUIManager.CardExecuteUI(transform, _cardActionTf, _cardDeckTf);
+            m_actionQueueUIManager.ExecuteCardUI(transform, _cardActionTf, _cardDeckTf);
         }
-
+        
+        private void onQueueFull()
+        {
+            DOVirtual.DelayedCall(2f, () =>
+            {
+                GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
+            });
+        }
+        #endregion
+        
         private void onRemoveDiedCharacterCardsUI(System.Object args = null)
         {
             m_handCardUIManager.RemoveDiedCharacterCard(args);
             m_actionQueueUIManager.UpdateCardQueueUI();
         }
-
+        
+        private void onUpdateLevelInfo(params object[] args)
+        {
+            //TODO:更新轮次,后面再说吧。。
+        }
+        #endregion
+        
         #region 按钮回调
         private void onPauseBtn()
         {
@@ -239,20 +244,11 @@ namespace Module.View
         private void onExitLevel(params object[] args)
         {
             // 注意:所有离开关卡的行为都需要经过这个事件,不然动画UI等效果会出错
-
             m_handCardOperator.Clear();
             m_handCardUIManager.Clear();
             m_cardPoolManager.RecycleAllCards();
             onHideAllHands(null);
         }
         #endregion
-        
-        private void onQueueFull()
-        {
-            DOVirtual.DelayedCall(2f, () =>
-            {
-                GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
-            });
-        }
     }
 }

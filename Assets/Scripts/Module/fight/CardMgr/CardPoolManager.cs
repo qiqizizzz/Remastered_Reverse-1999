@@ -17,19 +17,19 @@ namespace Module.fight.CardMgr
 {
     public class CardPoolManager
     {
-        private List<UI_CommonCardItem> m_commonCardPool;
-        private List<UI_UltimateCardItem> m_ultimateCardPool;
+        private readonly List<UI_CommonCardItem> _commonCardPool;
+        private readonly List<UI_UltimateCardItem> _ultimateCardPool;
         
         private int _totalPoolToLoad;
         private int _loadedPoolCount;
         
-        private Transform _cardDeckTf;
+        private readonly Transform _cardDeckTf;
 
         public CardPoolManager(Transform cardDeckTf)
         {
             _cardDeckTf = cardDeckTf;
-            m_ultimateCardPool = new List<UI_UltimateCardItem>();
-            m_commonCardPool = new List<UI_CommonCardItem>();
+            _ultimateCardPool = new List<UI_UltimateCardItem>();
+            _commonCardPool = new List<UI_CommonCardItem>();
         }
         
         public void Init()
@@ -37,35 +37,19 @@ namespace Module.fight.CardMgr
             PreLoadCardItem();
             PreLoadUltimateCardItem();
         }
-        
-        public void UnLoadAll()
-        {
-            foreach (var item in m_commonCardPool)
-            {
-                if (item != null)
-                    ResManager.UnLoadInstance(item.gameObject);
-            }
-            m_commonCardPool.Clear();
 
-            foreach (var item in m_ultimateCardPool)
-            {
-                if (item != null)
-                    ResManager.UnLoadInstance(item.gameObject);
-            }
-            m_ultimateCardPool.Clear();
-        }
-
+        #region 获取卡牌
         public UI_BaseCardItem GetCard(CardType type)
         {
             UI_BaseCardItem item;
             
             if (type == CardType.Ultimate)
             {
-                item = m_ultimateCardPool.Find(x => !x.gameObject.activeSelf);
+                item = _ultimateCardPool.Find(x => !x.gameObject.activeSelf);
             }
             else
             {
-                item = m_commonCardPool.Find(x => !x.gameObject.activeSelf);
+                item = _commonCardPool.Find(x => !x.gameObject.activeSelf);
             }
             
             if (item != null)
@@ -83,10 +67,12 @@ namespace Module.fight.CardMgr
             
             return item;
         }
+        #endregion
 
+        #region 回收卡牌
         public void RecycleAllCards()
         {
-            foreach (var item in m_commonCardPool)
+            foreach (var item in _commonCardPool)
             {
                 if (item != null)
                 {
@@ -94,7 +80,7 @@ namespace Module.fight.CardMgr
                 }
             }
             
-            foreach (var item in m_ultimateCardPool)
+            foreach (var item in _ultimateCardPool)
             {
                 if (item != null)
                 {
@@ -113,6 +99,25 @@ namespace Module.fight.CardMgr
             item.transform.SetParent(_cardDeckTf, true);
         }
         
+        public void UnLoadAll()
+        {
+            foreach (var item in _commonCardPool)
+            {
+                if (item != null)
+                    ResManager.UnLoadInstance(item.gameObject);
+            }
+            _commonCardPool.Clear();
+
+            foreach (var item in _ultimateCardPool)
+            {
+                if (item != null)
+                    ResManager.UnLoadInstance(item.gameObject);
+            }
+            _ultimateCardPool.Clear();
+        }
+        #endregion
+
+        #region 预加载卡牌
         private void PreLoadCardItem()
         {
             _totalPoolToLoad = GameApp.CardManager.mMaxHandCardCount + 8;
@@ -132,7 +137,7 @@ namespace Module.fight.CardMgr
                     UI_CommonCardItem item = go.GetComponent<UI_CommonCardItem>();
                     
                     item.SetVisible(false);
-                    m_commonCardPool.Add(item);
+                    _commonCardPool.Add(item);
 
                     CheckAllPoolLoaded();
                 });
@@ -158,7 +163,7 @@ namespace Module.fight.CardMgr
                     UI_UltimateCardItem item = go.GetComponent<UI_UltimateCardItem>();
                     
                     item.SetVisible(false);
-                    m_ultimateCardPool.Add(item);
+                    _ultimateCardPool.Add(item);
                     CheckAllPoolLoaded();
                 });
             }
@@ -172,5 +177,6 @@ namespace Module.fight.CardMgr
                 GameApp.MessageCenter.PostEvent(EventDefines.FightingViewReady);
             }
         }
+        #endregion
     }
 }

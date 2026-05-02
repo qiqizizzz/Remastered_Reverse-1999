@@ -18,8 +18,12 @@ namespace Module.fight.CardMgr
     public class HandCardUIManager
     {
         private List<UI_BaseCardItem> _handCardItems; //当前手牌实例列表
-        private Transform _cardDeckTf;
-        private CardPoolManager _poolManager;
+        private readonly CardPoolManager _poolManager;
+        
+        [Header("UI节点池分配")]
+        private readonly Transform _cardDeckTf;
+        private readonly Transform _cardActionTf;
+        private readonly float _cardActionWidth;
         
         private event Action<UI_BaseCardItem, PointerEventData> m_onBeginDrag;
         private event Action<UI_BaseCardItem, PointerEventData> m_onDrag;
@@ -154,9 +158,49 @@ namespace Module.fight.CardMgr
             }
         }
 
-        #region 查询与操作接口
-        public List<UI_BaseCardItem> GetHandItems() => _handCardItems;
+        #region 卡牌主要逻辑动画
+        public void AnimatePlayCard(UI_BaseCardItem item, int actionCount)
+        {
+            item.transform.SetParent(_cardActionTf, true);
 
+            Vector2 targetPos = new Vector2(-_cardActionWidth, 0) +
+                                new Vector2(
+                                    actionCount * (item.AnimConfig.CardWidth * 0.8f + 12f), 0);
+
+            item.PlayToQueueAnim(targetPos);
+            item.IsInQueue = true;
+            item.SetBlockRaycasts(false);
+        }
+
+        public void AnimateCompositeCard(UI_BaseCardItem cardA, UI_BaseCardItem cardB, int currentStarLevel,
+            Action onAnimComplete)
+        {
+            Vector2 centerPos = (cardA.Rect.anchoredPosition + cardB.Rect.anchoredPosition) / 2f;
+            
+            if (cardA is UI_CommonCardItem commonCardA)
+                commonCardA.ShowStarUI(cardA.BattleCardData.StarLevel);
+
+            cardA.PlayCompositeAnim(centerPos);
+            cardB.PlayCompositeAnim(centerPos, () =>
+            {
+                cardB.HideCard();
+                cardB.transform.SetParent(_cardDeckTf, true);
+                onAnimComplete?.Invoke();
+            });
+        }
+
+        public void AnimateUndoCard(UI_BaseCardItem undoItem)
+        {
+            undoItem.Rect.DOKill();
+            undoItem.IsInQueue = false;
+            undoItem.SetBlockRaycasts(true);
+            undoItem.transform.SetParent(_cardDeckTf, true);
+            InsertCard(0, undoItem);
+        }
+
+        #endregion
+        
+        #region 查询与操作接口
         public int GetCardIndex(UI_BaseCardItem item) => _handCardItems.IndexOf(item);
         
         public UI_BaseCardItem GetCardAt(int index) => index >= 0 && index < _handCardItems.Count ? _handCardItems[index] : null;
