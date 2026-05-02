@@ -35,7 +35,7 @@ namespace Module.fight.Component
         private CanvasGroup _canvasGroup;
 
         [Header("其他参数")] 
-        protected readonly float MinScale = 0.75f;
+        protected readonly float MinScale = 0.8f;
         private bool _isDragging;
         public bool IsInQueue;
         
@@ -63,6 +63,8 @@ namespace Module.fight.Component
             
             _isDragging = false;
             IsInQueue = false;
+            
+            SetBlockRaycasts(true);
         }
         
         #region 表现与动画逻辑
@@ -71,6 +73,7 @@ namespace Module.fight.Component
             Rect.DOKill();
             transform.DOKill(); 
             
+            SetBlockRaycasts(true);
             SetVisible(false);
             _isDragging = false;
             IsInQueue = false;
