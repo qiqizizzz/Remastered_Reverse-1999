@@ -15,6 +15,7 @@ using DG.Tweening;
 using Module.Character;
 using Module.fight.CardMgr;
 using Module.fight.Component;
+using Module.fight.Core.Entities;
 using MVC.View;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -133,7 +134,7 @@ namespace Module.View
         }
         private void onUpdateHandCards(params object[] args)
         {
-            List<BattleCardData> newCards = args[0] as List<BattleCardData>;
+            List<CardEntity> newCards = args[0] as List<CardEntity>;
             bool isUndo = args.Length > 1 && args[1] is true;
 
             if (newCards == null) return;

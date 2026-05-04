@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Common.Defines;
 using Data.card;
 using Module.fight.Component;
+using Module.fight.Core.Entities;
 using UnityEngine;
 
 namespace Module.fight.CardMgr
@@ -29,10 +30,10 @@ namespace Module.fight.CardMgr
         public Dictionary<string, int> HeroActionPoints;
         
         [Header("手牌数据相关")]
-        public List<BattleCardData> HandCards;
-        public List<BattleCardData> DrawPile;
-        public List<BattleCardData> DiscardPile;
-        public Dictionary<BattleCardData, int> CardStarLevels;
+        public List<CardEntity> HandCards;
+        public List<CardEntity> DrawPile;
+        public List<CardEntity> DiscardPile;
+        public Dictionary<CardEntity, int> CardStarLevels;
     }
     
     //卡牌行动
@@ -42,7 +43,7 @@ namespace Module.fight.CardMgr
         public CardSnapshot Snapshot;
         
         [Header("PlayCard相关数据")]
-        public BattleCardData BattleCardData;
+        public CardEntity cardEntity;
         public int OriginalIndex;//卡牌在手牌中的原始位置
         public string TargetInstanceId;
         

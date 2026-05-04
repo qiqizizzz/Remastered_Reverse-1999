@@ -84,7 +84,7 @@ namespace Module.fight.CardMgr
             {
                 ActionType = CardActionType.PlayCard,
                 Snapshot = snapshot,
-                BattleCardData = item.BattleCardData,
+                cardEntity = item.BattleCardData,
                 OriginalIndex = index,
                 TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId
             };

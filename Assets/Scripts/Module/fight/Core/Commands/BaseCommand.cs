@@ -6,7 +6,7 @@
 * └──────────────────────────────────┘
 */
 
-using Module.fight.Core.Models;
+using Module.fight.Core.Entities;
 
 namespace Module.fight.Core.Commands
 {
@@ -17,5 +17,6 @@ namespace Module.fight.Core.Commands
         {
             throw new System.NotImplementedException();
         }
+
     }
 }

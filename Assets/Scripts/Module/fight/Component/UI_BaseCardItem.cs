@@ -10,6 +10,7 @@ using System;
 using Data.card;
 using Data.card.Extensions;
 using DG.Tweening;
+using Module.fight.Core.Entities;
 using MVC.View;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +20,7 @@ namespace Module.fight.Component
 {
     public class UI_BaseCardItem : BaseItem, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
-        public BattleCardData BattleCardData;
+        public CardEntity BattleCardData;
         
         [Header("事件回调相关")] 
         private Action<UI_BaseCardItem, PointerEventData> OnBeginDragCallback;
@@ -50,7 +51,7 @@ namespace Module.fight.Component
             _canvasGroup = GetComponent<CanvasGroup>();
         }
         
-        public void InitCardUI(BattleCardData data)
+        public void InitCardUI(CardEntity data)
         {
             BattleCardData = data;
             RefreshUI();

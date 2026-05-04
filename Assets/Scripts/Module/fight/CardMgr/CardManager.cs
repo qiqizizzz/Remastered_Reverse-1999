@@ -12,6 +12,7 @@ using Data.card;
 using Data.card.Extensions;
 using Data.level;
 using Module.Character;
+using Module.fight.Core.Entities;
 using UnityEngine;
 
 namespace Module.fight.CardMgr
@@ -26,18 +27,18 @@ namespace Module.fight.CardMgr
         private readonly Dictionary<CharacterDataSO, IReadOnlyList<CardDataSO>> m_cards;
         
         [Header("牌堆")]
-        private List<BattleCardData> drawPile; //抽牌堆
-        private List<BattleCardData> handCards; //手牌
-        private List<BattleCardData> discardPile; //弃牌堆
+        private List<CardEntity> drawPile; //抽牌堆
+        private List<CardEntity> handCards; //手牌
+        private List<CardEntity> discardPile; //弃牌堆
 
         public CardManager()
         {
             CardActionQueue = new CardActionQueue();
             
             m_cards = new Dictionary<CharacterDataSO, IReadOnlyList<CardDataSO>>();
-            drawPile = new List<BattleCardData>();
-            handCards = new List<BattleCardData>();
-            discardPile = new List<BattleCardData>();
+            drawPile = new List<CardEntity>();
+            handCards = new List<CardEntity>();
+            discardPile = new List<CardEntity>();
         }
         
         public void InitCards(LevelModel model)
@@ -62,7 +63,7 @@ namespace Module.fight.CardMgr
                     
                     for (int i = 0; i < singleCardMaxLimit; i++)
                     {
-                        drawPile.Add(new BattleCardData(card.Id));
+                        drawPile.Add(new CardEntity(card.Id));
                     }
                 }
             }
@@ -86,7 +87,7 @@ namespace Module.fight.CardMgr
                 {
                     if(card.CardType == CardType.Ultimate) continue;
                     
-                    handCards.Add(new BattleCardData(card.Id));
+                    handCards.Add(new CardEntity(card.Id));
                 }
             }
             
@@ -94,7 +95,7 @@ namespace Module.fight.CardMgr
         }
         
         //Fisher–Yates 洗牌算法
-        public void ShuffleCard(List<BattleCardData> pile)
+        public void ShuffleCard(List<CardEntity> pile)
         {
             for (int i = 0; i < pile.Count; i++)
             {
@@ -121,14 +122,14 @@ namespace Module.fight.CardMgr
                     ShuffleCard(drawPile);
                 }
                 
-                BattleCardData drawnCard = drawPile[^1];
+                CardEntity drawnCard = drawPile[^1];
                 drawPile.RemoveAt(drawPile.Count - 1);
                 handCards.Insert(0, drawnCard);
             }
         }
         
         //弃牌
-        public void DiscardCard(BattleCardData card)
+        public void DiscardCard(CardEntity card)
         {
             if (card.GetConfig().CardType == CardType.Ultimate)
                 return;
@@ -159,7 +160,7 @@ namespace Module.fight.CardMgr
                 {
                     if(cardData.CardType == CardType.Ultimate)
                     {
-                        handCards.Insert(0, new BattleCardData(cardData.Id));
+                        handCards.Insert(0, new CardEntity(cardData.Id));
                         return true;
                     }
                 }
@@ -176,7 +177,7 @@ namespace Module.fight.CardMgr
             drawPile.RemoveAll(card => card.GetConfig().OwnerId == character.Id);
             discardPile.RemoveAll(card => card.GetConfig().OwnerId == character.Id);
 
-            List<BattleCardData> removedHandCards = handCards.FindAll(card => card.GetConfig().OwnerId == character.Id);
+            List<CardEntity> removedHandCards = handCards.FindAll(card => card.GetConfig().OwnerId == character.Id);
 
             //通知UI销毁手牌UI
             if (removedHandCards.Count > 0)
@@ -187,7 +188,7 @@ namespace Module.fight.CardMgr
             GameApp.MessageCenter.PostEvent(EventDefines.OnRemoveDiedCharacterCard, removedHandCards);
         }
         
-        public void RemoveHandCard(BattleCardData card)
+        public void RemoveHandCard(CardEntity card)
         {
             int index = handCards.FindIndex(x => ReferenceEquals(x, card));
             if (index != -1)
@@ -205,10 +206,10 @@ namespace Module.fight.CardMgr
             var snapshot = new CardSnapshot()
             {
                 HeroActionPoints = new Dictionary<string, int>(),
-                HandCards = new List<BattleCardData>(handCards),
-                DrawPile = new List<BattleCardData>(drawPile),
-                DiscardPile = new List<BattleCardData>(discardPile),
-                CardStarLevels = new Dictionary<BattleCardData, int>()
+                HandCards = new List<CardEntity>(handCards),
+                DrawPile = new List<CardEntity>(drawPile),
+                DiscardPile = new List<CardEntity>(discardPile),
+                CardStarLevels = new Dictionary<CardEntity, int>()
             };
 
             //记录行动点
@@ -228,9 +229,9 @@ namespace Module.fight.CardMgr
         {
             if(snapshot == null) return;
             
-            handCards = new List<BattleCardData>(snapshot.HandCards);
-            drawPile = new List<BattleCardData>(snapshot.DrawPile);
-            discardPile = new List<BattleCardData>(snapshot.DiscardPile);
+            handCards = new List<CardEntity>(snapshot.HandCards);
+            drawPile = new List<CardEntity>(snapshot.DrawPile);
+            discardPile = new List<CardEntity>(snapshot.DiscardPile);
 
             //恢复行动点
             foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
@@ -276,7 +277,7 @@ namespace Module.fight.CardMgr
             return count;
         }
         
-        public List<BattleCardData> GetHandCards()
+        public List<CardEntity> GetHandCards()
         {
             return handCards;
         }

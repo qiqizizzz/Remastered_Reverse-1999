@@ -14,7 +14,7 @@ using Data.card;
 using Data.level;
 using Module.Character;
 using Module.fight.CardMgr;
-using Module.fight.Component;
+using Module.fight.Core.Entities;
 using Module.fight.Skill;
 using MVC;
 using MVC.Controller;
@@ -137,8 +137,8 @@ namespace Module.fight
                     
                     await CardSkillExecutor.ExecuteCardActionAsync(action);
 
-                    GameApp.CardManager.RemoveHandCard(action.BattleCardData);
-                    GameApp.CardManager.DiscardCard(action.BattleCardData);
+                    GameApp.CardManager.RemoveHandCard(action.cardEntity);
+                    GameApp.CardManager.DiscardCard(action.cardEntity);
                 }
                 
                 if (_isBattleActive)
@@ -177,10 +177,10 @@ namespace Module.fight
 
                     CardDataSO randomCard = cards[Random.Range(0, cards.Count)];
 
-                    BattleCardData battleCard = new BattleCardData(randomCard.Id);
+                    CardEntity battleCard = new CardEntity(randomCard.Id);
                     CardAction enemyAction = new CardAction()
                     {
-                        BattleCardData = battleCard,
+                        cardEntity = battleCard,
                         OriginalIndex = -1,
                         TargetInstanceId = ""
                     };

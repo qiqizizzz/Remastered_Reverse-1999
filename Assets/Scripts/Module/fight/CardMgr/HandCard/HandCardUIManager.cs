@@ -8,10 +8,10 @@
 
 using System;
 using System.Collections.Generic;
-using Data.card;
 using Data.card.Extensions;
 using DG.Tweening;
 using Module.fight.Component;
+using Module.fight.Core.Entities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -64,7 +64,7 @@ namespace Module.fight.CardMgr
             m_onClick = onClick;
         }
         
-        public void UpdateCardsUI(List<BattleCardData> newCards, bool isUndo, Action onLayoutStable)
+        public void UpdateCardsUI(List<CardEntity> newCards, bool isUndo, Action onLayoutStable)
         {
             if(newCards == null) return;
             
@@ -73,7 +73,7 @@ namespace Module.fight.CardMgr
             
             for (int i = 0; i < newCards.Count; i++)
             {
-                BattleCardData cardData = newCards[i];
+                CardEntity cardData = newCards[i];
                 
                 UI_BaseCardItem item = _handCardItems.Find(x => ReferenceEquals(x.BattleCardData, cardData));
                 
@@ -144,7 +144,7 @@ namespace Module.fight.CardMgr
 
         public void RemoveDiedCharacterCard(System.Object args)
         {
-            if (args is List<BattleCardData> { Count: >= 0 } removedCards)
+            if (args is List<CardEntity> { Count: >= 0 } removedCards)
             {
                 bool layoutChanged = false;
                 foreach (var cardData in removedCards)

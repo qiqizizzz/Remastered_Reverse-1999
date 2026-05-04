@@ -6,14 +6,16 @@
 * └──────────────────────────────────┘
 */
 
+using Module.fight.Core.Entities;
+
 namespace Data.card.Extensions
 {
-    public static class BattleCardDataExtension
+    public static class CardModelExtension
     {
         /// <summary>
         /// 扩展方法：直接获取卡牌的只读配置表数据
         /// </summary>
-        public static CardDataSO GetConfig(this BattleCardData cardData)
+        public static CardDataSO GetConfig(this CardEntity cardData)
         {
             return GameApp.ConfigManager.Card.Get(cardData.ConfigId);
         }

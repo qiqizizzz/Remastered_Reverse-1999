@@ -6,7 +6,7 @@
 * └──────────────────────────────────┘
 */
 
-using Module.fight.Core.Models;
+using Module.fight.Core.Entities;
 
 namespace Module.fight.Core.Commands
 {
