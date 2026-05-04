@@ -8,6 +8,8 @@
 
 using System;
 using System.Collections.Generic;
+using Data.card;
+using Data.card.Extensions;
 using DG.Tweening;
 using Module.fight.Component;
 using UnityEngine;
@@ -30,11 +32,14 @@ namespace Module.fight.CardMgr
         private event Action<UI_BaseCardItem, PointerEventData> m_onEndDrag;
         private event Action<UI_BaseCardItem> m_onClick;
 
-        public HandCardUIManager(Transform cardDeckTf ,CardPoolManager poolManager)
+        public HandCardUIManager(Transform cardDeckTf ,Transform cardActionTf, CardPoolManager poolManager)
         {
             _handCardItems = new List<UI_BaseCardItem>();
             _cardDeckTf = cardDeckTf;
+            _cardActionTf = cardActionTf;
             _poolManager = poolManager;
+            
+            _cardActionWidth = 550f;
         }
 
         public void Init()
@@ -75,7 +80,7 @@ namespace Module.fight.CardMgr
                 bool isNewCard = false;
                 if (item == null)
                 {
-                    item = _poolManager.GetCard(cardData.BaseData.CardType);
+                    item = _poolManager.GetCard(cardData.GetConfig().CardType);
 
                     if (item != null)
                     {

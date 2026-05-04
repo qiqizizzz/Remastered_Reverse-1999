@@ -6,21 +6,18 @@
 * └───────────────────────────────────────┘
 */
 
-using Data.card;
-using UnityEngine;
-
-namespace Module.fight.Component
+namespace Data.card
 {
     public class BattleCardData
     {
         private readonly string InstanceId;
-        public readonly CardDataSO BaseData;
+        public readonly int ConfigId;
         public int StarLevel;//星级
 
-        public BattleCardData(CardDataSO baseData)
+        public BattleCardData(int configId)
         {
             InstanceId = System.Guid.NewGuid().ToString();
-            BaseData = baseData;
+            ConfigId = configId;
             StarLevel = 1;
         }
 
@@ -36,7 +33,7 @@ namespace Module.fight.Component
             
             if (obj is BattleCardData otherCard)
             {
-                return BaseData.Equals(otherCard.BaseData) && StarLevel == otherCard.StarLevel;
+                return ConfigId.Equals(otherCard.ConfigId) && StarLevel == otherCard.StarLevel;
             }
             return false;
         }

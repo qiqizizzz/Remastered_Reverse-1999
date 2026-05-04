@@ -18,11 +18,12 @@ namespace Data
     {
         [Header("所有卡牌配置")]
         [FormerlySerializedAs("allCards")]
-        public List<CardDataSO> allCharacterCards = new List<CardDataSO>();
+        public List<CardDataSO> allHeroCards = new List<CardDataSO>();
         public List<CardDataSO> allEnemyCards = new List<CardDataSO>();
 
         [Header("所有角色/怪物配置")]
-        public List<CharacterDataSO> allCharacters = new List<CharacterDataSO>();
+        [FormerlySerializedAs("allCharacters")]
+        public List<CharacterDataSO> allHeroes = new List<CharacterDataSO>();
         public List<CharacterDataSO> allEnemies = new List<CharacterDataSO>();
 
         [Header("所有关卡配置")]

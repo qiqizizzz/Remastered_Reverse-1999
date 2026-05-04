@@ -112,7 +112,7 @@ namespace Module.Character
                     enemySpawnCount += monsterSpawnList[i].count;
                     for (int j = 0; j < monsterSpawnList[i].count; j++)
                     {
-                        enemyDataList.Add(GameApp.ConfigManager.GetEnemyData(monsterSpawnList[i].monsterId));
+                        enemyDataList.Add(GameApp.ConfigManager.Character.Get(monsterSpawnList[i].monsterId));
                     }
                 }
             }

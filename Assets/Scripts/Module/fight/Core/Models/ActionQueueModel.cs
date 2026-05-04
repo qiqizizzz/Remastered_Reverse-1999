@@ -1,14 +1,14 @@
 ﻿/*
 * ┌──────────────────────────────────┐
-* │  描    述: 战斗实体纯数据模型（前后端完全共用）                      
-* │  类    名: EntityModel.cs       
+* │  描    述: 行动队列数据模型                      
+* │  类    名: ActionQueueModel.cs       
 * │  创    建: By qiqizizzz
 * └──────────────────────────────────┘
 */
 
-namespace Module.fight.Core
+namespace Module.fight.Core.Models
 {
-    public class EntityModel
+    public class ActionQueueModel
     {
         
     }

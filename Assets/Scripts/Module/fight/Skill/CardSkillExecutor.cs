@@ -13,6 +13,7 @@ using Module.fight.CardMgr;
 using UnityEngine;
 using System.Threading.Tasks;
 using Common.Defines;
+using Data.card.Extensions;
 
 namespace Module.fight.Skill
 {
@@ -21,7 +22,7 @@ namespace Module.fight.Skill
         
         public static async Task ExecuteCardActionAsync(CardAction action)
         {
-            CardDataSO cardData = action.BattleCardData.BaseData;
+            CardDataSO cardData = action.BattleCardData.GetConfig();
             int starLevel = action.BattleCardData.StarLevel;
 
             BaseCharacter caster = GameApp.EntityManager.GetCharacterById(cardData.OwnerId);

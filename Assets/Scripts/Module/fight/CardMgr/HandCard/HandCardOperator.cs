@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using Data.card;
+using Data.card.Extensions;
 using Module.fight.Component;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -73,7 +74,7 @@ namespace Module.fight.CardMgr
             
             //刷新UI
             _handCardUIManager.RefreshHandCardLayout();
-            _handCardUIManager.AnimatePlayCard(item, index);
+            _handCardUIManager.AnimatePlayCard(item, _actionQueue.Count);
 
             //检查合成
             CheckAndTriggerComposite();
@@ -120,8 +121,8 @@ namespace Module.fight.CardMgr
             var handCards = GameApp.CardManager.GetHandCards();
 
             // 大招卡不参与交换
-            if (handCards[indexA].BaseData.CardType == CardType.Ultimate ||
-                handCards[indexB].BaseData.CardType == CardType.Ultimate)
+            if (handCards[indexA].GetConfig().CardType == CardType.Ultimate ||
+                handCards[indexB].GetConfig().CardType == CardType.Ultimate)
                 return;
 
             _handCardUIManager.SwapCards(indexA, indexB);
@@ -191,7 +192,7 @@ namespace Module.fight.CardMgr
         // 卡牌开始拖拽
         private void onCardBeginDrag(UI_BaseCardItem item, PointerEventData eventData)
         {
-            if (item.BattleCardData.BaseData.CardType == CardType.Ultimate || item.IsInQueue) return;
+            if (item.BattleCardData.GetConfig().CardType == CardType.Ultimate || item.IsInQueue) return;
 
             _dragStartIndex = _handCardUIManager.GetCardIndex(item);
             if (_actionQueue.CanPlayCard())

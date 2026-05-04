@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using Common.Defines;
+using Data.card;
 using Module.fight.Component;
 using UnityEngine;
 
@@ -88,6 +89,8 @@ namespace Module.fight.CardMgr
         
         #region 工具函数
         public bool CanPlayCard() => _actionStack.Count < MaxActionCount;
+        
+        public int Count => _actionStack.Count;
         
         public void Clear()
         {

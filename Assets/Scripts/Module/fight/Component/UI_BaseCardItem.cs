@@ -8,6 +8,7 @@
 
 using System;
 using Data.card;
+using Data.card.Extensions;
 using DG.Tweening;
 using MVC.View;
 using UnityEngine;
@@ -57,9 +58,9 @@ namespace Module.fight.Component
         
         protected virtual void RefreshUI()
         {
-            if(BattleCardData == null || BattleCardData.BaseData == null) return;
+            if(BattleCardData == null || BattleCardData.ConfigId == null) return;
 
-            _icon.sprite = BattleCardData.BaseData.CardSprite;
+            _icon.sprite = BattleCardData.GetConfig().CardSprite;
             
             _isDragging = false;
             IsInQueue = false;
@@ -223,9 +224,9 @@ namespace Module.fight.Component
         #endregion
         
         #region 工具函数
-        public int GetOwnerId() => BattleCardData.BaseData.OwnerId;
+        public int GetOwnerId() => BattleCardData.GetConfig().OwnerId;
         
-        public bool IsUltimateCard() => BattleCardData.BaseData.CardType == CardType.Ultimate;
+        public bool IsUltimateCard() => BattleCardData.GetConfig().CardType == CardType.Ultimate;
 
         public void RegisterDragAndClickEvent(Action<UI_BaseCardItem, PointerEventData> onBeginDrag,
             Action<UI_BaseCardItem, PointerEventData> onDrag,

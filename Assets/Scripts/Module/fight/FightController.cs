@@ -165,7 +165,7 @@ namespace Module.fight
                     if(!enemy.gameObject.activeSelf) continue;
 
                     //TODO:以后需要优化，另外选一个数组存敌人的卡牌等
-                    var cards = enemy.CharacterData.GetAllCards()
+                    var cards = enemy.CharacterData.GetCards()
                         .Where(card => card.CardType != CardType.Ultimate)
                         .ToList();
                     
@@ -177,7 +177,7 @@ namespace Module.fight
 
                     CardDataSO randomCard = cards[Random.Range(0, cards.Count)];
 
-                    BattleCardData battleCard = new BattleCardData(randomCard);
+                    BattleCardData battleCard = new BattleCardData(randomCard.Id);
                     CardAction enemyAction = new CardAction()
                     {
                         BattleCardData = battleCard,

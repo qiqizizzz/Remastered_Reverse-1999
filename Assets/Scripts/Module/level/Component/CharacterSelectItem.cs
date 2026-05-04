@@ -57,7 +57,7 @@ namespace Module.level.Component
         
         void ScrollCellIndex(int idx)
         {
-            _characterData = GameApp.ConfigManager.GetCharacterData(startIndex + idx);
+            _characterData = GameApp.ConfigManager.Character.Get(startIndex + idx);
             if(_characterData == null) return;
             
             gameObject.name = "Card_" + _characterData.Id;

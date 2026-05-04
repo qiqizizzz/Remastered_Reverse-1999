@@ -9,10 +9,9 @@
 using System.Collections.Generic;
 using Common.Defines;
 using Data.card;
+using Data.card.Extensions;
 using Data.level;
-using DG.Tweening;
 using Module.Character;
-using Module.fight.Component;
 using UnityEngine;
 
 namespace Module.fight.CardMgr
@@ -24,7 +23,7 @@ namespace Module.fight.CardMgr
         
         private readonly int singleCardMaxLimit = 3;//单张牌的最大限制数量
         private int m_maxHandCardCount = 8;
-        private readonly Dictionary<CharacterDataSO, List<CardDataSO>> m_cards;
+        private readonly Dictionary<CharacterDataSO, IReadOnlyList<CardDataSO>> m_cards;
         
         [Header("牌堆")]
         private List<BattleCardData> drawPile; //抽牌堆
@@ -35,7 +34,7 @@ namespace Module.fight.CardMgr
         {
             CardActionQueue = new CardActionQueue();
             
-            m_cards = new Dictionary<CharacterDataSO, List<CardDataSO>>();
+            m_cards = new Dictionary<CharacterDataSO, IReadOnlyList<CardDataSO>>();
             drawPile = new List<BattleCardData>();
             handCards = new List<BattleCardData>();
             discardPile = new List<BattleCardData>();
@@ -54,7 +53,7 @@ namespace Module.fight.CardMgr
             {
                 if(character == null) continue;
                 
-                List<CardDataSO> characterCards = character.GetAllCards();
+                IReadOnlyList<CardDataSO> characterCards = character.GetCards();
                 m_cards.Add(character, characterCards);
 
                 foreach (var card in characterCards)
@@ -63,7 +62,7 @@ namespace Module.fight.CardMgr
                     
                     for (int i = 0; i < singleCardMaxLimit; i++)
                     {
-                        drawPile.Add(new BattleCardData(card));
+                        drawPile.Add(new BattleCardData(card.Id));
                     }
                 }
             }
@@ -81,13 +80,13 @@ namespace Module.fight.CardMgr
 
             foreach (var kv in m_cards)
             {
-                List<CardDataSO> cards = kv.Value;
+                var cards = kv.Value;
 
                 foreach (var card in cards)
                 {
                     if(card.CardType == CardType.Ultimate) continue;
                     
-                    handCards.Add(new BattleCardData(card));
+                    handCards.Add(new BattleCardData(card.Id));
                 }
             }
             
@@ -131,10 +130,10 @@ namespace Module.fight.CardMgr
         //弃牌
         public void DiscardCard(BattleCardData card)
         {
-            if (card.BaseData.CardType == CardType.Ultimate)
+            if (card.GetConfig().CardType == CardType.Ultimate)
                 return;
 
-            var owner = GameApp.EntityManager.GetCharacterById(card.BaseData.OwnerId);
+            var owner = GameApp.EntityManager.GetCharacterById(card.GetConfig().OwnerId);
             if(owner == null || owner.CurrentStateType == CharacterStateType.Die) return;
             
             card.StarLevel = 1;
@@ -147,7 +146,7 @@ namespace Module.fight.CardMgr
             foreach (var card in handCards)
             {
                 //该角色大招已经在手牌了
-                if(card.BaseData.CardType == CardType.Ultimate && card.BaseData.OwnerId == ownerId)
+                if(card.GetConfig().CardType == CardType.Ultimate && card.GetConfig().OwnerId == ownerId)
                     return false;
             }
 
@@ -160,7 +159,7 @@ namespace Module.fight.CardMgr
                 {
                     if(cardData.CardType == CardType.Ultimate)
                     {
-                        handCards.Insert(0, new BattleCardData(cardData));
+                        handCards.Insert(0, new BattleCardData(cardData.Id));
                         return true;
                     }
                 }
@@ -174,15 +173,15 @@ namespace Module.fight.CardMgr
         {
             m_maxHandCardCount = Mathf.Max(0, m_maxHandCardCount - 2);
 
-            drawPile.RemoveAll(card => card.BaseData.OwnerId == character.Id);
-            discardPile.RemoveAll(card => card.BaseData.OwnerId == character.Id);
+            drawPile.RemoveAll(card => card.GetConfig().OwnerId == character.Id);
+            discardPile.RemoveAll(card => card.GetConfig().OwnerId == character.Id);
 
-            List<BattleCardData> removedHandCards = handCards.FindAll(card => card.BaseData.OwnerId == character.Id);
+            List<BattleCardData> removedHandCards = handCards.FindAll(card => card.GetConfig().OwnerId == character.Id);
 
             //通知UI销毁手牌UI
             if (removedHandCards.Count > 0)
             {
-                handCards.RemoveAll(card => card.BaseData.OwnerId == character.Id);
+                handCards.RemoveAll(card => card.GetConfig().OwnerId == character.Id);
             }
             
             GameApp.MessageCenter.PostEvent(EventDefines.OnRemoveDiedCharacterCard, removedHandCards);
@@ -271,7 +270,7 @@ namespace Module.fight.CardMgr
             int count = 0;
             foreach (var card in handCards)
             {
-                if(card.BaseData.CardType != CardType.Ultimate)
+                if(card.GetConfig().CardType != CardType.Ultimate)
                     count++;
             }
             return count;

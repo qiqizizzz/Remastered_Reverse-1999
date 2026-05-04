@@ -74,9 +74,9 @@ namespace Data.card
         public Property Property;//角色属性
         public List<int> Cards;//角色拥有的卡牌(一张大招牌和两张普通牌)
         
-        public List<CardDataSO> GetAllCards()
+        public IReadOnlyList<CardDataSO> GetCards()
         {
-            return GameApp.ConfigManager.GetCharacterCards(Id);
+            return GameApp.ConfigManager.Card.GetCharacterCards(Id) ?? Array.Empty<CardDataSO>();
         }
         
     }

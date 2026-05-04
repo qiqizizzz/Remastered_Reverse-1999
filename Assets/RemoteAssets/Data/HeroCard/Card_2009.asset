@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9bd64f1787e34da79f7ffb88fe87571f, type: 3}
-  m_Name: Card_2006
+  m_Name: Card_2009
   m_EditorClassIdentifier: 
   CardType: 5
-  Id: 2006
-  Name: "\u857E\u7F2A\u5B89\u7684\u5927\u62DB"
-  Description: "\u857E\u7F2A\u5B89\u7684\u5927\u62DB"
-  OwnerId: 1002
+  Id: 2009
+  Name: "\u7F2A\u5C14\u8D5B\u601D\u7684\u5927\u62DB"
+  Description: "\u7F2A\u5C14\u8D5B\u601D\u7684\u5927\u62DB"
+  OwnerId: 1003
   Effects:
   - EffectType: 0
     Value: 0
     Round: 0
-    Target: 0
+    Target: 1
     TargetCount: 0
-  CardSprite: {fileID: 21300000, guid: c41e661ad91e96e4983ed82e5d4e7aea, type: 3}
+  CardSprite: {fileID: 21300000, guid: fc8dcbe3de75cde4da1593334d7c8c23, type: 3}
   CardEffectPrefab: {fileID: 0}

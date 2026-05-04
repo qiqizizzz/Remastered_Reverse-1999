@@ -306,13 +306,13 @@ public class GameDataEditorWindow : EditorWindow
         if (mainTab == 0)
         {
             type = typeof(CardDataSO);
-            if (cardSubTab == 0) { propName = "allCharacterCards"; folder = "CharacterCard"; defaultId = 2001; }
+            if (cardSubTab == 0) { propName = "allHeroCards"; folder = "HeroCard"; defaultId = 2001; }
             else                 { propName = "allEnemyCards"; folder = "EnemyCard"; defaultId = 3001; }
         }
         else if (mainTab == 1)
         {
             type = typeof(CharacterDataSO);
-            if (entitySubTab == 0) { propName = "allCharacters"; folder = "Character"; defaultId = 1001; }
+            if (entitySubTab == 0) { propName = "allHeroes"; folder = "Hero"; defaultId = 1001; }
             else                   { propName = "allEnemies"; folder = "Enemy"; defaultId = 5001; }
         }
         else

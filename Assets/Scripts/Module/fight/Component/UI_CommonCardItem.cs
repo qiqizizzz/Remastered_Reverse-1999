@@ -7,6 +7,7 @@
 */
 
 using System.Collections.Generic;
+using Data.card.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -52,7 +53,7 @@ namespace Module.fight.Component
         {
             base.RefreshUI();
             
-            showTypeUI((int)BattleCardData.BaseData.CardType);
+            showTypeUI((int)BattleCardData.GetConfig().CardType);
             ShowStarUI(BattleCardData.StarLevel);
             SetBlockRaycasts(true);
         }

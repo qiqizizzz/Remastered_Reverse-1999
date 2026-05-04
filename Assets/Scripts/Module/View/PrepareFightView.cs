@@ -72,7 +72,7 @@ namespace Module.View
         {
             //args[0]为关卡id,根据关卡id显示对应的界面内容
             _currentLevelId = (int)args[0];
-            LevelDataSO dataSo = GameApp.ConfigManager.GetLevelData(_currentLevelId);
+            LevelDataSO dataSo = GameApp.ConfigManager.Level.Get(_currentLevelId);
             if (dataSo == null)
             {
                 Debug.LogError("未找到关卡数据, id: " + _currentLevelId);
@@ -108,12 +108,12 @@ namespace Module.View
             for (int i = 0; i < formationCards.Length; i++)
             {
                 string cardName = formationCards[i].GetCardName();
-                CharacterDataSO data = GameApp.ConfigManager.GetCharacterData(cardName);
+                CharacterDataSO data = GameApp.ConfigManager.Character.GetByName(cardName);
                 if(data == null) Debug.Log("未找到角色数据, name: " + cardName);
                 characters.Add(data); 
             }
 
-            monsterSpawnData = GameApp.ConfigManager.GetLevelMonsterSpawnData(_currentLevelId);
+            monsterSpawnData = GameApp.ConfigManager.Level.GetLevelMonsterSpawnData(_currentLevelId);
             
             LevelModel model = new LevelModel(characters, monsterSpawnData, _currentLevelId);
 

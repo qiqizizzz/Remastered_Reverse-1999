@@ -49,7 +49,7 @@ namespace Module.View
             _turnInfoText = Find<Text>("FightDetail/Round/Txt_turnNum");
 
             m_cardPoolManager = new CardPoolManager(_cardDeckTf);
-            m_handCardUIManager = new HandCardUIManager(_cardDeckTf, m_cardPoolManager);
+            m_handCardUIManager = new HandCardUIManager(_cardDeckTf, _cardActionTf, m_cardPoolManager);
 
             #region 队列UI
             List<Transform> m_UIActions = new List<Transform>();
