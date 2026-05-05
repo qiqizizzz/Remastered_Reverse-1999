@@ -31,7 +31,7 @@ namespace Module.fight.Core.Entities
         {
             InstanceId = System.Threading.Interlocked.Increment(ref s_globalInstanceIdCounter);
             ConfigId = configId;
-            StarLevel = 0;
+            StarLevel = 1;
         }
         
         public CardEntity(int instanceId, int configId, int starLevel = 0)

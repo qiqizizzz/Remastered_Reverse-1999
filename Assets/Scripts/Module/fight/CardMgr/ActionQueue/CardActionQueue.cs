@@ -33,7 +33,7 @@ namespace Module.fight.CardMgr
         public List<CardEntity> HandCards;
         public List<CardEntity> DrawPile;
         public List<CardEntity> DiscardPile;
-        public Dictionary<CardEntity, int> CardStarLevels;
+        public Dictionary<int, int> CardStarLevels;
     }
     
     //卡牌行动

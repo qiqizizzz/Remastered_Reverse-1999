@@ -40,6 +40,8 @@ namespace Module.fight.Component
         protected readonly float MinScale = 0.8f;
         private bool _isDragging;
         public bool IsInQueue;
+        private int _dragEndFrame;
+        public bool IsInCompositeAnim { get; set; }
         
         public void SetBlockRaycasts(bool value) => _canvasGroup.blocksRaycasts = value;
 
@@ -79,6 +81,7 @@ namespace Module.fight.Component
             SetVisible(false);
             _isDragging = false;
             IsInQueue = false;
+            IsInCompositeAnim = false;
             Rect.anchoredPosition = AnimConfig.SpawnPos;//放置在初始发牌点
             Rect.localScale = Vector3.one;
             Rect.localRotation = Quaternion.identity; 
@@ -88,7 +91,8 @@ namespace Module.fight.Component
         {
             SetVisible(true);
 
-            if (_isDragging)
+            // 拖拽中或合成动画中，跳过定位（避免打断当前动画）
+            if (_isDragging || IsInCompositeAnim)
             {
                 transform.SetAsLastSibling();
                 return;
@@ -213,12 +217,14 @@ namespace Module.fight.Component
             _canvasGroup.blocksRaycasts = true;
 
             _isDragging = false;
+            _dragEndFrame = Time.frameCount;
             OnEndDragCallback?.Invoke(this, eventData);
         }
         
         public void OnPointerClick(PointerEventData eventData)
         {
-            if(_isDragging || IsInQueue) return;
+            // 同一帧内不响应点击，防止拖拽结束后 Unity 事件系统误判为点击
+            if(_isDragging || IsInQueue || Time.frameCount == _dragEndFrame) return;
             
             OnClickCallback?.Invoke(this);
         }

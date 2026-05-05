@@ -137,8 +137,8 @@ namespace Module.fight
                     
                     await CardSkillExecutor.ExecuteCardActionAsync(action);
 
-                    GameApp.CardManager.RemoveHandCard(action.cardEntity);
-                    GameApp.CardManager.DiscardCard(action.cardEntity);
+                    //GameApp.CardManager.RemoveHandCard(action.cardEntity);
+                    //GameApp.CardManager.DiscardCard(action.cardEntity);
                 }
                 
                 if (_isBattleActive)
@@ -251,6 +251,19 @@ namespace Module.fight
             _isBattleActive = true;
             GameApp.CardManager.InitCards(_currentModel);
 
+            // 把生成的英雄同步到纯C#层的 CombatContext
+            // 注意：key 用 ConfigId（OwnerId），因为 CombatSystem 的行动点操作按 ConfigId 查找
+            foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
+            {
+                GameApp.CardManager.BattleContext.Entities[hero.CharacterData.Id.ToString()] = new CombatEntity(
+                    hero.InstanceID,
+                    hero.CharacterData.Id,
+                    1, // 或者从hero身上取归属
+                    hero.CurrentHp,
+                    hero.ActionPoint
+                );
+            }
+            
             GameApp.ViewManager.CloseAll();
             GameApp.ViewManager.Open(ViewType.FightingView);
         }
@@ -258,8 +271,7 @@ namespace Module.fight
         private void StartFirstRound()
         {
             GameApp.CardManager.PrepareHandsForNewLevel();
-            
-            ApplyFunc(EventDefines.UpdateHandCards, GameApp.CardManager.GetHandCards());
+            GameApp.CardManager.ProcessRoundStartHandFix();
             GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnStart);
         }
 
@@ -267,8 +279,7 @@ namespace Module.fight
         {
             int count = GameApp.CardManager.mMaxHandCardCount - GameApp.CardManager.GetNormalHandCardCount();
             GameApp.CardManager.DrawCard(count);
-            
-            ApplyFunc(EventDefines.UpdateHandCards, GameApp.CardManager.GetHandCards());
+            GameApp.CardManager.ProcessRoundStartHandFix();
         }
         #endregion
     }

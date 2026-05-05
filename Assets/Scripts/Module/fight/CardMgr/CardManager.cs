@@ -13,6 +13,8 @@ using Data.card.Extensions;
 using Data.level;
 using Module.Character;
 using Module.fight.Core.Entities;
+using Module.fight.Core.EventBus;
+using Module.fight.Core.Systems;
 using UnityEngine;
 
 namespace Module.fight.CardMgr
@@ -21,180 +23,117 @@ namespace Module.fight.CardMgr
     {
         public readonly CardActionQueue CardActionQueue;
         public string CurrentSelectedTargetId { get; set; }
+
+        [Header("数据基座与计算系统")] 
+        public readonly CombatContext BattleContext;
+        public readonly CardCombatSystem CombatSystem;
+        public readonly CombatEventBus  EventBus;
         
-        private readonly int singleCardMaxLimit = 3;//单张牌的最大限制数量
+        private const int LOCAL_PLAYER_ID = 1;
         private int m_maxHandCardCount = 8;
-        private readonly Dictionary<CharacterDataSO, IReadOnlyList<CardDataSO>> m_cards;
-        
-        [Header("牌堆")]
-        private List<CardEntity> drawPile; //抽牌堆
-        private List<CardEntity> handCards; //手牌
-        private List<CardEntity> discardPile; //弃牌堆
+        private List<int> _currentCharacterConfigIds;
 
         public CardManager()
         {
             CardActionQueue = new CardActionQueue();
+            EventBus = new CombatEventBus();
             
-            m_cards = new Dictionary<CharacterDataSO, IReadOnlyList<CardDataSO>>();
-            drawPile = new List<CardEntity>();
-            handCards = new List<CardEntity>();
-            discardPile = new List<CardEntity>();
+            BattleContext = new CombatContext();
+            CombatSystem = new CardCombatSystem(BattleContext, GameApp.ConfigManager.Card, EventBus);
+            _currentCharacterConfigIds = new List<int>();
+            
+            InitEventBus();
         }
         
         public void InitCards(LevelModel model)
         {
             m_maxHandCardCount = 8;
             CardActionQueue.Clear();
-            m_cards.Clear();
-            drawPile.Clear();
-            handCards.Clear();
-            discardPile.Clear();
+            _currentCharacterConfigIds.Clear();
 
             foreach (var character in model.Characters)
             {
-                if(character == null) continue;
-                
-                IReadOnlyList<CardDataSO> characterCards = character.GetCards();
-                m_cards.Add(character, characterCards);
-
-                foreach (var card in characterCards)
-                {
-                    if(card.CardType == CardType.Ultimate) continue;
-                    
-                    for (int i = 0; i < singleCardMaxLimit; i++)
-                    {
-                        drawPile.Add(new CardEntity(card.Id));
-                    }
-                }
+                if(character != null) _currentCharacterConfigIds.Add(character.Id);
             }
             
-            ShuffleCard(drawPile);
-            
-            //TODO:敌人的牌堆暂时不做
+            CombatSystem.InitDeck(LOCAL_PLAYER_ID, _currentCharacterConfigIds);
         }
 
+        private void InitEventBus()
+        {
+            // 桥接手牌变化 → 旧UI更新
+            EventBus.OnHandCardsUpdated += (playerId, handCards) =>
+            {
+                GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, handCards);
+            };
+
+            // 桥接合成事件
+            EventBus.OnCardMerged += (playerId, kept, destroyed, newStar) =>
+            {
+                GameApp.MessageCenter.PostEvent(EventDefines.OnHandCardMerged, new object[] { kept, destroyed });
+            };
+
+            // 桥接行动点变化 → 同步 HeroEntity 并刷新 HUD
+            EventBus.OnActionPointChanged += (playerId, ownerId, current) =>
+            {
+                var hero = GameApp.EntityManager.GetCharacterById(ownerId) as HeroEntity;
+                if (hero == null) return;
+                
+                hero.SetActionPoint(current);
+                hero.HUD?.UpdateActionPoint(current);
+            };
+        }
+        
         #region 主要操作
-        //新关卡开始时准备手牌
         public void PrepareHandsForNewLevel()
         {
-            //回合开始时（即新进入关卡时）,玩家当前手牌应为每个角色两张普通牌,加起来一共8张（4个角色）
-
-            foreach (var kv in m_cards)
-            {
-                var cards = kv.Value;
-
-                foreach (var card in cards)
-                {
-                    if(card.CardType == CardType.Ultimate) continue;
-                    
-                    handCards.Add(new CardEntity(card.Id));
-                }
-            }
-            
-            ShuffleCard(handCards);
-        }
-        
-        //Fisher–Yates 洗牌算法
-        public void ShuffleCard(List<CardEntity> pile)
-        {
-            for (int i = 0; i < pile.Count; i++)
-            {
-                int RandomIndex = Random.Range(i, pile.Count);
-                (pile[i], pile[RandomIndex]) = (pile[RandomIndex], pile[i]);
-            }
+            CombatSystem.PrepareHandsForNewLevel(LOCAL_PLAYER_ID, _currentCharacterConfigIds);
         }
 
-        //抽牌
         public void DrawCard(int count)
         {
-            for (int i = 0; i < count; i++)
-            {
-                if (drawPile.Count == 0)
-                {
-                    if (discardPile.Count == 0)
-                    {
-                        Debug.LogWarning("抽牌失败: 牌堆和弃牌堆都没有牌了");
-                        break;
-                    }
-                    
-                    drawPile.AddRange(discardPile);
-                    discardPile.Clear();
-                    ShuffleCard(drawPile);
-                }
-                
-                CardEntity drawnCard = drawPile[^1];
-                drawPile.RemoveAt(drawPile.Count - 1);
-                handCards.Insert(0, drawnCard);
-            }
+            CombatSystem.DrawCard(LOCAL_PLAYER_ID, count);
         }
         
-        //弃牌
         public void DiscardCard(CardEntity card)
         {
-            if (card.GetConfig().CardType == CardType.Ultimate)
-                return;
-
-            var owner = GameApp.EntityManager.GetCharacterById(card.GetConfig().OwnerId);
-            if(owner == null || owner.CurrentStateType == CharacterStateType.Die) return;
-            
-            card.StarLevel = 1;
-            discardPile.Add(card);
+            CombatSystem.DiscardCard(LOCAL_PLAYER_ID, card);
         }
         
-        //发放大招牌
         public bool TryGiveUltimateCard(int ownerId)
         {
-            foreach (var card in handCards)
-            {
-                //该角色大招已经在手牌了
-                if(card.GetConfig().CardType == CardType.Ultimate && card.GetConfig().OwnerId == ownerId)
-                    return false;
-            }
-
-            //寻找大招
-            foreach (var kv in m_cards)
-            {
-                if(kv.Key.Id != ownerId) continue;
-
-                foreach (var cardData in kv.Value)
-                {
-                    if(cardData.CardType == CardType.Ultimate)
-                    {
-                        handCards.Insert(0, new CardEntity(cardData.Id));
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            return CombatSystem.TryGiveUltimateCard(LOCAL_PLAYER_ID, ownerId);
         }
         
-        //移除死亡角色的卡牌
         public void RemoveDiedCharacterCard(CharacterDataSO character)
         {
             m_maxHandCardCount = Mathf.Max(0, m_maxHandCardCount - 2);
-
-            drawPile.RemoveAll(card => card.GetConfig().OwnerId == character.Id);
-            discardPile.RemoveAll(card => card.GetConfig().OwnerId == character.Id);
-
-            List<CardEntity> removedHandCards = handCards.FindAll(card => card.GetConfig().OwnerId == character.Id);
-
-            //通知UI销毁手牌UI
-            if (removedHandCards.Count > 0)
-            {
-                handCards.RemoveAll(card => card.GetConfig().OwnerId == character.Id);
-            }
-            
-            GameApp.MessageCenter.PostEvent(EventDefines.OnRemoveDiedCharacterCard, removedHandCards);
+            CombatSystem.RemoveCardsOfCharacter(LOCAL_PLAYER_ID, character.Id);
         }
         
-        public void RemoveHandCard(CardEntity card)
+        // 回合初始化时的手牌修正：自动合成 → 补牌 → 发大招
+        public void ProcessRoundStartHandFix()
         {
-            int index = handCards.FindIndex(x => ReferenceEquals(x, card));
-            if (index != -1)
+            // 连环合成
+            while (CombatSystem.CheckAndAutoMerge(LOCAL_PLAYER_ID)) { }
+            
+            // 补牌
+            int normalCount = GetNormalHandCardCount();
+            if (normalCount < mMaxHandCardCount)
             {
-                handCards[index].ClearData();
-                handCards.RemoveAt(index);
+                int needCount = mMaxHandCardCount - normalCount;
+                DrawCard(needCount);
+                // 补牌后可能又触发合成
+                while (CombatSystem.CheckAndAutoMerge(LOCAL_PLAYER_ID)) { }
+            }
+            
+            // 发大招
+            foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
+            {
+                if (hero.ActionPoint >= HeroEntity.MaxActionPoint)
+                {
+                    TryGiveUltimateCard(hero.CharacterData.Id);
+                }
             }
         }
         #endregion
@@ -203,23 +142,27 @@ namespace Module.fight.CardMgr
         //记录快照
         public CardSnapshot TakeSnapshot()
         {
+            var deck = BattleContext.PlayerDecks[LOCAL_PLAYER_ID];
             var snapshot = new CardSnapshot()
             {
                 HeroActionPoints = new Dictionary<string, int>(),
-                HandCards = new List<CardEntity>(handCards),
-                DrawPile = new List<CardEntity>(drawPile),
-                DiscardPile = new List<CardEntity>(discardPile),
-                CardStarLevels = new Dictionary<CardEntity, int>()
+                HandCards = new List<CardEntity>(deck.HandCards),
+                DrawPile = new List<CardEntity>(deck.DrawPile),
+                DiscardPile = new List<CardEntity>(deck.DiscardPile),
+                CardStarLevels = new Dictionary<int, int>()
             };
-
-            //记录行动点
-            foreach (var hero in GameApp.EntityManager.GetAliveHeroes()) 
-                snapshot.HeroActionPoints[hero.InstanceID] = hero.ActionPoint;
             
             //记录星级
-            foreach (var card in handCards) snapshot.CardStarLevels[card] = card.StarLevel;
-            foreach (var card in drawPile) snapshot.CardStarLevels[card] = card.StarLevel;
-            foreach (var card in discardPile) snapshot.CardStarLevels[card] = card.StarLevel;
+            foreach (var card in deck.HandCards) snapshot.CardStarLevels[card.InstanceId] = card.StarLevel;
+            foreach (var card in deck.DrawPile) snapshot.CardStarLevels[card.InstanceId] = card.StarLevel;
+            foreach (var card in deck.DiscardPile) snapshot.CardStarLevels[card.InstanceId] = card.StarLevel;
+            
+            // 记录行动点
+            snapshot.HeroActionPoints = new Dictionary<string, int>();
+            foreach (var kvp in BattleContext.Entities)
+            {
+                snapshot.HeroActionPoints[kvp.Key] = kvp.Value.ActionPoint;
+            }
 
             return snapshot;
         }
@@ -228,48 +171,45 @@ namespace Module.fight.CardMgr
         public void RestoreSnapshot(CardSnapshot snapshot)
         {
             if(snapshot == null) return;
+            var deck = BattleContext.PlayerDecks[LOCAL_PLAYER_ID];
             
-            handCards = new List<CardEntity>(snapshot.HandCards);
-            drawPile = new List<CardEntity>(snapshot.DrawPile);
-            discardPile = new List<CardEntity>(snapshot.DiscardPile);
+            deck.HandCards = new List<CardEntity>(snapshot.HandCards);
+            deck.DrawPile = new List<CardEntity>(snapshot.DrawPile);
+            deck.DiscardPile = new List<CardEntity>(snapshot.DiscardPile);
 
-            //恢复行动点
-            foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
-            {
-                hero.SetActionPoint(snapshot.HeroActionPoints[hero.InstanceID]);
-            }
-            
-            //恢复星级
             foreach (var kvp in snapshot.CardStarLevels)
             {
-                kvp.Key.StarLevel = kvp.Value;
+                var card = FindCardByInstanceId(kvp.Key);
+                if (card != null) card.StarLevel = kvp.Value;
             }
+
+            foreach (var kvp in snapshot.HeroActionPoints)
+            {
+                if (BattleContext.Entities.TryGetValue(kvp.Key, out var entity))
+                    entity.ActionPoint = kvp.Value;
+            }
+
+            // 统一广播一次手牌更新
+            EventBus.OnHandCardsUpdated?.Invoke(LOCAL_PLAYER_ID, new List<CardEntity>(deck.HandCards));
         }
 
-        #endregion
-        
-        #region 行动点相关
-        public void AddActionPointToOwner(int ownerId)
+        private CardEntity FindCardByInstanceId(int instanceId)
         {
-            var hero = GameApp.EntityManager.GetCharacterById(ownerId) as HeroEntity;
-            if (hero == null) return;
-
-            hero.AddActionPoint();
-        }
-
-        public void ClearActionPointOfOwner(int ownerId)
-        {
-            var hero = GameApp.EntityManager.GetCharacterById(ownerId) as HeroEntity;
-            if (hero == null) return;
-            hero.SetActionPoint(0);
+            var deck = BattleContext.PlayerDecks[LOCAL_PLAYER_ID];
+            var all = new List<CardEntity>();
+            all.AddRange(deck.HandCards);
+            all.AddRange(deck.DrawPile);
+            all.AddRange(deck.DiscardPile);
+            return all.Find(c => c.InstanceId == instanceId);
         }
         #endregion
 
         #region 工具函数
         public int GetNormalHandCardCount()
         {
+            var deck = BattleContext.PlayerDecks[LOCAL_PLAYER_ID];
             int count = 0;
-            foreach (var card in handCards)
+            foreach (var card in deck.HandCards)
             {
                 if(card.GetConfig().CardType != CardType.Ultimate)
                     count++;
@@ -279,13 +219,10 @@ namespace Module.fight.CardMgr
         
         public List<CardEntity> GetHandCards()
         {
-            return handCards;
+            return BattleContext.PlayerDecks[LOCAL_PLAYER_ID].HandCards;
         }
 
-        public int mMaxHandCardCount
-        {
-            get { return m_maxHandCardCount; }
-        }
+        public int mMaxHandCardCount => m_maxHandCardCount;
         #endregion
     }
 }

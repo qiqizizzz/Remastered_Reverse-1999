@@ -110,7 +110,7 @@ namespace Module.fight.CardMgr
             
             foreach (var oldItem in _handCardItems)
             {
-                if (!newHandItems.Contains(oldItem) && !oldItem.IsInQueue)
+                if (!newHandItems.Contains(oldItem) && !oldItem.IsInQueue && !oldItem.IsInCompositeAnim)
                 {
                     _poolManager.RecycleCard(oldItem);
                 }
@@ -235,6 +235,9 @@ namespace Module.fight.CardMgr
         {
             _handCardItems.Insert(index, item);
         }
+        
+        public UI_BaseCardItem FindUIByCardEntity(CardEntity cardEntity)
+            => _handCardItems.Find(x => ReferenceEquals(x.BattleCardData, cardEntity));
         #endregion
     }
 }

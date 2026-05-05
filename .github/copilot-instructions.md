@@ -1,4 +1,4 @@
-首先，和我说话需要用中文。
+首先,和我说话要用中文
 
 # Unity C# 开发规范
 
@@ -54,10 +54,10 @@ public class PlayerController : MonoBehaviour
     /// <param name="damageType">伤害类型</param>
     public void TakeDamage(float damage, DamageType damageType)
     {
-        if (m_isInvincible) return;
+        if (_isInvincible) return;
         float finalDamage = CalculateFinalDamage(damage, damageType);
-        m_currentHealth -= finalDamage;
-        OnHealthChanged?.Invoke(m_currentHealth);
+        _currentHealth -= finalDamage;
+        OnHealthChanged?.Invoke(_currentHealth);
     }
 }
 ```
@@ -102,34 +102,34 @@ public class PlayerController : MonoBehaviour
 ### 字段命名（个人规范）
 
 | 类型                       | 规则                                | 示例                            |
-| -------------------------- | ----------------------------------- | ------------------------------- |
-| **纯私有字段**             | `m_` + camelCase                    | `m_animator`, `m_currentHealth` |
-| **SerializeField private** | PascalCase                          | `MoveSpeed`, `JumpForce`        |
-| **protected 字段**         | camelCase                           | `stats`, `config`, `animator`   |
-| 常量                       | UPPER_SNAKE_CASE                    | `MAX_HEALTH`, `DEFAULT_SPEED`   |
-| 静态只读                   | `S` + PascalCase                    | `S_DefaultSpawnPoint`           |
+| -------------------------- | ---------------------------------- | ------------------------------- |
+| **纯私有字段**             | `_` + camelCase                    | `_animator`, `_currentHealth` |
+| **SerializeField private** | PascalCase                         | `MoveSpeed`, `JumpForce`        |
+| **protected 字段**         | camelCase                          | `stats`, `config`, `animator`   |
+| 常量                       | UPPER_SNAKE_CASE                   | `MAX_HEALTH`, `DEFAULT_SPEED`   |
+| 静态只读                   | `S` + PascalCase                   | `S_DefaultSpawnPoint`           |
 | 公共字段                   | 尽量避免，改用属性或 SerializeField | —                               |
 
 ```csharp
-// ✅ 纯私有字段 —— m_ 前缀
-private Rigidbody m_rigidbody;
-private bool m_isGrounded;
-private float m_currentHealth;
+// ✅ 纯私有字段 —— _ 前缀
+private Rigidbody _rigidbody;
+private bool _isGrounded;
+private float _currentHealth;
 
 // ✅ SerializeField private
 [SerializeField] private float MoveSpeed = 5f;
 [SerializeField] private LayerMask GroundLayer;
 
-// ❌ 错误：SerializeField 用了 m_ 前缀
-[SerializeField] private float m_MoveSpeed;
+// ❌ 错误：SerializeField 用了 _ 前缀
+[SerializeField] private float _MoveSpeed;
 
-// ❌ 错误：纯私有字段没有 m_ 前缀
+// ❌ 错误：纯私有字段没有 _ 前缀
 private Rigidbody rigidbody;
 ```
 
 ### Unity 特定命名
 
-- **Layer 变量**：`m_enemyLayer`（纯私有）
+- **Layer 变量**：`_enemyLayer`（纯私有）
 - **Tag 字符串常量**：`const string PLAYER_TAG = "Player";`
 - **Scene 名称**：PascalCase，如 `MainMenu`, `Level01`
 - **Animator 参数**：camelCase，如 `isWalking`, `attackTrigger`
@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour
 {
     // ==================== 常量与静态字段 ====================
     private const float MAX_HEALTH = 100f;
-    private static readonly WaitForSeconds m_respawnDelay = new WaitForSeconds(3f);
+    private static readonly WaitForSeconds _respawnDelay = new WaitForSeconds(3f);
 
     // ==================== 字段[外部设置] ====================
     [Header("移动设置")]
@@ -157,8 +157,8 @@ public class PlayerController : MonoBehaviour
     public bool IsGrounded { get; private set; }
 
     // ==================== 字段[私有] ====================
-    private Rigidbody m_rigidbody;
-    private Animator m_animator;
+    private Rigidbody _rigidbody;
+    private Animator _animator;
 
     // ==================== 事件 ====================
     public event Action<float> OnHealthChanged;
@@ -211,15 +211,15 @@ public class PlayerController : MonoBehaviour
 
 ### 组件获取
 
-- **Awake()** 中获取并缓存所有组件引用到 `m_` 字段
+- **Awake()** 中获取并缓存所有组件引用到 `_` 字段
 - 优先使用 `TryGetComponent` 避免空引用异常
 - 禁止在 `Update()` 等高频方法中调用 `GetComponent`
 
 ```csharp
 private void Awake()
 {
-    m_rigidbody = GetComponent<Rigidbody>();
-    if (!TryGetComponent<Animator>(out m_animator))
+    _rigidbody = GetComponent<Rigidbody>();
+    if (!TryGetComponent<Animator>(out _animator))
     {
 #if UNITY_EDITOR
         Debug.LogError($"[{nameof(PlayerController)}] 未找到 Animator：{gameObject.name}");
@@ -231,8 +231,8 @@ private void Awake()
 ### 空检查
 
 ```csharp
-if (m_target == null) return;       // ✅ 正确
-if (m_target is null) return;       // ❌ 错误，无法检测已销毁对象
+if (_target == null) return;       // ✅ 正确
+if (_target is null) return;       // ❌ 错误，无法检测已销毁对象
 ```
 
 ### 事件订阅与取消
@@ -257,13 +257,13 @@ private void OnDisable()
 ### 缓存原则
 
 ```csharp
-private Transform m_transform;
+private Transform _transform;
 
-private void Awake() { m_transform = transform; }
+private void Awake() { _transform = transform; }
 
 private void Update()
 {
-    m_transform.position += m_inputDirection * (MoveSpeed * Time.deltaTime);
+    _transform.position += _inputDirection * (MoveSpeed * Time.deltaTime);
 }
 ```
 
@@ -273,7 +273,7 @@ private void Update()
 // 所有物理操作必须放在 FixedUpdate 中执行
 private void FixedUpdate()
 {
-    m_rigidbody.MovePosition(m_rigidbody.position + m_velocity * Time.fixedDeltaTime);
+    _rigidbody.MovePosition(_rigidbody.position + _velocity * Time.fixedDeltaTime);
 }
 ```
 
@@ -283,7 +283,7 @@ private void FixedUpdate()
 private void fire()
 {
     GameObject bullet = BulletPool.Instance.GetBullet();
-    bullet.transform.SetPositionAndRotation(m_firePoint.position, m_firePoint.rotation);
+    bullet.transform.SetPositionAndRotation(_firePoint.position, _firePoint.rotation);
     bullet.SetActive(true);
 }
 ```
@@ -301,13 +301,13 @@ if (other.CompareTag(ENEMY_TAG)) { }
 ### 协程优化
 
 ```csharp
-private static readonly WaitForSeconds m_waitOneSecond = new WaitForSeconds(1f);
+private static readonly WaitForSeconds _waitOneSecond = new WaitForSeconds(1f);
 
 private IEnumerator CountdownCoroutine(int seconds)
 {
     for (int i = seconds; i > 0; i--)
     {
-        yield return m_waitOneSecond;
+        yield return _waitOneSecond;
         OnCountdownTick?.Invoke(i);
     }
 }
@@ -359,7 +359,7 @@ float MoveSpeed;                            // ❌ 缺少访问修饰符
 ```csharp
 #if UNITY_EDITOR
 Debug.Log($"[{nameof(PlayerController)}] 玩家已死亡");
-Debug.LogWarning($"[{nameof(PlayerController)}] 血量低于阈值：{m_currentHealth}");
+Debug.LogWarning($"[{nameof(PlayerController)}] 血量低于阈值：{_currentHealth}");
 Debug.LogError($"[{nameof(PlayerController)}] 未找到 Animator：{gameObject.name}");
 #endif
 ```
@@ -457,17 +457,17 @@ if (prefab == null) Debug.LogError("[YourClass] 资源加载失败：Prefabs/UI/
 | 场景               | 说明                     | 示例                                |
 | ------------------ | ------------------------ | ----------------------------------- |
 | **可选引用**       | 该字段本身就是可有可无的 | 可选特效、可选音效组件              |
-| **运行时动态对象** | 对象可能已被销毁         | `if (m_target == null) return;`     |
+| **运行时动态对象** | 对象可能已被销毁         | `if (_target == null) return;`     |
 | **外部传入参数**   | 调用方可能传 null        | 公共 API 的参数校验                 |
 | **单例访问**       | 场景切换时单例可能不存在 | `if (GameManager.Instance != null)` |
 
 ```csharp
 // ✅ 可选特效，允许判空
-if (m_hitEffect != null)
-    m_hitEffect.Play();
+if (_hitEffect != null)
+    _hitEffect.Play();
 
 // ✅ 运行时目标可能已销毁
-if (m_target == null) return;
+if (_target == null) return;
 
 // ✅ 事件取消订阅，单例可能已销毁
 private void OnDisable()
@@ -492,7 +492,7 @@ private void OnDisable()
 | 公共字段暴露给外部                 | 使用 `[SerializeField] private` + 属性            |
 | 缺少访问修饰符                     | 所有成员显式声明                                  |
 | 缺少文件头注释块                   | 每个 `.cs` 文件顶部必须添加标准文件头             |
-| SerializeField 字段用 `m_` 前缀    | SerializeField 统一使用 PascalCase                |
-| 纯私有字段无前缀                   | 纯私有字段统一使用 `m_` 前缀                      |
+| SerializeField 字段用 `_` 前缀    | SerializeField 统一使用 PascalCase                |
+| 纯私有字段无前缀                   | 纯私有字段统一使用 `_` 前缀                      |
 | 必要引用判空后静默跳过             | `#if UNITY_EDITOR` 内用 `Debug.LogError` 主动报错 |
 | 日志散落在 Release 构建中          | 所有日志包裹在 `#if UNITY_EDITOR` 中              |

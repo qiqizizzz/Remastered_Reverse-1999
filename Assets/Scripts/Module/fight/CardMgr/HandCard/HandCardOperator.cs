@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Data.card;
 using Data.card.Extensions;
 using Module.fight.Component;
+using Module.fight.Core.Entities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -19,6 +20,7 @@ namespace Module.fight.CardMgr
     public class HandCardOperator
     {
         private readonly HandCardUIManager _handCardUIManager;
+        private const int LOCAL_PLAYER_ID = 1;
         
         [Header("行动队列相关")]
         private readonly CardActionQueue _actionQueue;
@@ -26,6 +28,7 @@ namespace Module.fight.CardMgr
         
         [Header("UI相关")]
         private int _dragStartIndex = -1;
+        private float _lastDragEndTime;
         
         [Header("快照")]
         private CardSnapshot _tempSnapshot;
@@ -46,6 +49,8 @@ namespace Module.fight.CardMgr
         {
             _handCardUIManager.SetCardEventHandlers(
                 onCardBeginDrag, onCardDrag, onCardEndDrag, onCardClick);
+            
+            GameApp.CardManager.EventBus.OnCardMerged += OnCardMergedFromCore;
         }
 
         public void Clear()
@@ -53,7 +58,27 @@ namespace Module.fight.CardMgr
             _uiActionStack.Clear();
             _dragStartIndex = -1;
             _tempSnapshot = null;
+            
+            GameApp.CardManager.EventBus.OnCardMerged -= OnCardMergedFromCore;
         }
+
+        #region 卡牌事件
+        private void OnCardMergedFromCore(int playerId, CardEntity kept, CardEntity destroyed, int newStarLevel)
+        {
+            // 根据 CardEntity 找到对应的 UI 项
+            var uiKept = _handCardUIManager.FindUIByCardEntity(kept);
+            var uiDestroyed = _handCardUIManager.FindUIByCardEntity(destroyed);
+
+            if (uiKept == null || uiDestroyed == null) return;
+
+            uiDestroyed.IsInCompositeAnim = true;
+            _handCardUIManager.AnimateCompositeCard(uiKept, uiDestroyed, newStarLevel, () =>
+            {
+                uiDestroyed.IsInCompositeAnim = false;
+                _handCardUIManager.RefreshHandCardLayout();
+            });
+        }
+        #endregion
         
         #region 卡牌主要操作
         #region 出牌
@@ -66,51 +91,35 @@ namespace Module.fight.CardMgr
                 return;
             }
 
-            //获取快照,修改数据 
-            CardSnapshot snapshot = GameApp.CardManager.TakeSnapshot();
+            var snapshot = GameApp.CardManager.TakeSnapshot();
+            var card = item.BattleCardData;
+
+            // 1. 先处理UI：移出手牌区并播放入队动画
+            // 必须放在 PlayCard 之前，否则 UpdateCardsUI 会回收这个 item
             _handCardUIManager.RemoveCardAt(index);
-            GameApp.CardManager.GetHandCards().Remove(item.BattleCardData);
             _uiActionStack.Push(item);
-            
-            //刷新UI
-            _handCardUIManager.RefreshHandCardLayout();
             _handCardUIManager.AnimatePlayCard(item, _actionQueue.Count);
 
-            //检查合成
-            CheckAndTriggerComposite();
+            // 2. 再调用纯C#层处理数据（内部触发事件时 item 已 IsInQueue=true，不会被回收）
+            bool isUltimate = card.GetConfig().CardType == CardType.Ultimate;
+            GameApp.CardManager.CombatSystem.PlayCard(
+                LOCAL_PLAYER_ID, card, GameApp.CardManager.CurrentSelectedTargetId);
 
-            //创建行动
-            CardAction action = new CardAction()
+            // 3. 创建行动（用于后续结算和撤销）
+            var action = new CardAction()
             {
                 ActionType = CardActionType.PlayCard,
                 Snapshot = snapshot,
-                cardEntity = item.BattleCardData,
+                cardEntity = card,
                 OriginalIndex = index,
                 TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId
             };
 
             bool isQueueFull = _actionQueue.PushAction(action);
             OnRefreshMoveIndicators?.Invoke();
-
-            //行动点处理
-            bool isUltimate = item.IsUltimateCard();
-            if (isUltimate)
-            {
-                // 打出大招后，清空该玩家的行动点
-                GameApp.CardManager.ClearActionPointOfOwner(item.GetOwnerId());
-            }
-            else
-            {
-                // 打出普通卡牌，增加行动点
-                GameApp.CardManager.AddActionPointToOwner(item.GetOwnerId());
-            }
-            
             OnRefreshActionPointUI?.Invoke();
 
-            if (isQueueFull)
-            {
-                OnQueueFull?.Invoke();
-            }
+            if (isQueueFull) OnQueueFull?.Invoke();
         }
         #endregion
 
@@ -128,51 +137,7 @@ namespace Module.fight.CardMgr
             _handCardUIManager.SwapCards(indexA, indexB);
 
             // 数据层同步交换
-            (handCards[indexA], handCards[indexB]) = (handCards[indexB], handCards[indexA]);
-            _handCardUIManager.RefreshHandCardLayout();
-        }
-        #endregion
-
-        #region 合成卡牌
-        // 合成两张相邻手牌
-        private void compositeCard(int indexA, int indexB, Action onCompleteAllMerges = null)
-        {
-            UI_BaseCardItem cardA = _handCardUIManager.GetCardAt(indexA);
-            UI_BaseCardItem cardB = _handCardUIManager.GetCardAt(indexB);
-            
-            // 保留cardA并升星，cardB销毁
-            cardA.BattleCardData.StarLevel += 1;
-            _handCardUIManager.RemoveCard(cardB);
-            GameApp.CardManager.RemoveHandCard(cardB.BattleCardData);
-            
-            //合成动画
-            _handCardUIManager.AnimateCompositeCard(cardA, cardB, cardA.BattleCardData.StarLevel, () =>
-            {
-                _handCardUIManager.RefreshHandCardLayout();
-                GameApp.CardManager.AddActionPointToOwner(cardA.GetOwnerId());
-                OnRefreshActionPointUI?.Invoke();
-
-                CheckAndTriggerComposite(onCompleteAllMerges);
-            });
-        }
-        //检查并触发相邻相同卡牌的合成
-        public void CheckAndTriggerComposite(Action onCompleteAllMerges = null)
-        {
-            for (int i = 0; i < _handCardUIManager.Count - 1; i++)
-            {
-                var cardA = _handCardUIManager.GetCardAt(i);
-                var cardB = _handCardUIManager.GetCardAt(i + 1);
-
-                if (cardA == null || cardB == null) continue;
-
-                if (cardA.BattleCardData.Equals(cardB.BattleCardData))
-                {
-                    compositeCard(i, i + 1, onCompleteAllMerges);
-                    return;
-                }
-            }
-
-            onCompleteAllMerges?.Invoke();
+            GameApp.CardManager.CombatSystem.SwapHandCards(LOCAL_PLAYER_ID, indexA, indexB);
         }
         #endregion
 
@@ -237,14 +202,17 @@ namespace Module.fight.CardMgr
         private void onCardEndDrag(UI_BaseCardItem item, PointerEventData eventData)
         {
             if (item.IsInQueue) return;
+            
+            _lastDragEndTime = Time.time;
 
             int index = _handCardUIManager.GetCardIndex(item);
             item.MoveToIndex(index, _handCardUIManager.Count);
 
-            // 如果位置确实改变了 && 有行动点
             if (_dragStartIndex != -1 && _dragStartIndex != index && _actionQueue.CanPlayCard())
             {
-                CardAction action = new CardAction()
+                // 拖拽过程中的 swapCard 已经同步交换了UI和数据层
+                // 这里只记录行动，不再交换数据，避免把数据层交换回起点
+                var action = new CardAction()
                 {
                     ActionType = CardActionType.MoveCard,
                     Snapshot = _tempSnapshot,
@@ -253,35 +221,33 @@ namespace Module.fight.CardMgr
                 };
 
                 bool isQueueFull = _actionQueue.PushAction(action);
-
                 OnRefreshMoveIndicators?.Invoke();
-                
-                //只有位置真实改变了才增加行动点
-                GameApp.CardManager.AddActionPointToOwner(item.GetOwnerId());
-                OnRefreshActionPointUI?.Invoke();
-                
-                CheckAndTriggerComposite();
 
-                if (isQueueFull)
-                {
-                    OnQueueFull?.Invoke();
-                }
+                // 移牌增加行动点
+                GameApp.CardManager.CombatSystem.AddActionPoint(LOCAL_PLAYER_ID, item.GetOwnerId(), 1);
+                OnRefreshActionPointUI?.Invoke();
+
+                // 拖拽结束后检查合成
+                GameApp.CardManager.CombatSystem.CheckAndAutoMerge(LOCAL_PLAYER_ID);
+
+                if (isQueueFull) OnQueueFull?.Invoke();
             }
             else
             {
-                // 位置没变或者没有行动点了，只进行基础检查
                 _handCardUIManager.RefreshHandCardLayout();
             }
 
-            
             _dragStartIndex = -1;
             _tempSnapshot = null;
-            
         }
 
         // 卡牌点击
         private void onCardClick(UI_BaseCardItem item)
         {
+            // 拖拽结束后短时间内忽略点击，防止 Unity 事件系统误判为点击
+            // 0.5s 确保合成动画播放期间不会被误触发出
+            if (Time.time - _lastDragEndTime < 0.5f) return;
+            
             int index = _handCardUIManager.GetCardIndex(item);
             if (index != -1)
                 playCard(item, index);

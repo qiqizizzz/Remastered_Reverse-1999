@@ -18,11 +18,11 @@ namespace Module.fight.Core.Entities
         /// </summary>
         public int OwnerPlayerId { get; set; }
         
-        public int CurrentHp { get; set; }
+        public float CurrentHp { get; set; }
         
         public int ActionPoint { get; set; }
 
-        public CombatEntity(string instanceId, int configId, int ownerPlayerId, int currentHp, int actionPoint)
+        public CombatEntity(string instanceId, int configId, int ownerPlayerId, float currentHp, int actionPoint)
         {
             InstanceId = instanceId;
             ConfigId = configId;

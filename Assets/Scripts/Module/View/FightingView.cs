@@ -8,17 +8,13 @@
 
 using System;
 using System.Collections.Generic;
-using Common;
 using Common.Defines;
-using Data.card;
 using DG.Tweening;
 using Module.Character;
 using Module.fight.CardMgr;
-using Module.fight.Component;
 using Module.fight.Core.Entities;
 using MVC.View;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Module.View
@@ -41,6 +37,7 @@ namespace Module.View
         private Transform _cardDeckTf;
 
         private Action m_refreshMoveIndicatorsHandler;
+        private Action<object> m_onUpdateHandCardsHandler;
 
         #region 生命周期
         protected override void OnAwake()
@@ -75,7 +72,8 @@ namespace Module.View
 
         protected override void OnStart()
         {
-            Controller.RegisterFunc(EventDefines.UpdateHandCards, onUpdateHandCards);
+            m_onUpdateHandCardsHandler = args => onUpdateHandCards(new object[] { args });
+            GameApp.MessageCenter.AddEvent(EventDefines.UpdateHandCards, m_onUpdateHandCardsHandler);
             Controller.RegisterFunc(EventDefines.ExitLevel, onExitLevel);
 
             m_actionQueueUIManager.Init();
@@ -100,7 +98,8 @@ namespace Module.View
 
         protected override void OnDestroy()
         {
-            Controller.UnRegisterFunc(EventDefines.UpdateHandCards, onUpdateHandCards);
+            if (m_onUpdateHandCardsHandler != null)
+                GameApp.MessageCenter.RemoveEvent(EventDefines.UpdateHandCards, m_onUpdateHandCardsHandler);
             Controller.UnRegisterFunc(EventDefines.ExitLevel, onExitLevel);
 
             m_cardPoolManager.UnLoadAll();
@@ -139,46 +138,10 @@ namespace Module.View
 
             if (newCards == null) return;
 
-            m_handCardUIManager.UpdateCardsUI(newCards, isUndo, () =>
-            {
-                if (!isUndo)
-                    processPostHandUpdate();
-            });
+            m_handCardUIManager.UpdateCardsUI(newCards, isUndo, null);
         }
         
-        //手牌布局稳定后的后置处理：合成检查 → 补牌
-        private void processPostHandUpdate()
-        {
-            m_handCardOperator.CheckAndTriggerComposite(() =>
-            {
-                int normalCount = GameApp.CardManager.GetNormalHandCardCount();
-                if (normalCount < GameApp.CardManager.mMaxHandCardCount)
-                {
-                    int needCount = GameApp.CardManager.mMaxHandCardCount - normalCount;
-                    int beforeCount = GameApp.CardManager.GetHandCards().Count;
 
-                    GameApp.CardManager.DrawCard(needCount);
-
-                    if (GameApp.CardManager.GetHandCards().Count > beforeCount)
-                        onUpdateHandCards(GameApp.CardManager.GetHandCards());
-                }
-                else
-                {
-                    bool needUpdateHand = false;
-                    foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
-                    {
-                        if (hero.ActionPoint >= HeroEntity.MaxActionPoint)
-                        {
-                            if(GameApp.CardManager.TryGiveUltimateCard(hero.CharacterData.Id))
-                                needUpdateHand = true;
-                        }
-                    }
-                    
-                    if(needUpdateHand)
-                        onUpdateHandCards(GameApp.CardManager.GetHandCards());
-                }
-            });
-        }
         #endregion
 
         #region 队列事件

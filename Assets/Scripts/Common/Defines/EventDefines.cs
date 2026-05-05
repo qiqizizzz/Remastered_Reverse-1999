@@ -51,5 +51,8 @@ namespace Common.Defines
         public const string OnCharacterDie = "OnCharacterDie";
         public const string OnRemoveDiedCharacterCard = "OnRemoveDiedCharacterCard";
         public const string OnHandCardChanged = "OnHandCardChanged";
+        
+        //战斗卡牌相关事件
+        public const string OnHandCardMerged = "OnHandCardMerged";
     }
 }
