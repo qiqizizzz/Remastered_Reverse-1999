@@ -201,22 +201,26 @@ namespace Module.fight.CardMgr
         // 卡牌结束拖拽
         private void onCardEndDrag(UI_BaseCardItem item, PointerEventData eventData)
         {
-            if (item.IsInQueue) return;
-            
             _lastDragEndTime = Time.time;
+            int safeStartIndex = _dragStartIndex; 
+            _dragStartIndex = -1;                 
+
+            if (item.IsInQueue) 
+            {
+                _tempSnapshot = null;
+                return;
+            }
 
             int index = _handCardUIManager.GetCardIndex(item);
             item.MoveToIndex(index, _handCardUIManager.Count);
 
-            if (_dragStartIndex != -1 && _dragStartIndex != index && _actionQueue.CanPlayCard())
+            if (safeStartIndex != -1 && safeStartIndex != index && _actionQueue.CanPlayCard())
             {
-                // 拖拽过程中的 swapCard 已经同步交换了UI和数据层
-                // 这里只记录行动，不再交换数据，避免把数据层交换回起点
                 var action = new CardAction()
                 {
                     ActionType = CardActionType.MoveCard,
                     Snapshot = _tempSnapshot,
-                    MoveFromIndex = _dragStartIndex,
+                    MoveFromIndex = safeStartIndex,
                     MoveToIndex = index
                 };
 
@@ -237,16 +241,15 @@ namespace Module.fight.CardMgr
                 _handCardUIManager.RefreshHandCardLayout();
             }
 
-            _dragStartIndex = -1;
             _tempSnapshot = null;
         }
 
         // 卡牌点击
         private void onCardClick(UI_BaseCardItem item)
         {
-            // 拖拽结束后短时间内忽略点击，防止 Unity 事件系统误判为点击
-            // 0.5s 确保合成动画播放期间不会被误触发出
-            if (Time.time - _lastDragEndTime < 0.5f) return;
+            if (_dragStartIndex != -1) return;
+
+            if (Time.time - _lastDragEndTime < 0.2f) return;
             
             int index = _handCardUIManager.GetCardIndex(item);
             if (index != -1)
