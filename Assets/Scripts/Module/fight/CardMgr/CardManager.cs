@@ -51,6 +51,9 @@ namespace Module.fight.CardMgr
             CardActionQueue.Clear();
             _currentCharacterConfigIds.Clear();
 
+            BattleContext.Entities.Clear();
+            BattleContext.SequenceCardInstanceId = 1000;
+            
             foreach (var character in model.Characters)
             {
                 if(character != null) _currentCharacterConfigIds.Add(character.Id);

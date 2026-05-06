@@ -12,6 +12,7 @@ using Common.Defines;
 using DG.Tweening;
 using Module.Character;
 using Module.fight.CardMgr;
+using Module.fight.Component;
 using Module.fight.Core.Commands;
 using Module.fight.Core.Entities;
 using MVC.View;
@@ -198,11 +199,12 @@ namespace Module.View
 
         private void onExitLevel(params object[] args)
         {
-            // 注意:所有离开关卡的行为都需要经过这个事件,不然动画UI等效果会出错
             _handCardOperator.Clear();
             _handCardUIManager.Clear();
             _cardPoolManager.RecycleAllCards();
-            onHideAllHands(null);
+            _commandProcessor?.Clear();
+
+            GameApp.CardManager.CardActionQueue.Clear();
         }
         #endregion
     }

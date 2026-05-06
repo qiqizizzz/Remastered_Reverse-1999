@@ -76,6 +76,11 @@ namespace Module.fight.Component
         {
             Rect.DOKill();
             transform.DOKill(); 
+            if (_canvasGroup != null) 
+            {
+                _canvasGroup.DOKill();
+                _canvasGroup.alpha = 1f;
+            }
             
             SetBlockRaycasts(true);
             SetVisible(false);

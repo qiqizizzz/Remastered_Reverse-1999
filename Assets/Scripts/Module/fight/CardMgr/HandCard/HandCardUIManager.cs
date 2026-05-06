@@ -49,6 +49,12 @@ namespace Module.fight.CardMgr
 
         public void Clear()
         {
+            foreach (var item in _handCardItems)
+            {
+                if (item != null)
+                    item.HideCard();
+            }
+            
             _handCardItems.Clear();
         }
 
