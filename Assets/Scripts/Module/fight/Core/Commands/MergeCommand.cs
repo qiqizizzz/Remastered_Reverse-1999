@@ -23,13 +23,13 @@ namespace Module.fight.Core.Commands
             NewStarLevel = newStarLevel;
         }
 
-        public override bool Execute(CommandExecutionContext context)
+        public override bool Execute(CombatContext context)
         {
             //TODO
             return true;
         }
 
-        public override void Undo(CommandExecutionContext context)
+        public override void Undo(CombatContext context)
         {
             //TODO
         }

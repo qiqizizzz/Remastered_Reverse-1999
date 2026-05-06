@@ -9,12 +9,13 @@
 using System;
 using System.Collections.Generic;
 using Module.fight.CardMgr;
+using Module.fight.Core.Entities;
 
 namespace Module.fight.Core.Commands
 {
     public class CombatCommandProcessor
     {
-        private readonly CommandExecutionContext _ctx;
+        private readonly CombatContext _ctx;
         private readonly Stack<BaseCommand> _history;
         private readonly int _maxActionCount;
         
@@ -25,7 +26,7 @@ namespace Module.fight.Core.Commands
         public bool CanExecute => _history.Count < _maxActionCount;
 
         public CombatCommandProcessor(
-            CommandExecutionContext ctx,
+            CombatContext ctx,
             Func<CardSnapshot> takeSnapshot,
             Action<CardSnapshot> restoreSnapshot,
             int maxActionCount = 4)

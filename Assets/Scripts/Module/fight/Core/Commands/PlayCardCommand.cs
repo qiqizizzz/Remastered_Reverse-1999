@@ -23,14 +23,13 @@ namespace Module.fight.Core.Commands
             OriginalHandIndex = originalHandIndex;
         }
 
-        public override bool Execute(CommandExecutionContext ctx)
+        public override bool Execute(CombatContext ctx)
         {
-            ctx.CombatSystem.PlayCard(SenderPlayerId, Card, TargetInstanceId);
             
             return true;
         }
 
-        public override void Undo(CommandExecutionContext ctx)
+        public override void Undo(CombatContext ctx)
         {
             //TODO
         }
