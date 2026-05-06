@@ -84,8 +84,9 @@ namespace Module.View
 
             _commandProcessor = new CombatCommandProcessor(GameApp.CardManager.BattleContext,
                 GameApp.CardManager.TakeSnapshot, GameApp.CardManager.RestoreSnapshot);
-            
-            _handCardOperator = new HandCardOperator(_handCardUIManager, _commandProcessor);
+
+            _handCardOperator =
+                new HandCardOperator(_handCardUIManager, _commandProcessor, GameApp.CardManager.CardActionQueue);
             _handCardOperator.Init();
 
             m_refreshMoveIndicatorsHandler = () => _actionQueueUIManager.RefreshMoveIndicators();
@@ -132,6 +133,7 @@ namespace Module.View
         {
             _handCardUIManager.HideAllHands(args);
             _actionQueueUIManager.HideAllMoveIndicators();
+            _commandProcessor.Clear();
         }
         private void onHandCardChanged(System.Object args = null)
         {
@@ -187,6 +189,7 @@ namespace Module.View
         {
             _commandProcessor.Undo();
             _handCardOperator.UndoLastPlayCard();
+            GameApp.CardManager.CardActionQueue.UndoLastAction();
 
             _actionQueueUIManager.RefreshHeroActionPointUI();
             _actionQueueUIManager.RefreshMoveIndicators();

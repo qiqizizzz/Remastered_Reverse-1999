@@ -31,6 +31,9 @@ namespace Module.fight.Core.Entities
             Entities = new Dictionary<string, CombatEntity>();
             PlayerDecks = new Dictionary<int, PlayerDeckEntity>();
             
+            CardCatalog = cardCatalog;
+            EventBus = eventBus;
+            
             CurrentRound = 1;
             SequenceCardInstanceId = 1000;
         }

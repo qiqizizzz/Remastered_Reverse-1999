@@ -17,32 +17,25 @@ namespace Module.fight.Core.Commands
     {
         private readonly CombatContext _context;
         private readonly Stack<BaseCommand> _history;
-        private readonly int _maxActionCount;
         
         private readonly Func<CardSnapshot> _takeSnapshot;
         private readonly Action<CardSnapshot> _restoreSnapshot;
 
         public int ActionCount => _history.Count;
-        public bool CanExecute => _history.Count < _maxActionCount;
 
         public CombatCommandProcessor(
             CombatContext context,
             Func<CardSnapshot> takeSnapshot,
-            Action<CardSnapshot> restoreSnapshot,
-            int maxActionCount = 4)
+            Action<CardSnapshot> restoreSnapshot)
         {
             _context = context;
             _takeSnapshot = takeSnapshot;
             _restoreSnapshot = restoreSnapshot;
             _history = new Stack<BaseCommand>();
-            _maxActionCount = maxActionCount;
         }
 
         public bool Execute(BaseCommand command)
         {
-            if (!CanExecute)
-                return false;
-
             command.BeforeSnapshot = _takeSnapshot();
             bool success = command.Execute(_context);
 

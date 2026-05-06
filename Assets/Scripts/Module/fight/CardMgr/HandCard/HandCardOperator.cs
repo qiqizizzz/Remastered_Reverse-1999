@@ -22,6 +22,7 @@ namespace Module.fight.CardMgr
     {
         private readonly HandCardUIManager _handCardUIManager;
         private readonly CombatCommandProcessor _commandProcessor;
+        private readonly CardActionQueue  _actionQueue;
         private const int LOCAL_PLAYER_ID = 1;
         
         private readonly Stack<UI_BaseCardItem> _uiActionStack;
@@ -30,15 +31,19 @@ namespace Module.fight.CardMgr
         private int _dragStartIndex = -1;
         private float _lastDragEndTime;
         
+        [Header("快照")]
+        private CardSnapshot _tempSnapshot;
+        
         //事件
         public event Action OnQueueFull;
         public event Action OnRefreshMoveIndicators;
         public event Action OnRefreshActionPointUI;
 
-        public HandCardOperator(HandCardUIManager handMgr, CombatCommandProcessor processor)
+        public HandCardOperator(HandCardUIManager handMgr, CombatCommandProcessor processor, CardActionQueue actionQueue)
         {
             _handCardUIManager = handMgr;
             _commandProcessor = processor;
+            _actionQueue = actionQueue;
             _uiActionStack = new Stack<UI_BaseCardItem>();
         }
         
@@ -54,6 +59,7 @@ namespace Module.fight.CardMgr
         {
             _uiActionStack.Clear();
             _dragStartIndex = -1;
+            _tempSnapshot = null;
             
             GameApp.CardManager.EventBus.OnCardMerged -= OnCardMergedFromCore;
         }
@@ -61,7 +67,6 @@ namespace Module.fight.CardMgr
         #region 卡牌事件
         private void OnCardMergedFromCore(int playerId, CardEntity kept, CardEntity destroyed, int newStarLevel)
         {
-            // 根据 CardEntity 找到对应的 UI 项
             var uiKept = _handCardUIManager.FindUIByCardEntity(kept);
             var uiDestroyed = _handCardUIManager.FindUIByCardEntity(destroyed);
 
@@ -81,27 +86,37 @@ namespace Module.fight.CardMgr
         // 执行出牌
         private void playCard(UI_BaseCardItem item, int index)
         {
-            if (!_commandProcessor.CanExecute)
+            if (!_actionQueue.CanPlayCard())
             {
                 Debug.Log("已达到本轮出牌上限");
                 return;
             }
             
+            var snapshot = GameApp.CardManager.TakeSnapshot();
             var card = item.BattleCardData;
 
             _handCardUIManager.RemoveCardAt(index);
             _uiActionStack.Push(item);
-            _handCardUIManager.AnimatePlayCard(item, _commandProcessor.ActionCount);
+            _handCardUIManager.AnimatePlayCard(item, _actionQueue.Count);
 
             var command =
                 new PlayCardCommand(LOCAL_PLAYER_ID, card, GameApp.CardManager.CurrentSelectedTargetId, index);
-            
             _commandProcessor.Execute(command);
             
+            var action = new CardAction()
+            {
+                ActionType = CardActionType.PlayCard,
+                Snapshot = snapshot,
+                cardEntity = card,
+                OriginalIndex = index,
+                TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId
+            };
+            bool isQueueFull = _actionQueue.PushAction(action);
+
             OnRefreshMoveIndicators?.Invoke();
             OnRefreshActionPointUI?.Invoke();
 
-            if (!_commandProcessor.CanExecute) OnQueueFull?.Invoke();
+            if (isQueueFull) OnQueueFull?.Invoke();
         }
         #endregion
 
@@ -142,12 +157,14 @@ namespace Module.fight.CardMgr
             if (item.BattleCardData.GetConfig().CardType == CardType.Ultimate || item.IsInQueue) return;
 
             _dragStartIndex = _handCardUIManager.GetCardIndex(item);
+            if (_actionQueue.CanPlayCard())
+                _tempSnapshot = GameApp.CardManager.TakeSnapshot();
         }
 
         // 卡牌拖拽中
         private void onCardDrag(UI_BaseCardItem item, PointerEventData eventData)
         {
-            if (!_commandProcessor.CanExecute) return;
+            if (!_actionQueue.CanPlayCard()) return;
 
             int currentIndex = _handCardUIManager.GetCardIndex(item);
             if (currentIndex == -1) return;
@@ -182,28 +199,43 @@ namespace Module.fight.CardMgr
         private void onCardEndDrag(UI_BaseCardItem item, PointerEventData eventData)
         {
             _lastDragEndTime = Time.time;
-            int safeStartIndex = _dragStartIndex; 
-            _dragStartIndex = -1;                 
+            int safeStartIndex = _dragStartIndex;
+            _dragStartIndex = -1;
 
-            if (item.IsInQueue) return;
+            if (item.IsInQueue)
+            {
+                _tempSnapshot = null;
+                return;
+            }
 
             int index = _handCardUIManager.GetCardIndex(item);
             item.MoveToIndex(index, _handCardUIManager.Count);
 
-            if (safeStartIndex != -1 && safeStartIndex != index && _commandProcessor.CanExecute)
+            if (safeStartIndex != -1 && safeStartIndex != index && _actionQueue.CanPlayCard())
             {
                 var command = new MoveCardCommand(LOCAL_PLAYER_ID, safeStartIndex, index);
                 _commandProcessor.Execute(command);
-                
+
+                var action = new CardAction()
+                {
+                    ActionType = CardActionType.MoveCard,
+                    Snapshot = _tempSnapshot,
+                    MoveFromIndex = safeStartIndex,
+                    MoveToIndex = index
+                };
+                bool isQueueFull = _actionQueue.PushAction(action);
+
                 OnRefreshMoveIndicators?.Invoke();
                 OnRefreshActionPointUI?.Invoke();
 
-                if (!_commandProcessor.CanExecute) OnQueueFull?.Invoke();
+                if (isQueueFull) OnQueueFull?.Invoke();
             }
             else
             {
                 _handCardUIManager.RefreshHandCardLayout();
             }
+
+            _tempSnapshot = null;
         }
 
         // 卡牌点击
