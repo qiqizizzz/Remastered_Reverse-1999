@@ -214,7 +214,7 @@ namespace Module.fight.CardMgr
             if (safeStartIndex != -1 && safeStartIndex != index && _actionQueue.CanPlayCard())
             {
                 var command = new MoveCardCommand(LOCAL_PLAYER_ID, safeStartIndex, index);
-                _commandProcessor.Execute(command);
+                _commandProcessor.Execute(command, _tempSnapshot);
 
                 var action = new CardAction()
                 {

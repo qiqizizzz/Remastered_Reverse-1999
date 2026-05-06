@@ -34,9 +34,9 @@ namespace Module.fight.Core.Commands
             _history = new Stack<BaseCommand>();
         }
 
-        public bool Execute(BaseCommand command)
+        public bool Execute(BaseCommand command, CardSnapshot externalSnapshot = null)
         {
-            command.BeforeSnapshot = _takeSnapshot();
+            command.BeforeSnapshot = externalSnapshot ?? _takeSnapshot();
             bool success = command.Execute(_context);
 
             if (success)
