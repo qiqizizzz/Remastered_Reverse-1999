@@ -14,6 +14,7 @@ namespace Module.fight.Core.Commands
     {
         int SenderPlayerId { get; }
 
-        bool Execute(CombatContext context);
+        bool Execute(CommandExecutionContext context);
+        void Undo(CommandExecutionContext context);
     }
 }

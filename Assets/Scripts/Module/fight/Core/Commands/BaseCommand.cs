@@ -22,8 +22,8 @@ namespace Module.fight.Core.Commands
             SenderPlayerId = senderPlayerId;
         }
 
-        public abstract bool Execute(CombatContext context);
-        public abstract void Undo(CombatContext context);
+        public abstract bool Execute(CommandExecutionContext context);
+        public abstract void Undo(CommandExecutionContext context);
 
 
     }

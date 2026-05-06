@@ -20,13 +20,13 @@ namespace Module.fight.Core.Commands
             RoundActions = roundActions;
         }
 
-        public override bool Execute(CombatContext context)
+        public override bool Execute(CommandExecutionContext context)
         {
             //TODO
             return true;
         }
 
-        public override void Undo(CombatContext context)
+        public override void Undo(CommandExecutionContext context)
         {
             //TODO
         }
