@@ -61,19 +61,16 @@ namespace Module.fight.CardMgr
 
         private void InitEventBus()
         {
-            // 桥接手牌变化 → 旧UI更新
             EventBus.OnHandCardsUpdated += (playerId, handCards) =>
             {
                 GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, handCards);
             };
 
-            // 桥接合成事件
             EventBus.OnCardMerged += (playerId, kept, destroyed, newStar) =>
             {
                 GameApp.MessageCenter.PostEvent(EventDefines.OnHandCardMerged, new object[] { kept, destroyed });
             };
 
-            // 桥接行动点变化 → 同步 HeroEntity 并刷新 HUD
             EventBus.OnActionPointChanged += (playerId, ownerId, current) =>
             {
                 var hero = GameApp.EntityManager.GetCharacterById(ownerId) as HeroEntity;
@@ -111,7 +108,6 @@ namespace Module.fight.CardMgr
             CombatSystem.RemoveCardsOfCharacter(LOCAL_PLAYER_ID, character.Id);
         }
         
-        // 回合初始化时的手牌修正：自动合成 → 补牌 → 发大招
         public void ProcessRoundStartHandFix()
         {
             // 连环合成
@@ -123,7 +119,6 @@ namespace Module.fight.CardMgr
             {
                 int needCount = mMaxHandCardCount - normalCount;
                 DrawCard(needCount);
-                // 补牌后可能又触发合成
                 while (CombatSystem.CheckAndAutoMerge(LOCAL_PLAYER_ID)) { }
             }
             

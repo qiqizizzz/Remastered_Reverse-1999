@@ -6,17 +6,25 @@
 * └──────────────────────────────────┘
 */
 
+using Module.fight.CardMgr;
 using Module.fight.Core.Entities;
 
 namespace Module.fight.Core.Commands
 {
-    public class BaseCommand : ICombatCommand
+    public abstract class BaseCommand : ICombatCommand
     {
         public int SenderPlayerId { get; }
-        public bool Execute(CombatContext context)
+        
+        public CardSnapshot BeforeSnapshot { get; set; }
+
+        public BaseCommand(int senderPlayerId)
         {
-            throw new System.NotImplementedException();
+            SenderPlayerId = senderPlayerId;
         }
+
+        public abstract bool Execute(CombatContext context);
+        public abstract void Undo(CombatContext context);
+
 
     }
 }
