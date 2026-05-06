@@ -6,6 +6,7 @@
 * └──────────────────────────────────┘
 */
 
+using Data.card.Extensions;
 using Module.fight.Core.Entities;
 
 namespace Module.fight.Core.Commands
@@ -23,7 +24,16 @@ namespace Module.fight.Core.Commands
 
         public override bool Execute(CombatContext context)
         {
-            //TODO
+            var deck = context.PlayerDecks[SenderPlayerId];
+            if (ToIndex < 0 || ToIndex >= deck.HandCards.Count) return false;
+            
+            var card = deck.HandCards[ToIndex];
+            var config = context.CardCatalog.Get(card.ConfigId);
+            int ownerId = config.OwnerId;
+            
+            context.AddActionPoint(SenderPlayerId, ownerId, 1);
+            context.CheckAndAutoMerge(SenderPlayerId);
+            
             return true;
         }
 

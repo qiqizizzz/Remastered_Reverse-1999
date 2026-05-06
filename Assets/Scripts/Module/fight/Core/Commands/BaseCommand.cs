@@ -24,7 +24,5 @@ namespace Module.fight.Core.Commands
 
         public abstract bool Execute(CombatContext context);
         public abstract void Undo(CombatContext context);
-
-
     }
 }

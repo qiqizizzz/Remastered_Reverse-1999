@@ -15,7 +15,7 @@ namespace Module.fight.Core.Commands
 {
     public class CombatCommandProcessor
     {
-        private readonly CombatContext _ctx;
+        private readonly CombatContext _context;
         private readonly Stack<BaseCommand> _history;
         private readonly int _maxActionCount;
         
@@ -26,12 +26,12 @@ namespace Module.fight.Core.Commands
         public bool CanExecute => _history.Count < _maxActionCount;
 
         public CombatCommandProcessor(
-            CombatContext ctx,
+            CombatContext context,
             Func<CardSnapshot> takeSnapshot,
             Action<CardSnapshot> restoreSnapshot,
             int maxActionCount = 4)
         {
-            _ctx = ctx;
+            _context = context;
             _takeSnapshot = takeSnapshot;
             _restoreSnapshot = restoreSnapshot;
             _history = new Stack<BaseCommand>();
@@ -44,7 +44,7 @@ namespace Module.fight.Core.Commands
                 return false;
 
             command.BeforeSnapshot = _takeSnapshot();
-            bool success = command.Execute(_ctx);
+            bool success = command.Execute(_context);
 
             if (success)
                 _history.Push(command);
@@ -62,7 +62,7 @@ namespace Module.fight.Core.Commands
             if (command.BeforeSnapshot != null)
                 _restoreSnapshot(command.BeforeSnapshot);
             else
-                command.Undo(_ctx);
+                command.Undo(_context);
         }
         
         public List<BaseCommand> GetHistoryAndClear()

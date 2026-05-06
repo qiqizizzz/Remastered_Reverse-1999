@@ -102,37 +102,7 @@ namespace Module.fight.Core.Systems
         //出牌
         public void PlayCard(int playerId, CardEntity card, string targetInstanceId)
         {
-            if(!_context.PlayerDecks.TryGetValue(playerId, out var deck)) return;
-
-            // 从手牌移除
-            int removeIndex = deck.HandCards.FindIndex(c => c.InstanceId == card.InstanceId);
-            if (removeIndex == -1) return;
-            deck.HandCards.RemoveAt(removeIndex);
-
-            // 弃置（普通牌进弃牌堆，大招牌销毁）
-            var config = _cardCatalog.Get(card.ConfigId);
-            if (config.CardType != CardType.Ultimate)
-            {
-                card.StarLevel = 1;
-                deck.DiscardPile.Add(card);
-                _eventBus?.OnCardDiscarded?.Invoke(playerId, card);
-            }
-
-            // 行动点处理
-            if (config.CardType == CardType.Ultimate)
-            {
-                ClearActionPoint(playerId, config.OwnerId);
-            }
-            else
-            {
-                AddActionPoint(playerId, config.OwnerId, 1);
-            }
-
-            _eventBus?.OnCardPlayed?.Invoke(playerId, card, targetInstanceId);
-            _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
-
-            // 自动检查合成
-            CheckAndAutoMerge(playerId);
+            
         }
         
         //抽牌
@@ -190,7 +160,7 @@ namespace Module.fight.Core.Systems
             _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
 
             // 交换后检查合成
-            CheckAndAutoMerge(playerId);
+            _context.CheckAndAutoMerge(playerId);
         }
         
         //发放大招牌
@@ -242,67 +212,6 @@ namespace Module.fight.Core.Systems
             _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
 
             return removedHandCards;
-        }
-        
-        //自动合成算法
-        public bool CheckAndAutoMerge(int playerId)
-        {
-            if (!_context.PlayerDecks.TryGetValue(playerId, out var deck)) return false;
-            List<CardEntity> hands = deck.HandCards;
-
-            for (int i = 0; i < hands.Count - 1; i++)
-            {
-                var cardA = hands[i];
-                var cardB = hands[i + 1];
-
-                if (cardA.ConfigId == cardB.ConfigId && cardA.StarLevel == cardB.StarLevel && cardA.StarLevel < 3) 
-                {
-                    var configA = _cardCatalog.Get(cardA.ConfigId);
-                    if (configA != null && configA.CardType != CardType.Ultimate)
-                    {
-                        cardA.StarLevel += 1;
-                        hands.RemoveAt(i + 1);
-
-                        _eventBus?.OnCardMerged?.Invoke(playerId, cardA, cardB, cardA.StarLevel);
-                        _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(hands));
-                        
-                        UpdateActionPoint(playerId, configA.OwnerId, 1);
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        #endregion
-
-        #region 行动点操作
-        public void AddActionPoint(int playerId, int ownerId, int delta)
-        {
-            if (_context.Entities.TryGetValue(ownerId.ToString(), out var entity))
-            {
-                int old = entity.ActionPoint;
-                entity.ActionPoint += delta;
-                _eventBus?.OnActionPointChanged?.Invoke(playerId, ownerId, entity.ActionPoint);
-            }
-        }
-
-        public void ClearActionPoint(int playerId, int ownerId)
-        {
-            if (_context.Entities.TryGetValue(ownerId.ToString(), out var entity))
-            {
-                entity.ActionPoint = 0;
-                _eventBus?.OnActionPointChanged?.Invoke(playerId, ownerId, 0);
-            }
-        }
-        
-        private void UpdateActionPoint(int playerId, int ownerId, int delta)
-        {
-            if (_context.Entities.TryGetValue(ownerId.ToString(), out var entity))
-            {
-                int old = entity.ActionPoint;
-                entity.ActionPoint += delta;
-                _eventBus?.OnActionPointChanged?.Invoke(playerId, ownerId, entity.ActionPoint);
-            }
         }
         #endregion
     }

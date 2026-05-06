@@ -7,6 +7,8 @@
 */
 
 using System.Collections.Generic;
+using Config.Catalogs;
+using Module.fight.Core.EventBus;
 
 namespace Module.fight.Core.Entities
 {
@@ -19,8 +21,11 @@ namespace Module.fight.Core.Entities
         public ActionQueueEntity ActionQueue { get; set; }
         public Dictionary<string, CombatEntity> Entities { get; set; }
         public Dictionary<int, PlayerDeckEntity> PlayerDecks { get; set; }
+        
+        public ICardCatalog CardCatalog { get; set; }
+        public CombatEventBus EventBus { get; set; }
 
-        public CombatContext()
+        public CombatContext(ICardCatalog cardCatalog, CombatEventBus eventBus)
         {
             ActionQueue = new ActionQueueEntity();
             Entities = new Dictionary<string, CombatEntity>();

@@ -30,7 +30,7 @@ namespace Module.fight.CardMgr
         public readonly CombatEventBus  EventBus;
         
         private const int LOCAL_PLAYER_ID = 1;
-        private int m_maxHandCardCount = 8;
+        private int _maxHandCardCount = 8;
         private List<int> _currentCharacterConfigIds;
 
         public CardManager()
@@ -38,7 +38,7 @@ namespace Module.fight.CardMgr
             CardActionQueue = new CardActionQueue();
             EventBus = new CombatEventBus();
             
-            BattleContext = new CombatContext();
+            BattleContext = new CombatContext(GameApp.ConfigManager.Card, EventBus);
             CombatSystem = new CardCombatSystem(BattleContext, GameApp.ConfigManager.Card, EventBus);
             _currentCharacterConfigIds = new List<int>();
             
@@ -47,7 +47,7 @@ namespace Module.fight.CardMgr
         
         public void InitCards(LevelModel model)
         {
-            m_maxHandCardCount = 8;
+            _maxHandCardCount = 8;
             CardActionQueue.Clear();
             _currentCharacterConfigIds.Clear();
 
@@ -104,22 +104,22 @@ namespace Module.fight.CardMgr
         
         public void RemoveDiedCharacterCard(CharacterDataSO character)
         {
-            m_maxHandCardCount = Mathf.Max(0, m_maxHandCardCount - 2);
+            _maxHandCardCount = Mathf.Max(0, _maxHandCardCount - 2);
             CombatSystem.RemoveCardsOfCharacter(LOCAL_PLAYER_ID, character.Id);
         }
         
         public void ProcessRoundStartHandFix()
         {
             // 连环合成
-            while (CombatSystem.CheckAndAutoMerge(LOCAL_PLAYER_ID)) { }
+            while (BattleContext.CheckAndAutoMerge(LOCAL_PLAYER_ID)) { }
             
             // 补牌
             int normalCount = GetNormalHandCardCount();
-            if (normalCount < mMaxHandCardCount)
+            if (normalCount < maxHandCardCount)
             {
-                int needCount = mMaxHandCardCount - normalCount;
+                int needCount = maxHandCardCount - normalCount;
                 DrawCard(needCount);
-                while (CombatSystem.CheckAndAutoMerge(LOCAL_PLAYER_ID)) { }
+                while (BattleContext.CheckAndAutoMerge(LOCAL_PLAYER_ID)) { }
             }
             
             // 发大招
@@ -217,7 +217,7 @@ namespace Module.fight.CardMgr
             return BattleContext.PlayerDecks[LOCAL_PLAYER_ID].HandCards;
         }
 
-        public int mMaxHandCardCount => m_maxHandCardCount;
+        public int maxHandCardCount => _maxHandCardCount;
         #endregion
     }
 }

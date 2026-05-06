@@ -12,6 +12,7 @@ using Common.Defines;
 using DG.Tweening;
 using Module.Character;
 using Module.fight.CardMgr;
+using Module.fight.Core.Commands;
 using Module.fight.Core.Entities;
 using MVC.View;
 using UnityEngine;
@@ -21,10 +22,12 @@ namespace Module.View
 {
     public class FightingView : BaseView
     {
-        private HandCardUIManager m_handCardUIManager;
-        private HandCardOperator m_handCardOperator;
-        private ActionQueueUIManager m_actionQueueUIManager;
-        private CardPoolManager m_cardPoolManager;
+        private HandCardUIManager _handCardUIManager;
+        private HandCardOperator _handCardOperator;
+        private ActionQueueUIManager _actionQueueUIManager;
+        private CardPoolManager _cardPoolManager;
+        
+        private CombatCommandProcessor _commandProcessor;
 
         [Header("关卡信息相关")]
         private Text _turnInfoText;
@@ -46,8 +49,8 @@ namespace Module.View
             _cardDeckTf = Find<Transform>("CardDeck");
             _turnInfoText = Find<Text>("FightDetail/Round/Txt_turnNum");
 
-            m_cardPoolManager = new CardPoolManager(_cardDeckTf);
-            m_handCardUIManager = new HandCardUIManager(_cardDeckTf, _cardActionTf, m_cardPoolManager);
+            _cardPoolManager = new CardPoolManager(_cardDeckTf);
+            _handCardUIManager = new HandCardUIManager(_cardDeckTf, _cardActionTf, _cardPoolManager);
 
             #region 队列UI
             List<Transform> m_UIActions = new List<Transform>();
@@ -55,7 +58,7 @@ namespace Module.View
             m_UIActions.Add(Find<Transform>("CardAction/queue_2"));
             m_UIActions.Add(Find<Transform>("CardAction/queue_3"));
             m_UIActions.Add(Find<Transform>("CardAction/queue_4"));
-            m_actionQueueUIManager = new ActionQueueUIManager(m_UIActions);
+            _actionQueueUIManager = new ActionQueueUIManager(m_UIActions);
             #endregion
         }
 
@@ -76,16 +79,19 @@ namespace Module.View
             GameApp.MessageCenter.AddEvent(EventDefines.UpdateHandCards, m_onUpdateHandCardsHandler);
             Controller.RegisterFunc(EventDefines.ExitLevel, onExitLevel);
 
-            m_actionQueueUIManager.Init();
-            m_cardPoolManager.Init();
+            _actionQueueUIManager.Init();
+            _cardPoolManager.Init();
 
-            m_handCardOperator = new HandCardOperator(m_handCardUIManager, GameApp.CardManager.CardActionQueue);
-            m_handCardOperator.Init();
+            _commandProcessor = new CombatCommandProcessor(GameApp.CardManager.BattleContext,
+                GameApp.CardManager.TakeSnapshot, GameApp.CardManager.RestoreSnapshot);
+            
+            _handCardOperator = new HandCardOperator(_handCardUIManager, _commandProcessor);
+            _handCardOperator.Init();
 
-            m_refreshMoveIndicatorsHandler = () => m_actionQueueUIManager.RefreshMoveIndicators();
-            m_handCardOperator.OnRefreshMoveIndicators += m_refreshMoveIndicatorsHandler;
-            m_handCardOperator.OnQueueFull += onQueueFull;
-            m_handCardOperator.OnRefreshActionPointUI +=  m_actionQueueUIManager.RefreshHeroActionPointUI;
+            m_refreshMoveIndicatorsHandler = () => _actionQueueUIManager.RefreshMoveIndicators();
+            _handCardOperator.OnRefreshMoveIndicators += m_refreshMoveIndicatorsHandler;
+            _handCardOperator.OnQueueFull += onQueueFull;
+            _handCardOperator.OnRefreshActionPointUI +=  _actionQueueUIManager.RefreshHeroActionPointUI;
         }
 
         protected override void OnDisable()
@@ -102,13 +108,13 @@ namespace Module.View
                 GameApp.MessageCenter.RemoveEvent(EventDefines.UpdateHandCards, m_onUpdateHandCardsHandler);
             Controller.UnRegisterFunc(EventDefines.ExitLevel, onExitLevel);
 
-            m_cardPoolManager.UnLoadAll();
+            _cardPoolManager.UnLoadAll();
 
-            if (m_handCardOperator != null)
+            if (_handCardOperator != null)
             {
-                m_handCardOperator.OnRefreshMoveIndicators -= m_refreshMoveIndicatorsHandler;
-                m_handCardOperator.OnQueueFull -= onQueueFull;
-                m_handCardOperator.OnRefreshActionPointUI -=  m_actionQueueUIManager.RefreshHeroActionPointUI;
+                _handCardOperator.OnRefreshMoveIndicators -= m_refreshMoveIndicatorsHandler;
+                _handCardOperator.OnQueueFull -= onQueueFull;
+                _handCardOperator.OnRefreshActionPointUI -=  _actionQueueUIManager.RefreshHeroActionPointUI;
             }
         }
         #endregion
@@ -117,15 +123,15 @@ namespace Module.View
         {
             SetVisible(true);
 
-            m_actionQueueUIManager.SetVisible(true);
+            _actionQueueUIManager.SetVisible(true);
         }
 
         #region UI事件
         #region 手牌事件
         private void onHideAllHands(System.Object args)
         {
-            m_handCardUIManager.HideAllHands(args);
-            m_actionQueueUIManager.HideAllMoveIndicators();
+            _handCardUIManager.HideAllHands(args);
+            _actionQueueUIManager.HideAllMoveIndicators();
         }
         private void onHandCardChanged(System.Object args = null)
         {
@@ -138,7 +144,7 @@ namespace Module.View
 
             if (newCards == null) return;
 
-            m_handCardUIManager.UpdateCardsUI(newCards, isUndo, null);
+            _handCardUIManager.UpdateCardsUI(newCards, isUndo, null);
         }
         
 
@@ -147,7 +153,7 @@ namespace Module.View
         #region 队列事件
         private void onExecuteCardUI(System.Object args = null)
         {
-            m_actionQueueUIManager.ExecuteCardUI(transform, _cardActionTf, _cardDeckTf);
+            _actionQueueUIManager.ExecuteCardUI(transform, _cardActionTf, _cardDeckTf);
         }
         
         private void onQueueFull()
@@ -161,8 +167,8 @@ namespace Module.View
         
         private void onRemoveDiedCharacterCardsUI(System.Object args = null)
         {
-            m_handCardUIManager.RemoveDiedCharacterCard(args);
-            m_actionQueueUIManager.UpdateCardQueueUI();
+            _handCardUIManager.RemoveDiedCharacterCard(args);
+            _actionQueueUIManager.UpdateCardQueueUI();
         }
         
         private void onUpdateLevelInfo(params object[] args)
@@ -179,38 +185,20 @@ namespace Module.View
 
         private void onUndoBtn()
         {
-            CardAction lastAction = GameApp.CardManager.CardActionQueue.UndoLastAction();
-            if (lastAction == null) return;
+            _commandProcessor.Undo();
+            _handCardOperator.UndoLastPlayCard();
 
-            GameApp.CardManager.RestoreSnapshot(lastAction.Snapshot);
-
-            if (lastAction.ActionType == CardActionType.PlayCard)
-            {
-                m_handCardOperator.UndoLastPlayCard();
-            }
-
-            m_actionQueueUIManager.RefreshHeroActionPointUI();
-            
-            // 更新玩家行动点UI
-            /*foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
-            {
-                
-                //hero.HUD?.UpdateActionPoint(hero.ActionPoint);
-            }*/
-
-            // 统一刷新移动占位符 UI
-            m_actionQueueUIManager.RefreshMoveIndicators();
-
-            // 全量重建当前手牌 UI
+            _actionQueueUIManager.RefreshHeroActionPointUI();
+            _actionQueueUIManager.RefreshMoveIndicators();
             onUpdateHandCards(GameApp.CardManager.GetHandCards(), true);
         }
 
         private void onExitLevel(params object[] args)
         {
             // 注意:所有离开关卡的行为都需要经过这个事件,不然动画UI等效果会出错
-            m_handCardOperator.Clear();
-            m_handCardUIManager.Clear();
-            m_cardPoolManager.RecycleAllCards();
+            _handCardOperator.Clear();
+            _handCardUIManager.Clear();
+            _cardPoolManager.RecycleAllCards();
             onHideAllHands(null);
         }
         #endregion

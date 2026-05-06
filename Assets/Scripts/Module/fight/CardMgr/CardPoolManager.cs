@@ -120,7 +120,7 @@ namespace Module.fight.CardMgr
         #region 预加载卡牌
         private void PreLoadCardItem()
         {
-            _totalPoolToLoad = GameApp.CardManager.mMaxHandCardCount + 8;
+            _totalPoolToLoad = GameApp.CardManager.maxHandCardCount + 8;
             _loadedPoolCount = 0;
             for (int i = 0; i < _totalPoolToLoad; i++)
             {

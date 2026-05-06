@@ -277,7 +277,7 @@ namespace Module.fight
 
         private void StartNextRound()
         {
-            int count = GameApp.CardManager.mMaxHandCardCount - GameApp.CardManager.GetNormalHandCardCount();
+            int count = GameApp.CardManager.maxHandCardCount - GameApp.CardManager.GetNormalHandCardCount();
             GameApp.CardManager.DrawCard(count);
             GameApp.CardManager.ProcessRoundStartHandFix();
         }
