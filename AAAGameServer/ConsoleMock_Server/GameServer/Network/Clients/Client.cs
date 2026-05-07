@@ -1,15 +1,10 @@
 ﻿using GameProtocol;
-using GameServer.DataBase;
-using GameServer.DataBase.Entity;
 using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using Network.DataBase;
+using Network.DataBase.Entity;
 using System.Net.Sockets;
-using System.Text;
 
-namespace GameServer
+namespace Network
 {
     //客户端
     internal class Client

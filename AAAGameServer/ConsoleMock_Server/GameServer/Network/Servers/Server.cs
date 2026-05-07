@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace GameServer
+namespace Network
 {
     //服务端
     internal class Server

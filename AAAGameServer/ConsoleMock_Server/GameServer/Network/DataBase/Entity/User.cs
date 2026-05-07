@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace GameServer.DataBase.Entity
+namespace Network.DataBase.Entity
 {
     [Table("users")]
     public class User

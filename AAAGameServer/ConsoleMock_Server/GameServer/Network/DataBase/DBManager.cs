@@ -1,10 +1,7 @@
-﻿using GameServer.DataBase.Entity;
-using MySqlConnector;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using Network.DataBase.Entity;
 
-namespace GameServer.DataBase
+namespace Network.DataBase
 {
     internal class DBManager
     {
