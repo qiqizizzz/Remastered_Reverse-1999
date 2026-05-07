@@ -1,6 +1,6 @@
 ﻿namespace GameServer.Battle.Core.Entities
 {
-    internal class CardEntity
+    public class CardEntity
     {
         private static int s_globalInstanceIdCounter = 10000;
 

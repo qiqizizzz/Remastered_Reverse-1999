@@ -1,6 +1,7 @@
 ﻿using GameServer.Battle.Core.Entities;
 using GameServer.Battle.Core.Extensions;
 using GameServer.Battle.Data;
+using GameServer.Battle.Data.Config;
 
 namespace GameServer.Battle.Core.Commands
 {

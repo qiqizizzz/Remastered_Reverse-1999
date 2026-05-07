@@ -1,6 +1,6 @@
 ﻿namespace GameServer.Battle.Core.Entities
 {
-    internal class ActionQueueEntity
+    public class ActionQueueEntity
     {
         public List<CardEntity> QueuedCards { get; set; }
         public int MaxQueueSize { get; set; }

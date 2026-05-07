@@ -2,7 +2,7 @@
 
 namespace GameServer.Battle.Data
 {
-    internal class CardSnapshot
+    public class CardSnapshot
     {
         public Dictionary<string, int> HeroActionPoints;
 

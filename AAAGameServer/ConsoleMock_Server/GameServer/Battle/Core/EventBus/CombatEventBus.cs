@@ -2,7 +2,7 @@
 
 namespace GameServer.Battle.Core.EventBus
 {
-    internal class CombatEventBus
+    public class CombatEventBus
     {
         #region 手牌整体状态
         /// <summary>

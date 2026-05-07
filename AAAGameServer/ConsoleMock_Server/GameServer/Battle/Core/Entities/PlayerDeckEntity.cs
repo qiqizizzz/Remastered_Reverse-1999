@@ -1,6 +1,6 @@
 ﻿namespace GameServer.Battle.Core.Entities
 {
-    internal class PlayerDeckEntity
+    public class PlayerDeckEntity
     {
         public int PlayerId { get; set; }
 

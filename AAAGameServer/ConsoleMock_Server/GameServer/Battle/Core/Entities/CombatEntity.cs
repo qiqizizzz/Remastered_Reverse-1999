@@ -1,8 +1,8 @@
 ﻿namespace GameServer.Battle.Core.Entities
 {
-    internal class CombatEntity
+    public class CombatEntity
     {
-        public string InstanceId { get; set; }
+        public int InstanceId { get; set; }
         public int ConfigId { get; set; }
 
         /// <summary>
@@ -14,7 +14,7 @@
 
         public int ActionPoint { get; set; }
 
-        public CombatEntity(string instanceId, int configId, int ownerPlayerId, float currentHp, int actionPoint)
+        public CombatEntity(int instanceId, int configId, int ownerPlayerId, float currentHp, int actionPoint)
         {
             InstanceId = instanceId;
             ConfigId = configId;

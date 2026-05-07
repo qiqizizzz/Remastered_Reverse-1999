@@ -2,6 +2,7 @@
 using GameServer.Battle.Core.EventBus;
 using GameServer.Battle.Core.Extensions;
 using GameServer.Battle.Data;
+using GameServer.Battle.Data.Config;
 using System.Diagnostics;
 
 namespace GameServer.Battle.Core.Systems

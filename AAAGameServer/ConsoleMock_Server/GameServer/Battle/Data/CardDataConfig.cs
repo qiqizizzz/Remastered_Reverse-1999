@@ -1,19 +1,8 @@
-﻿namespace GameServer.Battle.Data
+﻿using GameServer.Battle.Data.Config;
+
+namespace GameServer.Battle.Data
 {
-    public enum CardType { Attack, Buff, Debuff, Channel, Health, Ultimate }
-    public enum EffectType { Damage, Heal, Buff, Debuff }
-    public enum TargetType { Self, Enemy }
-
-    public class CardEffect
-    {
-        public EffectType EffectType;
-        public float Value;
-        public int Round;
-        public TargetType Target;
-        public int TargetCount = 1;
-    }
-
-    internal class CardDataConfig
+    public class CardDataConfig
     {
         public CardType CardType;
         public int Id;

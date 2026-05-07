@@ -3,7 +3,7 @@ using GameServer.Battle.Data;
 
 namespace GameServer.Battle.Core.Entities
 {
-    internal class CombatContext
+    public class CombatContext
     {
         public int CurrentRound { get; set; }
 
