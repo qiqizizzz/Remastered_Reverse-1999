@@ -1,5 +1,6 @@
 ﻿using GameServer.Battle.Core.Entities;
 using GameServer.Battle.Core.EventBus;
+using GameServer.Battle.Core.Extensions;
 using GameServer.Battle.Data;
 using System.Diagnostics;
 
@@ -112,7 +113,7 @@ namespace GameServer.Battle.Core.Systems
                 {
                     if (deck.DiscardPile.Count == 0)
                     {
-                        Debug.LogWarning("抽牌失败: 牌堆和弃牌堆都没有牌了");
+                        Console.WriteLine("抽牌失败: 牌堆和弃牌堆都没有牌了");
                         break;
                     }
 
