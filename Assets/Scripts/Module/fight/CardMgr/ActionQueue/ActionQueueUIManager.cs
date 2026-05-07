@@ -158,7 +158,7 @@ namespace Module.fight.CardMgr
         
         #region 其他事件操作
         //刷新英雄行动点
-        public void RefreshHeroActionPointUI(bool isUndo = false)
+        public void RefreshHeroActionPointUI()
         {
             var currentActions = GameApp.CardManager.CardActionQueue.GetAction();
             
@@ -168,7 +168,7 @@ namespace Module.fight.CardMgr
             {
                 int previewGain = 0;
 
-                if (!isUndo && firstAction is { Snapshot: not null })
+                if (firstAction is { Snapshot: not null })
                 {
                     if(firstAction.Snapshot.HeroActionPoints.TryGetValue(hero.CharacterData.Id.ToString(), out int baseActionPoint))
                     {

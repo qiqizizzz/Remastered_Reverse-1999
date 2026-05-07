@@ -37,7 +37,7 @@ namespace Module.fight.CardMgr
         //事件
         public event Action OnQueueFull;
         public event Action OnRefreshMoveIndicators;
-        public event Action<bool> OnRefreshActionPointUI;
+        public event Action OnRefreshActionPointUI;
 
         public HandCardOperator(HandCardUIManager handMgr, CombatCommandProcessor processor, CardActionQueue actionQueue)
         {
@@ -115,7 +115,7 @@ namespace Module.fight.CardMgr
             bool isQueueFull = _actionQueue.PushAction(action);
 
             OnRefreshMoveIndicators?.Invoke();
-            OnRefreshActionPointUI?.Invoke(false);
+            OnRefreshActionPointUI?.Invoke();
 
             if (isQueueFull) OnQueueFull?.Invoke();
         }
@@ -227,7 +227,7 @@ namespace Module.fight.CardMgr
                 bool isQueueFull = _actionQueue.PushAction(action);
 
                 OnRefreshMoveIndicators?.Invoke();
-                OnRefreshActionPointUI?.Invoke(false);
+                OnRefreshActionPointUI?.Invoke();
 
                 if (isQueueFull) OnQueueFull?.Invoke();
             }
