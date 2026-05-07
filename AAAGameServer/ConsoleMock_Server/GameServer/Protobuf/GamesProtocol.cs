@@ -35,56 +35,143 @@ namespace GameProtocol {
             "axgIIAEoCzIdLkdhbWVQcm90b2NvbC5DaGF0SGlzdG9yeVBhY2tIABIuCgpi",
             "YXR0bGVQYWNrGAkgASgLMhguR2FtZVByb3RvY29sLkJhdHRsZVBhY2tIAEIG",
             "CgRkYXRhIi8KCUxvZ2luUGFjaxIQCgh1c2VybmFtZRgBIAEoCRIQCghwYXNz",
-            "d29yZBgCIAEoCSJiCghDaGF0UGFjaxIOCgZ0b1VzZXIYASABKAkSEAoIZnJv",
-            "bVVzZXIYAiABKAkSDwoHY29udGVudBgDIAEoCRIQCghjaGF0VHlwZRgEIAEo",
-            "BRIRCgl0aW1lc3RhbXAYBSABKAMiQgoKRnJpZW5kSW5mbxIQCgh1c2VybmFt",
-            "ZRgBIAEoCRIQCghpc09ubGluZRgCIAEoCBIQCghpc0ZyaWVuZBgDIAEoCCJ6",
-            "CgpGcmllbmRQYWNrEioKBm9wVHlwZRgBIAEoDjIaLkdhbWVQcm90b2NvbC5G",
-            "cmllbmRPcFR5cGUSEgoKdGFyZ2V0VXNlchgCIAEoCRIsCgpmcmllbmRMaXN0",
-            "GAMgAygLMhguR2FtZVByb3RvY29sLkZyaWVuZEluZm8iTwoPQ2hhdEhpc3Rv",
-            "cnlQYWNrEhIKCnRhcmdldFVzZXIYASABKAkSKAoIY2hhdExpc3QYAiADKAsy",
-            "Fi5HYW1lUHJvdG9jb2wuQ2hhdFBhY2sieAoKQmF0dGxlUGFjaxIPCgdsZXZl",
-            "bElkGAEgASgFEhYKDmNhcmRJbnN0YW5jZUlkGAIgASgFEhYKDnRhcmdldEVu",
-            "dGl0eUlkGAMgASgFEikKBmV2ZW50cxgEIAMoCzIZLkdhbWVQcm90b2NvbC5C",
-            "YXR0bGVFdmVudCKqAgoLQmF0dGxlRXZlbnQSMAoJZXZlbnRUeXBlGAEgASgO",
-            "Mh0uR2FtZVByb3RvY29sLkJhdHRsZUV2ZW50VHlwZRIQCghzb3VyY2VJZBgC",
-            "IAEoBRIQCgh0YXJnZXRJZBgDIAEoBRIsCgZkYW1hZ2UYBCABKAsyGi5HYW1l",
-            "UHJvdG9jb2wuRGFtYWdlUGFyYW1zSAASKAoEaGVhbBgFIAEoCzIYLkdhbWVQ",
-            "cm90b2NvbC5IZWFsUGFyYW1zSAASKgoFZGVhdGgYBiABKAsyGS5HYW1lUHJv",
-            "dG9jb2wuRGVhdGhQYXJhbXNIABIyCglza2lsbENhc3QYByABKAsyHS5HYW1l",
-            "UHJvdG9jb2wuU2tpbGxDYXN0UGFyYW1zSABCDQoLZXZlbnRQYXJhbXMiNwoM",
-            "RGFtYWdlUGFyYW1zEhMKC2RhbWFnZVZhbHVlGAEgASgFEhIKCmlzQ3JpdGlj",
-            "YWwYAiABKAgiMwoKSGVhbFBhcmFtcxIRCgloZWFsVmFsdWUYASABKAUSEgoK",
-            "aXNPdmVySGVhbBgCIAEoCCINCgtEZWF0aFBhcmFtcyI1Cg9Ta2lsbENhc3RQ",
-            "YXJhbXMSDwoHc2tpbGxJZBgBIAEoBRIRCgl0YXJnZXRJZHMYAiADKAUqQAoL",
-            "UmVxdWVzdENvZGUSDwoLUmVxdWVzdE5vbmUQABIICgRVc2VyEAESCgoGRnJp",
-            "ZW5kEAISCgoGQmF0dGxlEAMquQEKCkFjdGlvbkNvZGUSDgoKQWN0aW9uTm9u",
-            "ZRAAEgkKBUxvZ29uEAESCQoFTG9naW4QAhINCglIZWFydGJlYXQQAxIPCgtD",
-            "aGF0UHJpdmF0ZRAEEhMKD0ZyaWVuZE9wZXJhdGlvbhAFEhIKDkdldENoYXRI",
-            "aXN0b3J5EAYSDAoIRW50ZXJQdmUQBxIMCghQbGF5Q2FyZBAIEgsKB0VuZFR1",
-            "cm4QCRITCg9TeW5jQmF0dGxlRXZlbnQQCio1CgpSZXR1cm5Db2RlEg4KClJl",
-            "dHVybk5vbmUQABILCgdTdWNjZWVkEAESCgoGRmFpbGVkEAIqXgoMRnJpZW5k",
-            "T3BUeXBlEhAKDEZyaWVuZE9wTm9uZRAAEgsKB0dldExpc3QQARINCglBZGRG",
-            "cmllbmQQAhIQCgxSZW1vdmVGcmllbmQQAxIOCgpTZWFyY2hVc2VyEAQqlgEK",
-            "D0JhdHRsZUV2ZW50VHlwZRIICgROb25lEAASDwoLQmF0dGxlU3RhcnQQARIN",
-            "CglCYXR0bGVFbmQQAhINCglUdXJuU3RhcnQQChILCgdUdXJuRW5kEAsSDQoJ",
-            "U2tpbGxDYXN0EBQSDwoLRGFtYWdlVGFrZW4QHhINCglIZWFsVGFrZW4QHxIO",
-            "CgpFbnRpdHlEaWVkECBiBnByb3RvMw=="));
+            "d29yZBgCIAEoCSJCCgpGcmllbmRJbmZvEhAKCHVzZXJuYW1lGAEgASgJEhAK",
+            "CGlzT25saW5lGAIgASgIEhAKCGlzRnJpZW5kGAMgASgIInoKCkZyaWVuZFBh",
+            "Y2sSKgoGb3BUeXBlGAEgASgOMhouR2FtZVByb3RvY29sLkZyaWVuZE9wVHlw",
+            "ZRISCgp0YXJnZXRVc2VyGAIgASgJEiwKCmZyaWVuZExpc3QYAyADKAsyGC5H",
+            "YW1lUHJvdG9jb2wuRnJpZW5kSW5mbyJPCg9DaGF0SGlzdG9yeVBhY2sSEgoK",
+            "dGFyZ2V0VXNlchgBIAEoCRIoCghjaGF0TGlzdBgCIAMoCzIWLkdhbWVQcm90",
+            "b2NvbC5DaGF0UGFjayJiCghDaGF0UGFjaxIOCgZ0b1VzZXIYASABKAkSEAoI",
+            "ZnJvbVVzZXIYAiABKAkSDwoHY29udGVudBgDIAEoCRIQCghjaGF0VHlwZRgE",
+            "IAEoBRIRCgl0aW1lc3RhbXAYBSABKAMinQEKEENvbWJhdEVudGl0eUluZm8S",
+            "EgoKaW5zdGFuY2VJZBgBIAEoBRIQCghjb25maWdJZBgCIAEoBRIUCgxpc1Bs",
+            "YXllclNpZGUYAyABKAgSEQoJY3VycmVudEhwGAQgASgFEg0KBW1heEhwGAUg",
+            "ASgFEhMKC2FjdGlvblBvaW50GAYgASgFEhYKDm1heEFjdGlvblBvaW50GAcg",
+            "ASgFIkkKDkNhcmRFbnRpdHlJbmZvEhIKCmluc3RhbmNlSWQYASABKAUSEAoI",
+            "Y29uZmlnSWQYAiABKAUSEQoJc3RhckxldmVsGAMgASgFIrsBCg5QbGF5ZXJE",
+            "ZWNrSW5mbxIvCgloYW5kQ2FyZHMYASADKAsyHC5HYW1lUHJvdG9jb2wuQ2Fy",
+            "ZEVudGl0eUluZm8SLgoIZHJhd1BpbGUYAiADKAsyHC5HYW1lUHJvdG9jb2wu",
+            "Q2FyZEVudGl0eUluZm8SMQoLZGlzY2FyZFBpbGUYAyADKAsyHC5HYW1lUHJv",
+            "dG9jb2wuQ2FyZEVudGl0eUluZm8SFQoNZHJhd1BpbGVDb3VudBgEIAEoBSJV",
+            "Cg9BY3Rpb25RdWV1ZUluZm8SMQoLcXVldWVkQ2FyZHMYASADKAsyHC5HYW1l",
+            "UHJvdG9jb2wuQ2FyZEVudGl0eUluZm8SDwoHbWF4U2l6ZRgCIAEoBSLZAQoT",
+            "QmF0dGxlU3RhdGVTbmFwc2hvdBIUCgxjdXJyZW50Um91bmQYASABKAUSFAoM",
+            "aXNQbGF5ZXJUdXJuGAIgASgIEjAKCGVudGl0aWVzGAMgAygLMh4uR2FtZVBy",
+            "b3RvY29sLkNvbWJhdEVudGl0eUluZm8SMAoKcGxheWVyRGVjaxgEIAEoCzIc",
+            "LkdhbWVQcm90b2NvbC5QbGF5ZXJEZWNrSW5mbxIyCgthY3Rpb25RdWV1ZRgF",
+            "IAEoCzIdLkdhbWVQcm90b2NvbC5BY3Rpb25RdWV1ZUluZm8i5AEKCkJhdHRs",
+            "ZVBhY2sSDwoHbGV2ZWxJZBgBIAEoBRIWCg5jYXJkSW5zdGFuY2VJZBgCIAEo",
+            "BRIWCg50YXJnZXRFbnRpdHlJZBgDIAEoBRIXCg9zb3VyY2VTbG90SW5kZXgY",
+            "BCABKAUSFwoPdGFyZ2V0U2xvdEluZGV4GAUgASgFEikKBmV2ZW50cxgKIAMo",
+            "CzIZLkdhbWVQcm90b2NvbC5CYXR0bGVFdmVudBI4Cg1zdGF0ZVNuYXBzaG90",
+            "GAsgASgLMiEuR2FtZVByb3RvY29sLkJhdHRsZVN0YXRlU25hcHNob3Qi+ggK",
+            "C0JhdHRsZUV2ZW50EjAKCWV2ZW50VHlwZRgBIAEoDjIdLkdhbWVQcm90b2Nv",
+            "bC5CYXR0bGVFdmVudFR5cGUSEAoIc291cmNlSWQYAiABKAUSEAoIdGFyZ2V0",
+            "SWQYAyABKAUSLAoGZGFtYWdlGAogASgLMhouR2FtZVByb3RvY29sLkRhbWFn",
+            "ZVBhcmFtc0gAEigKBGhlYWwYCyABKAsyGC5HYW1lUHJvdG9jb2wuSGVhbFBh",
+            "cmFtc0gAEioKBWRlYXRoGAwgASgLMhkuR2FtZVByb3RvY29sLkRlYXRoUGFy",
+            "YW1zSAASMgoJc2tpbGxDYXN0GA0gASgLMh0uR2FtZVByb3RvY29sLlNraWxs",
+            "Q2FzdFBhcmFtc0gAEjAKCGRyYXdDYXJkGBQgASgLMhwuR2FtZVByb3RvY29s",
+            "LkRyYXdDYXJkUGFyYW1zSAASNgoLZGlzY2FyZENhcmQYFSABKAsyHy5HYW1l",
+            "UHJvdG9jb2wuRGlzY2FyZENhcmRQYXJhbXNIABIwCghtb3ZlQ2FyZBgWIAEo",
+            "CzIcLkdhbWVQcm90b2NvbC5Nb3ZlQ2FyZFBhcmFtc0gAEjIKCW1lcmdlQ2Fy",
+            "ZBgXIAEoCzIdLkdhbWVQcm90b2NvbC5NZXJnZUNhcmRQYXJhbXNIABI6Cg1n",
+            "cmFudFVsdGltYXRlGBggASgLMiEuR2FtZVByb3RvY29sLkdyYW50VWx0aW1h",
+            "dGVQYXJhbXNIABI2CgtzaHVmZmxlRGVjaxgZIAEoCzIfLkdhbWVQcm90b2Nv",
+            "bC5TaHVmZmxlRGVja1BhcmFtc0gAEjYKC2VucXVldWVDYXJkGB4gASgLMh8u",
+            "R2FtZVByb3RvY29sLkVucXVldWVDYXJkUGFyYW1zSAASNgoLZGVxdWV1ZUNh",
+            "cmQYHyABKAsyHy5HYW1lUHJvdG9jb2wuRGVxdWV1ZUNhcmRQYXJhbXNIABJA",
+            "ChBjbGVhckFjdGlvblF1ZXVlGCAgASgLMiQuR2FtZVByb3RvY29sLkNsZWFy",
+            "QWN0aW9uUXVldWVQYXJhbXNIABJEChJhY3Rpb25Qb2ludENoYW5nZWQYKCAB",
+            "KAsyJi5HYW1lUHJvdG9jb2wuQWN0aW9uUG9pbnRDaGFuZ2VkUGFyYW1zSAAS",
+            "QgoRZW5lbXlTZWxlY3RUYXJnZXQYKSABKAsyJS5HYW1lUHJvdG9jb2wuRW5l",
+            "bXlTZWxlY3RUYXJnZXRQYXJhbXNIABIyCgl0dXJuU3RhcnQYKiABKAsyHS5H",
+            "YW1lUHJvdG9jb2wuVHVyblN0YXJ0UGFyYW1zSAASLgoHdHVybkVuZBgrIAEo",
+            "CzIbLkdhbWVQcm90b2NvbC5UdXJuRW5kUGFyYW1zSAASNgoLYmF0dGxlU3Rh",
+            "cnQYLCABKAsyHy5HYW1lUHJvdG9jb2wuQmF0dGxlU3RhcnRQYXJhbXNIABIy",
+            "CgliYXR0bGVFbmQYLSABKAsyHS5HYW1lUHJvdG9jb2wuQmF0dGxlRW5kUGFy",
+            "YW1zSABCDQoLZXZlbnRQYXJhbXMiNwoMRGFtYWdlUGFyYW1zEhMKC2RhbWFn",
+            "ZVZhbHVlGAEgASgFEhIKCmlzQ3JpdGljYWwYAiABKAgiMwoKSGVhbFBhcmFt",
+            "cxIRCgloZWFsVmFsdWUYASABKAUSEgoKaXNPdmVySGVhbBgCIAEoCCINCgtE",
+            "ZWF0aFBhcmFtcyI1Cg9Ta2lsbENhc3RQYXJhbXMSDwoHc2tpbGxJZBgBIAEo",
+            "BRIRCgl0YXJnZXRJZHMYAiADKAUiTwoORHJhd0NhcmRQYXJhbXMSKgoEY2Fy",
+            "ZBgBIAEoCzIcLkdhbWVQcm90b2NvbC5DYXJkRW50aXR5SW5mbxIRCglzbG90",
+            "SW5kZXgYAiABKAUiUgoRRGlzY2FyZENhcmRQYXJhbXMSKgoEY2FyZBgBIAEo",
+            "CzIcLkdhbWVQcm90b2NvbC5DYXJkRW50aXR5SW5mbxIRCglzbG90SW5kZXgY",
+            "AiABKAUiNAoOTW92ZUNhcmRQYXJhbXMSEQoJZnJvbUluZGV4GAEgASgFEg8K",
+            "B3RvSW5kZXgYAiABKAUidAoPTWVyZ2VDYXJkUGFyYW1zEhwKFHJlc3VsdENh",
+            "cmRJbnN0YW5jZUlkGAEgASgFEhcKD3Jlc3VsdFN0YXJMZXZlbBgCIAEoBRIX",
+            "Cg9jb25zdW1lZENhcmRJZHMYAyADKAUSEQoJc2xvdEluZGV4GAQgASgFIlQK",
+            "E0dyYW50VWx0aW1hdGVQYXJhbXMSKgoEY2FyZBgBIAEoCzIcLkdhbWVQcm90",
+            "b2NvbC5DYXJkRW50aXR5SW5mbxIRCglzbG90SW5kZXgYAiABKAUiKAoRU2h1",
+            "ZmZsZURlY2tQYXJhbXMSEwoLZGVja093bmVySWQYASABKAUibQoRRW5xdWV1",
+            "ZUNhcmRQYXJhbXMSKgoEY2FyZBgBIAEoCzIcLkdhbWVQcm90b2NvbC5DYXJk",
+            "RW50aXR5SW5mbxISCgpxdWV1ZUluZGV4GAIgASgFEhgKEGFjdGlvblBvaW50",
+            "QWZ0ZXIYAyABKAUiQgoRRGVxdWV1ZUNhcmRQYXJhbXMSEgoKcXVldWVJbmRl",
+            "eBgBIAEoBRIZChFyZXN0b3JlZFNsb3RJbmRleBgCIAEoBSIYChZDbGVhckFj",
+            "dGlvblF1ZXVlUGFyYW1zIlAKGEFjdGlvblBvaW50Q2hhbmdlZFBhcmFtcxIQ",
+            "CghlbnRpdHlJZBgBIAEoBRIQCghuZXdWYWx1ZRgCIAEoBRIQCghtYXhWYWx1",
+            "ZRgDIAEoBSI8ChdFbmVteVNlbGVjdFRhcmdldFBhcmFtcxIPCgdlbmVteUlk",
+            "GAEgASgFEhAKCHRhcmdldElkGAIgASgFIjwKD1R1cm5TdGFydFBhcmFtcxIU",
+            "Cgxpc1BsYXllclR1cm4YASABKAgSEwoLcm91bmROdW1iZXIYAiABKAUiOgoN",
+            "VHVybkVuZFBhcmFtcxIUCgxpc1BsYXllclR1cm4YASABKAgSEwoLcm91bmRO",
+            "dW1iZXIYAiABKAUiVgoRQmF0dGxlU3RhcnRQYXJhbXMSDwoHbGV2ZWxJZBgB",
+            "IAEoBRIwCghlbnRpdGllcxgCIAMoCzIeLkdhbWVQcm90b2NvbC5Db21iYXRF",
+            "bnRpdHlJbmZvIiYKD0JhdHRsZUVuZFBhcmFtcxITCgtpc1BsYXllcldpbhgB",
+            "IAEoCCpACgtSZXF1ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggKBFVzZXIQ",
+            "ARIKCgZGcmllbmQQAhIKCgZCYXR0bGUQAyqAAgoKQWN0aW9uQ29kZRIOCgpB",
+            "Y3Rpb25Ob25lEAASCQoFTG9nb24QARIJCgVMb2dpbhACEg0KCUhlYXJ0YmVh",
+            "dBADEg8KC0NoYXRQcml2YXRlEAQSEwoPRnJpZW5kT3BlcmF0aW9uEAUSEgoO",
+            "R2V0Q2hhdEhpc3RvcnkQBhIMCghFbnRlclB2ZRAHEgwKCFBsYXlDYXJkEAgS",
+            "CwoHRW5kVHVybhAJEhMKD1N5bmNCYXR0bGVFdmVudBAKEgwKCE1vdmVDYXJk",
+            "EAsSDgoKVW5Eb0FjdGlvbhAMEg8KC0NvbW1pdFJvdW5kEA0SFgoSUmVxdWVz",
+            "dEJhdHRsZVN0YXRlEA4qNQoKUmV0dXJuQ29kZRIOCgpSZXR1cm5Ob25lEAAS",
+            "CwoHU3VjY2VlZBABEgoKBkZhaWxlZBACKl4KDEZyaWVuZE9wVHlwZRIQCgxG",
+            "cmllbmRPcE5vbmUQABILCgdHZXRMaXN0EAESDQoJQWRkRnJpZW5kEAISEAoM",
+            "UmVtb3ZlRnJpZW5kEAMSDgoKU2VhcmNoVXNlchAEKt4CCg9CYXR0bGVFdmVu",
+            "dFR5cGUSCAoETm9uZRAAEg8KC0JhdHRsZVN0YXJ0EAESDQoJQmF0dGxlRW5k",
+            "EAISDQoJVHVyblN0YXJ0EAoSCwoHVHVybkVuZBALEgwKCERyYXdDYXJkEAwS",
+            "DwoLRGlzY2FyZENhcmQQDRINCglDYXJkTW92ZWQQDhINCglNZXJnZUNhcmQQ",
+            "DxIRCg1HcmFudFVsdGltYXRlEBASDwoLRW5xdWV1ZUNhcmQQERIPCgtEZXF1",
+            "ZXVlQ2FyZBASEhQKEENsZWFyQWN0aW9uUXVldWUQExINCglTa2lsbENhc3QQ",
+            "FBIPCgtEYW1hZ2VUYWtlbhAeEg0KCUhlYWxUYWtlbhAfEg4KCkVudGl0eURp",
+            "ZWQQIBIWChJBY3Rpb25Qb2ludENoYW5nZWQQIRIPCgtTaHVmZmxlRGVjaxAo",
+            "EhUKEUVuZW15U2VsZWN0VGFyZ2V0ECliBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProtocol.RequestCode), typeof(global::GameProtocol.ActionCode), typeof(global::GameProtocol.ReturnCode), typeof(global::GameProtocol.FriendOpType), typeof(global::GameProtocol.BattleEventType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.MainPack), global::GameProtocol.MainPack.Parser, new[]{ "RequestCode", "ActionCode", "ReturnCode", "StrMsg", "LoginPack", "ChatPack", "FriendPack", "ChatHistoryPack", "BattlePack" }, new[]{ "Data" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.LoginPack), global::GameProtocol.LoginPack.Parser, new[]{ "Username", "Password" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ChatPack), global::GameProtocol.ChatPack.Parser, new[]{ "ToUser", "FromUser", "Content", "ChatType", "Timestamp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.FriendInfo), global::GameProtocol.FriendInfo.Parser, new[]{ "Username", "IsOnline", "IsFriend" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.FriendPack), global::GameProtocol.FriendPack.Parser, new[]{ "OpType", "TargetUser", "FriendList" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ChatHistoryPack), global::GameProtocol.ChatHistoryPack.Parser, new[]{ "TargetUser", "ChatList" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.BattlePack), global::GameProtocol.BattlePack.Parser, new[]{ "LevelId", "CardInstanceId", "TargetEntityId", "Events" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.BattleEvent), global::GameProtocol.BattleEvent.Parser, new[]{ "EventType", "SourceId", "TargetId", "Damage", "Heal", "Death", "SkillCast" }, new[]{ "EventParams" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ChatPack), global::GameProtocol.ChatPack.Parser, new[]{ "ToUser", "FromUser", "Content", "ChatType", "Timestamp" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.CombatEntityInfo), global::GameProtocol.CombatEntityInfo.Parser, new[]{ "InstanceId", "ConfigId", "IsPlayerSide", "CurrentHp", "MaxHp", "ActionPoint", "MaxActionPoint" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.CardEntityInfo), global::GameProtocol.CardEntityInfo.Parser, new[]{ "InstanceId", "ConfigId", "StarLevel" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.PlayerDeckInfo), global::GameProtocol.PlayerDeckInfo.Parser, new[]{ "HandCards", "DrawPile", "DiscardPile", "DrawPileCount" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ActionQueueInfo), global::GameProtocol.ActionQueueInfo.Parser, new[]{ "QueuedCards", "MaxSize" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.BattleStateSnapshot), global::GameProtocol.BattleStateSnapshot.Parser, new[]{ "CurrentRound", "IsPlayerTurn", "Entities", "PlayerDeck", "ActionQueue" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.BattlePack), global::GameProtocol.BattlePack.Parser, new[]{ "LevelId", "CardInstanceId", "TargetEntityId", "SourceSlotIndex", "TargetSlotIndex", "Events", "StateSnapshot" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.BattleEvent), global::GameProtocol.BattleEvent.Parser, new[]{ "EventType", "SourceId", "TargetId", "Damage", "Heal", "Death", "SkillCast", "DrawCard", "DiscardCard", "MoveCard", "MergeCard", "GrantUltimate", "ShuffleDeck", "EnqueueCard", "DequeueCard", "ClearActionQueue", "ActionPointChanged", "EnemySelectTarget", "TurnStart", "TurnEnd", "BattleStart", "BattleEnd" }, new[]{ "EventParams" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.DamageParams), global::GameProtocol.DamageParams.Parser, new[]{ "DamageValue", "IsCritical" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.HealParams), global::GameProtocol.HealParams.Parser, new[]{ "HealValue", "IsOverHeal" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.DeathParams), global::GameProtocol.DeathParams.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.SkillCastParams), global::GameProtocol.SkillCastParams.Parser, new[]{ "SkillId", "TargetIds" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.SkillCastParams), global::GameProtocol.SkillCastParams.Parser, new[]{ "SkillId", "TargetIds" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.DrawCardParams), global::GameProtocol.DrawCardParams.Parser, new[]{ "Card", "SlotIndex" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.DiscardCardParams), global::GameProtocol.DiscardCardParams.Parser, new[]{ "Card", "SlotIndex" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.MoveCardParams), global::GameProtocol.MoveCardParams.Parser, new[]{ "FromIndex", "ToIndex" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.MergeCardParams), global::GameProtocol.MergeCardParams.Parser, new[]{ "ResultCardInstanceId", "ResultStarLevel", "ConsumedCardIds", "SlotIndex" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.GrantUltimateParams), global::GameProtocol.GrantUltimateParams.Parser, new[]{ "Card", "SlotIndex" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ShuffleDeckParams), global::GameProtocol.ShuffleDeckParams.Parser, new[]{ "DeckOwnerId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.EnqueueCardParams), global::GameProtocol.EnqueueCardParams.Parser, new[]{ "Card", "QueueIndex", "ActionPointAfter" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.DequeueCardParams), global::GameProtocol.DequeueCardParams.Parser, new[]{ "QueueIndex", "RestoredSlotIndex" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ClearActionQueueParams), global::GameProtocol.ClearActionQueueParams.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ActionPointChangedParams), global::GameProtocol.ActionPointChangedParams.Parser, new[]{ "EntityId", "NewValue", "MaxValue" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.EnemySelectTargetParams), global::GameProtocol.EnemySelectTargetParams.Parser, new[]{ "EnemyId", "TargetId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.TurnStartParams), global::GameProtocol.TurnStartParams.Parser, new[]{ "IsPlayerTurn", "RoundNumber" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.TurnEndParams), global::GameProtocol.TurnEndParams.Parser, new[]{ "IsPlayerTurn", "RoundNumber" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.BattleStartParams), global::GameProtocol.BattleStartParams.Parser, new[]{ "LevelId", "Entities" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.BattleEndParams), global::GameProtocol.BattleEndParams.Parser, new[]{ "IsPlayerWin" }, null, null, null, null)
           }));
     }
     #endregion
@@ -131,7 +218,7 @@ namespace GameProtocol {
     /// </summary>
     [pbr::OriginalName("GetChatHistory")] GetChatHistory = 6,
     /// <summary>
-    ///请求进入单机/PVE关卡
+    ///进入PVE关卡
     /// </summary>
     [pbr::OriginalName("EnterPve")] EnterPve = 7,
     /// <summary>
@@ -143,9 +230,25 @@ namespace GameProtocol {
     /// </summary>
     [pbr::OriginalName("EndTurn")] EndTurn = 9,
     /// <summary>
-    ///服务端下发战斗表现事件
+    ///服务端推送事件
     /// </summary>
     [pbr::OriginalName("SyncBattleEvent")] SyncBattleEvent = 10,
+    /// <summary>
+    ///移动卡牌
+    /// </summary>
+    [pbr::OriginalName("MoveCard")] MoveCard = 11,
+    /// <summary>
+    ///撤销操作
+    /// </summary>
+    [pbr::OriginalName("UnDoAction")] UnDoAction = 12,
+    /// <summary>
+    ///提交整轮行动(行动队列满)
+    /// </summary>
+    [pbr::OriginalName("CommitRound")] CommitRound = 13,
+    /// <summary>
+    ///客户端请求完整状态同步(断线重连用)
+    /// </summary>
+    [pbr::OriginalName("RequestBattleState")] RequestBattleState = 14,
   }
 
   public enum ReturnCode {
@@ -202,11 +305,43 @@ namespace GameProtocol {
     /// </summary>
     [pbr::OriginalName("TurnEnd")] TurnEnd = 11,
     /// <summary>
-    /// 技能释放
+    ///牌库操作
+    /// </summary>
+    [pbr::OriginalName("DrawCard")] DrawCard = 12,
+    /// <summary>
+    /// 弃牌
+    /// </summary>
+    [pbr::OriginalName("DiscardCard")] DiscardCard = 13,
+    /// <summary>
+    /// 移动卡牌
+    /// </summary>
+    [pbr::OriginalName("CardMoved")] CardMoved = 14,
+    /// <summary>
+    /// 合成卡牌
+    /// </summary>
+    [pbr::OriginalName("MergeCard")] MergeCard = 15,
+    /// <summary>
+    ///发放大招牌
+    /// </summary>
+    [pbr::OriginalName("GrantUltimate")] GrantUltimate = 16,
+    /// <summary>
+    ///行动队列
+    /// </summary>
+    [pbr::OriginalName("EnqueueCard")] EnqueueCard = 17,
+    /// <summary>
+    /// 卡牌离开行动队列
+    /// </summary>
+    [pbr::OriginalName("DequeueCard")] DequeueCard = 18,
+    /// <summary>
+    /// 清空行动队列
+    /// </summary>
+    [pbr::OriginalName("ClearActionQueue")] ClearActionQueue = 19,
+    /// <summary>
+    ///技能相关
     /// </summary>
     [pbr::OriginalName("SkillCast")] SkillCast = 20,
     /// <summary>
-    /// 受到伤害
+    ///实体状态变化
     /// </summary>
     [pbr::OriginalName("DamageTaken")] DamageTaken = 30,
     /// <summary>
@@ -217,6 +352,18 @@ namespace GameProtocol {
     /// 实体死亡
     /// </summary>
     [pbr::OriginalName("EntityDied")] EntityDied = 32,
+    /// <summary>
+    /// 行动点变化
+    /// </summary>
+    [pbr::OriginalName("ActionPointChanged")] ActionPointChanged = 33,
+    /// <summary>
+    ///其他
+    /// </summary>
+    [pbr::OriginalName("ShuffleDeck")] ShuffleDeck = 40,
+    /// <summary>
+    ///敌人选择目标
+    /// </summary>
+    [pbr::OriginalName("EnemySelectTarget")] EnemySelectTarget = 41,
   }
 
   #endregion
@@ -812,6 +959,544 @@ namespace GameProtocol {
 
   }
 
+  public sealed partial class FriendInfo : pb::IMessage<FriendInfo> {
+    private static readonly pb::MessageParser<FriendInfo> _parser = new pb::MessageParser<FriendInfo>(() => new FriendInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<FriendInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendInfo(FriendInfo other) : this() {
+      username_ = other.username_;
+      isOnline_ = other.isOnline_;
+      isFriend_ = other.isFriend_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendInfo Clone() {
+      return new FriendInfo(this);
+    }
+
+    /// <summary>Field number for the "username" field.</summary>
+    public const int UsernameFieldNumber = 1;
+    private string username_ = "";
+    /// <summary>
+    ///好友用户名
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Username {
+      get { return username_; }
+      set {
+        username_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "isOnline" field.</summary>
+    public const int IsOnlineFieldNumber = 2;
+    private bool isOnline_;
+    /// <summary>
+    ///是否在线
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsOnline {
+      get { return isOnline_; }
+      set {
+        isOnline_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "isFriend" field.</summary>
+    public const int IsFriendFieldNumber = 3;
+    private bool isFriend_;
+    /// <summary>
+    ///是否已经是好友
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsFriend {
+      get { return isFriend_; }
+      set {
+        isFriend_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as FriendInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(FriendInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Username != other.Username) return false;
+      if (IsOnline != other.IsOnline) return false;
+      if (IsFriend != other.IsFriend) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Username.Length != 0) hash ^= Username.GetHashCode();
+      if (IsOnline != false) hash ^= IsOnline.GetHashCode();
+      if (IsFriend != false) hash ^= IsFriend.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Username.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Username);
+      }
+      if (IsOnline != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(IsOnline);
+      }
+      if (IsFriend != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(IsFriend);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Username.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Username);
+      }
+      if (IsOnline != false) {
+        size += 1 + 1;
+      }
+      if (IsFriend != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(FriendInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Username.Length != 0) {
+        Username = other.Username;
+      }
+      if (other.IsOnline != false) {
+        IsOnline = other.IsOnline;
+      }
+      if (other.IsFriend != false) {
+        IsFriend = other.IsFriend;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Username = input.ReadString();
+            break;
+          }
+          case 16: {
+            IsOnline = input.ReadBool();
+            break;
+          }
+          case 24: {
+            IsFriend = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class FriendPack : pb::IMessage<FriendPack> {
+    private static readonly pb::MessageParser<FriendPack> _parser = new pb::MessageParser<FriendPack>(() => new FriendPack());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<FriendPack> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendPack() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendPack(FriendPack other) : this() {
+      opType_ = other.opType_;
+      targetUser_ = other.targetUser_;
+      friendList_ = other.friendList_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FriendPack Clone() {
+      return new FriendPack(this);
+    }
+
+    /// <summary>Field number for the "opType" field.</summary>
+    public const int OpTypeFieldNumber = 1;
+    private global::GameProtocol.FriendOpType opType_ = global::GameProtocol.FriendOpType.FriendOpNone;
+    /// <summary>
+    /// 操作类型 (获取列表 / 添加 / 删除)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.FriendOpType OpType {
+      get { return opType_; }
+      set {
+        opType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "targetUser" field.</summary>
+    public const int TargetUserFieldNumber = 2;
+    private string targetUser_ = "";
+    /// <summary>
+    /// 目标用户
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string TargetUser {
+      get { return targetUser_; }
+      set {
+        targetUser_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "friendList" field.</summary>
+    public const int FriendListFieldNumber = 3;
+    private static readonly pb::FieldCodec<global::GameProtocol.FriendInfo> _repeated_friendList_codec
+        = pb::FieldCodec.ForMessage(26, global::GameProtocol.FriendInfo.Parser);
+    private readonly pbc::RepeatedField<global::GameProtocol.FriendInfo> friendList_ = new pbc::RepeatedField<global::GameProtocol.FriendInfo>();
+    /// <summary>
+    /// 好友列表数据 (仅在 opType = GetList 且由服务器返回时，这个列表里才会有数据)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::GameProtocol.FriendInfo> FriendList {
+      get { return friendList_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as FriendPack);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(FriendPack other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (OpType != other.OpType) return false;
+      if (TargetUser != other.TargetUser) return false;
+      if(!friendList_.Equals(other.friendList_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (OpType != global::GameProtocol.FriendOpType.FriendOpNone) hash ^= OpType.GetHashCode();
+      if (TargetUser.Length != 0) hash ^= TargetUser.GetHashCode();
+      hash ^= friendList_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (OpType != global::GameProtocol.FriendOpType.FriendOpNone) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) OpType);
+      }
+      if (TargetUser.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(TargetUser);
+      }
+      friendList_.WriteTo(output, _repeated_friendList_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (OpType != global::GameProtocol.FriendOpType.FriendOpNone) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) OpType);
+      }
+      if (TargetUser.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(TargetUser);
+      }
+      size += friendList_.CalculateSize(_repeated_friendList_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(FriendPack other) {
+      if (other == null) {
+        return;
+      }
+      if (other.OpType != global::GameProtocol.FriendOpType.FriendOpNone) {
+        OpType = other.OpType;
+      }
+      if (other.TargetUser.Length != 0) {
+        TargetUser = other.TargetUser;
+      }
+      friendList_.Add(other.friendList_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            OpType = (global::GameProtocol.FriendOpType) input.ReadEnum();
+            break;
+          }
+          case 18: {
+            TargetUser = input.ReadString();
+            break;
+          }
+          case 26: {
+            friendList_.AddEntriesFrom(input, _repeated_friendList_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 聊天记录包 (拉取历史记录用)
+  /// </summary>
+  public sealed partial class ChatHistoryPack : pb::IMessage<ChatHistoryPack> {
+    private static readonly pb::MessageParser<ChatHistoryPack> _parser = new pb::MessageParser<ChatHistoryPack>(() => new ChatHistoryPack());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatHistoryPack> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatHistoryPack() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatHistoryPack(ChatHistoryPack other) : this() {
+      targetUser_ = other.targetUser_;
+      chatList_ = other.chatList_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatHistoryPack Clone() {
+      return new ChatHistoryPack(this);
+    }
+
+    /// <summary>Field number for the "targetUser" field.</summary>
+    public const int TargetUserFieldNumber = 1;
+    private string targetUser_ = "";
+    /// <summary>
+    /// 目标用户(与谁的聊天记录)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string TargetUser {
+      get { return targetUser_; }
+      set {
+        targetUser_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "chatList" field.</summary>
+    public const int ChatListFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::GameProtocol.ChatPack> _repeated_chatList_codec
+        = pb::FieldCodec.ForMessage(18, global::GameProtocol.ChatPack.Parser);
+    private readonly pbc::RepeatedField<global::GameProtocol.ChatPack> chatList_ = new pbc::RepeatedField<global::GameProtocol.ChatPack>();
+    /// <summary>
+    /// 历史记录列表
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::GameProtocol.ChatPack> ChatList {
+      get { return chatList_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatHistoryPack);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatHistoryPack other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (TargetUser != other.TargetUser) return false;
+      if(!chatList_.Equals(other.chatList_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (TargetUser.Length != 0) hash ^= TargetUser.GetHashCode();
+      hash ^= chatList_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (TargetUser.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(TargetUser);
+      }
+      chatList_.WriteTo(output, _repeated_chatList_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (TargetUser.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(TargetUser);
+      }
+      size += chatList_.CalculateSize(_repeated_chatList_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatHistoryPack other) {
+      if (other == null) {
+        return;
+      }
+      if (other.TargetUser.Length != 0) {
+        TargetUser = other.TargetUser;
+      }
+      chatList_.Add(other.chatList_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            TargetUser = input.ReadString();
+            break;
+          }
+          case 18: {
+            chatList_.AddEntriesFrom(input, _repeated_chatList_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   public sealed partial class ChatPack : pb::IMessage<ChatPack> {
     private static readonly pb::MessageParser<ChatPack> _parser = new pb::MessageParser<ChatPack>(() => new ChatPack());
     private pb::UnknownFieldSet _unknownFields;
@@ -820,7 +1505,7 @@ namespace GameProtocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[2]; }
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1053,15 +1738,15 @@ namespace GameProtocol {
 
   }
 
-  public sealed partial class FriendInfo : pb::IMessage<FriendInfo> {
-    private static readonly pb::MessageParser<FriendInfo> _parser = new pb::MessageParser<FriendInfo>(() => new FriendInfo());
+  public sealed partial class CombatEntityInfo : pb::IMessage<CombatEntityInfo> {
+    private static readonly pb::MessageParser<CombatEntityInfo> _parser = new pb::MessageParser<CombatEntityInfo>(() => new CombatEntityInfo());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<FriendInfo> Parser { get { return _parser; } }
+    public static pb::MessageParser<CombatEntityInfo> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[3]; }
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1070,92 +1755,142 @@ namespace GameProtocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FriendInfo() {
+    public CombatEntityInfo() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FriendInfo(FriendInfo other) : this() {
-      username_ = other.username_;
-      isOnline_ = other.isOnline_;
-      isFriend_ = other.isFriend_;
+    public CombatEntityInfo(CombatEntityInfo other) : this() {
+      instanceId_ = other.instanceId_;
+      configId_ = other.configId_;
+      isPlayerSide_ = other.isPlayerSide_;
+      currentHp_ = other.currentHp_;
+      maxHp_ = other.maxHp_;
+      actionPoint_ = other.actionPoint_;
+      maxActionPoint_ = other.maxActionPoint_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FriendInfo Clone() {
-      return new FriendInfo(this);
+    public CombatEntityInfo Clone() {
+      return new CombatEntityInfo(this);
     }
 
-    /// <summary>Field number for the "username" field.</summary>
-    public const int UsernameFieldNumber = 1;
-    private string username_ = "";
-    /// <summary>
-    ///好友用户名
-    /// </summary>
+    /// <summary>Field number for the "instanceId" field.</summary>
+    public const int InstanceIdFieldNumber = 1;
+    private int instanceId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Username {
-      get { return username_; }
+    public int InstanceId {
+      get { return instanceId_; }
       set {
-        username_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        instanceId_ = value;
       }
     }
 
-    /// <summary>Field number for the "isOnline" field.</summary>
-    public const int IsOnlineFieldNumber = 2;
-    private bool isOnline_;
-    /// <summary>
-    ///是否在线
-    /// </summary>
+    /// <summary>Field number for the "configId" field.</summary>
+    public const int ConfigIdFieldNumber = 2;
+    private int configId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool IsOnline {
-      get { return isOnline_; }
+    public int ConfigId {
+      get { return configId_; }
       set {
-        isOnline_ = value;
+        configId_ = value;
       }
     }
 
-    /// <summary>Field number for the "isFriend" field.</summary>
-    public const int IsFriendFieldNumber = 3;
-    private bool isFriend_;
+    /// <summary>Field number for the "isPlayerSide" field.</summary>
+    public const int IsPlayerSideFieldNumber = 3;
+    private bool isPlayerSide_;
     /// <summary>
-    ///是否已经是好友
+    /// true=英雄, false=敌人
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool IsFriend {
-      get { return isFriend_; }
+    public bool IsPlayerSide {
+      get { return isPlayerSide_; }
       set {
-        isFriend_ = value;
+        isPlayerSide_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "currentHp" field.</summary>
+    public const int CurrentHpFieldNumber = 4;
+    private int currentHp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CurrentHp {
+      get { return currentHp_; }
+      set {
+        currentHp_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "maxHp" field.</summary>
+    public const int MaxHpFieldNumber = 5;
+    private int maxHp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MaxHp {
+      get { return maxHp_; }
+      set {
+        maxHp_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "actionPoint" field.</summary>
+    public const int ActionPointFieldNumber = 6;
+    private int actionPoint_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ActionPoint {
+      get { return actionPoint_; }
+      set {
+        actionPoint_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "maxActionPoint" field.</summary>
+    public const int MaxActionPointFieldNumber = 7;
+    private int maxActionPoint_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MaxActionPoint {
+      get { return maxActionPoint_; }
+      set {
+        maxActionPoint_ = value;
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as FriendInfo);
+      return Equals(other as CombatEntityInfo);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(FriendInfo other) {
+    public bool Equals(CombatEntityInfo other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Username != other.Username) return false;
-      if (IsOnline != other.IsOnline) return false;
-      if (IsFriend != other.IsFriend) return false;
+      if (InstanceId != other.InstanceId) return false;
+      if (ConfigId != other.ConfigId) return false;
+      if (IsPlayerSide != other.IsPlayerSide) return false;
+      if (CurrentHp != other.CurrentHp) return false;
+      if (MaxHp != other.MaxHp) return false;
+      if (ActionPoint != other.ActionPoint) return false;
+      if (MaxActionPoint != other.MaxActionPoint) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Username.Length != 0) hash ^= Username.GetHashCode();
-      if (IsOnline != false) hash ^= IsOnline.GetHashCode();
-      if (IsFriend != false) hash ^= IsFriend.GetHashCode();
+      if (InstanceId != 0) hash ^= InstanceId.GetHashCode();
+      if (ConfigId != 0) hash ^= ConfigId.GetHashCode();
+      if (IsPlayerSide != false) hash ^= IsPlayerSide.GetHashCode();
+      if (CurrentHp != 0) hash ^= CurrentHp.GetHashCode();
+      if (MaxHp != 0) hash ^= MaxHp.GetHashCode();
+      if (ActionPoint != 0) hash ^= ActionPoint.GetHashCode();
+      if (MaxActionPoint != 0) hash ^= MaxActionPoint.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1169,208 +1904,34 @@ namespace GameProtocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Username.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Username);
-      }
-      if (IsOnline != false) {
-        output.WriteRawTag(16);
-        output.WriteBool(IsOnline);
-      }
-      if (IsFriend != false) {
-        output.WriteRawTag(24);
-        output.WriteBool(IsFriend);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (Username.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Username);
-      }
-      if (IsOnline != false) {
-        size += 1 + 1;
-      }
-      if (IsFriend != false) {
-        size += 1 + 1;
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(FriendInfo other) {
-      if (other == null) {
-        return;
-      }
-      if (other.Username.Length != 0) {
-        Username = other.Username;
-      }
-      if (other.IsOnline != false) {
-        IsOnline = other.IsOnline;
-      }
-      if (other.IsFriend != false) {
-        IsFriend = other.IsFriend;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            Username = input.ReadString();
-            break;
-          }
-          case 16: {
-            IsOnline = input.ReadBool();
-            break;
-          }
-          case 24: {
-            IsFriend = input.ReadBool();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  public sealed partial class FriendPack : pb::IMessage<FriendPack> {
-    private static readonly pb::MessageParser<FriendPack> _parser = new pb::MessageParser<FriendPack>(() => new FriendPack());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<FriendPack> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[4]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FriendPack() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FriendPack(FriendPack other) : this() {
-      opType_ = other.opType_;
-      targetUser_ = other.targetUser_;
-      friendList_ = other.friendList_.Clone();
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FriendPack Clone() {
-      return new FriendPack(this);
-    }
-
-    /// <summary>Field number for the "opType" field.</summary>
-    public const int OpTypeFieldNumber = 1;
-    private global::GameProtocol.FriendOpType opType_ = global::GameProtocol.FriendOpType.FriendOpNone;
-    /// <summary>
-    /// 操作类型 (获取列表 / 添加 / 删除)
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::GameProtocol.FriendOpType OpType {
-      get { return opType_; }
-      set {
-        opType_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "targetUser" field.</summary>
-    public const int TargetUserFieldNumber = 2;
-    private string targetUser_ = "";
-    /// <summary>
-    /// 目标用户
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string TargetUser {
-      get { return targetUser_; }
-      set {
-        targetUser_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "friendList" field.</summary>
-    public const int FriendListFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::GameProtocol.FriendInfo> _repeated_friendList_codec
-        = pb::FieldCodec.ForMessage(26, global::GameProtocol.FriendInfo.Parser);
-    private readonly pbc::RepeatedField<global::GameProtocol.FriendInfo> friendList_ = new pbc::RepeatedField<global::GameProtocol.FriendInfo>();
-    /// <summary>
-    /// 好友列表数据 (仅在 opType = GetList 且由服务器返回时，这个列表里才会有数据)
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::GameProtocol.FriendInfo> FriendList {
-      get { return friendList_; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as FriendPack);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(FriendPack other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (OpType != other.OpType) return false;
-      if (TargetUser != other.TargetUser) return false;
-      if(!friendList_.Equals(other.friendList_)) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (OpType != global::GameProtocol.FriendOpType.FriendOpNone) hash ^= OpType.GetHashCode();
-      if (TargetUser.Length != 0) hash ^= TargetUser.GetHashCode();
-      hash ^= friendList_.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (OpType != global::GameProtocol.FriendOpType.FriendOpNone) {
+      if (InstanceId != 0) {
         output.WriteRawTag(8);
-        output.WriteEnum((int) OpType);
+        output.WriteInt32(InstanceId);
       }
-      if (TargetUser.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(TargetUser);
+      if (ConfigId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(ConfigId);
       }
-      friendList_.WriteTo(output, _repeated_friendList_codec);
+      if (IsPlayerSide != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(IsPlayerSide);
+      }
+      if (CurrentHp != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(CurrentHp);
+      }
+      if (MaxHp != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(MaxHp);
+      }
+      if (ActionPoint != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(ActionPoint);
+      }
+      if (MaxActionPoint != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(MaxActionPoint);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1379,13 +1940,27 @@ namespace GameProtocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (OpType != global::GameProtocol.FriendOpType.FriendOpNone) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) OpType);
+      if (InstanceId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InstanceId);
       }
-      if (TargetUser.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(TargetUser);
+      if (ConfigId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ConfigId);
       }
-      size += friendList_.CalculateSize(_repeated_friendList_codec);
+      if (IsPlayerSide != false) {
+        size += 1 + 1;
+      }
+      if (CurrentHp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CurrentHp);
+      }
+      if (MaxHp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxHp);
+      }
+      if (ActionPoint != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActionPoint);
+      }
+      if (MaxActionPoint != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxActionPoint);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -1393,17 +1968,31 @@ namespace GameProtocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(FriendPack other) {
+    public void MergeFrom(CombatEntityInfo other) {
       if (other == null) {
         return;
       }
-      if (other.OpType != global::GameProtocol.FriendOpType.FriendOpNone) {
-        OpType = other.OpType;
+      if (other.InstanceId != 0) {
+        InstanceId = other.InstanceId;
       }
-      if (other.TargetUser.Length != 0) {
-        TargetUser = other.TargetUser;
+      if (other.ConfigId != 0) {
+        ConfigId = other.ConfigId;
       }
-      friendList_.Add(other.friendList_);
+      if (other.IsPlayerSide != false) {
+        IsPlayerSide = other.IsPlayerSide;
+      }
+      if (other.CurrentHp != 0) {
+        CurrentHp = other.CurrentHp;
+      }
+      if (other.MaxHp != 0) {
+        MaxHp = other.MaxHp;
+      }
+      if (other.ActionPoint != 0) {
+        ActionPoint = other.ActionPoint;
+      }
+      if (other.MaxActionPoint != 0) {
+        MaxActionPoint = other.MaxActionPoint;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1416,15 +2005,31 @@ namespace GameProtocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            OpType = (global::GameProtocol.FriendOpType) input.ReadEnum();
+            InstanceId = input.ReadInt32();
             break;
           }
-          case 18: {
-            TargetUser = input.ReadString();
+          case 16: {
+            ConfigId = input.ReadInt32();
             break;
           }
-          case 26: {
-            friendList_.AddEntriesFrom(input, _repeated_friendList_codec);
+          case 24: {
+            IsPlayerSide = input.ReadBool();
+            break;
+          }
+          case 32: {
+            CurrentHp = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            MaxHp = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            ActionPoint = input.ReadInt32();
+            break;
+          }
+          case 56: {
+            MaxActionPoint = input.ReadInt32();
             break;
           }
         }
@@ -1433,18 +2038,15 @@ namespace GameProtocol {
 
   }
 
-  /// <summary>
-  /// 聊天记录包 (拉取历史记录用)
-  /// </summary>
-  public sealed partial class ChatHistoryPack : pb::IMessage<ChatHistoryPack> {
-    private static readonly pb::MessageParser<ChatHistoryPack> _parser = new pb::MessageParser<ChatHistoryPack>(() => new ChatHistoryPack());
+  public sealed partial class CardEntityInfo : pb::IMessage<CardEntityInfo> {
+    private static readonly pb::MessageParser<CardEntityInfo> _parser = new pb::MessageParser<CardEntityInfo>(() => new CardEntityInfo());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<ChatHistoryPack> Parser { get { return _parser; } }
+    public static pb::MessageParser<CardEntityInfo> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[5]; }
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1453,74 +2055,86 @@ namespace GameProtocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ChatHistoryPack() {
+    public CardEntityInfo() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ChatHistoryPack(ChatHistoryPack other) : this() {
-      targetUser_ = other.targetUser_;
-      chatList_ = other.chatList_.Clone();
+    public CardEntityInfo(CardEntityInfo other) : this() {
+      instanceId_ = other.instanceId_;
+      configId_ = other.configId_;
+      starLevel_ = other.starLevel_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ChatHistoryPack Clone() {
-      return new ChatHistoryPack(this);
+    public CardEntityInfo Clone() {
+      return new CardEntityInfo(this);
     }
 
-    /// <summary>Field number for the "targetUser" field.</summary>
-    public const int TargetUserFieldNumber = 1;
-    private string targetUser_ = "";
-    /// <summary>
-    /// 目标用户(与谁的聊天记录)
-    /// </summary>
+    /// <summary>Field number for the "instanceId" field.</summary>
+    public const int InstanceIdFieldNumber = 1;
+    private int instanceId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string TargetUser {
-      get { return targetUser_; }
+    public int InstanceId {
+      get { return instanceId_; }
       set {
-        targetUser_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        instanceId_ = value;
       }
     }
 
-    /// <summary>Field number for the "chatList" field.</summary>
-    public const int ChatListFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::GameProtocol.ChatPack> _repeated_chatList_codec
-        = pb::FieldCodec.ForMessage(18, global::GameProtocol.ChatPack.Parser);
-    private readonly pbc::RepeatedField<global::GameProtocol.ChatPack> chatList_ = new pbc::RepeatedField<global::GameProtocol.ChatPack>();
+    /// <summary>Field number for the "configId" field.</summary>
+    public const int ConfigIdFieldNumber = 2;
+    private int configId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ConfigId {
+      get { return configId_; }
+      set {
+        configId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "starLevel" field.</summary>
+    public const int StarLevelFieldNumber = 3;
+    private int starLevel_;
     /// <summary>
-    /// 历史记录列表
+    /// 1~3
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::GameProtocol.ChatPack> ChatList {
-      get { return chatList_; }
+    public int StarLevel {
+      get { return starLevel_; }
+      set {
+        starLevel_ = value;
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as ChatHistoryPack);
+      return Equals(other as CardEntityInfo);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(ChatHistoryPack other) {
+    public bool Equals(CardEntityInfo other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (TargetUser != other.TargetUser) return false;
-      if(!chatList_.Equals(other.chatList_)) return false;
+      if (InstanceId != other.InstanceId) return false;
+      if (ConfigId != other.ConfigId) return false;
+      if (StarLevel != other.StarLevel) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (TargetUser.Length != 0) hash ^= TargetUser.GetHashCode();
-      hash ^= chatList_.GetHashCode();
+      if (InstanceId != 0) hash ^= InstanceId.GetHashCode();
+      if (ConfigId != 0) hash ^= ConfigId.GetHashCode();
+      if (StarLevel != 0) hash ^= StarLevel.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1534,11 +2148,18 @@ namespace GameProtocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (TargetUser.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(TargetUser);
+      if (InstanceId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(InstanceId);
       }
-      chatList_.WriteTo(output, _repeated_chatList_codec);
+      if (ConfigId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(ConfigId);
+      }
+      if (StarLevel != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(StarLevel);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1547,10 +2168,15 @@ namespace GameProtocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (TargetUser.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(TargetUser);
+      if (InstanceId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InstanceId);
       }
-      size += chatList_.CalculateSize(_repeated_chatList_codec);
+      if (ConfigId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ConfigId);
+      }
+      if (StarLevel != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(StarLevel);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -1558,14 +2184,213 @@ namespace GameProtocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(ChatHistoryPack other) {
+    public void MergeFrom(CardEntityInfo other) {
       if (other == null) {
         return;
       }
-      if (other.TargetUser.Length != 0) {
-        TargetUser = other.TargetUser;
+      if (other.InstanceId != 0) {
+        InstanceId = other.InstanceId;
       }
-      chatList_.Add(other.chatList_);
+      if (other.ConfigId != 0) {
+        ConfigId = other.ConfigId;
+      }
+      if (other.StarLevel != 0) {
+        StarLevel = other.StarLevel;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            InstanceId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            ConfigId = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            StarLevel = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class PlayerDeckInfo : pb::IMessage<PlayerDeckInfo> {
+    private static readonly pb::MessageParser<PlayerDeckInfo> _parser = new pb::MessageParser<PlayerDeckInfo>(() => new PlayerDeckInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<PlayerDeckInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[8]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerDeckInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerDeckInfo(PlayerDeckInfo other) : this() {
+      handCards_ = other.handCards_.Clone();
+      drawPile_ = other.drawPile_.Clone();
+      discardPile_ = other.discardPile_.Clone();
+      drawPileCount_ = other.drawPileCount_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerDeckInfo Clone() {
+      return new PlayerDeckInfo(this);
+    }
+
+    /// <summary>Field number for the "handCards" field.</summary>
+    public const int HandCardsFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::GameProtocol.CardEntityInfo> _repeated_handCards_codec
+        = pb::FieldCodec.ForMessage(10, global::GameProtocol.CardEntityInfo.Parser);
+    private readonly pbc::RepeatedField<global::GameProtocol.CardEntityInfo> handCards_ = new pbc::RepeatedField<global::GameProtocol.CardEntityInfo>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::GameProtocol.CardEntityInfo> HandCards {
+      get { return handCards_; }
+    }
+
+    /// <summary>Field number for the "drawPile" field.</summary>
+    public const int DrawPileFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::GameProtocol.CardEntityInfo> _repeated_drawPile_codec
+        = pb::FieldCodec.ForMessage(18, global::GameProtocol.CardEntityInfo.Parser);
+    private readonly pbc::RepeatedField<global::GameProtocol.CardEntityInfo> drawPile_ = new pbc::RepeatedField<global::GameProtocol.CardEntityInfo>();
+    /// <summary>
+    /// 可选：抽牌堆数量即可
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::GameProtocol.CardEntityInfo> DrawPile {
+      get { return drawPile_; }
+    }
+
+    /// <summary>Field number for the "discardPile" field.</summary>
+    public const int DiscardPileFieldNumber = 3;
+    private static readonly pb::FieldCodec<global::GameProtocol.CardEntityInfo> _repeated_discardPile_codec
+        = pb::FieldCodec.ForMessage(26, global::GameProtocol.CardEntityInfo.Parser);
+    private readonly pbc::RepeatedField<global::GameProtocol.CardEntityInfo> discardPile_ = new pbc::RepeatedField<global::GameProtocol.CardEntityInfo>();
+    /// <summary>
+    /// 可选
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::GameProtocol.CardEntityInfo> DiscardPile {
+      get { return discardPile_; }
+    }
+
+    /// <summary>Field number for the "drawPileCount" field.</summary>
+    public const int DrawPileCountFieldNumber = 4;
+    private int drawPileCount_;
+    /// <summary>
+    /// 简化：只同步数量
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int DrawPileCount {
+      get { return drawPileCount_; }
+      set {
+        drawPileCount_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as PlayerDeckInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(PlayerDeckInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!handCards_.Equals(other.handCards_)) return false;
+      if(!drawPile_.Equals(other.drawPile_)) return false;
+      if(!discardPile_.Equals(other.discardPile_)) return false;
+      if (DrawPileCount != other.DrawPileCount) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= handCards_.GetHashCode();
+      hash ^= drawPile_.GetHashCode();
+      hash ^= discardPile_.GetHashCode();
+      if (DrawPileCount != 0) hash ^= DrawPileCount.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      handCards_.WriteTo(output, _repeated_handCards_codec);
+      drawPile_.WriteTo(output, _repeated_drawPile_codec);
+      discardPile_.WriteTo(output, _repeated_discardPile_codec);
+      if (DrawPileCount != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(DrawPileCount);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      size += handCards_.CalculateSize(_repeated_handCards_codec);
+      size += drawPile_.CalculateSize(_repeated_drawPile_codec);
+      size += discardPile_.CalculateSize(_repeated_discardPile_codec);
+      if (DrawPileCount != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DrawPileCount);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(PlayerDeckInfo other) {
+      if (other == null) {
+        return;
+      }
+      handCards_.Add(other.handCards_);
+      drawPile_.Add(other.drawPile_);
+      discardPile_.Add(other.discardPile_);
+      if (other.DrawPileCount != 0) {
+        DrawPileCount = other.DrawPileCount;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1578,11 +2403,413 @@ namespace GameProtocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            TargetUser = input.ReadString();
+            handCards_.AddEntriesFrom(input, _repeated_handCards_codec);
             break;
           }
           case 18: {
-            chatList_.AddEntriesFrom(input, _repeated_chatList_codec);
+            drawPile_.AddEntriesFrom(input, _repeated_drawPile_codec);
+            break;
+          }
+          case 26: {
+            discardPile_.AddEntriesFrom(input, _repeated_discardPile_codec);
+            break;
+          }
+          case 32: {
+            DrawPileCount = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ActionQueueInfo : pb::IMessage<ActionQueueInfo> {
+    private static readonly pb::MessageParser<ActionQueueInfo> _parser = new pb::MessageParser<ActionQueueInfo>(() => new ActionQueueInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ActionQueueInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[9]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ActionQueueInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ActionQueueInfo(ActionQueueInfo other) : this() {
+      queuedCards_ = other.queuedCards_.Clone();
+      maxSize_ = other.maxSize_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ActionQueueInfo Clone() {
+      return new ActionQueueInfo(this);
+    }
+
+    /// <summary>Field number for the "queuedCards" field.</summary>
+    public const int QueuedCardsFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::GameProtocol.CardEntityInfo> _repeated_queuedCards_codec
+        = pb::FieldCodec.ForMessage(10, global::GameProtocol.CardEntityInfo.Parser);
+    private readonly pbc::RepeatedField<global::GameProtocol.CardEntityInfo> queuedCards_ = new pbc::RepeatedField<global::GameProtocol.CardEntityInfo>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::GameProtocol.CardEntityInfo> QueuedCards {
+      get { return queuedCards_; }
+    }
+
+    /// <summary>Field number for the "maxSize" field.</summary>
+    public const int MaxSizeFieldNumber = 2;
+    private int maxSize_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MaxSize {
+      get { return maxSize_; }
+      set {
+        maxSize_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ActionQueueInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ActionQueueInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!queuedCards_.Equals(other.queuedCards_)) return false;
+      if (MaxSize != other.MaxSize) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= queuedCards_.GetHashCode();
+      if (MaxSize != 0) hash ^= MaxSize.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      queuedCards_.WriteTo(output, _repeated_queuedCards_codec);
+      if (MaxSize != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(MaxSize);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      size += queuedCards_.CalculateSize(_repeated_queuedCards_codec);
+      if (MaxSize != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxSize);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ActionQueueInfo other) {
+      if (other == null) {
+        return;
+      }
+      queuedCards_.Add(other.queuedCards_);
+      if (other.MaxSize != 0) {
+        MaxSize = other.MaxSize;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            queuedCards_.AddEntriesFrom(input, _repeated_queuedCards_codec);
+            break;
+          }
+          case 16: {
+            MaxSize = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class BattleStateSnapshot : pb::IMessage<BattleStateSnapshot> {
+    private static readonly pb::MessageParser<BattleStateSnapshot> _parser = new pb::MessageParser<BattleStateSnapshot>(() => new BattleStateSnapshot());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<BattleStateSnapshot> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[10]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BattleStateSnapshot() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BattleStateSnapshot(BattleStateSnapshot other) : this() {
+      currentRound_ = other.currentRound_;
+      isPlayerTurn_ = other.isPlayerTurn_;
+      entities_ = other.entities_.Clone();
+      playerDeck_ = other.playerDeck_ != null ? other.playerDeck_.Clone() : null;
+      actionQueue_ = other.actionQueue_ != null ? other.actionQueue_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BattleStateSnapshot Clone() {
+      return new BattleStateSnapshot(this);
+    }
+
+    /// <summary>Field number for the "currentRound" field.</summary>
+    public const int CurrentRoundFieldNumber = 1;
+    private int currentRound_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CurrentRound {
+      get { return currentRound_; }
+      set {
+        currentRound_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "isPlayerTurn" field.</summary>
+    public const int IsPlayerTurnFieldNumber = 2;
+    private bool isPlayerTurn_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsPlayerTurn {
+      get { return isPlayerTurn_; }
+      set {
+        isPlayerTurn_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "entities" field.</summary>
+    public const int EntitiesFieldNumber = 3;
+    private static readonly pb::FieldCodec<global::GameProtocol.CombatEntityInfo> _repeated_entities_codec
+        = pb::FieldCodec.ForMessage(26, global::GameProtocol.CombatEntityInfo.Parser);
+    private readonly pbc::RepeatedField<global::GameProtocol.CombatEntityInfo> entities_ = new pbc::RepeatedField<global::GameProtocol.CombatEntityInfo>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::GameProtocol.CombatEntityInfo> Entities {
+      get { return entities_; }
+    }
+
+    /// <summary>Field number for the "playerDeck" field.</summary>
+    public const int PlayerDeckFieldNumber = 4;
+    private global::GameProtocol.PlayerDeckInfo playerDeck_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.PlayerDeckInfo PlayerDeck {
+      get { return playerDeck_; }
+      set {
+        playerDeck_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "actionQueue" field.</summary>
+    public const int ActionQueueFieldNumber = 5;
+    private global::GameProtocol.ActionQueueInfo actionQueue_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.ActionQueueInfo ActionQueue {
+      get { return actionQueue_; }
+      set {
+        actionQueue_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as BattleStateSnapshot);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(BattleStateSnapshot other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (CurrentRound != other.CurrentRound) return false;
+      if (IsPlayerTurn != other.IsPlayerTurn) return false;
+      if(!entities_.Equals(other.entities_)) return false;
+      if (!object.Equals(PlayerDeck, other.PlayerDeck)) return false;
+      if (!object.Equals(ActionQueue, other.ActionQueue)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (CurrentRound != 0) hash ^= CurrentRound.GetHashCode();
+      if (IsPlayerTurn != false) hash ^= IsPlayerTurn.GetHashCode();
+      hash ^= entities_.GetHashCode();
+      if (playerDeck_ != null) hash ^= PlayerDeck.GetHashCode();
+      if (actionQueue_ != null) hash ^= ActionQueue.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (CurrentRound != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(CurrentRound);
+      }
+      if (IsPlayerTurn != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(IsPlayerTurn);
+      }
+      entities_.WriteTo(output, _repeated_entities_codec);
+      if (playerDeck_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(PlayerDeck);
+      }
+      if (actionQueue_ != null) {
+        output.WriteRawTag(42);
+        output.WriteMessage(ActionQueue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (CurrentRound != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CurrentRound);
+      }
+      if (IsPlayerTurn != false) {
+        size += 1 + 1;
+      }
+      size += entities_.CalculateSize(_repeated_entities_codec);
+      if (playerDeck_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(PlayerDeck);
+      }
+      if (actionQueue_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ActionQueue);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(BattleStateSnapshot other) {
+      if (other == null) {
+        return;
+      }
+      if (other.CurrentRound != 0) {
+        CurrentRound = other.CurrentRound;
+      }
+      if (other.IsPlayerTurn != false) {
+        IsPlayerTurn = other.IsPlayerTurn;
+      }
+      entities_.Add(other.entities_);
+      if (other.playerDeck_ != null) {
+        if (playerDeck_ == null) {
+          PlayerDeck = new global::GameProtocol.PlayerDeckInfo();
+        }
+        PlayerDeck.MergeFrom(other.PlayerDeck);
+      }
+      if (other.actionQueue_ != null) {
+        if (actionQueue_ == null) {
+          ActionQueue = new global::GameProtocol.ActionQueueInfo();
+        }
+        ActionQueue.MergeFrom(other.ActionQueue);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            CurrentRound = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            IsPlayerTurn = input.ReadBool();
+            break;
+          }
+          case 26: {
+            entities_.AddEntriesFrom(input, _repeated_entities_codec);
+            break;
+          }
+          case 34: {
+            if (playerDeck_ == null) {
+              PlayerDeck = new global::GameProtocol.PlayerDeckInfo();
+            }
+            input.ReadMessage(PlayerDeck);
+            break;
+          }
+          case 42: {
+            if (actionQueue_ == null) {
+              ActionQueue = new global::GameProtocol.ActionQueueInfo();
+            }
+            input.ReadMessage(ActionQueue);
             break;
           }
         }
@@ -1602,7 +2829,7 @@ namespace GameProtocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[6]; }
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1622,7 +2849,10 @@ namespace GameProtocol {
       levelId_ = other.levelId_;
       cardInstanceId_ = other.cardInstanceId_;
       targetEntityId_ = other.targetEntityId_;
+      sourceSlotIndex_ = other.sourceSlotIndex_;
+      targetSlotIndex_ = other.targetSlotIndex_;
       events_ = other.events_.Clone();
+      stateSnapshot_ = other.stateSnapshot_ != null ? other.stateSnapshot_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1649,7 +2879,7 @@ namespace GameProtocol {
     public const int CardInstanceIdFieldNumber = 2;
     private int cardInstanceId_;
     /// <summary>
-    /// 卡牌实例ID
+    /// 卡牌实例ID(PlayCard时用)
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CardInstanceId {
@@ -1673,10 +2903,38 @@ namespace GameProtocol {
       }
     }
 
+    /// <summary>Field number for the "sourceSlotIndex" field.</summary>
+    public const int SourceSlotIndexFieldNumber = 4;
+    private int sourceSlotIndex_;
+    /// <summary>
+    /// 卡牌来源槽位索引(MoveCard时用)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int SourceSlotIndex {
+      get { return sourceSlotIndex_; }
+      set {
+        sourceSlotIndex_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "targetSlotIndex" field.</summary>
+    public const int TargetSlotIndexFieldNumber = 5;
+    private int targetSlotIndex_;
+    /// <summary>
+    /// 卡牌目标槽位索引
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int TargetSlotIndex {
+      get { return targetSlotIndex_; }
+      set {
+        targetSlotIndex_ = value;
+      }
+    }
+
     /// <summary>Field number for the "events" field.</summary>
-    public const int EventsFieldNumber = 4;
+    public const int EventsFieldNumber = 10;
     private static readonly pb::FieldCodec<global::GameProtocol.BattleEvent> _repeated_events_codec
-        = pb::FieldCodec.ForMessage(34, global::GameProtocol.BattleEvent.Parser);
+        = pb::FieldCodec.ForMessage(82, global::GameProtocol.BattleEvent.Parser);
     private readonly pbc::RepeatedField<global::GameProtocol.BattleEvent> events_ = new pbc::RepeatedField<global::GameProtocol.BattleEvent>();
     /// <summary>
     /// 战斗事件列表
@@ -1684,6 +2942,20 @@ namespace GameProtocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::GameProtocol.BattleEvent> Events {
       get { return events_; }
+    }
+
+    /// <summary>Field number for the "stateSnapshot" field.</summary>
+    public const int StateSnapshotFieldNumber = 11;
+    private global::GameProtocol.BattleStateSnapshot stateSnapshot_;
+    /// <summary>
+    /// 完整状态快照
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.BattleStateSnapshot StateSnapshot {
+      get { return stateSnapshot_; }
+      set {
+        stateSnapshot_ = value;
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1702,7 +2974,10 @@ namespace GameProtocol {
       if (LevelId != other.LevelId) return false;
       if (CardInstanceId != other.CardInstanceId) return false;
       if (TargetEntityId != other.TargetEntityId) return false;
+      if (SourceSlotIndex != other.SourceSlotIndex) return false;
+      if (TargetSlotIndex != other.TargetSlotIndex) return false;
       if(!events_.Equals(other.events_)) return false;
+      if (!object.Equals(StateSnapshot, other.StateSnapshot)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1712,7 +2987,10 @@ namespace GameProtocol {
       if (LevelId != 0) hash ^= LevelId.GetHashCode();
       if (CardInstanceId != 0) hash ^= CardInstanceId.GetHashCode();
       if (TargetEntityId != 0) hash ^= TargetEntityId.GetHashCode();
+      if (SourceSlotIndex != 0) hash ^= SourceSlotIndex.GetHashCode();
+      if (TargetSlotIndex != 0) hash ^= TargetSlotIndex.GetHashCode();
       hash ^= events_.GetHashCode();
+      if (stateSnapshot_ != null) hash ^= StateSnapshot.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1738,7 +3016,19 @@ namespace GameProtocol {
         output.WriteRawTag(24);
         output.WriteInt32(TargetEntityId);
       }
+      if (SourceSlotIndex != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(SourceSlotIndex);
+      }
+      if (TargetSlotIndex != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(TargetSlotIndex);
+      }
       events_.WriteTo(output, _repeated_events_codec);
+      if (stateSnapshot_ != null) {
+        output.WriteRawTag(90);
+        output.WriteMessage(StateSnapshot);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1756,7 +3046,16 @@ namespace GameProtocol {
       if (TargetEntityId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(TargetEntityId);
       }
+      if (SourceSlotIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SourceSlotIndex);
+      }
+      if (TargetSlotIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TargetSlotIndex);
+      }
       size += events_.CalculateSize(_repeated_events_codec);
+      if (stateSnapshot_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(StateSnapshot);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -1777,7 +3076,19 @@ namespace GameProtocol {
       if (other.TargetEntityId != 0) {
         TargetEntityId = other.TargetEntityId;
       }
+      if (other.SourceSlotIndex != 0) {
+        SourceSlotIndex = other.SourceSlotIndex;
+      }
+      if (other.TargetSlotIndex != 0) {
+        TargetSlotIndex = other.TargetSlotIndex;
+      }
       events_.Add(other.events_);
+      if (other.stateSnapshot_ != null) {
+        if (stateSnapshot_ == null) {
+          StateSnapshot = new global::GameProtocol.BattleStateSnapshot();
+        }
+        StateSnapshot.MergeFrom(other.StateSnapshot);
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1801,8 +3112,23 @@ namespace GameProtocol {
             TargetEntityId = input.ReadInt32();
             break;
           }
-          case 34: {
+          case 32: {
+            SourceSlotIndex = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            TargetSlotIndex = input.ReadInt32();
+            break;
+          }
+          case 82: {
             events_.AddEntriesFrom(input, _repeated_events_codec);
+            break;
+          }
+          case 90: {
+            if (stateSnapshot_ == null) {
+              StateSnapshot = new global::GameProtocol.BattleStateSnapshot();
+            }
+            input.ReadMessage(StateSnapshot);
             break;
           }
         }
@@ -1822,7 +3148,7 @@ namespace GameProtocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[7]; }
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1854,6 +3180,51 @@ namespace GameProtocol {
           break;
         case EventParamsOneofCase.SkillCast:
           SkillCast = other.SkillCast.Clone();
+          break;
+        case EventParamsOneofCase.DrawCard:
+          DrawCard = other.DrawCard.Clone();
+          break;
+        case EventParamsOneofCase.DiscardCard:
+          DiscardCard = other.DiscardCard.Clone();
+          break;
+        case EventParamsOneofCase.MoveCard:
+          MoveCard = other.MoveCard.Clone();
+          break;
+        case EventParamsOneofCase.MergeCard:
+          MergeCard = other.MergeCard.Clone();
+          break;
+        case EventParamsOneofCase.GrantUltimate:
+          GrantUltimate = other.GrantUltimate.Clone();
+          break;
+        case EventParamsOneofCase.ShuffleDeck:
+          ShuffleDeck = other.ShuffleDeck.Clone();
+          break;
+        case EventParamsOneofCase.EnqueueCard:
+          EnqueueCard = other.EnqueueCard.Clone();
+          break;
+        case EventParamsOneofCase.DequeueCard:
+          DequeueCard = other.DequeueCard.Clone();
+          break;
+        case EventParamsOneofCase.ClearActionQueue:
+          ClearActionQueue = other.ClearActionQueue.Clone();
+          break;
+        case EventParamsOneofCase.ActionPointChanged:
+          ActionPointChanged = other.ActionPointChanged.Clone();
+          break;
+        case EventParamsOneofCase.EnemySelectTarget:
+          EnemySelectTarget = other.EnemySelectTarget.Clone();
+          break;
+        case EventParamsOneofCase.TurnStart:
+          TurnStart = other.TurnStart.Clone();
+          break;
+        case EventParamsOneofCase.TurnEnd:
+          TurnEnd = other.TurnEnd.Clone();
+          break;
+        case EventParamsOneofCase.BattleStart:
+          BattleStart = other.BattleStart.Clone();
+          break;
+        case EventParamsOneofCase.BattleEnd:
+          BattleEnd = other.BattleEnd.Clone();
           break;
       }
 
@@ -1905,7 +3276,10 @@ namespace GameProtocol {
     }
 
     /// <summary>Field number for the "damage" field.</summary>
-    public const int DamageFieldNumber = 4;
+    public const int DamageFieldNumber = 10;
+    /// <summary>
+    /// 数值与技能
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::GameProtocol.DamageParams Damage {
       get { return eventParamsCase_ == EventParamsOneofCase.Damage ? (global::GameProtocol.DamageParams) eventParams_ : null; }
@@ -1916,7 +3290,7 @@ namespace GameProtocol {
     }
 
     /// <summary>Field number for the "heal" field.</summary>
-    public const int HealFieldNumber = 5;
+    public const int HealFieldNumber = 11;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::GameProtocol.HealParams Heal {
       get { return eventParamsCase_ == EventParamsOneofCase.Heal ? (global::GameProtocol.HealParams) eventParams_ : null; }
@@ -1927,7 +3301,7 @@ namespace GameProtocol {
     }
 
     /// <summary>Field number for the "death" field.</summary>
-    public const int DeathFieldNumber = 6;
+    public const int DeathFieldNumber = 12;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::GameProtocol.DeathParams Death {
       get { return eventParamsCase_ == EventParamsOneofCase.Death ? (global::GameProtocol.DeathParams) eventParams_ : null; }
@@ -1938,7 +3312,7 @@ namespace GameProtocol {
     }
 
     /// <summary>Field number for the "skillCast" field.</summary>
-    public const int SkillCastFieldNumber = 7;
+    public const int SkillCastFieldNumber = 13;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::GameProtocol.SkillCastParams SkillCast {
       get { return eventParamsCase_ == EventParamsOneofCase.SkillCast ? (global::GameProtocol.SkillCastParams) eventParams_ : null; }
@@ -1948,14 +3322,203 @@ namespace GameProtocol {
       }
     }
 
+    /// <summary>Field number for the "drawCard" field.</summary>
+    public const int DrawCardFieldNumber = 20;
+    /// <summary>
+    /// 牌库与手牌操作
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.DrawCardParams DrawCard {
+      get { return eventParamsCase_ == EventParamsOneofCase.DrawCard ? (global::GameProtocol.DrawCardParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.DrawCard;
+      }
+    }
+
+    /// <summary>Field number for the "discardCard" field.</summary>
+    public const int DiscardCardFieldNumber = 21;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.DiscardCardParams DiscardCard {
+      get { return eventParamsCase_ == EventParamsOneofCase.DiscardCard ? (global::GameProtocol.DiscardCardParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.DiscardCard;
+      }
+    }
+
+    /// <summary>Field number for the "moveCard" field.</summary>
+    public const int MoveCardFieldNumber = 22;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.MoveCardParams MoveCard {
+      get { return eventParamsCase_ == EventParamsOneofCase.MoveCard ? (global::GameProtocol.MoveCardParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.MoveCard;
+      }
+    }
+
+    /// <summary>Field number for the "mergeCard" field.</summary>
+    public const int MergeCardFieldNumber = 23;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.MergeCardParams MergeCard {
+      get { return eventParamsCase_ == EventParamsOneofCase.MergeCard ? (global::GameProtocol.MergeCardParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.MergeCard;
+      }
+    }
+
+    /// <summary>Field number for the "grantUltimate" field.</summary>
+    public const int GrantUltimateFieldNumber = 24;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.GrantUltimateParams GrantUltimate {
+      get { return eventParamsCase_ == EventParamsOneofCase.GrantUltimate ? (global::GameProtocol.GrantUltimateParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.GrantUltimate;
+      }
+    }
+
+    /// <summary>Field number for the "shuffleDeck" field.</summary>
+    public const int ShuffleDeckFieldNumber = 25;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.ShuffleDeckParams ShuffleDeck {
+      get { return eventParamsCase_ == EventParamsOneofCase.ShuffleDeck ? (global::GameProtocol.ShuffleDeckParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.ShuffleDeck;
+      }
+    }
+
+    /// <summary>Field number for the "enqueueCard" field.</summary>
+    public const int EnqueueCardFieldNumber = 30;
+    /// <summary>
+    /// 行动队列
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.EnqueueCardParams EnqueueCard {
+      get { return eventParamsCase_ == EventParamsOneofCase.EnqueueCard ? (global::GameProtocol.EnqueueCardParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.EnqueueCard;
+      }
+    }
+
+    /// <summary>Field number for the "dequeueCard" field.</summary>
+    public const int DequeueCardFieldNumber = 31;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.DequeueCardParams DequeueCard {
+      get { return eventParamsCase_ == EventParamsOneofCase.DequeueCard ? (global::GameProtocol.DequeueCardParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.DequeueCard;
+      }
+    }
+
+    /// <summary>Field number for the "clearActionQueue" field.</summary>
+    public const int ClearActionQueueFieldNumber = 32;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.ClearActionQueueParams ClearActionQueue {
+      get { return eventParamsCase_ == EventParamsOneofCase.ClearActionQueue ? (global::GameProtocol.ClearActionQueueParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.ClearActionQueue;
+      }
+    }
+
+    /// <summary>Field number for the "actionPointChanged" field.</summary>
+    public const int ActionPointChangedFieldNumber = 40;
+    /// <summary>
+    /// 实体与回合状态
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.ActionPointChangedParams ActionPointChanged {
+      get { return eventParamsCase_ == EventParamsOneofCase.ActionPointChanged ? (global::GameProtocol.ActionPointChangedParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.ActionPointChanged;
+      }
+    }
+
+    /// <summary>Field number for the "enemySelectTarget" field.</summary>
+    public const int EnemySelectTargetFieldNumber = 41;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.EnemySelectTargetParams EnemySelectTarget {
+      get { return eventParamsCase_ == EventParamsOneofCase.EnemySelectTarget ? (global::GameProtocol.EnemySelectTargetParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.EnemySelectTarget;
+      }
+    }
+
+    /// <summary>Field number for the "turnStart" field.</summary>
+    public const int TurnStartFieldNumber = 42;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.TurnStartParams TurnStart {
+      get { return eventParamsCase_ == EventParamsOneofCase.TurnStart ? (global::GameProtocol.TurnStartParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.TurnStart;
+      }
+    }
+
+    /// <summary>Field number for the "turnEnd" field.</summary>
+    public const int TurnEndFieldNumber = 43;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.TurnEndParams TurnEnd {
+      get { return eventParamsCase_ == EventParamsOneofCase.TurnEnd ? (global::GameProtocol.TurnEndParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.TurnEnd;
+      }
+    }
+
+    /// <summary>Field number for the "battleStart" field.</summary>
+    public const int BattleStartFieldNumber = 44;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.BattleStartParams BattleStart {
+      get { return eventParamsCase_ == EventParamsOneofCase.BattleStart ? (global::GameProtocol.BattleStartParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.BattleStart;
+      }
+    }
+
+    /// <summary>Field number for the "battleEnd" field.</summary>
+    public const int BattleEndFieldNumber = 45;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.BattleEndParams BattleEnd {
+      get { return eventParamsCase_ == EventParamsOneofCase.BattleEnd ? (global::GameProtocol.BattleEndParams) eventParams_ : null; }
+      set {
+        eventParams_ = value;
+        eventParamsCase_ = value == null ? EventParamsOneofCase.None : EventParamsOneofCase.BattleEnd;
+      }
+    }
+
     private object eventParams_;
     /// <summary>Enum of possible cases for the "eventParams" oneof.</summary>
     public enum EventParamsOneofCase {
       None = 0,
-      Damage = 4,
-      Heal = 5,
-      Death = 6,
-      SkillCast = 7,
+      Damage = 10,
+      Heal = 11,
+      Death = 12,
+      SkillCast = 13,
+      DrawCard = 20,
+      DiscardCard = 21,
+      MoveCard = 22,
+      MergeCard = 23,
+      GrantUltimate = 24,
+      ShuffleDeck = 25,
+      EnqueueCard = 30,
+      DequeueCard = 31,
+      ClearActionQueue = 32,
+      ActionPointChanged = 40,
+      EnemySelectTarget = 41,
+      TurnStart = 42,
+      TurnEnd = 43,
+      BattleStart = 44,
+      BattleEnd = 45,
     }
     private EventParamsOneofCase eventParamsCase_ = EventParamsOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1989,6 +3552,21 @@ namespace GameProtocol {
       if (!object.Equals(Heal, other.Heal)) return false;
       if (!object.Equals(Death, other.Death)) return false;
       if (!object.Equals(SkillCast, other.SkillCast)) return false;
+      if (!object.Equals(DrawCard, other.DrawCard)) return false;
+      if (!object.Equals(DiscardCard, other.DiscardCard)) return false;
+      if (!object.Equals(MoveCard, other.MoveCard)) return false;
+      if (!object.Equals(MergeCard, other.MergeCard)) return false;
+      if (!object.Equals(GrantUltimate, other.GrantUltimate)) return false;
+      if (!object.Equals(ShuffleDeck, other.ShuffleDeck)) return false;
+      if (!object.Equals(EnqueueCard, other.EnqueueCard)) return false;
+      if (!object.Equals(DequeueCard, other.DequeueCard)) return false;
+      if (!object.Equals(ClearActionQueue, other.ClearActionQueue)) return false;
+      if (!object.Equals(ActionPointChanged, other.ActionPointChanged)) return false;
+      if (!object.Equals(EnemySelectTarget, other.EnemySelectTarget)) return false;
+      if (!object.Equals(TurnStart, other.TurnStart)) return false;
+      if (!object.Equals(TurnEnd, other.TurnEnd)) return false;
+      if (!object.Equals(BattleStart, other.BattleStart)) return false;
+      if (!object.Equals(BattleEnd, other.BattleEnd)) return false;
       if (EventParamsCase != other.EventParamsCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -2003,6 +3581,21 @@ namespace GameProtocol {
       if (eventParamsCase_ == EventParamsOneofCase.Heal) hash ^= Heal.GetHashCode();
       if (eventParamsCase_ == EventParamsOneofCase.Death) hash ^= Death.GetHashCode();
       if (eventParamsCase_ == EventParamsOneofCase.SkillCast) hash ^= SkillCast.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.DrawCard) hash ^= DrawCard.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.DiscardCard) hash ^= DiscardCard.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.MoveCard) hash ^= MoveCard.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.MergeCard) hash ^= MergeCard.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.GrantUltimate) hash ^= GrantUltimate.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.ShuffleDeck) hash ^= ShuffleDeck.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.EnqueueCard) hash ^= EnqueueCard.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.DequeueCard) hash ^= DequeueCard.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.ClearActionQueue) hash ^= ClearActionQueue.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.ActionPointChanged) hash ^= ActionPointChanged.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.EnemySelectTarget) hash ^= EnemySelectTarget.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.TurnStart) hash ^= TurnStart.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.TurnEnd) hash ^= TurnEnd.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.BattleStart) hash ^= BattleStart.GetHashCode();
+      if (eventParamsCase_ == EventParamsOneofCase.BattleEnd) hash ^= BattleEnd.GetHashCode();
       hash ^= (int) eventParamsCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -2030,20 +3623,80 @@ namespace GameProtocol {
         output.WriteInt32(TargetId);
       }
       if (eventParamsCase_ == EventParamsOneofCase.Damage) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(82);
         output.WriteMessage(Damage);
       }
       if (eventParamsCase_ == EventParamsOneofCase.Heal) {
-        output.WriteRawTag(42);
+        output.WriteRawTag(90);
         output.WriteMessage(Heal);
       }
       if (eventParamsCase_ == EventParamsOneofCase.Death) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(98);
         output.WriteMessage(Death);
       }
       if (eventParamsCase_ == EventParamsOneofCase.SkillCast) {
-        output.WriteRawTag(58);
+        output.WriteRawTag(106);
         output.WriteMessage(SkillCast);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.DrawCard) {
+        output.WriteRawTag(162, 1);
+        output.WriteMessage(DrawCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.DiscardCard) {
+        output.WriteRawTag(170, 1);
+        output.WriteMessage(DiscardCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.MoveCard) {
+        output.WriteRawTag(178, 1);
+        output.WriteMessage(MoveCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.MergeCard) {
+        output.WriteRawTag(186, 1);
+        output.WriteMessage(MergeCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.GrantUltimate) {
+        output.WriteRawTag(194, 1);
+        output.WriteMessage(GrantUltimate);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.ShuffleDeck) {
+        output.WriteRawTag(202, 1);
+        output.WriteMessage(ShuffleDeck);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.EnqueueCard) {
+        output.WriteRawTag(242, 1);
+        output.WriteMessage(EnqueueCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.DequeueCard) {
+        output.WriteRawTag(250, 1);
+        output.WriteMessage(DequeueCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.ClearActionQueue) {
+        output.WriteRawTag(130, 2);
+        output.WriteMessage(ClearActionQueue);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.ActionPointChanged) {
+        output.WriteRawTag(194, 2);
+        output.WriteMessage(ActionPointChanged);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.EnemySelectTarget) {
+        output.WriteRawTag(202, 2);
+        output.WriteMessage(EnemySelectTarget);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.TurnStart) {
+        output.WriteRawTag(210, 2);
+        output.WriteMessage(TurnStart);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.TurnEnd) {
+        output.WriteRawTag(218, 2);
+        output.WriteMessage(TurnEnd);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.BattleStart) {
+        output.WriteRawTag(226, 2);
+        output.WriteMessage(BattleStart);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.BattleEnd) {
+        output.WriteRawTag(234, 2);
+        output.WriteMessage(BattleEnd);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -2073,6 +3726,51 @@ namespace GameProtocol {
       }
       if (eventParamsCase_ == EventParamsOneofCase.SkillCast) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(SkillCast);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.DrawCard) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(DrawCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.DiscardCard) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(DiscardCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.MoveCard) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(MoveCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.MergeCard) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(MergeCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.GrantUltimate) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(GrantUltimate);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.ShuffleDeck) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(ShuffleDeck);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.EnqueueCard) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(EnqueueCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.DequeueCard) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(DequeueCard);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.ClearActionQueue) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(ClearActionQueue);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.ActionPointChanged) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(ActionPointChanged);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.EnemySelectTarget) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(EnemySelectTarget);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.TurnStart) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(TurnStart);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.TurnEnd) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(TurnEnd);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.BattleStart) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(BattleStart);
+      }
+      if (eventParamsCase_ == EventParamsOneofCase.BattleEnd) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(BattleEnd);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2119,6 +3817,96 @@ namespace GameProtocol {
           }
           SkillCast.MergeFrom(other.SkillCast);
           break;
+        case EventParamsOneofCase.DrawCard:
+          if (DrawCard == null) {
+            DrawCard = new global::GameProtocol.DrawCardParams();
+          }
+          DrawCard.MergeFrom(other.DrawCard);
+          break;
+        case EventParamsOneofCase.DiscardCard:
+          if (DiscardCard == null) {
+            DiscardCard = new global::GameProtocol.DiscardCardParams();
+          }
+          DiscardCard.MergeFrom(other.DiscardCard);
+          break;
+        case EventParamsOneofCase.MoveCard:
+          if (MoveCard == null) {
+            MoveCard = new global::GameProtocol.MoveCardParams();
+          }
+          MoveCard.MergeFrom(other.MoveCard);
+          break;
+        case EventParamsOneofCase.MergeCard:
+          if (MergeCard == null) {
+            MergeCard = new global::GameProtocol.MergeCardParams();
+          }
+          MergeCard.MergeFrom(other.MergeCard);
+          break;
+        case EventParamsOneofCase.GrantUltimate:
+          if (GrantUltimate == null) {
+            GrantUltimate = new global::GameProtocol.GrantUltimateParams();
+          }
+          GrantUltimate.MergeFrom(other.GrantUltimate);
+          break;
+        case EventParamsOneofCase.ShuffleDeck:
+          if (ShuffleDeck == null) {
+            ShuffleDeck = new global::GameProtocol.ShuffleDeckParams();
+          }
+          ShuffleDeck.MergeFrom(other.ShuffleDeck);
+          break;
+        case EventParamsOneofCase.EnqueueCard:
+          if (EnqueueCard == null) {
+            EnqueueCard = new global::GameProtocol.EnqueueCardParams();
+          }
+          EnqueueCard.MergeFrom(other.EnqueueCard);
+          break;
+        case EventParamsOneofCase.DequeueCard:
+          if (DequeueCard == null) {
+            DequeueCard = new global::GameProtocol.DequeueCardParams();
+          }
+          DequeueCard.MergeFrom(other.DequeueCard);
+          break;
+        case EventParamsOneofCase.ClearActionQueue:
+          if (ClearActionQueue == null) {
+            ClearActionQueue = new global::GameProtocol.ClearActionQueueParams();
+          }
+          ClearActionQueue.MergeFrom(other.ClearActionQueue);
+          break;
+        case EventParamsOneofCase.ActionPointChanged:
+          if (ActionPointChanged == null) {
+            ActionPointChanged = new global::GameProtocol.ActionPointChangedParams();
+          }
+          ActionPointChanged.MergeFrom(other.ActionPointChanged);
+          break;
+        case EventParamsOneofCase.EnemySelectTarget:
+          if (EnemySelectTarget == null) {
+            EnemySelectTarget = new global::GameProtocol.EnemySelectTargetParams();
+          }
+          EnemySelectTarget.MergeFrom(other.EnemySelectTarget);
+          break;
+        case EventParamsOneofCase.TurnStart:
+          if (TurnStart == null) {
+            TurnStart = new global::GameProtocol.TurnStartParams();
+          }
+          TurnStart.MergeFrom(other.TurnStart);
+          break;
+        case EventParamsOneofCase.TurnEnd:
+          if (TurnEnd == null) {
+            TurnEnd = new global::GameProtocol.TurnEndParams();
+          }
+          TurnEnd.MergeFrom(other.TurnEnd);
+          break;
+        case EventParamsOneofCase.BattleStart:
+          if (BattleStart == null) {
+            BattleStart = new global::GameProtocol.BattleStartParams();
+          }
+          BattleStart.MergeFrom(other.BattleStart);
+          break;
+        case EventParamsOneofCase.BattleEnd:
+          if (BattleEnd == null) {
+            BattleEnd = new global::GameProtocol.BattleEndParams();
+          }
+          BattleEnd.MergeFrom(other.BattleEnd);
+          break;
       }
 
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -2144,7 +3932,7 @@ namespace GameProtocol {
             TargetId = input.ReadInt32();
             break;
           }
-          case 34: {
+          case 82: {
             global::GameProtocol.DamageParams subBuilder = new global::GameProtocol.DamageParams();
             if (eventParamsCase_ == EventParamsOneofCase.Damage) {
               subBuilder.MergeFrom(Damage);
@@ -2153,7 +3941,7 @@ namespace GameProtocol {
             Damage = subBuilder;
             break;
           }
-          case 42: {
+          case 90: {
             global::GameProtocol.HealParams subBuilder = new global::GameProtocol.HealParams();
             if (eventParamsCase_ == EventParamsOneofCase.Heal) {
               subBuilder.MergeFrom(Heal);
@@ -2162,7 +3950,7 @@ namespace GameProtocol {
             Heal = subBuilder;
             break;
           }
-          case 50: {
+          case 98: {
             global::GameProtocol.DeathParams subBuilder = new global::GameProtocol.DeathParams();
             if (eventParamsCase_ == EventParamsOneofCase.Death) {
               subBuilder.MergeFrom(Death);
@@ -2171,13 +3959,148 @@ namespace GameProtocol {
             Death = subBuilder;
             break;
           }
-          case 58: {
+          case 106: {
             global::GameProtocol.SkillCastParams subBuilder = new global::GameProtocol.SkillCastParams();
             if (eventParamsCase_ == EventParamsOneofCase.SkillCast) {
               subBuilder.MergeFrom(SkillCast);
             }
             input.ReadMessage(subBuilder);
             SkillCast = subBuilder;
+            break;
+          }
+          case 162: {
+            global::GameProtocol.DrawCardParams subBuilder = new global::GameProtocol.DrawCardParams();
+            if (eventParamsCase_ == EventParamsOneofCase.DrawCard) {
+              subBuilder.MergeFrom(DrawCard);
+            }
+            input.ReadMessage(subBuilder);
+            DrawCard = subBuilder;
+            break;
+          }
+          case 170: {
+            global::GameProtocol.DiscardCardParams subBuilder = new global::GameProtocol.DiscardCardParams();
+            if (eventParamsCase_ == EventParamsOneofCase.DiscardCard) {
+              subBuilder.MergeFrom(DiscardCard);
+            }
+            input.ReadMessage(subBuilder);
+            DiscardCard = subBuilder;
+            break;
+          }
+          case 178: {
+            global::GameProtocol.MoveCardParams subBuilder = new global::GameProtocol.MoveCardParams();
+            if (eventParamsCase_ == EventParamsOneofCase.MoveCard) {
+              subBuilder.MergeFrom(MoveCard);
+            }
+            input.ReadMessage(subBuilder);
+            MoveCard = subBuilder;
+            break;
+          }
+          case 186: {
+            global::GameProtocol.MergeCardParams subBuilder = new global::GameProtocol.MergeCardParams();
+            if (eventParamsCase_ == EventParamsOneofCase.MergeCard) {
+              subBuilder.MergeFrom(MergeCard);
+            }
+            input.ReadMessage(subBuilder);
+            MergeCard = subBuilder;
+            break;
+          }
+          case 194: {
+            global::GameProtocol.GrantUltimateParams subBuilder = new global::GameProtocol.GrantUltimateParams();
+            if (eventParamsCase_ == EventParamsOneofCase.GrantUltimate) {
+              subBuilder.MergeFrom(GrantUltimate);
+            }
+            input.ReadMessage(subBuilder);
+            GrantUltimate = subBuilder;
+            break;
+          }
+          case 202: {
+            global::GameProtocol.ShuffleDeckParams subBuilder = new global::GameProtocol.ShuffleDeckParams();
+            if (eventParamsCase_ == EventParamsOneofCase.ShuffleDeck) {
+              subBuilder.MergeFrom(ShuffleDeck);
+            }
+            input.ReadMessage(subBuilder);
+            ShuffleDeck = subBuilder;
+            break;
+          }
+          case 242: {
+            global::GameProtocol.EnqueueCardParams subBuilder = new global::GameProtocol.EnqueueCardParams();
+            if (eventParamsCase_ == EventParamsOneofCase.EnqueueCard) {
+              subBuilder.MergeFrom(EnqueueCard);
+            }
+            input.ReadMessage(subBuilder);
+            EnqueueCard = subBuilder;
+            break;
+          }
+          case 250: {
+            global::GameProtocol.DequeueCardParams subBuilder = new global::GameProtocol.DequeueCardParams();
+            if (eventParamsCase_ == EventParamsOneofCase.DequeueCard) {
+              subBuilder.MergeFrom(DequeueCard);
+            }
+            input.ReadMessage(subBuilder);
+            DequeueCard = subBuilder;
+            break;
+          }
+          case 258: {
+            global::GameProtocol.ClearActionQueueParams subBuilder = new global::GameProtocol.ClearActionQueueParams();
+            if (eventParamsCase_ == EventParamsOneofCase.ClearActionQueue) {
+              subBuilder.MergeFrom(ClearActionQueue);
+            }
+            input.ReadMessage(subBuilder);
+            ClearActionQueue = subBuilder;
+            break;
+          }
+          case 322: {
+            global::GameProtocol.ActionPointChangedParams subBuilder = new global::GameProtocol.ActionPointChangedParams();
+            if (eventParamsCase_ == EventParamsOneofCase.ActionPointChanged) {
+              subBuilder.MergeFrom(ActionPointChanged);
+            }
+            input.ReadMessage(subBuilder);
+            ActionPointChanged = subBuilder;
+            break;
+          }
+          case 330: {
+            global::GameProtocol.EnemySelectTargetParams subBuilder = new global::GameProtocol.EnemySelectTargetParams();
+            if (eventParamsCase_ == EventParamsOneofCase.EnemySelectTarget) {
+              subBuilder.MergeFrom(EnemySelectTarget);
+            }
+            input.ReadMessage(subBuilder);
+            EnemySelectTarget = subBuilder;
+            break;
+          }
+          case 338: {
+            global::GameProtocol.TurnStartParams subBuilder = new global::GameProtocol.TurnStartParams();
+            if (eventParamsCase_ == EventParamsOneofCase.TurnStart) {
+              subBuilder.MergeFrom(TurnStart);
+            }
+            input.ReadMessage(subBuilder);
+            TurnStart = subBuilder;
+            break;
+          }
+          case 346: {
+            global::GameProtocol.TurnEndParams subBuilder = new global::GameProtocol.TurnEndParams();
+            if (eventParamsCase_ == EventParamsOneofCase.TurnEnd) {
+              subBuilder.MergeFrom(TurnEnd);
+            }
+            input.ReadMessage(subBuilder);
+            TurnEnd = subBuilder;
+            break;
+          }
+          case 354: {
+            global::GameProtocol.BattleStartParams subBuilder = new global::GameProtocol.BattleStartParams();
+            if (eventParamsCase_ == EventParamsOneofCase.BattleStart) {
+              subBuilder.MergeFrom(BattleStart);
+            }
+            input.ReadMessage(subBuilder);
+            BattleStart = subBuilder;
+            break;
+          }
+          case 362: {
+            global::GameProtocol.BattleEndParams subBuilder = new global::GameProtocol.BattleEndParams();
+            if (eventParamsCase_ == EventParamsOneofCase.BattleEnd) {
+              subBuilder.MergeFrom(BattleEnd);
+            }
+            input.ReadMessage(subBuilder);
+            BattleEnd = subBuilder;
             break;
           }
         }
@@ -2194,7 +4117,7 @@ namespace GameProtocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[8]; }
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2357,7 +4280,7 @@ namespace GameProtocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[9]; }
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2523,7 +4446,7 @@ namespace GameProtocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[10]; }
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[15]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2624,7 +4547,7 @@ namespace GameProtocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[11]; }
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[16]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2764,6 +4687,2430 @@ namespace GameProtocol {
           case 18:
           case 16: {
             targetIds_.AddEntriesFrom(input, _repeated_targetIds_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 抽牌参数
+  /// </summary>
+  public sealed partial class DrawCardParams : pb::IMessage<DrawCardParams> {
+    private static readonly pb::MessageParser<DrawCardParams> _parser = new pb::MessageParser<DrawCardParams>(() => new DrawCardParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<DrawCardParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[17]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DrawCardParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DrawCardParams(DrawCardParams other) : this() {
+      card_ = other.card_ != null ? other.card_.Clone() : null;
+      slotIndex_ = other.slotIndex_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DrawCardParams Clone() {
+      return new DrawCardParams(this);
+    }
+
+    /// <summary>Field number for the "card" field.</summary>
+    public const int CardFieldNumber = 1;
+    private global::GameProtocol.CardEntityInfo card_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.CardEntityInfo Card {
+      get { return card_; }
+      set {
+        card_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "slotIndex" field.</summary>
+    public const int SlotIndexFieldNumber = 2;
+    private int slotIndex_;
+    /// <summary>
+    /// 抽到手牌第几个位置
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int SlotIndex {
+      get { return slotIndex_; }
+      set {
+        slotIndex_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as DrawCardParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(DrawCardParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Card, other.Card)) return false;
+      if (SlotIndex != other.SlotIndex) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (card_ != null) hash ^= Card.GetHashCode();
+      if (SlotIndex != 0) hash ^= SlotIndex.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (card_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Card);
+      }
+      if (SlotIndex != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(SlotIndex);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (card_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Card);
+      }
+      if (SlotIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SlotIndex);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(DrawCardParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.card_ != null) {
+        if (card_ == null) {
+          Card = new global::GameProtocol.CardEntityInfo();
+        }
+        Card.MergeFrom(other.Card);
+      }
+      if (other.SlotIndex != 0) {
+        SlotIndex = other.SlotIndex;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (card_ == null) {
+              Card = new global::GameProtocol.CardEntityInfo();
+            }
+            input.ReadMessage(Card);
+            break;
+          }
+          case 16: {
+            SlotIndex = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 弃牌参数
+  /// </summary>
+  public sealed partial class DiscardCardParams : pb::IMessage<DiscardCardParams> {
+    private static readonly pb::MessageParser<DiscardCardParams> _parser = new pb::MessageParser<DiscardCardParams>(() => new DiscardCardParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<DiscardCardParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[18]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DiscardCardParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DiscardCardParams(DiscardCardParams other) : this() {
+      card_ = other.card_ != null ? other.card_.Clone() : null;
+      slotIndex_ = other.slotIndex_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DiscardCardParams Clone() {
+      return new DiscardCardParams(this);
+    }
+
+    /// <summary>Field number for the "card" field.</summary>
+    public const int CardFieldNumber = 1;
+    private global::GameProtocol.CardEntityInfo card_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.CardEntityInfo Card {
+      get { return card_; }
+      set {
+        card_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "slotIndex" field.</summary>
+    public const int SlotIndexFieldNumber = 2;
+    private int slotIndex_;
+    /// <summary>
+    /// 从手牌哪个位置弃掉
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int SlotIndex {
+      get { return slotIndex_; }
+      set {
+        slotIndex_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as DiscardCardParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(DiscardCardParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Card, other.Card)) return false;
+      if (SlotIndex != other.SlotIndex) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (card_ != null) hash ^= Card.GetHashCode();
+      if (SlotIndex != 0) hash ^= SlotIndex.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (card_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Card);
+      }
+      if (SlotIndex != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(SlotIndex);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (card_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Card);
+      }
+      if (SlotIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SlotIndex);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(DiscardCardParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.card_ != null) {
+        if (card_ == null) {
+          Card = new global::GameProtocol.CardEntityInfo();
+        }
+        Card.MergeFrom(other.Card);
+      }
+      if (other.SlotIndex != 0) {
+        SlotIndex = other.SlotIndex;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (card_ == null) {
+              Card = new global::GameProtocol.CardEntityInfo();
+            }
+            input.ReadMessage(Card);
+            break;
+          }
+          case 16: {
+            SlotIndex = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 移动卡牌参数
+  /// </summary>
+  public sealed partial class MoveCardParams : pb::IMessage<MoveCardParams> {
+    private static readonly pb::MessageParser<MoveCardParams> _parser = new pb::MessageParser<MoveCardParams>(() => new MoveCardParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<MoveCardParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[19]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MoveCardParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MoveCardParams(MoveCardParams other) : this() {
+      fromIndex_ = other.fromIndex_;
+      toIndex_ = other.toIndex_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MoveCardParams Clone() {
+      return new MoveCardParams(this);
+    }
+
+    /// <summary>Field number for the "fromIndex" field.</summary>
+    public const int FromIndexFieldNumber = 1;
+    private int fromIndex_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int FromIndex {
+      get { return fromIndex_; }
+      set {
+        fromIndex_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "toIndex" field.</summary>
+    public const int ToIndexFieldNumber = 2;
+    private int toIndex_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ToIndex {
+      get { return toIndex_; }
+      set {
+        toIndex_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as MoveCardParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(MoveCardParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (FromIndex != other.FromIndex) return false;
+      if (ToIndex != other.ToIndex) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (FromIndex != 0) hash ^= FromIndex.GetHashCode();
+      if (ToIndex != 0) hash ^= ToIndex.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (FromIndex != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(FromIndex);
+      }
+      if (ToIndex != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(ToIndex);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (FromIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FromIndex);
+      }
+      if (ToIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ToIndex);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(MoveCardParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.FromIndex != 0) {
+        FromIndex = other.FromIndex;
+      }
+      if (other.ToIndex != 0) {
+        ToIndex = other.ToIndex;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            FromIndex = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            ToIndex = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 合成卡牌参数
+  /// </summary>
+  public sealed partial class MergeCardParams : pb::IMessage<MergeCardParams> {
+    private static readonly pb::MessageParser<MergeCardParams> _parser = new pb::MessageParser<MergeCardParams>(() => new MergeCardParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<MergeCardParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[20]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MergeCardParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MergeCardParams(MergeCardParams other) : this() {
+      resultCardInstanceId_ = other.resultCardInstanceId_;
+      resultStarLevel_ = other.resultStarLevel_;
+      consumedCardIds_ = other.consumedCardIds_.Clone();
+      slotIndex_ = other.slotIndex_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MergeCardParams Clone() {
+      return new MergeCardParams(this);
+    }
+
+    /// <summary>Field number for the "resultCardInstanceId" field.</summary>
+    public const int ResultCardInstanceIdFieldNumber = 1;
+    private int resultCardInstanceId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ResultCardInstanceId {
+      get { return resultCardInstanceId_; }
+      set {
+        resultCardInstanceId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "resultStarLevel" field.</summary>
+    public const int ResultStarLevelFieldNumber = 2;
+    private int resultStarLevel_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ResultStarLevel {
+      get { return resultStarLevel_; }
+      set {
+        resultStarLevel_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "consumedCardIds" field.</summary>
+    public const int ConsumedCardIdsFieldNumber = 3;
+    private static readonly pb::FieldCodec<int> _repeated_consumedCardIds_codec
+        = pb::FieldCodec.ForInt32(26);
+    private readonly pbc::RepeatedField<int> consumedCardIds_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    /// 被消耗的卡
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> ConsumedCardIds {
+      get { return consumedCardIds_; }
+    }
+
+    /// <summary>Field number for the "slotIndex" field.</summary>
+    public const int SlotIndexFieldNumber = 4;
+    private int slotIndex_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int SlotIndex {
+      get { return slotIndex_; }
+      set {
+        slotIndex_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as MergeCardParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(MergeCardParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (ResultCardInstanceId != other.ResultCardInstanceId) return false;
+      if (ResultStarLevel != other.ResultStarLevel) return false;
+      if(!consumedCardIds_.Equals(other.consumedCardIds_)) return false;
+      if (SlotIndex != other.SlotIndex) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ResultCardInstanceId != 0) hash ^= ResultCardInstanceId.GetHashCode();
+      if (ResultStarLevel != 0) hash ^= ResultStarLevel.GetHashCode();
+      hash ^= consumedCardIds_.GetHashCode();
+      if (SlotIndex != 0) hash ^= SlotIndex.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (ResultCardInstanceId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(ResultCardInstanceId);
+      }
+      if (ResultStarLevel != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(ResultStarLevel);
+      }
+      consumedCardIds_.WriteTo(output, _repeated_consumedCardIds_codec);
+      if (SlotIndex != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(SlotIndex);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (ResultCardInstanceId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResultCardInstanceId);
+      }
+      if (ResultStarLevel != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResultStarLevel);
+      }
+      size += consumedCardIds_.CalculateSize(_repeated_consumedCardIds_codec);
+      if (SlotIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SlotIndex);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(MergeCardParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ResultCardInstanceId != 0) {
+        ResultCardInstanceId = other.ResultCardInstanceId;
+      }
+      if (other.ResultStarLevel != 0) {
+        ResultStarLevel = other.ResultStarLevel;
+      }
+      consumedCardIds_.Add(other.consumedCardIds_);
+      if (other.SlotIndex != 0) {
+        SlotIndex = other.SlotIndex;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            ResultCardInstanceId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            ResultStarLevel = input.ReadInt32();
+            break;
+          }
+          case 26:
+          case 24: {
+            consumedCardIds_.AddEntriesFrom(input, _repeated_consumedCardIds_codec);
+            break;
+          }
+          case 32: {
+            SlotIndex = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 发放大招牌参数
+  /// </summary>
+  public sealed partial class GrantUltimateParams : pb::IMessage<GrantUltimateParams> {
+    private static readonly pb::MessageParser<GrantUltimateParams> _parser = new pb::MessageParser<GrantUltimateParams>(() => new GrantUltimateParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GrantUltimateParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[21]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GrantUltimateParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GrantUltimateParams(GrantUltimateParams other) : this() {
+      card_ = other.card_ != null ? other.card_.Clone() : null;
+      slotIndex_ = other.slotIndex_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GrantUltimateParams Clone() {
+      return new GrantUltimateParams(this);
+    }
+
+    /// <summary>Field number for the "card" field.</summary>
+    public const int CardFieldNumber = 1;
+    private global::GameProtocol.CardEntityInfo card_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.CardEntityInfo Card {
+      get { return card_; }
+      set {
+        card_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "slotIndex" field.</summary>
+    public const int SlotIndexFieldNumber = 2;
+    private int slotIndex_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int SlotIndex {
+      get { return slotIndex_; }
+      set {
+        slotIndex_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GrantUltimateParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GrantUltimateParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Card, other.Card)) return false;
+      if (SlotIndex != other.SlotIndex) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (card_ != null) hash ^= Card.GetHashCode();
+      if (SlotIndex != 0) hash ^= SlotIndex.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (card_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Card);
+      }
+      if (SlotIndex != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(SlotIndex);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (card_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Card);
+      }
+      if (SlotIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SlotIndex);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GrantUltimateParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.card_ != null) {
+        if (card_ == null) {
+          Card = new global::GameProtocol.CardEntityInfo();
+        }
+        Card.MergeFrom(other.Card);
+      }
+      if (other.SlotIndex != 0) {
+        SlotIndex = other.SlotIndex;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (card_ == null) {
+              Card = new global::GameProtocol.CardEntityInfo();
+            }
+            input.ReadMessage(Card);
+            break;
+          }
+          case 16: {
+            SlotIndex = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 洗牌参数
+  /// </summary>
+  public sealed partial class ShuffleDeckParams : pb::IMessage<ShuffleDeckParams> {
+    private static readonly pb::MessageParser<ShuffleDeckParams> _parser = new pb::MessageParser<ShuffleDeckParams>(() => new ShuffleDeckParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ShuffleDeckParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[22]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ShuffleDeckParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ShuffleDeckParams(ShuffleDeckParams other) : this() {
+      deckOwnerId_ = other.deckOwnerId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ShuffleDeckParams Clone() {
+      return new ShuffleDeckParams(this);
+    }
+
+    /// <summary>Field number for the "deckOwnerId" field.</summary>
+    public const int DeckOwnerIdFieldNumber = 1;
+    private int deckOwnerId_;
+    /// <summary>
+    /// 谁的牌库被洗了（预留，PVP时有用）
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int DeckOwnerId {
+      get { return deckOwnerId_; }
+      set {
+        deckOwnerId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ShuffleDeckParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ShuffleDeckParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (DeckOwnerId != other.DeckOwnerId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (DeckOwnerId != 0) hash ^= DeckOwnerId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (DeckOwnerId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(DeckOwnerId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (DeckOwnerId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DeckOwnerId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ShuffleDeckParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.DeckOwnerId != 0) {
+        DeckOwnerId = other.DeckOwnerId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            DeckOwnerId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 卡牌进入行动队列参数
+  /// </summary>
+  public sealed partial class EnqueueCardParams : pb::IMessage<EnqueueCardParams> {
+    private static readonly pb::MessageParser<EnqueueCardParams> _parser = new pb::MessageParser<EnqueueCardParams>(() => new EnqueueCardParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<EnqueueCardParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[23]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EnqueueCardParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EnqueueCardParams(EnqueueCardParams other) : this() {
+      card_ = other.card_ != null ? other.card_.Clone() : null;
+      queueIndex_ = other.queueIndex_;
+      actionPointAfter_ = other.actionPointAfter_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EnqueueCardParams Clone() {
+      return new EnqueueCardParams(this);
+    }
+
+    /// <summary>Field number for the "card" field.</summary>
+    public const int CardFieldNumber = 1;
+    private global::GameProtocol.CardEntityInfo card_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProtocol.CardEntityInfo Card {
+      get { return card_; }
+      set {
+        card_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "queueIndex" field.</summary>
+    public const int QueueIndexFieldNumber = 2;
+    private int queueIndex_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int QueueIndex {
+      get { return queueIndex_; }
+      set {
+        queueIndex_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "actionPointAfter" field.</summary>
+    public const int ActionPointAfterFieldNumber = 3;
+    private int actionPointAfter_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ActionPointAfter {
+      get { return actionPointAfter_; }
+      set {
+        actionPointAfter_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as EnqueueCardParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(EnqueueCardParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Card, other.Card)) return false;
+      if (QueueIndex != other.QueueIndex) return false;
+      if (ActionPointAfter != other.ActionPointAfter) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (card_ != null) hash ^= Card.GetHashCode();
+      if (QueueIndex != 0) hash ^= QueueIndex.GetHashCode();
+      if (ActionPointAfter != 0) hash ^= ActionPointAfter.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (card_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Card);
+      }
+      if (QueueIndex != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(QueueIndex);
+      }
+      if (ActionPointAfter != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(ActionPointAfter);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (card_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Card);
+      }
+      if (QueueIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(QueueIndex);
+      }
+      if (ActionPointAfter != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ActionPointAfter);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(EnqueueCardParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.card_ != null) {
+        if (card_ == null) {
+          Card = new global::GameProtocol.CardEntityInfo();
+        }
+        Card.MergeFrom(other.Card);
+      }
+      if (other.QueueIndex != 0) {
+        QueueIndex = other.QueueIndex;
+      }
+      if (other.ActionPointAfter != 0) {
+        ActionPointAfter = other.ActionPointAfter;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (card_ == null) {
+              Card = new global::GameProtocol.CardEntityInfo();
+            }
+            input.ReadMessage(Card);
+            break;
+          }
+          case 16: {
+            QueueIndex = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            ActionPointAfter = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 卡牌离开行动队列参数
+  /// </summary>
+  public sealed partial class DequeueCardParams : pb::IMessage<DequeueCardParams> {
+    private static readonly pb::MessageParser<DequeueCardParams> _parser = new pb::MessageParser<DequeueCardParams>(() => new DequeueCardParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<DequeueCardParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[24]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DequeueCardParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DequeueCardParams(DequeueCardParams other) : this() {
+      queueIndex_ = other.queueIndex_;
+      restoredSlotIndex_ = other.restoredSlotIndex_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public DequeueCardParams Clone() {
+      return new DequeueCardParams(this);
+    }
+
+    /// <summary>Field number for the "queueIndex" field.</summary>
+    public const int QueueIndexFieldNumber = 1;
+    private int queueIndex_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int QueueIndex {
+      get { return queueIndex_; }
+      set {
+        queueIndex_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "restoredSlotIndex" field.</summary>
+    public const int RestoredSlotIndexFieldNumber = 2;
+    private int restoredSlotIndex_;
+    /// <summary>
+    /// 回到手牌位置
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int RestoredSlotIndex {
+      get { return restoredSlotIndex_; }
+      set {
+        restoredSlotIndex_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as DequeueCardParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(DequeueCardParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (QueueIndex != other.QueueIndex) return false;
+      if (RestoredSlotIndex != other.RestoredSlotIndex) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (QueueIndex != 0) hash ^= QueueIndex.GetHashCode();
+      if (RestoredSlotIndex != 0) hash ^= RestoredSlotIndex.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (QueueIndex != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(QueueIndex);
+      }
+      if (RestoredSlotIndex != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(RestoredSlotIndex);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (QueueIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(QueueIndex);
+      }
+      if (RestoredSlotIndex != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RestoredSlotIndex);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(DequeueCardParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.QueueIndex != 0) {
+        QueueIndex = other.QueueIndex;
+      }
+      if (other.RestoredSlotIndex != 0) {
+        RestoredSlotIndex = other.RestoredSlotIndex;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            QueueIndex = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            RestoredSlotIndex = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 清空行动队列参数
+  /// </summary>
+  public sealed partial class ClearActionQueueParams : pb::IMessage<ClearActionQueueParams> {
+    private static readonly pb::MessageParser<ClearActionQueueParams> _parser = new pb::MessageParser<ClearActionQueueParams>(() => new ClearActionQueueParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ClearActionQueueParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[25]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ClearActionQueueParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ClearActionQueueParams(ClearActionQueueParams other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ClearActionQueueParams Clone() {
+      return new ClearActionQueueParams(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ClearActionQueueParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ClearActionQueueParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ClearActionQueueParams other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 行动点变化参数
+  /// </summary>
+  public sealed partial class ActionPointChangedParams : pb::IMessage<ActionPointChangedParams> {
+    private static readonly pb::MessageParser<ActionPointChangedParams> _parser = new pb::MessageParser<ActionPointChangedParams>(() => new ActionPointChangedParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ActionPointChangedParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[26]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ActionPointChangedParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ActionPointChangedParams(ActionPointChangedParams other) : this() {
+      entityId_ = other.entityId_;
+      newValue_ = other.newValue_;
+      maxValue_ = other.maxValue_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ActionPointChangedParams Clone() {
+      return new ActionPointChangedParams(this);
+    }
+
+    /// <summary>Field number for the "entityId" field.</summary>
+    public const int EntityIdFieldNumber = 1;
+    private int entityId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int EntityId {
+      get { return entityId_; }
+      set {
+        entityId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "newValue" field.</summary>
+    public const int NewValueFieldNumber = 2;
+    private int newValue_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int NewValue {
+      get { return newValue_; }
+      set {
+        newValue_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "maxValue" field.</summary>
+    public const int MaxValueFieldNumber = 3;
+    private int maxValue_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MaxValue {
+      get { return maxValue_; }
+      set {
+        maxValue_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ActionPointChangedParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ActionPointChangedParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (EntityId != other.EntityId) return false;
+      if (NewValue != other.NewValue) return false;
+      if (MaxValue != other.MaxValue) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (EntityId != 0) hash ^= EntityId.GetHashCode();
+      if (NewValue != 0) hash ^= NewValue.GetHashCode();
+      if (MaxValue != 0) hash ^= MaxValue.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (EntityId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(EntityId);
+      }
+      if (NewValue != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(NewValue);
+      }
+      if (MaxValue != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(MaxValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (EntityId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(EntityId);
+      }
+      if (NewValue != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(NewValue);
+      }
+      if (MaxValue != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxValue);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ActionPointChangedParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.EntityId != 0) {
+        EntityId = other.EntityId;
+      }
+      if (other.NewValue != 0) {
+        NewValue = other.NewValue;
+      }
+      if (other.MaxValue != 0) {
+        MaxValue = other.MaxValue;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            EntityId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            NewValue = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            MaxValue = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 敌人选择目标参数
+  /// </summary>
+  public sealed partial class EnemySelectTargetParams : pb::IMessage<EnemySelectTargetParams> {
+    private static readonly pb::MessageParser<EnemySelectTargetParams> _parser = new pb::MessageParser<EnemySelectTargetParams>(() => new EnemySelectTargetParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<EnemySelectTargetParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[27]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EnemySelectTargetParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EnemySelectTargetParams(EnemySelectTargetParams other) : this() {
+      enemyId_ = other.enemyId_;
+      targetId_ = other.targetId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EnemySelectTargetParams Clone() {
+      return new EnemySelectTargetParams(this);
+    }
+
+    /// <summary>Field number for the "enemyId" field.</summary>
+    public const int EnemyIdFieldNumber = 1;
+    private int enemyId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int EnemyId {
+      get { return enemyId_; }
+      set {
+        enemyId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "targetId" field.</summary>
+    public const int TargetIdFieldNumber = 2;
+    private int targetId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int TargetId {
+      get { return targetId_; }
+      set {
+        targetId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as EnemySelectTargetParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(EnemySelectTargetParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (EnemyId != other.EnemyId) return false;
+      if (TargetId != other.TargetId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (EnemyId != 0) hash ^= EnemyId.GetHashCode();
+      if (TargetId != 0) hash ^= TargetId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (EnemyId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(EnemyId);
+      }
+      if (TargetId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(TargetId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (EnemyId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(EnemyId);
+      }
+      if (TargetId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TargetId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(EnemySelectTargetParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.EnemyId != 0) {
+        EnemyId = other.EnemyId;
+      }
+      if (other.TargetId != 0) {
+        TargetId = other.TargetId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            EnemyId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            TargetId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 回合开始参数
+  /// </summary>
+  public sealed partial class TurnStartParams : pb::IMessage<TurnStartParams> {
+    private static readonly pb::MessageParser<TurnStartParams> _parser = new pb::MessageParser<TurnStartParams>(() => new TurnStartParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<TurnStartParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[28]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TurnStartParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TurnStartParams(TurnStartParams other) : this() {
+      isPlayerTurn_ = other.isPlayerTurn_;
+      roundNumber_ = other.roundNumber_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TurnStartParams Clone() {
+      return new TurnStartParams(this);
+    }
+
+    /// <summary>Field number for the "isPlayerTurn" field.</summary>
+    public const int IsPlayerTurnFieldNumber = 1;
+    private bool isPlayerTurn_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsPlayerTurn {
+      get { return isPlayerTurn_; }
+      set {
+        isPlayerTurn_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "roundNumber" field.</summary>
+    public const int RoundNumberFieldNumber = 2;
+    private int roundNumber_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int RoundNumber {
+      get { return roundNumber_; }
+      set {
+        roundNumber_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as TurnStartParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(TurnStartParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (IsPlayerTurn != other.IsPlayerTurn) return false;
+      if (RoundNumber != other.RoundNumber) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (IsPlayerTurn != false) hash ^= IsPlayerTurn.GetHashCode();
+      if (RoundNumber != 0) hash ^= RoundNumber.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (IsPlayerTurn != false) {
+        output.WriteRawTag(8);
+        output.WriteBool(IsPlayerTurn);
+      }
+      if (RoundNumber != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(RoundNumber);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (IsPlayerTurn != false) {
+        size += 1 + 1;
+      }
+      if (RoundNumber != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RoundNumber);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(TurnStartParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.IsPlayerTurn != false) {
+        IsPlayerTurn = other.IsPlayerTurn;
+      }
+      if (other.RoundNumber != 0) {
+        RoundNumber = other.RoundNumber;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            IsPlayerTurn = input.ReadBool();
+            break;
+          }
+          case 16: {
+            RoundNumber = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 回合结束参数
+  /// </summary>
+  public sealed partial class TurnEndParams : pb::IMessage<TurnEndParams> {
+    private static readonly pb::MessageParser<TurnEndParams> _parser = new pb::MessageParser<TurnEndParams>(() => new TurnEndParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<TurnEndParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[29]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TurnEndParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TurnEndParams(TurnEndParams other) : this() {
+      isPlayerTurn_ = other.isPlayerTurn_;
+      roundNumber_ = other.roundNumber_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TurnEndParams Clone() {
+      return new TurnEndParams(this);
+    }
+
+    /// <summary>Field number for the "isPlayerTurn" field.</summary>
+    public const int IsPlayerTurnFieldNumber = 1;
+    private bool isPlayerTurn_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsPlayerTurn {
+      get { return isPlayerTurn_; }
+      set {
+        isPlayerTurn_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "roundNumber" field.</summary>
+    public const int RoundNumberFieldNumber = 2;
+    private int roundNumber_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int RoundNumber {
+      get { return roundNumber_; }
+      set {
+        roundNumber_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as TurnEndParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(TurnEndParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (IsPlayerTurn != other.IsPlayerTurn) return false;
+      if (RoundNumber != other.RoundNumber) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (IsPlayerTurn != false) hash ^= IsPlayerTurn.GetHashCode();
+      if (RoundNumber != 0) hash ^= RoundNumber.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (IsPlayerTurn != false) {
+        output.WriteRawTag(8);
+        output.WriteBool(IsPlayerTurn);
+      }
+      if (RoundNumber != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(RoundNumber);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (IsPlayerTurn != false) {
+        size += 1 + 1;
+      }
+      if (RoundNumber != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RoundNumber);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(TurnEndParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.IsPlayerTurn != false) {
+        IsPlayerTurn = other.IsPlayerTurn;
+      }
+      if (other.RoundNumber != 0) {
+        RoundNumber = other.RoundNumber;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            IsPlayerTurn = input.ReadBool();
+            break;
+          }
+          case 16: {
+            RoundNumber = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 战斗开始参数
+  /// </summary>
+  public sealed partial class BattleStartParams : pb::IMessage<BattleStartParams> {
+    private static readonly pb::MessageParser<BattleStartParams> _parser = new pb::MessageParser<BattleStartParams>(() => new BattleStartParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<BattleStartParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[30]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BattleStartParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BattleStartParams(BattleStartParams other) : this() {
+      levelId_ = other.levelId_;
+      entities_ = other.entities_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BattleStartParams Clone() {
+      return new BattleStartParams(this);
+    }
+
+    /// <summary>Field number for the "levelId" field.</summary>
+    public const int LevelIdFieldNumber = 1;
+    private int levelId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int LevelId {
+      get { return levelId_; }
+      set {
+        levelId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "entities" field.</summary>
+    public const int EntitiesFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::GameProtocol.CombatEntityInfo> _repeated_entities_codec
+        = pb::FieldCodec.ForMessage(18, global::GameProtocol.CombatEntityInfo.Parser);
+    private readonly pbc::RepeatedField<global::GameProtocol.CombatEntityInfo> entities_ = new pbc::RepeatedField<global::GameProtocol.CombatEntityInfo>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::GameProtocol.CombatEntityInfo> Entities {
+      get { return entities_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as BattleStartParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(BattleStartParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (LevelId != other.LevelId) return false;
+      if(!entities_.Equals(other.entities_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (LevelId != 0) hash ^= LevelId.GetHashCode();
+      hash ^= entities_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (LevelId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(LevelId);
+      }
+      entities_.WriteTo(output, _repeated_entities_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (LevelId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LevelId);
+      }
+      size += entities_.CalculateSize(_repeated_entities_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(BattleStartParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.LevelId != 0) {
+        LevelId = other.LevelId;
+      }
+      entities_.Add(other.entities_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            LevelId = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            entities_.AddEntriesFrom(input, _repeated_entities_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 战斗结束参数
+  /// </summary>
+  public sealed partial class BattleEndParams : pb::IMessage<BattleEndParams> {
+    private static readonly pb::MessageParser<BattleEndParams> _parser = new pb::MessageParser<BattleEndParams>(() => new BattleEndParams());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<BattleEndParams> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProtocol.GamesProtocolReflection.Descriptor.MessageTypes[31]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BattleEndParams() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BattleEndParams(BattleEndParams other) : this() {
+      isPlayerWin_ = other.isPlayerWin_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public BattleEndParams Clone() {
+      return new BattleEndParams(this);
+    }
+
+    /// <summary>Field number for the "isPlayerWin" field.</summary>
+    public const int IsPlayerWinFieldNumber = 1;
+    private bool isPlayerWin_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsPlayerWin {
+      get { return isPlayerWin_; }
+      set {
+        isPlayerWin_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as BattleEndParams);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(BattleEndParams other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (IsPlayerWin != other.IsPlayerWin) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (IsPlayerWin != false) hash ^= IsPlayerWin.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (IsPlayerWin != false) {
+        output.WriteRawTag(8);
+        output.WriteBool(IsPlayerWin);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (IsPlayerWin != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(BattleEndParams other) {
+      if (other == null) {
+        return;
+      }
+      if (other.IsPlayerWin != false) {
+        IsPlayerWin = other.IsPlayerWin;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            IsPlayerWin = input.ReadBool();
             break;
           }
         }
