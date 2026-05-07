@@ -26,8 +26,8 @@ namespace Module.fight
     public class FightController : BaseController
     {
         private LevelModel _currentModel;
-        private bool _isBattleActive = false; //是否还在战斗中
-        private bool _isPlayerTurnStart = false; //是否是玩家回合开始（不包括输出回合）
+        private bool _isBattleActive;//是否还在战斗中
+        private bool _isPlayerTurnStart; //是否是玩家回合开始（不包括输出回合）
         
         public FightController() : base()
         {
@@ -56,7 +56,7 @@ namespace Module.fight
             InitModuleEvent();
         }
 
-        public override void InitModuleEvent()
+        public sealed override void InitModuleEvent()
         {
             RegisterFunc(EventDefines.OpenFightingView, onOpenFightView);
             RegisterFunc(EventDefines.OpenPauseFightView, onOpenPauseFightView);
@@ -111,13 +111,13 @@ namespace Module.fight
         #endregion
 
         #region 战斗事件
-        private void onPlayerTurnStart(System.Object args)
+        private void onPlayerTurnStart(object args)
         {
             Debug.Log("==== 玩家回合开始 ====");
             _isPlayerTurnStart = true;
         }
         
-        private async void onPlayerTurnOutput(System.Object args)
+        private async void onPlayerTurnOutput(object args)
         {
             try
             {
@@ -136,9 +136,6 @@ namespace Module.fight
                     if(action.ActionType == CardActionType.MoveCard) continue;
                     
                     await CardSkillExecutor.ExecuteCardActionAsync(action);
-
-                    //GameApp.CardManager.RemoveHandCard(action.cardEntity);
-                    //GameApp.CardManager.DiscardCard(action.cardEntity);
                 }
                 
                 if (_isBattleActive)
@@ -146,11 +143,11 @@ namespace Module.fight
             }
             catch (Exception e)
             {
-                throw; 
+                Debug.Log("玩家回合结算发生异常: " + e);
             }
         }
 
-        private async void onEnemyTurn(System.Object args)
+        private async void onEnemyTurn(object args)
         {
             try
             {
@@ -201,7 +198,7 @@ namespace Module.fight
             }
         }
 
-        private void onSelectEnemyTarget(System.Object args)
+        private void onSelectEnemyTarget(object args)
         {
             if(!_isPlayerTurnStart) return;
             
@@ -214,7 +211,7 @@ namespace Module.fight
             }
         }
 
-        private void onCharacterDie(System.Object args)
+        private void onCharacterDie(object args)
         {
             BaseCharacter deadChar = args as BaseCharacter;
             
@@ -251,14 +248,12 @@ namespace Module.fight
             _isBattleActive = true;
             GameApp.CardManager.InitCards(_currentModel);
 
-            // 把生成的英雄同步到纯C#层的 CombatContext
-            // 注意：key 用 ConfigId（OwnerId），因为 CombatSystem 的行动点操作按 ConfigId 查找
             foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
             {
                 GameApp.CardManager.BattleContext.Entities[hero.CharacterData.Id.ToString()] = new CombatEntity(
                     hero.InstanceID,
                     hero.CharacterData.Id,
-                    1, // 或者从hero身上取归属
+                    1, // TODO:这里后续需要修改
                     hero.CurrentHp,
                     hero.ActionPoint
                 );

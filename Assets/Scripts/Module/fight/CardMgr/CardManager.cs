@@ -31,7 +31,7 @@ namespace Module.fight.CardMgr
         
         private const int LOCAL_PLAYER_ID = 1;
         private int _maxHandCardCount = 8;
-        private List<int> _currentCharacterConfigIds;
+        private readonly List<int> _currentCharacterConfigIds;
 
         public CardManager()
         {
