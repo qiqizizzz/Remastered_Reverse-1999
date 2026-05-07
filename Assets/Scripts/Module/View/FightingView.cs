@@ -193,7 +193,7 @@ namespace Module.View
             _handCardOperator.UndoLastPlayCard();
             GameApp.CardManager.CardActionQueue.UndoLastAction();
 
-            _actionQueueUIManager.RefreshHeroActionPointUI();
+            _actionQueueUIManager.RefreshHeroActionPointUI(true);
             _actionQueueUIManager.RefreshMoveIndicators();
             onUpdateHandCards(GameApp.CardManager.GetHandCards(), true);
         }

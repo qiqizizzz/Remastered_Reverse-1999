@@ -187,6 +187,15 @@ namespace Module.fight.CardMgr
                     entity.ActionPoint = kvp.Value;
             }
 
+            foreach (var kvp in snapshot.HeroActionPoints)
+            {
+                if (int.TryParse(kvp.Key, out int characterId))
+                {
+                    var hero = GameApp.EntityManager.GetCharacterById(characterId) as HeroEntity;
+                    hero?.SetActionPoint(kvp.Value);
+                }
+            }
+
             // 统一广播一次手牌更新
             EventBus.OnHandCardsUpdated?.Invoke(LOCAL_PLAYER_ID, new List<CardEntity>(deck.HandCards));
         }
