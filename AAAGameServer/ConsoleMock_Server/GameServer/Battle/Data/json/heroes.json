@@ -1,0 +1,80 @@
+{
+    "items": [
+        {
+            "Id": 1001,
+            "Name": "莫提斯",
+            "En_Name": "Mortis",
+            "CharacterType": 0,
+            "InspirationType": 0,
+            "Property": {
+                "Hp": 1200.0,
+                "Attack": 180.0,
+                "Defense": 80.0,
+                "CritRate": 0.15000000596046449,
+                "CritDamage": 1.5
+            },
+            "Cards": [
+                2001,
+                2002,
+                2003
+            ]
+        },
+        {
+            "Id": 1002,
+            "Name": "蕾缪安",
+            "En_Name": "LeiMiuan",
+            "CharacterType": 0,
+            "InspirationType": 0,
+            "Property": {
+                "Hp": 950.0,
+                "Attack": 220.0,
+                "Defense": 60.0,
+                "CritRate": 0.30000001192092898,
+                "CritDamage": 1.7999999523162842
+            },
+            "Cards": [
+                2004,
+                2005,
+                2006
+            ]
+        },
+        {
+            "Id": 1003,
+            "Name": "缪尔赛思",
+            "En_Name": "Miuersaisi",
+            "CharacterType": 0,
+            "InspirationType": 1,
+            "Property": {
+                "Hp": 1300.0,
+                "Attack": 150.0,
+                "Defense": 30.0,
+                "CritRate": 0.20000000298023225,
+                "CritDamage": 1.7000000476837159
+            },
+            "Cards": [
+                2007,
+                2008,
+                2009
+            ]
+        },
+        {
+            "Id": 1004,
+            "Name": "艾丽妮",
+            "En_Name": "Ailini",
+            "CharacterType": 0,
+            "InspirationType": 0,
+            "Property": {
+                "Hp": 2000.0,
+                "Attack": 230.0,
+                "Defense": 60.0,
+                "CritRate": 0.4000000059604645,
+                "CritDamage": 2.0
+            },
+            "Cards": [
+                2010,
+                2011,
+                2012
+            ]
+        }
+    ]
+}

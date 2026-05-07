@@ -1,0 +1,27 @@
+{
+    "items": [
+        {
+            "Id": 1,
+            "Name": "",
+            "Description": "击败所有敌人-12回合内胜利",
+            "MonsterSpawns": [
+                {
+                    "monsterId": 5001,
+                    "count": 3
+                }
+            ]
+        },
+        {
+            "Id": 2,
+            "Name": "",
+            "Description": "击败所有敌人-12回合内胜利",
+            "MonsterSpawns": []
+        },
+        {
+            "Id": 3,
+            "Name": "",
+            "Description": "击败所有敌人-12回合内胜利",
+            "MonsterSpawns": []
+        }
+    ]
+}

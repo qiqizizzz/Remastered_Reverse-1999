@@ -1,0 +1,196 @@
+{
+    "items": [
+        {
+            "Id": 2001,
+            "Name": "Mortis的卡牌1",
+            "Description": "Mortis的卡牌1",
+            "OwnerId": 1001,
+            "CardType": 0,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 1.2000000476837159,
+                    "Round": 1,
+                    "Target": 1,
+                    "TargetCount": 3
+                }
+            ]
+        },
+        {
+            "Id": 2002,
+            "Name": "Mortis的卡牌2",
+            "Description": "Mortis的卡牌2",
+            "OwnerId": 1001,
+            "CardType": 1,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 2.0,
+                    "Round": 1,
+                    "Target": 1,
+                    "TargetCount": 1
+                }
+            ]
+        },
+        {
+            "Id": 2003,
+            "Name": "Mortis的大招",
+            "Description": "Mortis的大招",
+            "OwnerId": 1001,
+            "CardType": 5,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 4.0,
+                    "Round": 0,
+                    "Target": 1,
+                    "TargetCount": 1
+                }
+            ]
+        },
+        {
+            "Id": 2004,
+            "Name": "蕾缪安的卡牌1",
+            "Description": "蕾缪安的卡牌1",
+            "OwnerId": 1002,
+            "CardType": 0,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 1.2000000476837159,
+                    "Round": 1,
+                    "Target": 1,
+                    "TargetCount": 3
+                }
+            ]
+        },
+        {
+            "Id": 2005,
+            "Name": "蕾缪安的卡牌2",
+            "Description": "蕾缪安的卡牌2",
+            "OwnerId": 1002,
+            "CardType": 0,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 2.0,
+                    "Round": 1,
+                    "Target": 1,
+                    "TargetCount": 1
+                }
+            ]
+        },
+        {
+            "Id": 2006,
+            "Name": "蕾缪安的大招",
+            "Description": "蕾缪安的大招",
+            "OwnerId": 1002,
+            "CardType": 5,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 0.0,
+                    "Round": 0,
+                    "Target": 1,
+                    "TargetCount": 0
+                }
+            ]
+        },
+        {
+            "Id": 2007,
+            "Name": "缪尔赛思的卡牌1",
+            "Description": "缪尔赛思的卡牌1",
+            "OwnerId": 1003,
+            "CardType": 0,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 2.0,
+                    "Round": 1,
+                    "Target": 1,
+                    "TargetCount": 1
+                }
+            ]
+        },
+        {
+            "Id": 2008,
+            "Name": "缪尔赛思的卡牌2",
+            "Description": "缪尔赛思的卡牌2",
+            "OwnerId": 1003,
+            "CardType": 0,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 2.0,
+                    "Round": 1,
+                    "Target": 1,
+                    "TargetCount": 3
+                }
+            ]
+        },
+        {
+            "Id": 2009,
+            "Name": "缪尔赛思的大招",
+            "Description": "缪尔赛思的大招",
+            "OwnerId": 1003,
+            "CardType": 5,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 0.0,
+                    "Round": 0,
+                    "Target": 1,
+                    "TargetCount": 0
+                }
+            ]
+        },
+        {
+            "Id": 2010,
+            "Name": "艾丽妮的卡牌1",
+            "Description": "艾丽妮的卡牌1",
+            "OwnerId": 1004,
+            "CardType": 0,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 3.0,
+                    "Round": 1,
+                    "Target": 1,
+                    "TargetCount": 3
+                }
+            ]
+        },
+        {
+            "Id": 2011,
+            "Name": "艾丽妮的卡牌2",
+            "Description": "艾丽妮的卡牌2",
+            "OwnerId": 1004,
+            "CardType": 0,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 4.0,
+                    "Round": 1,
+                    "Target": 1,
+                    "TargetCount": 1
+                }
+            ]
+        },
+        {
+            "Id": 2012,
+            "Name": "艾丽妮的大招",
+            "Description": "艾丽妮的大招",
+            "OwnerId": 1004,
+            "CardType": 5,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 2.0,
+                    "Round": 1,
+                    "Target": 1,
+                    "TargetCount": 3
+                }
+            ]
+        }
+    ]
+}

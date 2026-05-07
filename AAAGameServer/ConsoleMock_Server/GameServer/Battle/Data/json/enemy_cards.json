@@ -1,0 +1,44 @@
+{
+    "items": [
+        {
+            "Id": 3001,
+            "Name": "源石虫的卡牌1",
+            "Description": "源石虫的卡牌1",
+            "OwnerId": 5001,
+            "CardType": 0,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 1.2000000476837159,
+                    "Round": 1,
+                    "Target": 1,
+                    "TargetCount": 3
+                }
+            ]
+        },
+        {
+            "Id": 3002,
+            "Name": "源石虫的卡牌2",
+            "Description": "源石虫的卡牌2",
+            "OwnerId": 5001,
+            "CardType": 0,
+            "Effects": [
+                {
+                    "EffectType": 0,
+                    "Value": 1.0,
+                    "Round": 1,
+                    "Target": 1,
+                    "TargetCount": 1
+                }
+            ]
+        },
+        {
+            "Id": 3003,
+            "Name": "源石虫的大招",
+            "Description": "源石虫的大招",
+            "OwnerId": 5001,
+            "CardType": 5,
+            "Effects": []
+        }
+    ]
+}

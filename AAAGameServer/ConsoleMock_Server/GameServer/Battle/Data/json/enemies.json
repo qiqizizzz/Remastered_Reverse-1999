@@ -1,0 +1,23 @@
+{
+    "items": [
+        {
+            "Id": 5001,
+            "Name": "源石虫",
+            "En_Name": "OriginiumSlug",
+            "CharacterType": 1,
+            "InspirationType": 0,
+            "Property": {
+                "Hp": 20000.0,
+                "Attack": 100.0,
+                "Defense": 40.0,
+                "CritRate": 0.05000000074505806,
+                "CritDamage": 1.5
+            },
+            "Cards": [
+                3001,
+                3002,
+                3003
+            ]
+        }
+    ]
+}
