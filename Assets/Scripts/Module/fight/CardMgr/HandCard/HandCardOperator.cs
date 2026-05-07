@@ -52,6 +52,7 @@ namespace Module.fight.CardMgr
             _handCardUIManager.SetCardEventHandlers(
                 onCardBeginDrag, onCardDrag, onCardEndDrag, onCardClick);
             
+            GameApp.CardManager.EventBus.OnCardMerged -= OnCardMergedFromCore;
             GameApp.CardManager.EventBus.OnCardMerged += OnCardMergedFromCore;
         }
 

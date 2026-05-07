@@ -24,6 +24,8 @@ namespace Module.fight.Core.Systems
         private readonly ICardCatalog _cardCatalog;
         private readonly CombatEventBus _eventBus;
         private readonly Random _random;
+
+        private static int num = 0;
         
         public CardCombatSystem(CombatContext context, ICardCatalog cardCatalog, CombatEventBus eventBus)
         {
@@ -82,6 +84,13 @@ namespace Module.fight.Core.Systems
                     deck.HandCards.Add(new CardEntity(card.Id));
                 }
             }
+
+            #if UNITY_EDITOR
+            foreach (var handCard in deck.HandCards)
+            {
+                Debug.Log($"初始手牌: {handCard.GetConfig().Name} (InstanceId: {handCard.InstanceId})");
+            }
+            #endif
             
             ShuffleCard(deck.HandCards);
             _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));

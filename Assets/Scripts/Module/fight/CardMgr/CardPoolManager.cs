@@ -118,6 +118,13 @@ namespace Module.fight.CardMgr
         #endregion
 
         #region 预加载卡牌
+
+        public void TryNotifyReady()
+        {
+            if(_loadedPoolCount >= _totalPoolToLoad && _totalPoolToLoad > 0)
+                GameApp.MessageCenter.PostEvent(EventDefines.FightingViewReady);
+        }
+        
         private void PreLoadCardItem()
         {
             _totalPoolToLoad = GameApp.CardManager.maxHandCardCount + 8;

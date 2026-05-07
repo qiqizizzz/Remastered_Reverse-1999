@@ -126,6 +126,7 @@ namespace Module.View
             SetVisible(true);
 
             _actionQueueUIManager.SetVisible(true);
+            _cardPoolManager.TryNotifyReady();
         }
 
         #region UI事件
