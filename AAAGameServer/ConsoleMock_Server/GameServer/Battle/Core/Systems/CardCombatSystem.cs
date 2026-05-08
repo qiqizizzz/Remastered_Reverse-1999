@@ -40,6 +40,7 @@ namespace GameServer.Battle.Core.Systems
             foreach (var charId in CharacterConfigIds)
             {
                 var charCards = _cardCatalog.GetCharacterCards(charId);
+                Console.WriteLine($"[InitDeck] 角色 {charId} 的卡牌数量: {charCards.Count}");
 
                 foreach (var card in charCards)
                 {
@@ -53,10 +54,11 @@ namespace GameServer.Battle.Core.Systems
             }
 
             ShuffleCard(deck.DrawPile);
+            Console.WriteLine($"[InitDeck] 牌库初始化完成: DrawPile={deck.DrawPile.Count}, HandCards={deck.HandCards.Count}, DiscardPile={deck.DiscardPile.Count}");
         }
 
         #region 准备阶段与洗牌
-        //为新关卡准备初始手牌
+        //为新关卡准备初始手牌（从牌堆中抽取）
         public void PrepareHandsForNewLevel(int playerId, List<int> CharacterConfigIds)
         {
             //回合开始时（即新进入关卡时）,玩家当前手牌应为每个角色两张普通牌,加起来一共8张（4个角色）
@@ -65,24 +67,32 @@ namespace GameServer.Battle.Core.Systems
             foreach (var charId in CharacterConfigIds)
             {
                 var charCards = _cardCatalog.GetCharacterCards(charId);
-
                 foreach (var card in charCards)
                 {
                     if (card.CardType == CardType.Ultimate) continue;
 
-                    deck.HandCards.Add(new CardEntity(card.Id));
+                    // 优先从 DrawPile 中抽取该角色的牌
+                    int drawIndex = deck.DrawPile.FindIndex(c => c.ConfigId == card.Id);
+                    if (drawIndex >= 0)
+                    {
+                        var drawnCard = deck.DrawPile[drawIndex];
+                        deck.DrawPile.RemoveAt(drawIndex);
+                        deck.HandCards.Insert(0, drawnCard);
+                        _eventBus?.OnCardDrawn?.Invoke(playerId, drawnCard);
+                    }
+                    else
+                    {
+                        // 兜底：若牌堆中无该牌则直接创建
+                        var fallbackCard = new CardEntity(card.Id);
+                        deck.HandCards.Insert(0, fallbackCard);
+                        _eventBus?.OnCardDrawn?.Invoke(playerId, fallbackCard);
+                    }
                 }
             }
 
-#if UNITY_EDITOR
-            foreach (var handCard in deck.HandCards)
-            {
-                Debug.Log($"初始手牌: {handCard.GetConfig().Name} (InstanceId: {handCard.InstanceId})");
-            }
-#endif
-
             ShuffleCard(deck.HandCards);
             _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
+            Console.WriteLine($"[PrepareHandsForNewLevel] 初始手牌准备完成: HandCards={deck.HandCards.Count}, DrawPile={deck.DrawPile.Count}");
         }
 
         //Fisher–Yates 洗牌算法
@@ -108,27 +118,32 @@ namespace GameServer.Battle.Core.Systems
         {
             if (!_context.PlayerDecks.TryGetValue(playerId, out var deck)) return;
 
+            int drawn = 0;
             for (int i = 0; i < count; i++)
             {
                 if (deck.DrawPile.Count == 0)
                 {
                     if (deck.DiscardPile.Count == 0)
                     {
-                        Console.WriteLine("抽牌失败: 牌堆和弃牌堆都没有牌了");
+                        Console.WriteLine($"[DrawCard] 抽牌失败: 牌堆({deck.DrawPile.Count})和弃牌堆({deck.DiscardPile.Count})都没有牌了, 请求抽{count}张, 实际抽了{drawn}张");
                         break;
                     }
 
                     deck.DrawPile.AddRange(deck.DiscardPile);
                     deck.DiscardPile.Clear();
                     ShuffleCard(deck.DrawPile);
+                    Console.WriteLine($"[DrawCard] 弃牌堆洗入抽牌堆, 当前抽牌堆数量: {deck.DrawPile.Count}");
                 }
 
                 CardEntity drawnCard = deck.DrawPile[^1];
                 deck.DrawPile.RemoveAt(deck.DrawPile.Count - 1);
                 deck.HandCards.Insert(0, drawnCard);
+                drawn++;
+                _eventBus?.OnCardDrawn?.Invoke(playerId, drawnCard);
             }
 
             _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
+            Console.WriteLine($"[DrawCard] 抽牌完成: 请求{count}张, 实际{drawn}张, DrawPile={deck.DrawPile.Count}, HandCards={deck.HandCards.Count}, DiscardPile={deck.DiscardPile.Count}");
         }
 
         //弃牌

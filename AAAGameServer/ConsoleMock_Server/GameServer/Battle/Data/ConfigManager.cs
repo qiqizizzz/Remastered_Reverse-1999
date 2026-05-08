@@ -21,14 +21,29 @@ namespace GameServer.Battle.Data
 
         public void LoadAll(string configDir)
         {
-            HeroCards = LoadList<CardDataConfig>(Path.Combine(configDir, "hero_cards.json"));
-            EnemyCards = LoadList<CardDataConfig>(Path.Combine(configDir, "enemy_cards.json"));
-            Heroes = LoadList<CharacterDataConfig>(Path.Combine(configDir, "heroes.json"));
-            Enemies = LoadList<CharacterDataConfig>(Path.Combine(configDir, "enemies.json"));
-            Levels = LoadList<LevelDataConfig>(Path.Combine(configDir, "levels.json"));
+            try
+            {
+                HeroCards = LoadList<CardDataConfig>(Path.Combine(configDir, "hero_cards.json"));
+                EnemyCards = LoadList<CardDataConfig>(Path.Combine(configDir, "enemy_cards.json"));
+                Heroes = LoadList<CharacterDataConfig>(Path.Combine(configDir, "heroes.json"));
+                Enemies = LoadList<CharacterDataConfig>(Path.Combine(configDir, "enemies.json"));
+                Levels = LoadList<LevelDataConfig>(Path.Combine(configDir, "levels.json"));
 
-            _heroDict = Heroes.ToDictionary(h => h.Id);
-            _enemyDict = Enemies.ToDictionary(e => e.Id);
+                _heroDict = Heroes.ToDictionary(h => h.Id);
+                _enemyDict = Enemies.ToDictionary(e => e.Id);
+
+                Console.WriteLine($"[ConfigManager] 配置加载完成: HeroCards={HeroCards.Count}, EnemyCards={EnemyCards.Count}, Heroes={Heroes.Count}, Enemies={Enemies.Count}, Levels={Levels.Count}");
+                foreach (var hero in Heroes)
+                {
+                    var cards = GetCharacterCards(hero.Id);
+                    Console.WriteLine($"[ConfigManager] 角色 {hero.Id} ({hero.Name}) 拥有 {cards.Count} 张卡牌");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ConfigManager] 配置加载失败: {ex.Message}");
+                throw;
+            }
         }
 
         // 根据角色配置Id查找角色数据

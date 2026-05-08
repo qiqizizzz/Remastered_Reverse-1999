@@ -9,6 +9,7 @@
 using System;
 using Common.Defines;
 using Data.level;
+using GameProtocol;
 using Module.Character;
 using Module.fight.CardMgr;
 using Module.fight.Core.Entities;
@@ -65,6 +66,7 @@ namespace Module.fight
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
             GameApp.MessageCenter.AddEvent(EventDefines.OnSelectEnemyTarget, onSelectEnemyTarget);
             GameApp.MessageCenter.AddEvent(EventDefines.OnCharacterDie, onCharacterDie);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnBattleServerResponse, onBattleServerResponse);
         }
 
         public override void RemoveModuleEvent()
@@ -77,6 +79,7 @@ namespace Module.fight
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnSelectEnemyTarget, onSelectEnemyTarget);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnCharacterDie, onCharacterDie);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnBattleServerResponse, onBattleServerResponse);
             
             _battleNetwork.UnInit();
         }
@@ -104,6 +107,14 @@ namespace Module.fight
         private void onFightingViewReady(System.Object args)
         {
             // 战斗准备就绪，等待服务端事件驱动
+        }
+
+        // 接收并播放服务端推送的战斗事件序列
+        private void onBattleServerResponse(object args)
+        {
+            var battlePack = args as BattlePack;
+            if (battlePack == null) return;
+            PlayEventSequence.Play(battlePack.Events);
         }
         #endregion
 

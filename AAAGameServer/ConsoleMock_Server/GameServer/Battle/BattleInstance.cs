@@ -172,6 +172,7 @@ namespace GameServer.Battle
                 battleStartEvent.BattleStart.Entities.Add(toProtoEntity(entity));
             }
             _eventBuilder.AddEvent(battleStartEvent);
+            Console.WriteLine($"[initDecks] 牌库初始化完成, 英雄数: {heroConfigIds.Count}");
         }
 
         // ==================== 公共操作接口 ====================
@@ -286,10 +287,6 @@ namespace GameServer.Battle
         {
             _context.CurrentRound++;
 
-            int drawCount = INITIAL_HAND_COUNT - getNormalHandCardCount();
-            if (drawCount > 0)
-                _cardSystem.DrawCard(PLAYER_ID, drawCount);
-
             processRoundStartHandFix();
             _state = BattleState.PlayerTurn;
 
@@ -298,6 +295,7 @@ namespace GameServer.Battle
                 EventType = BattleEventType.TurnStart,
                 TurnStart = new TurnStartParams { IsPlayerTurn = true, RoundNumber = _context.CurrentRound }
             });
+            Console.WriteLine($"[startNextRound] 第 {_context.CurrentRound} 回合开始");
         }
 
         // 回合开始手牌修正（合成、补牌、发大招）
@@ -306,6 +304,7 @@ namespace GameServer.Battle
             while (_context.CheckAndAutoMerge(PLAYER_ID)) { }
 
             int normalCount = getNormalHandCardCount();
+            Console.WriteLine($"[processRoundStartHandFix] 当前普通手牌数: {normalCount}, 目标: {INITIAL_HAND_COUNT}");
             if (normalCount < INITIAL_HAND_COUNT)
             {
                 int needCount = INITIAL_HAND_COUNT - normalCount;
