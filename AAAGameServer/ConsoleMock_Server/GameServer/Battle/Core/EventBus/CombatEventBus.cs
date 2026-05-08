@@ -70,5 +70,28 @@ namespace GameServer.Battle.Core.EventBus
         /// </summary>
         public Action<int, int, int> OnActionPointChanged; // playerId, ownerId, currentValue
         #endregion
+
+        #region 实体状态事件
+        /// <summary>
+        /// 实体受到伤害
+        /// 参数1(int): 目标实例Id
+        /// 参数2(int): 伤害数值
+        /// 参数3(bool): 是否暴击
+        /// </summary>
+        public Action<int, int, bool> OnDamageTaken;
+
+        /// <summary>
+        /// 实体受到治疗
+        /// 参数1(int): 目标实例Id
+        /// 参数2(int): 治疗数值
+        /// </summary>
+        public Action<int, int> OnHealTaken;
+
+        /// <summary>
+        /// 实体死亡
+        /// 参数1(int): 实例Id
+        /// </summary>
+        public Action<int> OnEntityDied;
+        #endregion
     }
 }
