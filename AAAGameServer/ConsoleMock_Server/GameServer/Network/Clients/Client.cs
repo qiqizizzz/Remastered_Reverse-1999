@@ -693,7 +693,10 @@ namespace Network
             }
 
             var events = battle.CollectEvents();
-            sendBattleResponse(ActionCode.UnDoAction, events);
+            var response = new BattlePack();
+            response.Events.AddRange(events);
+            response.StateSnapshot = battle.GetStateSnapshot();
+            sendBattleResponse(ActionCode.UnDoAction, response);
         }
 
         // 请求完整战斗状态（断线重连）
@@ -748,14 +751,20 @@ namespace Network
         // 发送战斗成功响应（附带事件列表）
         private void sendBattleResponse(ActionCode actionCode, List<BattleEvent> events)
         {
+            var battlePack = new BattlePack();
+            battlePack.Events.AddRange(events);
+            sendBattleResponse(actionCode, battlePack);
+        }
+        
+        private void sendBattleResponse(ActionCode actionCode, BattlePack battlePack)
+        {
             var resPack = new MainPack
             {
                 RequestCode = RequestCode.Battle,
                 ActionCode = actionCode,
                 ReturnCode = ReturnCode.Succeed,
-                BattlePack = new BattlePack()
+                BattlePack = battlePack ?? new BattlePack()
             };
-            resPack.BattlePack.Events.AddRange(events);
             Send(resPack.ToByteArray());
         }
 

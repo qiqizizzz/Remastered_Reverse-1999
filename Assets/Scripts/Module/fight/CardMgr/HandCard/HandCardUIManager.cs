@@ -103,7 +103,7 @@ namespace Module.fight.CardMgr
 
                     item.RegisterDragAndClickEvent(m_onBeginDrag, m_onDrag, m_onEndDrag, m_onClick);
                     
-                    float delay = (isNewCard && !isUndo) ? i * 0.05f : 0f;
+                    float delay = (isNewCard && !isUndo) ? (newCards.Count - 1 - i) * 0.05f : 0f;
                     
                     if (isNewCard && !isUndo) item.transform.SetAsLastSibling();
                     
@@ -207,6 +207,8 @@ namespace Module.fight.CardMgr
             undoItem.SetBlockRaycasts(true);
             undoItem.transform.SetParent(_cardDeckTf, true);
             InsertCard(0, undoItem);
+            
+            RefreshHandCardLayout();
         }
 
         #endregion

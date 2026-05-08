@@ -114,7 +114,34 @@ namespace Module.fight
         {
             var battlePack = args as BattlePack;
             if (battlePack == null) return;
+            
+            if (battlePack.StateSnapshot != null)
+                restoreFromStateSnapshot(battlePack.StateSnapshot);
+            
             PlayEventSequence.Play(battlePack.Events);
+        }
+        
+        // 根据服务端状态快照恢复本地战斗上下文
+        private void restoreFromStateSnapshot(BattleStateSnapshot snapshot)
+        {
+            var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
+            deck.HandCards.Clear();
+            deck.DrawPile.Clear();
+            deck.DiscardPile.Clear();
+            
+            if (snapshot.PlayerDeck != null)
+            {
+                foreach (var cardInfo in snapshot.PlayerDeck.HandCards)
+                    deck.HandCards.Add(new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel));
+                
+                foreach (var cardInfo in snapshot.PlayerDeck.DrawPile)
+                    deck.DrawPile.Add(new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel));
+                
+                foreach (var cardInfo in snapshot.PlayerDeck.DiscardPile)
+                    deck.DiscardPile.Add(new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel));
+            }
+            
+            GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, deck.HandCards);
         }
         #endregion
 
