@@ -28,7 +28,7 @@ namespace Module.View
         private ActionQueueUIManager _actionQueueUIManager;
         private CardPoolManager _cardPoolManager;
         
-        private CombatCommandProcessor _commandProcessor;
+
 
         [Header("关卡信息相关")]
         private Text _turnInfoText;
@@ -83,11 +83,8 @@ namespace Module.View
             _actionQueueUIManager.Init();
             _cardPoolManager.Init();
 
-            _commandProcessor = new CombatCommandProcessor(GameApp.CardManager.BattleContext,
-                GameApp.CardManager.TakeSnapshot, GameApp.CardManager.RestoreSnapshot);
-
             _handCardOperator =
-                new HandCardOperator(_handCardUIManager, _commandProcessor, GameApp.CardManager.CardActionQueue);
+                new HandCardOperator(_handCardUIManager, GameApp.CardManager.CardActionQueue);
             _handCardOperator.Init();
 
             m_refreshMoveIndicatorsHandler = () => _actionQueueUIManager.RefreshMoveIndicators();
@@ -135,7 +132,6 @@ namespace Module.View
         {
             _handCardUIManager.HideAllHands(args);
             _actionQueueUIManager.HideAllMoveIndicators();
-            _commandProcessor.Clear();
         }
         private void onHandCardChanged(System.Object args = null)
         {
@@ -189,13 +185,10 @@ namespace Module.View
 
         private void onUndoBtn()
         {
-            _commandProcessor.Undo();
             _handCardOperator.UndoLastPlayCard();
-            GameApp.CardManager.CardActionQueue.UndoLastAction();
 
             _actionQueueUIManager.RefreshHeroActionPointUI();
             _actionQueueUIManager.RefreshMoveIndicators();
-            onUpdateHandCards(GameApp.CardManager.GetHandCards(), true);
         }
 
         private void onExitLevel(params object[] args)
@@ -203,9 +196,6 @@ namespace Module.View
             _handCardOperator.Clear();
             _handCardUIManager.Clear();
             _cardPoolManager.RecycleAllCards();
-            _commandProcessor?.Clear();
-
-            GameApp.CardManager.CardActionQueue.Clear();
         }
         #endregion
     }

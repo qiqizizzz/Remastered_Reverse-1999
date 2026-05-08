@@ -54,5 +54,11 @@ namespace Common.Defines
         
         //战斗卡牌相关事件
         public const string OnHandCardMerged = "OnHandCardMerged";
+        
+        // 网络战斗事件（服务端推送）
+        public const string OnBattleServerResponse = "OnBattleServerResponse";
+        public const string OnBattleTurnStart = "OnBattleTurnStart";
+        public const string OnBattleTurnEnd = "OnBattleTurnEnd";
+        public const string OnBattleStateChanged = "OnBattleStateChanged";
     }
 }

@@ -7,19 +7,15 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Common.Defines;
-using Data.card;
 using Data.level;
 using Module.Character;
 using Module.fight.CardMgr;
 using Module.fight.Core.Entities;
-using Module.fight.Skill;
+using Module.fight.Network;
 using MVC;
 using MVC.Controller;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Module.fight
 {
@@ -28,9 +24,12 @@ namespace Module.fight
         private LevelModel _currentModel;
         private bool _isBattleActive;//是否还在战斗中
         private bool _isPlayerTurnStart; //是否是玩家回合开始（不包括输出回合）
+        private readonly BattleNetworkController _battleNetwork;
         
         public FightController() : base()
         {
+            _battleNetwork = new BattleNetworkController();
+            _battleNetwork.Init();
             GameApp.ViewManager.Register(ViewType.FightingView, new ViewInfo()
             {
                 PrefabName = AddressDefines.UI_FightingView,
@@ -64,8 +63,6 @@ namespace Module.fight
             
             GameApp.MessageCenter.AddEvent(EventDefines.FightingViewReady, onFightingViewReady);
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
-            GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
-            GameApp.MessageCenter.AddEvent(EventDefines.OnEnemyTurn, onEnemyTurn);
             GameApp.MessageCenter.AddEvent(EventDefines.OnSelectEnemyTarget, onSelectEnemyTarget);
             GameApp.MessageCenter.AddEvent(EventDefines.OnCharacterDie, onCharacterDie);
         }
@@ -78,10 +75,10 @@ namespace Module.fight
             
             GameApp.MessageCenter.RemoveEvent(EventDefines.FightingViewReady, onFightingViewReady);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
-            GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onPlayerTurnOutput);
-            GameApp.MessageCenter.RemoveEvent(EventDefines.OnEnemyTurn, onEnemyTurn);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnSelectEnemyTarget, onSelectEnemyTarget);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnCharacterDie, onCharacterDie);
+            
+            _battleNetwork.UnInit();
         }
 
         #region UI事件
@@ -106,7 +103,7 @@ namespace Module.fight
         
         private void onFightingViewReady(System.Object args)
         {
-            StartFirstRound();
+            // 战斗准备就绪，等待服务端事件驱动
         }
         #endregion
 
@@ -115,87 +112,6 @@ namespace Module.fight
         {
             Debug.Log("==== 玩家回合开始 ====");
             _isPlayerTurnStart = true;
-        }
-        
-        private async void onPlayerTurnOutput(object args)
-        {
-            try
-            {
-                foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
-                {
-                    hero.HUD?.UpdateActionPoint(hero.ActionPoint);
-                }
-                
-                Debug.Log("==== 玩家出牌阶段结束，开始结算队列 ====");
-                _isPlayerTurnStart = false;
-                List<CardAction> actions = GameApp.CardManager.CardActionQueue.GetAllActionsAndClear();
-
-                foreach (var action in actions)
-                {
-                    if(!_isBattleActive) break;
-                    if(action.ActionType == CardActionType.MoveCard) continue;
-                    
-                    await CardSkillExecutor.ExecuteCardActionAsync(action);
-                }
-                
-                if (_isBattleActive)
-                    GameApp.MessageCenter.PostEvent(EventDefines.OnEnemyTurn);
-            }
-            catch (Exception e)
-            {
-                Debug.Log("玩家回合结算发生异常: " + e);
-            }
-        }
-
-        private async void onEnemyTurn(object args)
-        {
-            try
-            {
-                Debug.Log("==== 敌人回合开始 ====");
-
-                foreach (var enemy in GameApp.EntityManager.GetAliveEnemies())
-                {
-                    if (!_isBattleActive) break;
-                    if(GameApp.EntityManager.GetAliveHeroes().Count == 0) break;
-                    
-                    //TODO:生成剩下的敌人等
-                    if(!enemy.gameObject.activeSelf) continue;
-
-                    //TODO:以后需要优化，另外选一个数组存敌人的卡牌等
-                    var cards = enemy.CharacterData.GetCards()
-                        .Where(card => card.CardType != CardType.Ultimate)
-                        .ToList();
-                    
-                    if(cards.Count == 0)
-                    {
-                        Debug.LogWarning($"[{enemy.CharacterData.Name}] 没有可用的卡牌！");
-                        continue;
-                    }
-
-                    CardDataSO randomCard = cards[Random.Range(0, cards.Count)];
-
-                    CardEntity battleCard = new CardEntity(randomCard.Id);
-                    CardAction enemyAction = new CardAction()
-                    {
-                        cardEntity = battleCard,
-                        OriginalIndex = -1,
-                        TargetInstanceId = 0
-                    };
-                    
-                    await CardSkillExecutor.ExecuteCardActionAsync(enemyAction);
-                }
-
-                if (GameApp.EntityManager.GetAliveHeroes().Count > 0 &&
-                    GameApp.EntityManager.GetAliveEnemies().Count > 0)
-                {
-                    GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnStart);
-                    StartNextRound();
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"敌人回合发生异常: {e}"); 
-            }
         }
 
         private void onSelectEnemyTarget(object args)
@@ -225,19 +141,7 @@ namespace Module.fight
             else if (deadChar is EnemyEntity enemy)
                 GameApp.EntityManager.GetAliveEnemies().Remove(enemy);
             
-            //判断胜负
-            if (GameApp.EntityManager.GetAliveHeroes().Count == 0)
-            {
-                _isBattleActive = false;
-                Debug.Log("==== 全部英雄死亡，玩家失败 ====");
-                ApplyFunc(EventDefines.OpenFightSettleView, false);
-            }
-            else if (GameApp.EntityManager.GetAliveEnemies().Count == 0)
-            {
-                _isBattleActive = false;
-                Debug.Log("==== 全部敌人死亡，玩家胜利 ====");
-                ApplyFunc(EventDefines.OpenFightSettleView, true);
-            }
+            // 胜负判断由服务端 BattleEnd 事件驱动（PlayEventSequence 处理）
         }
 
         #endregion
@@ -246,14 +150,13 @@ namespace Module.fight
         private void onSpawnBattleCallback()
         {
             _isBattleActive = true;
-            GameApp.CardManager.InitCards(_currentModel);
 
             foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
             {
                 GameApp.CardManager.BattleContext.Entities[hero.CharacterData.Id] = new CombatEntity(
                     hero.CombatInstanceId,
                     hero.CharacterData.Id,
-                    1, // TODO:这里后续需要修改
+                    1,
                     hero.CurrentHp,
                     hero.ActionPoint
                 );
@@ -261,20 +164,9 @@ namespace Module.fight
             
             GameApp.ViewManager.CloseAll();
             GameApp.ViewManager.Open(ViewType.FightingView);
-        }
-        
-        private void StartFirstRound()
-        {
-            GameApp.CardManager.PrepareHandsForNewLevel();
-            GameApp.CardManager.ProcessRoundStartHandFix();
-            GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnStart);
-        }
-
-        private void StartNextRound()
-        {
-            int count = GameApp.CardManager.maxHandCardCount - GameApp.CardManager.GetNormalHandCardCount();
-            GameApp.CardManager.DrawCard(count);
-            GameApp.CardManager.ProcessRoundStartHandFix();
+            
+            // 由服务端驱动战斗初始化与回合流转
+            _battleNetwork.SendEnterPve(_currentModel.LevelId);
         }
         #endregion
     }

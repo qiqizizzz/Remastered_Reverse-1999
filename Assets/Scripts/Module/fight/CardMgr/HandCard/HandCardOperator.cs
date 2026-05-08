@@ -11,8 +11,8 @@ using System.Collections.Generic;
 using Data.card;
 using Data.card.Extensions;
 using Module.fight.Component;
-using Module.fight.Core.Commands;
 using Module.fight.Core.Entities;
+using Module.fight.Network;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -21,8 +21,8 @@ namespace Module.fight.CardMgr
     public class HandCardOperator
     {
         private readonly HandCardUIManager _handCardUIManager;
-        private readonly CombatCommandProcessor _commandProcessor;
         private readonly CardActionQueue  _actionQueue;
+        private readonly BattleNetworkController _battleNetwork;
         private const int LOCAL_PLAYER_ID = 1;
         
         private readonly Stack<UI_BaseCardItem> _uiActionStack;
@@ -39,11 +39,11 @@ namespace Module.fight.CardMgr
         public event Action OnRefreshMoveIndicators;
         public event Action OnRefreshActionPointUI;
 
-        public HandCardOperator(HandCardUIManager handMgr, CombatCommandProcessor processor, CardActionQueue actionQueue)
+        public HandCardOperator(HandCardUIManager handMgr, CardActionQueue actionQueue)
         {
             _handCardUIManager = handMgr;
-            _commandProcessor = processor;
             _actionQueue = actionQueue;
+            _battleNetwork = new BattleNetworkController();
             _uiActionStack = new Stack<UI_BaseCardItem>();
         }
         
@@ -93,26 +93,16 @@ namespace Module.fight.CardMgr
                 return;
             }
             
-            var snapshot = GameApp.CardManager.TakeSnapshot();
             var card = item.BattleCardData;
 
             _handCardUIManager.RemoveCardAt(index);
             _uiActionStack.Push(item);
-            _handCardUIManager.AnimatePlayCard(item, _actionQueue.Count);
+            _handCardUIManager.AnimatePlayCard(item, _uiActionStack.Count);
 
-            var command =
-                new PlayCardCommand(LOCAL_PLAYER_ID, card, GameApp.CardManager.CurrentSelectedTargetId, index);
-            _commandProcessor.Execute(command);
+            // 发送网络请求，由服务端驱动实际逻辑
+            _battleNetwork.SendPlayCard(card.InstanceId, GameApp.CardManager.CurrentSelectedTargetId);
             
-            var action = new CardAction()
-            {
-                ActionType = CardActionType.PlayCard,
-                Snapshot = snapshot,
-                cardEntity = card,
-                OriginalIndex = index,
-                TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId
-            };
-            bool isQueueFull = _actionQueue.PushAction(action);
+            bool isQueueFull = !_actionQueue.CanPlayCard();
 
             OnRefreshMoveIndicators?.Invoke();
             OnRefreshActionPointUI?.Invoke();
@@ -134,8 +124,7 @@ namespace Module.fight.CardMgr
 
             _handCardUIManager.SwapCards(indexA, indexB);
 
-            // 数据层同步交换
-            GameApp.CardManager.CombatSystem.SwapHandCards(LOCAL_PLAYER_ID, indexA, indexB);
+            // 服务端事件驱动数据更新，此处仅更新UI
         }
         #endregion
 
@@ -147,6 +136,9 @@ namespace Module.fight.CardMgr
 
             UI_BaseCardItem undoItem = _uiActionStack.Pop();
             _handCardUIManager.AnimateUndoCard(undoItem);
+            
+            // 发送撤销请求，由服务端驱动数据回滚
+            _battleNetwork.SendUndo();
         }
         #endregion
         #endregion
@@ -214,22 +206,11 @@ namespace Module.fight.CardMgr
 
             if (safeStartIndex != -1 && safeStartIndex != index && _actionQueue.CanPlayCard())
             {
-                var command = new MoveCardCommand(LOCAL_PLAYER_ID, safeStartIndex, index);
-                _commandProcessor.Execute(command, _tempSnapshot);
-
-                var action = new CardAction()
-                {
-                    ActionType = CardActionType.MoveCard,
-                    Snapshot = _tempSnapshot,
-                    MoveFromIndex = safeStartIndex,
-                    MoveToIndex = index
-                };
-                bool isQueueFull = _actionQueue.PushAction(action);
+                // 发送移动卡牌请求，由服务端驱动数据更新
+                _battleNetwork.SendMoveCard(safeStartIndex, index);
 
                 OnRefreshMoveIndicators?.Invoke();
                 OnRefreshActionPointUI?.Invoke();
-
-                if (isQueueFull) OnQueueFull?.Invoke();
             }
             else
             {
