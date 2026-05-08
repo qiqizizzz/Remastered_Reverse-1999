@@ -65,6 +65,12 @@ namespace Module.fight.CardMgr
             GameApp.CardManager.EventBus.OnCardMerged -= OnCardMergedFromCore;
         }
 
+        // 清空出牌队列栈（用于回合切换时重置状态，不回收UI对象）
+        public void ClearActionStack()
+        {
+            _uiActionStack.Clear();
+        }
+
         #region 卡牌事件
         private void OnCardMergedFromCore(int playerId, CardEntity kept, CardEntity destroyed, int newStarLevel)
         {

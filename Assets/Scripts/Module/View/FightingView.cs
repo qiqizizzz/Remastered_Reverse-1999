@@ -132,6 +132,15 @@ namespace Module.View
         {
             _handCardUIManager.HideAllHands(args);
             _actionQueueUIManager.HideAllMoveIndicators();
+            
+            // 回收行动队列区域的所有卡牌到对象池
+            for (int i = _cardActionTf.childCount - 1; i >= 0; i--)
+            {
+                var cardItem = _cardActionTf.GetChild(i).GetComponent<Module.fight.Component.UI_BaseCardItem>();
+                if (cardItem != null)
+                    _cardPoolManager.RecycleCard(cardItem);
+            }
+            _handCardOperator.ClearActionStack();
         }
         private void onHandCardChanged(System.Object args = null)
         {

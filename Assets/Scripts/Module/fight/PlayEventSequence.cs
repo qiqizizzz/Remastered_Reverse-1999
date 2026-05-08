@@ -20,24 +20,31 @@ namespace Module.fight
     public static class PlayEventSequence
     {
         private static bool _isPlaying;
+        private static readonly Queue<IList<BattleEvent>> _eventQueue = new Queue<IList<BattleEvent>>();
 
         // 播放事件序列
-        public static async void Play(IList<BattleEvent> events)
+        public static void Play(IList<BattleEvent> events)
         {
             if (events == null || events.Count == 0) return;
-            if (_isPlaying)
-            {
-#if UNITY_EDITOR
-                Debug.LogWarning("[PlayEventSequence] 已有事件序列正在播放，忽略新序列");
-#endif
-                return;
-            }
 
+            _eventQueue.Enqueue(events);
+
+            if (!_isPlaying)
+                processQueue();
+        }
+
+        // 顺序处理队列中的事件序列
+        private static async void processQueue()
+        {
             _isPlaying = true;
 
-            foreach (var evt in events)
+            while (_eventQueue.Count > 0)
             {
-                await playSingleEvent(evt);
+                var events = _eventQueue.Dequeue();
+                foreach (var evt in events)
+                {
+                    await playSingleEvent(evt);
+                }
             }
 
             _isPlaying = false;
