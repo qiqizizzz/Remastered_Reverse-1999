@@ -183,6 +183,9 @@ namespace GameServer.Battle
 
             if (!_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) return false;
 
+            if (_context.ActionQueue.QueuedCards.Count >= _context.ActionQueue.MaxQueueSize)
+                return false;
+
             var card = deck.HandCards.Find(c => c.InstanceId == cardInstanceId);
             if (card == null) return false;
 
@@ -285,6 +288,7 @@ namespace GameServer.Battle
         // 开始下一回合
         private void startNextRound()
         {
+            _context.ActionQueue.QueuedCards.Clear();
             _context.CurrentRound++;
 
             processRoundStartHandFix();

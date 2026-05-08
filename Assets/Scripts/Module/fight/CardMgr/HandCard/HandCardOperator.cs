@@ -97,7 +97,16 @@ namespace Module.fight.CardMgr
 
             _handCardUIManager.RemoveCardAt(index);
             _uiActionStack.Push(item);
-            _handCardUIManager.AnimatePlayCard(item, _uiActionStack.Count);
+            
+            _actionQueue.PushAction(new CardAction
+            {
+                ActionType = CardActionType.PlayCard,
+                cardEntity = card,
+                OriginalIndex = index,
+                TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId
+            });
+            
+            _handCardUIManager.AnimatePlayCard(item, _uiActionStack.Count - 1);
 
             // 发送网络请求，由服务端驱动实际逻辑
             _battleNetwork.SendPlayCard(card.InstanceId, GameApp.CardManager.CurrentSelectedTargetId);
@@ -107,7 +116,11 @@ namespace Module.fight.CardMgr
             OnRefreshMoveIndicators?.Invoke();
             OnRefreshActionPointUI?.Invoke();
 
-            if (isQueueFull) OnQueueFull?.Invoke();
+            if (isQueueFull)
+            {
+                OnQueueFull?.Invoke();
+                _battleNetwork.SendEndTurn();
+            }
         }
         #endregion
 
@@ -135,6 +148,7 @@ namespace Module.fight.CardMgr
             if (_uiActionStack.Count <= 0) return;
 
             UI_BaseCardItem undoItem = _uiActionStack.Pop();
+            _actionQueue.UndoLastAction();
             _handCardUIManager.AnimateUndoCard(undoItem);
             
             // 发送撤销请求，由服务端驱动数据回滚

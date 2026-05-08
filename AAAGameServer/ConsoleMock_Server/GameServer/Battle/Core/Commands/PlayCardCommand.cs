@@ -27,6 +27,9 @@ namespace GameServer.Battle.Core.Commands
             if (removeIndex == -1) return false;
             deck.HandCards.RemoveAt(removeIndex);
 
+            // 加入行动队列
+            context.ActionQueue.QueuedCards.Add(Card);
+
             // 弃置（普通牌进弃牌堆，大招牌销毁）
             var config = context.CardCatalog.Get(Card.ConfigId);
             if (config.CardType != CardType.Ultimate)
