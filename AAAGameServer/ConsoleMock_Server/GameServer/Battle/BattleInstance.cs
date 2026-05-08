@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameProtocol;
 using GameServer.Battle.AI;
 using GameServer.Battle.Core.Commands;
 using GameServer.Battle.Core.Entities;
@@ -50,6 +51,7 @@ namespace GameServer.Battle
         private readonly CombatCommandProcessor _commandProcessor;
         private readonly ConfigManager _configManager;
         private readonly IEnemyAI _enemyAI;
+        private readonly BattleEventBuilder _eventBuilder;
         private readonly Random _random;
 
         // ==================== 状态字段 ====================
@@ -64,6 +66,12 @@ namespace GameServer.Battle
         public BattleResult Result => _result;
         public CombatContext Context => _context;
         public IReadOnlyList<CombatEntity> AllEntities => _allEntities;
+
+        // 收集待发送的战斗事件
+        public List<BattleEvent> CollectEvents()
+        {
+            return _eventBuilder.CollectAndClear();
+        }
 
         public BattleInstance(
             int levelId,
@@ -85,6 +93,7 @@ namespace GameServer.Battle
             _cardSystem = new CardCombatSystem(_context, cardCatalog, eventBus);
             _skillExecutor = new CardSkillExecutor(_context, configManager, _allEntities);
             _enemyAI = new EnemyAI(_context, configManager, _allEntities);
+            _eventBuilder = new BattleEventBuilder(_context);
             _commandProcessor = new CombatCommandProcessor(_context, takeSnapshot, restoreSnapshot);
 
             initBattle(heroConfigIds, monsterSpawns);
@@ -152,6 +161,17 @@ namespace GameServer.Battle
             _cardSystem.InitDeck(PLAYER_ID, heroConfigIds);
             _cardSystem.PrepareHandsForNewLevel(PLAYER_ID, heroConfigIds);
             processRoundStartHandFix();
+
+            var battleStartEvent = new BattleEvent
+            {
+                EventType = BattleEventType.BattleStart,
+                BattleStart = new BattleStartParams { LevelId = _levelId }
+            };
+            foreach (var entity in _allEntities)
+            {
+                battleStartEvent.BattleStart.Entities.Add(toProtoEntity(entity));
+            }
+            _eventBuilder.AddEvent(battleStartEvent);
         }
 
         // ==================== 公共操作接口 ====================
@@ -194,6 +214,12 @@ namespace GameServer.Battle
             if (_state != BattleState.PlayerTurn) return;
 
             _state = BattleState.Resolving;
+
+            _eventBuilder.AddEvent(new BattleEvent
+            {
+                EventType = BattleEventType.TurnEnd,
+                TurnEnd = new TurnEndParams { IsPlayerTurn = true, RoundNumber = _context.CurrentRound }
+            });
 
             resolvePlayerActions();
             if (_state == BattleState.BattleEnd) return;
@@ -266,6 +292,12 @@ namespace GameServer.Battle
 
             processRoundStartHandFix();
             _state = BattleState.PlayerTurn;
+
+            _eventBuilder.AddEvent(new BattleEvent
+            {
+                EventType = BattleEventType.TurnStart,
+                TurnStart = new TurnStartParams { IsPlayerTurn = true, RoundNumber = _context.CurrentRound }
+            });
         }
 
         // 回合开始手牌修正（合成、补牌、发大招）
@@ -338,6 +370,12 @@ namespace GameServer.Battle
         {
             _state = BattleState.BattleEnd;
             _result = result;
+
+            _eventBuilder.AddEvent(new BattleEvent
+            {
+                EventType = BattleEventType.BattleEnd,
+                BattleEnd = new BattleEndParams { IsPlayerWin = result == BattleResult.PlayerWin }
+            });
         }
 
         // 清理死亡实体及其卡牌
@@ -431,6 +469,24 @@ namespace GameServer.Battle
             all.AddRange(deck.DrawPile);
             all.AddRange(deck.DiscardPile);
             return all.Find(c => c.InstanceId == instanceId);
+        }
+
+        // 将内部 CombatEntity 转为 Proto CombatEntityInfo
+        private CombatEntityInfo toProtoEntity(CombatEntity entity)
+        {
+            var charConfig = _configManager.GetCharacter(entity.ConfigId);
+            int maxHp = charConfig != null ? (int)charConfig.Property.Hp : 0;
+
+            return new CombatEntityInfo
+            {
+                InstanceId = entity.InstanceId,
+                ConfigId = entity.ConfigId,
+                IsPlayerSide = entity.OwnerPlayerId == 1,
+                CurrentHp = (int)entity.CurrentHp,
+                MaxHp = maxHp,
+                ActionPoint = entity.ActionPoint,
+                MaxActionPoint = MAX_ACTION_POINT
+            };
         }
     }
 }
