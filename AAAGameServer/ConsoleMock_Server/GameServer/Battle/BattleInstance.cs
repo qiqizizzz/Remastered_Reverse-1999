@@ -1,0 +1,437 @@
+/*
+* ┌──────────────────────────────────┐
+* │  描    述: 战斗实例，负责状态机与回合流转协调
+* │  类    名: BattleInstance.cs
+* │  创    建: By qiqizizzz
+* └──────────────────────────────────┘
+*/
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using GameServer.Battle.Core.Commands;
+using GameServer.Battle.Core.Entities;
+using GameServer.Battle.Core.EventBus;
+using GameServer.Battle.Core.Extensions;
+using GameServer.Battle.Core.Systems;
+using GameServer.Battle.Data;
+using GameServer.Battle.Data.Config;
+
+namespace GameServer.Battle
+{
+    public enum BattleState
+    {
+        Idle,
+        PlayerTurn,
+        Resolving,
+        BattleEnd
+    }
+
+    public enum BattleResult
+    {
+        None,
+        PlayerWin,
+        PlayerLose
+    }
+
+    internal class BattleInstance
+    {
+        // ==================== 常量 ====================
+        private const int PLAYER_ID = 1;
+        private const int ENEMY_OWNER_START_ID = 2;
+        private const int MAX_ACTION_POINT = 5;
+        private const int INITIAL_HAND_COUNT = 8;
+
+        // ==================== 依赖系统 ====================
+        private readonly CombatContext _context;
+        private readonly CardCombatSystem _cardSystem;
+        private readonly CardSkillExecutor _skillExecutor;
+        private readonly CombatCommandProcessor _commandProcessor;
+        private readonly ConfigManager _configManager;
+        private readonly Random _random;
+
+        // ==================== 状态字段 ====================
+        private BattleState _state;
+        private BattleResult _result;
+        private int _levelId;
+        private int _nextInstanceId;
+        private readonly List<CombatEntity> _allEntities;
+
+        // ==================== 属性 ====================
+        public BattleState State => _state;
+        public BattleResult Result => _result;
+        public CombatContext Context => _context;
+        public IReadOnlyList<CombatEntity> AllEntities => _allEntities;
+
+        public BattleInstance(
+            int levelId,
+            List<int> heroConfigIds,
+            List<MonsterSpawnData> monsterSpawns,
+            ConfigManager configManager,
+            ICardCatalog cardCatalog)
+        {
+            _levelId = levelId;
+            _configManager = configManager;
+            _random = new Random();
+            _nextInstanceId = 1;
+            _state = BattleState.Idle;
+            _result = BattleResult.None;
+            _allEntities = new List<CombatEntity>();
+
+            var eventBus = new CombatEventBus();
+            _context = new CombatContext(cardCatalog, eventBus);
+            _cardSystem = new CardCombatSystem(_context, cardCatalog, eventBus);
+            _skillExecutor = new CardSkillExecutor(_context, configManager, _allEntities);
+            _commandProcessor = new CombatCommandProcessor(_context, takeSnapshot, restoreSnapshot);
+
+            initBattle(heroConfigIds, monsterSpawns);
+        }
+
+        // ==================== 战斗初始化 ====================
+        private void initBattle(List<int> heroConfigIds, List<MonsterSpawnData> monsterSpawns)
+        {
+            createHeroEntities(heroConfigIds);
+            createEnemyEntities(monsterSpawns);
+            initDecks(heroConfigIds);
+
+            _state = BattleState.PlayerTurn;
+        }
+
+        // 创建玩家方英雄实体
+        private void createHeroEntities(List<int> heroConfigIds)
+        {
+            foreach (var heroId in heroConfigIds)
+            {
+                var heroConfig = _configManager.GetCharacter(heroId);
+                if (heroConfig == null) continue;
+
+                var entity = new CombatEntity(
+                    _nextInstanceId++,
+                    heroId,
+                    PLAYER_ID,
+                    heroConfig.Property.Hp,
+                    0
+                );
+
+                _context.Entities[heroId] = entity;
+                _allEntities.Add(entity);
+            }
+        }
+
+        // 创建敌方实体
+        private void createEnemyEntities(List<MonsterSpawnData> monsterSpawns)
+        {
+            int enemyOwnerId = ENEMY_OWNER_START_ID;
+
+            foreach (var spawn in monsterSpawns)
+            {
+                var enemyConfig = _configManager.GetCharacter(spawn.monsterId);
+                if (enemyConfig == null) continue;
+
+                for (int i = 0; i < spawn.count; i++)
+                {
+                    var entity = new CombatEntity(
+                        _nextInstanceId++,
+                        spawn.monsterId,
+                        enemyOwnerId++,
+                        enemyConfig.Property.Hp,
+                        0
+                    );
+
+                    _allEntities.Add(entity);
+                }
+            }
+        }
+
+        // 初始化牌库与手牌
+        private void initDecks(List<int> heroConfigIds)
+        {
+            _cardSystem.InitDeck(PLAYER_ID, heroConfigIds);
+            _cardSystem.PrepareHandsForNewLevel(PLAYER_ID, heroConfigIds);
+            processRoundStartHandFix();
+        }
+
+        // ==================== 公共操作接口 ====================
+        // 玩家出牌
+        public bool PlayCard(int cardInstanceId, int targetInstanceId, int handIndex)
+        {
+            if (_state != BattleState.PlayerTurn) return false;
+
+            if (!_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) return false;
+
+            var card = deck.HandCards.Find(c => c.InstanceId == cardInstanceId);
+            if (card == null) return false;
+
+            var command = new PlayCardCommand(PLAYER_ID, card, targetInstanceId, handIndex);
+            return _commandProcessor.Execute(command);
+        }
+
+        // 玩家交换手牌
+        public bool MoveCard(int fromIndex, int toIndex)
+        {
+            if (_state != BattleState.PlayerTurn) return false;
+
+            var command = new MoveCardCommand(PLAYER_ID, fromIndex, toIndex);
+            return _commandProcessor.Execute(command);
+        }
+
+        // 撤销上一次操作
+        public bool Undo()
+        {
+            if (_state != BattleState.PlayerTurn) return false;
+            if (_commandProcessor.ActionCount == 0) return false;
+
+            _commandProcessor.Undo();
+            return true;
+        }
+
+        // 结束玩家回合，进入结算与敌人回合
+        public void EndTurn()
+        {
+            if (_state != BattleState.PlayerTurn) return;
+
+            _state = BattleState.Resolving;
+
+            resolvePlayerActions();
+            if (_state == BattleState.BattleEnd) return;
+
+            resolveEnemyTurn();
+            if (_state == BattleState.BattleEnd) return;
+
+            startNextRound();
+        }
+
+        // ==================== 回合结算 ====================
+        // 结算玩家行动队列
+        private void resolvePlayerActions()
+        {
+            var history = _commandProcessor.GetHistoryAndClear();
+
+            foreach (var cmd in history)
+            {
+                if (!_isBattleActive()) break;
+                if (cmd is not PlayCardCommand playCmd) continue;
+
+                _skillExecutor.ExecuteCardEffect(playCmd.SenderPlayerId, playCmd.Card, playCmd.TargetInstanceId);
+            }
+
+            removeDeadEntities();
+
+            if (tryEndBattle(out var result))
+                endBattle(result);
+        }
+
+        // 结算敌人回合
+        private void resolveEnemyTurn()
+        {
+            var enemies = getAliveEnemies();
+            var heroes = getAliveHeroes();
+
+            foreach (var enemy in enemies)
+            {
+                if (_state == BattleState.BattleEnd) break;
+                if (heroes.Count == 0) break;
+
+                // TODO: Step 4 接入 EnemyAI，此处先使用临时随机选牌
+                executeEnemyAction(enemy);
+            }
+
+            removeDeadEntities();
+
+            if (tryEndBattle(out var result))
+                endBattle(result);
+        }
+
+        // 敌人执行一次出牌（临时实现，待 EnemyAI 替换）
+        private void executeEnemyAction(CombatEntity enemy)
+        {
+            var enemyConfig = _configManager.GetCharacter(enemy.ConfigId);
+            if (enemyConfig?.Cards == null || enemyConfig.Cards.Count == 0) return;
+
+            int cardConfigId = enemyConfig.Cards[_random.Next(enemyConfig.Cards.Count)];
+            var cardConfig = _context.CardCatalog.Get(cardConfigId);
+            if (cardConfig == null || cardConfig.CardType == CardType.Ultimate) return;
+
+            var card = new CardEntity(cardConfigId);
+            _skillExecutor.ExecuteCardEffect(enemy.OwnerPlayerId, card, 0);
+        }
+
+        // 开始下一回合
+        private void startNextRound()
+        {
+            _context.CurrentRound++;
+
+            int drawCount = INITIAL_HAND_COUNT - getNormalHandCardCount();
+            if (drawCount > 0)
+                _cardSystem.DrawCard(PLAYER_ID, drawCount);
+
+            processRoundStartHandFix();
+            _state = BattleState.PlayerTurn;
+        }
+
+        // 回合开始手牌修正（合成、补牌、发大招）
+        private void processRoundStartHandFix()
+        {
+            while (_context.CheckAndAutoMerge(PLAYER_ID)) { }
+
+            int normalCount = getNormalHandCardCount();
+            if (normalCount < INITIAL_HAND_COUNT)
+            {
+                int needCount = INITIAL_HAND_COUNT - normalCount;
+                _cardSystem.DrawCard(PLAYER_ID, needCount);
+                while (_context.CheckAndAutoMerge(PLAYER_ID)) { }
+            }
+
+            foreach (var kvp in _context.Entities)
+            {
+                var entity = kvp.Value;
+                if (entity.CurrentHp <= 0) continue;
+                if (entity.ActionPoint >= MAX_ACTION_POINT)
+                {
+                    _cardSystem.TryGiveUltimateCard(PLAYER_ID, entity.ConfigId);
+                }
+            }
+        }
+
+        // ==================== 实体与胜负 ====================
+        // 获取存活英雄
+        private List<CombatEntity> getAliveHeroes()
+        {
+            return _allEntities.Where(e => e.OwnerPlayerId == PLAYER_ID && e.CurrentHp > 0).ToList();
+        }
+
+        // 获取存活敌人
+        private List<CombatEntity> getAliveEnemies()
+        {
+            return _allEntities.Where(e => e.OwnerPlayerId != PLAYER_ID && e.CurrentHp > 0).ToList();
+        }
+
+        // 战斗是否仍在进行
+        private bool _isBattleActive()
+        {
+            return _state != BattleState.BattleEnd;
+        }
+
+        // 尝试判断战斗是否结束
+        private bool tryEndBattle(out BattleResult result)
+        {
+            bool hasAliveHero = getAliveHeroes().Count > 0;
+            bool hasAliveEnemy = getAliveEnemies().Count > 0;
+
+            if (!hasAliveHero)
+            {
+                result = BattleResult.PlayerLose;
+                return true;
+            }
+
+            if (!hasAliveEnemy)
+            {
+                result = BattleResult.PlayerWin;
+                return true;
+            }
+
+            result = BattleResult.None;
+            return false;
+        }
+
+        // 结束战斗
+        private void endBattle(BattleResult result)
+        {
+            _state = BattleState.BattleEnd;
+            _result = result;
+        }
+
+        // 清理死亡实体及其卡牌
+        private void removeDeadEntities()
+        {
+            var deadEntities = _allEntities.Where(e => e.CurrentHp <= 0).ToList();
+
+            foreach (var dead in deadEntities)
+            {
+                _context.EventBus?.OnEntityDied?.Invoke(dead.InstanceId);
+
+                if (_context.Entities.ContainsKey(dead.ConfigId))
+                {
+                    _cardSystem.RemoveCardsOfCharacter(PLAYER_ID, dead.ConfigId);
+                    _context.Entities.Remove(dead.ConfigId);
+                }
+            }
+        }
+
+        // ==================== 工具函数 ====================
+        // 获取手牌中非大招牌的数量
+        private int getNormalHandCardCount()
+        {
+            if (!_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) return 0;
+
+            int count = 0;
+            foreach (var card in deck.HandCards)
+            {
+                var config = _context.CardCatalog.Get(card.ConfigId);
+                if (config != null && config.CardType != CardType.Ultimate)
+                    count++;
+            }
+            return count;
+        }
+
+        // ==================== 快照与撤销 ====================
+        // 记录当前状态快照
+        private CardSnapshot takeSnapshot()
+        {
+            if (!_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck))
+                return new CardSnapshot();
+
+            var snapshot = new CardSnapshot
+            {
+                HeroActionPoints = _context.Entities.ToDictionary(e => e.Key, e => e.Value.ActionPoint),
+                HandCards = new List<CardEntity>(deck.HandCards),
+                DrawPile = new List<CardEntity>(deck.DrawPile),
+                DiscardPile = new List<CardEntity>(deck.DiscardPile),
+                CardStarLevels = new Dictionary<int, int>()
+            };
+
+            foreach (var card in deck.HandCards) snapshot.CardStarLevels[card.InstanceId] = card.StarLevel;
+            foreach (var card in deck.DrawPile) snapshot.CardStarLevels[card.InstanceId] = card.StarLevel;
+            foreach (var card in deck.DiscardPile) snapshot.CardStarLevels[card.InstanceId] = card.StarLevel;
+
+            return snapshot;
+        }
+
+        // 恢复快照
+        private void restoreSnapshot(CardSnapshot snapshot)
+        {
+            if (snapshot == null) return;
+            if (!_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) return;
+
+            deck.HandCards = new List<CardEntity>(snapshot.HandCards);
+            deck.DrawPile = new List<CardEntity>(snapshot.DrawPile);
+            deck.DiscardPile = new List<CardEntity>(snapshot.DiscardPile);
+
+            foreach (var kvp in snapshot.CardStarLevels)
+            {
+                var card = findCardByInstanceId(kvp.Key);
+                if (card != null) card.StarLevel = kvp.Value;
+            }
+
+            foreach (var kvp in snapshot.HeroActionPoints)
+            {
+                if (_context.Entities.TryGetValue(kvp.Key, out var entity))
+                    entity.ActionPoint = kvp.Value;
+            }
+
+            _context.EventBus?.OnHandCardsUpdated?.Invoke(PLAYER_ID, new List<CardEntity>(deck.HandCards));
+        }
+
+        // 根据实例Id查找卡牌
+        private CardEntity findCardByInstanceId(int instanceId)
+        {
+            if (!_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) return null;
+
+            var all = new List<CardEntity>();
+            all.AddRange(deck.HandCards);
+            all.AddRange(deck.DrawPile);
+            all.AddRange(deck.DiscardPile);
+            return all.Find(c => c.InstanceId == instanceId);
+        }
+    }
+}

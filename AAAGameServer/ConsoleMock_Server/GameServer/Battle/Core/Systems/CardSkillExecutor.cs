@@ -19,12 +19,14 @@ namespace GameServer.Battle.Core.Systems
     {
         private readonly CombatContext _context;
         private readonly ConfigManager _configManager;
+        private readonly List<CombatEntity> _allEntities;
         private readonly Random _random;
 
-        public CardSkillExecutor(CombatContext context, ConfigManager configManager)
+        public CardSkillExecutor(CombatContext context, ConfigManager configManager, List<CombatEntity> allEntities)
         {
             _context = context;
             _configManager = configManager;
+            _allEntities = allEntities;
             _random = new Random();
         }
 
@@ -100,9 +102,8 @@ namespace GameServer.Battle.Core.Systems
         {
             var pool = new List<CombatEntity>();
 
-            foreach (var kvp in _context.Entities)
+            foreach (var entity in _allEntities)
             {
-                var entity = kvp.Value;
                 if (entity.CurrentHp <= 0) continue;
 
                 bool targetIsPlayerSide = entity.OwnerPlayerId == 1;

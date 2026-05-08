@@ -4,7 +4,7 @@ namespace GameServer.Battle.Data
 {
     public class CardSnapshot
     {
-        public Dictionary<string, int> HeroActionPoints;
+        public Dictionary<int, int> HeroActionPoints;
 
         public List<CardEntity> HandCards;
         public List<CardEntity> DrawPile;
