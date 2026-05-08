@@ -33,11 +33,6 @@ namespace GameServer.Battle.Data
                 _enemyDict = Enemies.ToDictionary(e => e.Id);
 
                 Console.WriteLine($"[ConfigManager] 配置加载完成: HeroCards={HeroCards.Count}, EnemyCards={EnemyCards.Count}, Heroes={Heroes.Count}, Enemies={Enemies.Count}, Levels={Levels.Count}");
-                foreach (var hero in Heroes)
-                {
-                    var cards = GetCharacterCards(hero.Id);
-                    Console.WriteLine($"[ConfigManager] 角色 {hero.Id} ({hero.Name}) 拥有 {cards.Count} 张卡牌");
-                }
             }
             catch (Exception ex)
             {

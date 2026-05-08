@@ -1,4 +1,6 @@
-﻿namespace GameServer.Battle.Data
+﻿using GameServer.Battle.Data.Config;
+
+namespace GameServer.Battle.Data
 {
     public interface ICardCatalog
     {

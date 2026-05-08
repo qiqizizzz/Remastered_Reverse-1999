@@ -162,6 +162,8 @@ namespace Module.fight
         {
             _isBattleActive = true;
 
+            GameApp.CardManager.InitCards(_currentModel);
+            
             foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
             {
                 GameApp.CardManager.BattleContext.Entities[hero.CharacterData.Id] = new CombatEntity(
