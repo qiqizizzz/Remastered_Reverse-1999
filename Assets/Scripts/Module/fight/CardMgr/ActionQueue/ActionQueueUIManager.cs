@@ -170,7 +170,7 @@ namespace Module.fight.CardMgr
 
                 if (firstAction is { Snapshot: not null })
                 {
-                    if(firstAction.Snapshot.HeroActionPoints.TryGetValue(hero.CharacterData.Id.ToString(), out int baseActionPoint))
+                    if(firstAction.Snapshot.HeroActionPoints.TryGetValue(hero.CharacterData.Id, out int baseActionPoint))
                     {
                         previewGain = hero.ActionPoint - baseActionPoint;
                     }

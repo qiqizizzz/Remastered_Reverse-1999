@@ -179,7 +179,7 @@ namespace Module.fight
                     {
                         cardEntity = battleCard,
                         OriginalIndex = -1,
-                        TargetInstanceId = ""
+                        TargetInstanceId = 0
                     };
                     
                     await CardSkillExecutor.ExecuteCardActionAsync(enemyAction);
@@ -202,12 +202,12 @@ namespace Module.fight
         {
             if(!_isPlayerTurnStart) return;
             
-            string enemyInstanceId = args.ToString();
+            int enemyInstanceId = (int)args;
             GameApp.CardManager.CurrentSelectedTargetId = enemyInstanceId;
             
             foreach (var enemy in GameApp.EntityManager.GetAliveEnemies())
             {
-                enemy.HUD?.SetSelected(string.Equals(enemy.InstanceID, enemyInstanceId));
+                enemy.HUD?.SetSelected(enemy.CombatInstanceId == enemyInstanceId);
             }
         }
 
@@ -250,8 +250,8 @@ namespace Module.fight
 
             foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
             {
-                GameApp.CardManager.BattleContext.Entities[hero.CharacterData.Id.ToString()] = new CombatEntity(
-                    hero.InstanceID,
+                GameApp.CardManager.BattleContext.Entities[hero.CharacterData.Id] = new CombatEntity(
+                    hero.CombatInstanceId,
                     hero.CharacterData.Id,
                     1, // TODO:这里后续需要修改
                     hero.CurrentHp,

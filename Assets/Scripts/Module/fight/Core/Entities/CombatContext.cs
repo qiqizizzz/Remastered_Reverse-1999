@@ -19,7 +19,7 @@ namespace Module.fight.Core.Entities
         public int SequenceCardInstanceId { get; set; }
         
         public ActionQueueEntity ActionQueue { get; set; }
-        public Dictionary<string, CombatEntity> Entities { get; set; }
+        public Dictionary<int, CombatEntity> Entities { get; set; }
         public Dictionary<int, PlayerDeckEntity> PlayerDecks { get; set; }
         
         public ICardCatalog CardCatalog { get; set; }
@@ -28,7 +28,7 @@ namespace Module.fight.Core.Entities
         public CombatContext(ICardCatalog cardCatalog, CombatEventBus eventBus)
         {
             ActionQueue = new ActionQueueEntity();
-            Entities = new Dictionary<string, CombatEntity>();
+            Entities = new Dictionary<int, CombatEntity>();
             PlayerDecks = new Dictionary<int, PlayerDeckEntity>();
             
             CardCatalog = cardCatalog;

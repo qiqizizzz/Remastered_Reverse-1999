@@ -27,7 +27,7 @@ namespace Module.fight.CardMgr
     public class CardSnapshot
     {
         [Header("行动点")] 
-        public Dictionary<string, int> HeroActionPoints;
+        public Dictionary<int, int> HeroActionPoints;
         
         [Header("手牌数据相关")]
         public List<CardEntity> HandCards;
@@ -45,7 +45,7 @@ namespace Module.fight.CardMgr
         [Header("PlayCard相关数据")]
         public CardEntity cardEntity;
         public int OriginalIndex;//卡牌在手牌中的原始位置
-        public string TargetInstanceId;
+        public int TargetInstanceId;
         
         [Header("MoveCard相关数据")]
         public int MoveFromIndex;

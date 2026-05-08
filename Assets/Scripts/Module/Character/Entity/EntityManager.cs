@@ -82,6 +82,23 @@ namespace Module.Character
 
             return null;
         }
+        
+        public BaseCharacter GetCharacterByCombatInstanceId(int combatInstanceId)
+        {
+            foreach (var hero in AliveHeroes)
+            {
+                if (hero.CombatInstanceId == combatInstanceId)
+                    return hero;
+            }
+
+            foreach (var enemy in AliveEnemies)
+            {
+                if (enemy.CombatInstanceId == combatInstanceId)
+                    return enemy;
+            }
+
+            return null;
+        }
         #endregion
         
         #region 生成实体与配置数据

@@ -14,6 +14,8 @@ using UnityEngine;
 using System.Threading.Tasks;
 using Common.Defines;
 using Data.card.Extensions;
+using System;
+using Random = UnityEngine.Random;
 
 namespace Module.fight.Skill
 {
@@ -55,7 +57,7 @@ namespace Module.fight.Skill
             
             foreach (var effect in cardData.Effects)
             {
-                List<BaseCharacter> targets = GetTargets(caster,effect, action.TargetInstanceId);
+                List<BaseCharacter> targets = GetTargets(caster, effect, action.TargetInstanceId);
 
                 switch (effect.EffectType)
                 {
@@ -104,7 +106,7 @@ namespace Module.fight.Skill
         #endregion
 
         #region 获取目标对象
-        public static List<BaseCharacter> GetTargets(BaseCharacter caster ,CardEffect effect, string targetInstanceId)
+        public static List<BaseCharacter> GetTargets(BaseCharacter caster, CardEffect effect, int targetInstanceId)
         {
             List<BaseCharacter> results = new List<BaseCharacter>();
             bool isCasterHero = caster is HeroEntity;
@@ -127,9 +129,9 @@ namespace Module.fight.Skill
             }
 
             //玩家出牌时优先选选中的目标
-            if (isCasterHero && effect.Target == TargetType.Enemy && !string.IsNullOrEmpty(targetInstanceId))
+            if (isCasterHero && effect.Target == TargetType.Enemy && targetInstanceId != 0)
             {
-                BaseCharacter manualTarget = pool.Find(c => c.InstanceID == targetInstanceId);
+                BaseCharacter manualTarget = pool.Find(c => c.CombatInstanceId == targetInstanceId);
                 if (manualTarget != null && manualTarget.CurrentStateType != CharacterStateType.Die)
                 {
                     results.Add(manualTarget);

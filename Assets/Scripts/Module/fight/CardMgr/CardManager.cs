@@ -22,7 +22,7 @@ namespace Module.fight.CardMgr
     public class CardManager
     {
         public readonly CardActionQueue CardActionQueue;
-        public string CurrentSelectedTargetId { get; set; }
+        public int CurrentSelectedTargetId { get; set; }
 
         [Header("数据基座与计算系统")] 
         public readonly CombatContext BattleContext;
@@ -143,7 +143,7 @@ namespace Module.fight.CardMgr
             var deck = BattleContext.PlayerDecks[LOCAL_PLAYER_ID];
             var snapshot = new CardSnapshot()
             {
-                HeroActionPoints = new Dictionary<string, int>(),
+                HeroActionPoints = new Dictionary<int, int>(),
                 HandCards = new List<CardEntity>(deck.HandCards),
                 DrawPile = new List<CardEntity>(deck.DrawPile),
                 DiscardPile = new List<CardEntity>(deck.DiscardPile),
@@ -156,7 +156,7 @@ namespace Module.fight.CardMgr
             foreach (var card in deck.DiscardPile) snapshot.CardStarLevels[card.InstanceId] = card.StarLevel;
             
             // 记录行动点
-            snapshot.HeroActionPoints = new Dictionary<string, int>();
+            snapshot.HeroActionPoints = new Dictionary<int, int>();
             foreach (var kvp in BattleContext.Entities)
             {
                 snapshot.HeroActionPoints[kvp.Key] = kvp.Value.ActionPoint;
@@ -189,11 +189,8 @@ namespace Module.fight.CardMgr
 
             foreach (var kvp in snapshot.HeroActionPoints)
             {
-                if (int.TryParse(kvp.Key, out int characterId))
-                {
-                    var hero = GameApp.EntityManager.GetCharacterById(characterId) as HeroEntity;
-                    hero?.SetActionPoint(kvp.Value);
-                }
+                var hero = GameApp.EntityManager.GetCharacterById(kvp.Key) as HeroEntity;
+                hero?.SetActionPoint(kvp.Value);
             }
 
             // 统一广播一次手牌更新

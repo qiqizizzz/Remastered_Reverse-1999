@@ -1,0 +1,365 @@
+syntax = "proto3";
+package GameProtocol;
+
+enum RequestCode
+{
+    RequestNone=0;
+    //用户
+    User=1;
+    //好友
+    Friend=2;
+    Battle=3;
+}
+
+enum ActionCode
+{
+    ActionNone=0;
+    //注册
+    Logon=1;
+    //登录
+    Login=2;
+    //心跳包
+    Heartbeat = 3;
+    //私聊频道
+    ChatPrivate = 4;
+    //好友相关操作
+    FriendOperation = 5;
+    //获取历史聊天记录
+    GetChatHistory = 6; 
+    //进入PVE关卡
+    EnterPve = 7;
+    //玩家出牌
+    PlayCard = 8;
+    //结束回合
+    EndTurn = 9;
+    //服务端推送事件
+    SyncBattleEvent = 10;
+    //移动卡牌
+    MoveCard = 11;
+    //撤销操作
+    UnDoAction = 12;
+    //提交整轮行动(行动队列满)
+    CommitRound = 13;
+    //客户端请求完整状态同步(断线重连用)
+    RequestBattleState = 14;
+}
+
+enum ReturnCode
+{
+    ReturnNone=0;
+    //成功
+    Succeed=1;
+    //失败
+    Failed=2;
+}
+
+message MainPack
+{
+    RequestCode requestCode=1;
+    ActionCode actionCode=2;
+    ReturnCode returnCode=3;
+    string strMsg = 4; 
+
+    // 使用oneof包装所有具体的业务包
+    oneof data {
+        LoginPack loginPack = 5;
+        ChatPack chatPack = 6;
+        FriendPack friendPack = 7; 
+        ChatHistoryPack chatHistoryPack = 8; 
+        BattlePack battlePack = 9;
+    }
+}
+
+message LoginPack
+{
+    string username=1;
+    string password=2;
+}
+
+enum FriendOpType
+{
+    FriendOpNone = 0;
+    GetList = 1;        // 客户端请求获取列表，或服务器返回列表
+    AddFriend = 2;      // 添加好友
+    RemoveFriend = 3;   // 删除好友
+    SearchUser = 4;     //搜索玩家
+}
+
+message FriendInfo
+{
+    //好友用户名
+    string username = 1;
+    //是否在线
+    bool isOnline = 2;
+    //是否已经是好友
+    bool isFriend = 3;
+}
+
+message FriendPack
+{
+    // 操作类型 (获取列表 / 添加 / 删除)
+    FriendOpType opType = 1; 
+    
+    // 目标用户
+    string targetUser = 2;   
+    
+    // 好友列表数据 (仅在 opType = GetList 且由服务器返回时，这个列表里才会有数据)
+    repeated FriendInfo friendList = 3; 
+}
+
+// 聊天记录包 (拉取历史记录用)
+message ChatHistoryPack
+{
+    // 目标用户(与谁的聊天记录)
+    string targetUser = 1; 
+    // 历史记录列表
+    repeated ChatPack chatList = 2; 
+}
+
+message ChatPack
+{
+    string toUser = 1;
+    string fromUser = 2;
+    string content = 3;
+    int32 chatType = 4;
+    int64 timestamp = 5;
+}
+
+message CombatEntityInfo {
+    int32 instanceId = 1;
+    int32 configId = 2;
+    bool isPlayerSide = 3;        // true=英雄, false=敌人
+    int32 currentHp = 4;
+    int32 maxHp = 5;
+    int32 actionPoint = 6;
+    int32 maxActionPoint = 7;
+}
+
+message CardEntityInfo {
+    int32 instanceId = 1;
+    int32 configId = 2;
+    int32 starLevel = 3;          // 1~3
+}
+
+message PlayerDeckInfo {
+    repeated CardEntityInfo handCards = 1;
+    repeated CardEntityInfo drawPile = 2;    // 可选：抽牌堆数量即可
+    repeated CardEntityInfo discardPile = 3; // 可选
+    int32 drawPileCount = 4;      // 简化：只同步数量
+}
+
+message ActionQueueInfo {
+    repeated CardEntityInfo queuedCards = 1;
+    int32 maxSize = 2;
+}
+
+message BattleStateSnapshot {
+    int32 currentRound = 1;
+    bool isPlayerTurn = 2;
+    repeated CombatEntityInfo entities = 3;
+    PlayerDeckInfo playerDeck = 4;
+    ActionQueueInfo actionQueue = 5;
+}
+
+// 战斗事件类型
+enum BattleEventType
+{
+    None = 0;
+    BattleStart = 1;    // 战斗开始
+    BattleEnd = 2;     // 战斗结束
+
+    TurnStart = 10;     // 回合开始
+    TurnEnd = 11;      // 回合结束
+
+    //牌库操作
+    DrawCard = 12;      // 抽牌
+    DiscardCard = 13;   // 弃牌
+    CardMoved = 14;      // 移动卡牌
+    MergeCard = 15;     // 合成卡牌
+    GrantUltimate = 16;  //发放大招牌
+
+    //行动队列
+    EnqueueCard = 17;   // 卡牌进入行动队列
+    DequeueCard = 18;   // 卡牌离开行动队列
+    ClearActionQueue = 19; // 清空行动队列
+
+    //技能相关
+    SkillCast = 20;     // 技能释放
+
+    //实体状态变化
+    DamageTaken = 30;   // 受到伤害
+    HealTaken = 31;     // 受到治疗
+    EntityDied = 32;      // 实体死亡
+    ActionPointChanged = 33; // 行动点变化
+
+    //其他
+    ShuffleDeck = 40;    // 洗牌
+    EnemySelectTarget = 41; //敌人选择目标
+}
+
+// 战斗包
+message BattlePack
+{
+    int32 levelId = 1; // 关卡ID
+    int32 cardInstanceId = 2; // 卡牌实例ID(PlayCard时用)
+    int32 targetEntityId = 3; // 目标实体ID
+
+    int32 sourceSlotIndex = 4; // 卡牌来源槽位索引(MoveCard时用)
+    int32 targetSlotIndex = 5; // 卡牌目标槽位索引
+
+    repeated BattleEvent events = 10; // 战斗事件列表
+    BattleStateSnapshot stateSnapshot = 11; // 完整状态快照
+}
+
+// 单个战斗表现事件
+message BattleEvent
+{
+    BattleEventType eventType = 1;
+    int32 sourceId = 2; // 事件来源实体ID
+    int32 targetId = 3; // 事件目标实体ID
+    
+    oneof eventParams
+    {
+        // 数值与技能
+        DamageParams damage = 10;
+        HealParams heal = 11;
+        DeathParams death = 12;
+        SkillCastParams skillCast = 13;
+
+        // 牌库与手牌操作
+        DrawCardParams drawCard = 20;
+        DiscardCardParams discardCard = 21;
+        MoveCardParams moveCard = 22;
+        MergeCardParams mergeCard = 23;
+        GrantUltimateParams grantUltimate = 24;
+        ShuffleDeckParams shuffleDeck = 25;
+
+        // 行动队列
+        EnqueueCardParams enqueueCard = 30;
+        DequeueCardParams dequeueCard = 31;
+        ClearActionQueueParams clearActionQueue = 32;
+
+        // 实体与回合状态
+        ActionPointChangedParams actionPointChanged = 40;
+        EnemySelectTargetParams enemySelectTarget = 41;
+        TurnStartParams turnStart = 42;
+        TurnEndParams turnEnd = 43;
+        BattleStartParams battleStart = 44;
+        BattleEndParams battleEnd = 45;
+    }
+}
+
+message DamageParams
+{
+    int32 damageValue = 1;  // 伤害数值
+    bool isCritical = 2;    // 是否暴击
+}
+
+message HealParams
+{
+    int32 healValue = 1;    // 治疗数值
+    bool isOverHeal = 2;    // 是否溢出治疗
+}
+
+message DeathParams
+{
+    //暂时为空
+}
+
+message SkillCastParams
+{
+    int32 skillId = 1; // 技能ID
+    repeated int32 targetIds = 2; // 多目标
+}
+
+// 抽牌参数
+message DrawCardParams {
+    CardEntityInfo card = 1;
+    int32 slotIndex = 2;          // 抽到手牌第几个位置
+}
+
+// 弃牌参数
+message DiscardCardParams {
+    CardEntityInfo card = 1;
+    int32 slotIndex = 2;          // 从手牌哪个位置弃掉
+}
+
+// 移动卡牌参数
+message MoveCardParams {
+    int32 fromIndex = 1;
+    int32 toIndex = 2;
+}
+
+// 合成卡牌参数
+message MergeCardParams {
+    int32 resultCardInstanceId = 1;
+    int32 resultStarLevel = 2;
+    repeated int32 consumedCardIds = 3; // 被消耗的卡
+    int32 slotIndex = 4;
+}
+
+// 发放大招牌参数
+message GrantUltimateParams {
+    CardEntityInfo card = 1;
+    int32 slotIndex = 2;
+}
+
+// 洗牌参数
+message ShuffleDeckParams {
+    int32 deckOwnerId = 1;        // 谁的牌库被洗了（预留，PVP时有用）
+}
+
+// 卡牌进入行动队列参数
+message EnqueueCardParams {
+    CardEntityInfo card = 1;
+    int32 queueIndex = 2;
+    int32 actionPointAfter = 3;
+}
+
+// 卡牌离开行动队列参数
+message DequeueCardParams {
+    int32 queueIndex = 1;
+    int32 restoredSlotIndex = 2;  // 回到手牌位置
+}
+
+// 清空行动队列参数
+message ClearActionQueueParams {
+    // 暂时为空，如果需要可以补充 clearedQueueIndices
+}
+
+// 行动点变化参数
+message ActionPointChangedParams {
+    int32 entityId = 1;
+    int32 newValue = 2;
+    int32 maxValue = 3;
+}
+
+// 敌人选择目标参数
+message EnemySelectTargetParams {
+    int32 enemyId = 1;
+    int32 targetId = 2;
+}
+
+// 回合开始参数
+message TurnStartParams {
+    bool isPlayerTurn = 1;
+    int32 roundNumber = 2;
+}
+
+// 回合结束参数
+message TurnEndParams {
+    bool isPlayerTurn = 1;
+    int32 roundNumber = 2;
+}
+
+// 战斗开始参数
+message BattleStartParams {
+    int32 levelId = 1;
+    repeated CombatEntityInfo entities = 2;
+}
+
+// 战斗结束参数
+message BattleEndParams {
+    bool isPlayerWin = 1;
+}
+

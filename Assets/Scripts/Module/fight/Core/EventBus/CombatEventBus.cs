@@ -50,7 +50,7 @@ namespace Module.fight.Core.EventBus
         /// <summary>
         /// 玩家打出了某张牌（已进入行动队列，但尚未结算）
         /// </summary>
-        public Action<int, CardEntity, string> OnCardPlayed; // playerId, card, targetInstanceId
+        public Action<int, CardEntity, int> OnCardPlayed; // playerId, card, targetInstanceId
         #endregion
 
         #region 大招与角色事件

@@ -9,7 +9,7 @@ namespace GameServer.Battle.Core.Extensions
         #region 行动点相关
         public static void AddActionPoint(this CombatContext context, int playerId, int ownerId, int delta)
         {
-            if (context.Entities.TryGetValue(ownerId.ToString(), out var entity))
+            if (context.Entities.TryGetValue(ownerId, out var entity))
             {
                 entity.ActionPoint += delta;
                 context.EventBus?.OnActionPointChanged?.Invoke(playerId, ownerId, entity.ActionPoint);
@@ -18,7 +18,7 @@ namespace GameServer.Battle.Core.Extensions
 
         public static void ClearActionPoint(this CombatContext context, int playerId, int ownerId)
         {
-            if (context.Entities.TryGetValue(ownerId.ToString(), out var entity))
+            if (context.Entities.TryGetValue(ownerId, out var entity))
             {
                 entity.ActionPoint = 0;
                 context.EventBus?.OnActionPointChanged?.Invoke(playerId, ownerId, 0);
@@ -48,7 +48,7 @@ namespace GameServer.Battle.Core.Extensions
                         context.EventBus?.OnCardMerged?.Invoke(playerId, cardA, cardB, cardA.StarLevel);
                         context.EventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(hands));
 
-                        if (context.Entities.TryGetValue(configA.OwnerId.ToString(), out var entity))
+                        if (context.Entities.TryGetValue(configA.OwnerId, out var entity))
                         {
                             entity.ActionPoint = 1;
                             context.EventBus?.OnActionPointChanged?.Invoke(playerId, configA.OwnerId, entity.ActionPoint);

@@ -8,10 +8,10 @@ namespace GameServer.Battle.Core.Commands
     internal class PlayCardCommand : BaseCommand
     {
         public CardEntity Card { get; }
-        public string TargetInstanceId { get; }
+        public int TargetInstanceId { get; }
         public int OriginalHandIndex { get; }
 
-        public PlayCardCommand(int senderPlayerId, CardEntity card, string targetInstanceId, int originalHandIndex) : base(senderPlayerId)
+        public PlayCardCommand(int senderPlayerId, CardEntity card, int targetInstanceId, int originalHandIndex) : base(senderPlayerId)
         {
             Card = card;
             TargetInstanceId = targetInstanceId;

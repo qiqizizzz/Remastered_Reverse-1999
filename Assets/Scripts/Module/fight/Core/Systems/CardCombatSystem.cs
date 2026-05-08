@@ -109,7 +109,7 @@ namespace Module.fight.Core.Systems
 
         #region 卡牌主要操作
         //出牌
-        public void PlayCard(int playerId, CardEntity card, string targetInstanceId)
+        public void PlayCard(int playerId, CardEntity card, int targetInstanceId)
         {
             
         }

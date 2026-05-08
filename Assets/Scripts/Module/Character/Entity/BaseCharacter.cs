@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Data.card;
 using DG.Tweening;
 using Module.Character.Components;
@@ -43,6 +44,8 @@ namespace Module.Character
     
     public class BaseCharacter : MonoBehaviour
     {
+        private static int s_combatInstanceIdCounter = 1;
+        
         private string _instanceId;
         protected CharacterDataSO _characterData;
         [SerializeField]protected SkeletonAnimation _skeAnim;
@@ -63,6 +66,7 @@ namespace Module.Character
 
         public CharacterDataSO CharacterData => _characterData;
         public string InstanceID => _instanceId;
+        public int CombatInstanceId { get; private set; }
         public CharacterHUD HUD => _HUD;
         
         #region 生命周期、初始化
@@ -99,6 +103,7 @@ namespace Module.Character
         public void Init(CharacterDataSO data)
         {
             _instanceId = Guid.NewGuid().ToString();
+            CombatInstanceId = Interlocked.Increment(ref s_combatInstanceIdCounter);
             _characterData = data;
             MaxHp = data.Property.Hp;
             CurrentHp = MaxHp;
