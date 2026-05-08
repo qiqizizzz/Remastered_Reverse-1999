@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameServer.Battle.AI;
 using GameServer.Battle.Core.Commands;
 using GameServer.Battle.Core.Entities;
 using GameServer.Battle.Core.EventBus;
@@ -48,6 +49,7 @@ namespace GameServer.Battle
         private readonly CardSkillExecutor _skillExecutor;
         private readonly CombatCommandProcessor _commandProcessor;
         private readonly ConfigManager _configManager;
+        private readonly IEnemyAI _enemyAI;
         private readonly Random _random;
 
         // ==================== 状态字段 ====================
@@ -82,6 +84,7 @@ namespace GameServer.Battle
             _context = new CombatContext(cardCatalog, eventBus);
             _cardSystem = new CardCombatSystem(_context, cardCatalog, eventBus);
             _skillExecutor = new CardSkillExecutor(_context, configManager, _allEntities);
+            _enemyAI = new EnemyAI(_context, configManager, _allEntities);
             _commandProcessor = new CombatCommandProcessor(_context, takeSnapshot, restoreSnapshot);
 
             initBattle(heroConfigIds, monsterSpawns);
@@ -242,18 +245,14 @@ namespace GameServer.Battle
                 endBattle(result);
         }
 
-        // 敌人执行一次出牌（临时实现，待 EnemyAI 替换）
+        // 敌人执行一次出牌
         private void executeEnemyAction(CombatEntity enemy)
         {
-            var enemyConfig = _configManager.GetCharacter(enemy.ConfigId);
-            if (enemyConfig?.Cards == null || enemyConfig.Cards.Count == 0) return;
+            var decision = _enemyAI.MakeDecision(enemy);
+            if (decision == null) return;
 
-            int cardConfigId = enemyConfig.Cards[_random.Next(enemyConfig.Cards.Count)];
-            var cardConfig = _context.CardCatalog.Get(cardConfigId);
-            if (cardConfig == null || cardConfig.CardType == CardType.Ultimate) return;
-
-            var card = new CardEntity(cardConfigId);
-            _skillExecutor.ExecuteCardEffect(enemy.OwnerPlayerId, card, 0);
+            var card = new CardEntity(decision.CardConfigId);
+            _skillExecutor.ExecuteCardEffect(enemy.OwnerPlayerId, card, decision.TargetInstanceId);
         }
 
         // 开始下一回合
