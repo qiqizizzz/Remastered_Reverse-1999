@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GameServer.Battle.Data
 {
-    internal class ConfigManager
+    internal class ConfigManager : ICardCatalog
     {
         public List<CardDataConfig> HeroCards { get; private set; }
         public List<CardDataConfig> EnemyCards { get; private set; }
@@ -37,6 +37,27 @@ namespace GameServer.Battle.Data
             if (_heroDict != null && _heroDict.TryGetValue(id, out var hero)) return hero;
             if (_enemyDict != null && _enemyDict.TryGetValue(id, out var enemy)) return enemy;
             return null;
+        }
+
+        // ICardCatalog 实现：根据卡牌配置Id查找卡牌数据
+        public CardDataConfig Get(int id)
+        {
+            var heroCard = HeroCards?.Find(c => c.Id == id);
+            if (heroCard != null) return heroCard;
+
+            var enemyCard = EnemyCards?.Find(c => c.Id == id);
+            return enemyCard;
+        }
+
+        // ICardCatalog 实现：根据角色配置Id获取该角色的所有卡牌
+        public IReadOnlyList<CardDataConfig> GetCharacterCards(int characterId)
+        {
+            var result = new List<CardDataConfig>();
+            if (HeroCards != null)
+                result.AddRange(HeroCards.FindAll(c => c.OwnerId == characterId));
+            if (EnemyCards != null)
+                result.AddRange(EnemyCards.FindAll(c => c.OwnerId == characterId));
+            return result;
         }
 
         private List<T> LoadList<T>(string path)

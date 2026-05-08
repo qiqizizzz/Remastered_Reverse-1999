@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using GameServer.Battle;
 
 namespace Network
 {
@@ -22,10 +23,13 @@ namespace Network
         private int _clientIdCounter = 0;//计数器
         private readonly object _lockObj = new object();
 
-        public Server(string ip,int port)
+        public BattleManager BattleManager { get; }
+
+        public Server(string ip,int port, BattleManager battleManager)
         {
             _ip = ip;
             _port = port;
+            BattleManager = battleManager;
 
             Connect();
         }

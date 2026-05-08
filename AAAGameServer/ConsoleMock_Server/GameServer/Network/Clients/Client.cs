@@ -1,7 +1,9 @@
 ﻿using GameProtocol;
+using GameServer.Battle;
 using Google.Protobuf;
 using Network.DataBase;
 using Network.DataBase.Entity;
+using System.Collections.Generic;
 using System.Net.Sockets;
 
 namespace Network
@@ -231,6 +233,30 @@ namespace Network
                 resPack.ActionCode = ActionCode.Heartbeat;
                 Send(resPack.ToByteArray());
                 return;
+            }
+            else if (pack.ActionCode == ActionCode.EnterPve)
+            {
+                handleEnterPve(pack);
+            }
+            else if (pack.ActionCode == ActionCode.PlayCard)
+            {
+                handlePlayCard(pack);
+            }
+            else if (pack.ActionCode == ActionCode.EndTurn || pack.ActionCode == ActionCode.CommitRound)
+            {
+                handleEndTurn(pack);
+            }
+            else if (pack.ActionCode == ActionCode.MoveCard)
+            {
+                handleMoveCard(pack);
+            }
+            else if (pack.ActionCode == ActionCode.UnDoAction)
+            {
+                handleUndoAction(pack);
+            }
+            else if (pack.ActionCode == ActionCode.RequestBattleState)
+            {
+                handleRequestBattleState(pack);
             }
         }
 
@@ -555,6 +581,183 @@ namespace Network
 
         #endregion
         #endregion
+
+        #endregion
+
+        #region 战斗协议相关
+
+        // 进入PVE关卡
+        private void handleEnterPve(MainPack pack)
+        {
+            if (!checkLogin(ActionCode.EnterPve)) return;
+
+            int levelId = pack.BattlePack?.LevelId ?? 0;
+            var battle = _server.BattleManager.CreateBattle(UserName, levelId);
+            if (battle == null)
+            {
+                sendBattleError(ActionCode.EnterPve, "关卡不存在或创建失败");
+                return;
+            }
+
+            var events = battle.CollectEvents();
+            sendBattleResponse(ActionCode.EnterPve, events);
+        }
+
+        // 玩家出牌
+        private void handlePlayCard(MainPack pack)
+        {
+            if (!checkLogin(ActionCode.PlayCard)) return;
+
+            var battle = _server.BattleManager.GetBattle(UserName);
+            if (battle == null)
+            {
+                sendBattleError(ActionCode.PlayCard, "当前不在战斗中");
+                return;
+            }
+
+            var bp = pack.BattlePack;
+            bool success = battle.PlayCard(bp.CardInstanceId, bp.TargetEntityId, 0);
+            if (!success)
+            {
+                sendBattleError(ActionCode.PlayCard, "出牌失败");
+                return;
+            }
+
+            var events = battle.CollectEvents();
+            sendBattleResponse(ActionCode.PlayCard, events);
+        }
+
+        // 结束回合 / 提交整轮
+        private void handleEndTurn(MainPack pack)
+        {
+            if (!checkLogin(ActionCode.EndTurn)) return;
+
+            var battle = _server.BattleManager.GetBattle(UserName);
+            if (battle == null)
+            {
+                sendBattleError(ActionCode.EndTurn, "当前不在战斗中");
+                return;
+            }
+
+            battle.EndTurn();
+            var events = battle.CollectEvents();
+            sendBattleResponse(ActionCode.EndTurn, events);
+
+            if (battle.Result != BattleResult.None)
+            {
+                _server.BattleManager.RemoveBattle(UserName);
+            }
+        }
+
+        // 移动卡牌
+        private void handleMoveCard(MainPack pack)
+        {
+            if (!checkLogin(ActionCode.MoveCard)) return;
+
+            var battle = _server.BattleManager.GetBattle(UserName);
+            if (battle == null)
+            {
+                sendBattleError(ActionCode.MoveCard, "当前不在战斗中");
+                return;
+            }
+
+            var bp = pack.BattlePack;
+            bool success = battle.MoveCard(bp.SourceSlotIndex, bp.TargetSlotIndex);
+            if (!success)
+            {
+                sendBattleError(ActionCode.MoveCard, "移动卡牌失败");
+                return;
+            }
+
+            var events = battle.CollectEvents();
+            sendBattleResponse(ActionCode.MoveCard, events);
+        }
+
+        // 撤销操作
+        private void handleUndoAction(MainPack pack)
+        {
+            if (!checkLogin(ActionCode.UnDoAction)) return;
+
+            var battle = _server.BattleManager.GetBattle(UserName);
+            if (battle == null)
+            {
+                sendBattleError(ActionCode.UnDoAction, "当前不在战斗中");
+                return;
+            }
+
+            bool success = battle.Undo();
+            if (!success)
+            {
+                sendBattleError(ActionCode.UnDoAction, "撤销失败");
+                return;
+            }
+
+            var events = battle.CollectEvents();
+            sendBattleResponse(ActionCode.UnDoAction, events);
+        }
+
+        // 请求完整战斗状态（断线重连）
+        private void handleRequestBattleState(MainPack pack)
+        {
+            if (!checkLogin(ActionCode.RequestBattleState)) return;
+
+            var battle = _server.BattleManager.GetBattle(UserName);
+            if (battle == null)
+            {
+                sendBattleError(ActionCode.RequestBattleState, "当前不在战斗中");
+                return;
+            }
+
+            var snapshot = battle.GetStateSnapshot();
+            var events = battle.CollectEvents();
+
+            var resPack = new MainPack
+            {
+                RequestCode = RequestCode.Battle,
+                ActionCode = ActionCode.RequestBattleState,
+                ReturnCode = ReturnCode.Succeed,
+                BattlePack = new BattlePack { StateSnapshot = snapshot }
+            };
+            resPack.BattlePack.Events.AddRange(events);
+            Send(resPack.ToByteArray());
+        }
+
+        // ==================== 战斗辅助方法 ====================
+        // 检查是否已登录
+        private bool checkLogin(ActionCode actionCode)
+        {
+            if (!string.IsNullOrEmpty(UserName)) return true;
+
+            sendBattleError(actionCode, "请先登录");
+            return false;
+        }
+
+        // 发送战斗错误响应
+        private void sendBattleError(ActionCode actionCode, string msg)
+        {
+            var resPack = new MainPack
+            {
+                RequestCode = RequestCode.Battle,
+                ActionCode = actionCode,
+                ReturnCode = ReturnCode.Failed,
+                StrMsg = msg
+            };
+            Send(resPack.ToByteArray());
+        }
+
+        // 发送战斗成功响应（附带事件列表）
+        private void sendBattleResponse(ActionCode actionCode, List<BattleEvent> events)
+        {
+            var resPack = new MainPack
+            {
+                RequestCode = RequestCode.Battle,
+                ActionCode = actionCode,
+                ReturnCode = ReturnCode.Succeed,
+                BattlePack = new BattlePack()
+            };
+            resPack.BattlePack.Events.AddRange(events);
+            Send(resPack.ToByteArray());
+        }
 
         #endregion
 

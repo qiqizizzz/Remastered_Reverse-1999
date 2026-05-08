@@ -471,6 +471,40 @@ namespace GameServer.Battle
             return all.Find(c => c.InstanceId == instanceId);
         }
 
+        // 获取完整战斗状态快照（用于断线重连）
+        public BattleStateSnapshot GetStateSnapshot()
+        {
+            var snapshot = new BattleStateSnapshot
+            {
+                CurrentRound = _context.CurrentRound,
+                IsPlayerTurn = _state == BattleState.PlayerTurn
+            };
+
+            foreach (var entity in _allEntities)
+            {
+                snapshot.Entities.Add(toProtoEntity(entity));
+            }
+
+            if (_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck))
+            {
+                snapshot.PlayerDeck = new PlayerDeckInfo();
+                foreach (var card in deck.HandCards)
+                    snapshot.PlayerDeck.HandCards.Add(toProtoCard(card));
+                foreach (var card in deck.DrawPile)
+                    snapshot.PlayerDeck.DrawPile.Add(toProtoCard(card));
+                foreach (var card in deck.DiscardPile)
+                    snapshot.PlayerDeck.DiscardPile.Add(toProtoCard(card));
+                snapshot.PlayerDeck.DrawPileCount = deck.DrawPile.Count;
+            }
+
+            snapshot.ActionQueue = new ActionQueueInfo();
+            foreach (var card in _context.ActionQueue.QueuedCards)
+                snapshot.ActionQueue.QueuedCards.Add(toProtoCard(card));
+            snapshot.ActionQueue.MaxSize = _context.ActionQueue.MaxQueueSize;
+
+            return snapshot;
+        }
+
         // 将内部 CombatEntity 转为 Proto CombatEntityInfo
         private CombatEntityInfo toProtoEntity(CombatEntity entity)
         {
@@ -486,6 +520,17 @@ namespace GameServer.Battle
                 MaxHp = maxHp,
                 ActionPoint = entity.ActionPoint,
                 MaxActionPoint = MAX_ACTION_POINT
+            };
+        }
+
+        // 将内部 CardEntity 转为 Proto CardEntityInfo
+        private static CardEntityInfo toProtoCard(CardEntity card)
+        {
+            return new CardEntityInfo
+            {
+                InstanceId = card.InstanceId,
+                ConfigId = card.ConfigId,
+                StarLevel = card.StarLevel
             };
         }
     }
