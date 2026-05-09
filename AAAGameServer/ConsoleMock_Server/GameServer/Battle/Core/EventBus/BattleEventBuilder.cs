@@ -174,7 +174,8 @@ namespace GameServer.Battle.Core.EventBus
         {
             int queueIndex = _context.ActionQueue.QueuedCards.Count - 1;
             int actionPoint = 0;
-            if (_context.Entities.TryGetValue(card.ConfigId, out var entity))
+            var cardConfig = _context.CardCatalog.Get(card.ConfigId);
+            if (cardConfig != null && _context.Entities.TryGetValue(cardConfig.OwnerId, out var entity))
                 actionPoint = entity.ActionPoint;
 
             _events.Add(new BattleEvent

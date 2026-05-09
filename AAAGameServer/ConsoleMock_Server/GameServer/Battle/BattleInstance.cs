@@ -372,7 +372,11 @@ namespace GameServer.Battle
                 if (entity.CurrentHp <= 0) continue;
                 if (entity.ActionPoint >= MAX_ACTION_POINT)
                 {
-                    _cardSystem.TryGiveUltimateCard(PLAYER_ID, entity.ConfigId);
+                    if (_cardSystem.TryGiveUltimateCard(PLAYER_ID, entity.ConfigId))
+                    {
+                        entity.ActionPoint = 0;
+                        _context.EventBus?.OnActionPointChanged?.Invoke(PLAYER_ID, entity.ConfigId, 0);
+                    }
                 }
             }
         }

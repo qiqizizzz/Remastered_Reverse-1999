@@ -190,9 +190,10 @@ namespace Module.fight.Core.Systems
             {
                 if(cardData.CardType == CardType.Ultimate)
                 {
-                    deck.HandCards.Insert(0, new CardEntity(cardData.Id));
+                    var ultimateCard = new CardEntity(cardData.Id);
+                    deck.HandCards.Insert(0, ultimateCard);
                     
-                    _eventBus?.OnUltimateCardGranted?.Invoke(playerId, characterConfigId, new CardEntity(cardData.Id));
+                    _eventBus?.OnUltimateCardGranted?.Invoke(playerId, characterConfigId, ultimateCard);
                     _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
                     
                     return true;

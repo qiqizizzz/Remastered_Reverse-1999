@@ -1,4 +1,12 @@
-﻿using GameServer.Battle.Core.Entities;
+﻿/*
+* ┌──────────────────────────────────┐
+* │  描    述: 出牌命令，负责从手牌打出卡牌并处理行动点
+* │  类    名: PlayCardCommand.cs
+* │  创    建: By qiqizizzz
+* └──────────────────────────────────┘
+*/
+
+using GameServer.Battle.Core.Entities;
 using GameServer.Battle.Core.Extensions;
 using GameServer.Battle.Data;
 using GameServer.Battle.Data.Config;

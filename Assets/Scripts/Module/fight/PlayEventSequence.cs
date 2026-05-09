@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Defines;
+using Data.card;
 using Data.card.Extensions;
 using GameProtocol;
 using Module.Character;
@@ -392,6 +393,13 @@ namespace Module.fight
                 return;
             }
 
+            var cardInfo = evt.EnqueueCard.Card;
+            if (cardInfo != null)
+            {
+                var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
+                deck.HandCards.RemoveAll(c => c.InstanceId == cardInfo.InstanceId);
+            }
+
             await Task.Delay(100);
         }
 
@@ -453,6 +461,10 @@ namespace Module.fight
             if (hero == null) return;
 
             hero.SetActionPoint(entityInfo.NewValue);
+
+            if (GameApp.CardManager.BattleContext.Entities.TryGetValue(entityInfo.EntityId, out var contextEntity))
+                contextEntity.ActionPoint = entityInfo.NewValue;
+
             if (_isPlayerTurnResolving || _isEnemyTurnResolving)
             {
                 hero.HUD?.UpdateActionPoint(entityInfo.NewValue, 0);
@@ -466,7 +478,7 @@ namespace Module.fight
                     CardAction action = queuedActions[i];
                     if (action.ActionType != CardActionType.PlayCard || action.cardEntity == null) continue;
                     var config = action.cardEntity.GetConfig();
-                    if (config == null) continue;
+                    if (config == null || config.CardType == CardType.Ultimate) continue;
                     if (config.OwnerId == hero.CharacterData.Id) previewGain++;
                 }
 
