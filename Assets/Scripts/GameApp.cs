@@ -10,6 +10,7 @@ using Common;
 using Config;
 using DefaultNamespace;
 using Module.Character;
+using Module.Effect;
 using Module.fight.CardMgr;
 using Module.Timer;
 using MVC;
@@ -28,6 +29,7 @@ public class GameApp : Singleton<GameApp>
     public static ConfigManager ConfigManager;
     public static EntityManager EntityManager;
     public static CardManager CardManager;
+    public static EffectManager EffectManager;
     
     public override void Init()
     {
@@ -41,12 +43,14 @@ public class GameApp : Singleton<GameApp>
         ConfigManager = new ConfigManager();
         EntityManager = new EntityManager();
         CardManager = new CardManager();
+        EffectManager = new EffectManager();
     }
 
     public override void Update(float dt)
     {
         TimerManager.OnUpdate(dt);
         NetworkManager.OnUpdate();
+        EffectManager.OnUpdate();
     }
 
     public override void Destroy()
