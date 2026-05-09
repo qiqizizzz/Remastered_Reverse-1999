@@ -192,6 +192,8 @@ namespace Module.Character
 
         private void ClearBattleEntities()
         {
+            BaseCharacter.ResetCombatInstanceIdCounter();
+
             // 回收敌人对象
             foreach (var enemy in AliveEnemies)
             {

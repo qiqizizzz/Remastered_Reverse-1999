@@ -44,7 +44,7 @@ namespace Module.Character
     
     public class BaseCharacter : MonoBehaviour
     {
-        private static int s_combatInstanceIdCounter = 1;
+        private static int s_combatInstanceIdCounter = 0;
         
         private string _instanceId;
         protected CharacterDataSO _characterData;
@@ -174,6 +174,12 @@ namespace Module.Character
 
             var anim = _skeAnim.Skeleton.Data.FindAnimation(animName);
             return anim?.Duration ?? 0f;
+        }
+
+        // 重置战斗实例Id计数器，保证与服务端每场战斗从1开始一致
+        public static void ResetCombatInstanceIdCounter()
+        {
+            s_combatInstanceIdCounter = 0;
         }
         
         public void HandleDie()

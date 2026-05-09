@@ -231,7 +231,7 @@ namespace Module.fight
             var cardInfo = evt.DrawCard.Card;
             var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
             var card = new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel);
-            deck.HandCards.Add(card);
+            deck.HandCards.Insert(0, card);
 
             GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, deck.HandCards);
             await Task.Delay(150);
@@ -249,7 +249,7 @@ namespace Module.fight
                 if (deck.HandCards.Exists(c => c.InstanceId == cardInfo.InstanceId)) continue;
 
                 var card = new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel);
-                deck.HandCards.Add(card);
+                deck.HandCards.Insert(0, card);
             }
 
             GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, deck.HandCards);
