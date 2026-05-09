@@ -28,12 +28,11 @@ namespace Module.View
             Find<Button>("RightArea/Btn_character").onClick.AddListener(onOpenCharacterBtn);
         }
 
-        //测试打开level界面
+        //打开level界面
         private void onOpenLevelBtn()
         {
             ApplyControllerFunc(ControllerType.Level, EventDefines.OpenLevelView);
             GameApp.ViewManager.Close(ViewId);
-            //ViewExtensions.LoadScene(this, SceneDefines.LevelView);
         }
         
         //打开更多选项界面
