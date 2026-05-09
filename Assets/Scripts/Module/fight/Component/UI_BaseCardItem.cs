@@ -152,7 +152,9 @@ namespace Module.fight.Component
             Vector3 originalScale = Rect.localScale;
 
             Sequence seq = DOTween.Sequence();
-            seq.Append(Rect.DOAnchorPos(targetPos, AnimConfig.CompositeMoveDuration).SetEase(Ease.OutQuad));
+            seq.Append(Rect.DOAnchorPos(targetPos, AnimConfig.CompositeMoveDuration).SetEase(Ease.InOutQuad));
+            seq.Join(Rect.DOScaleX(originalScale.x * 0.6f, AnimConfig.CompositeMoveDuration * 0.6f).SetEase(Ease.InQuad));
+            seq.Join(Rect.DOScaleY(originalScale.y * 1.05f, AnimConfig.CompositeMoveDuration * 0.6f).SetEase(Ease.InQuad));
             seq.Append(Rect.DOScale(originalScale * 1.35f, AnimConfig.CompositeScaleUpDuration).SetEase(Ease.OutQuad));
             seq.Append(Rect.DOScale(originalScale * 0.85f, AnimConfig.CompositeScaleDownDuration).SetEase(Ease.InQuad));
             seq.Append(Rect.DOShakeAnchorPos(AnimConfig.CompositeShakeDuration,

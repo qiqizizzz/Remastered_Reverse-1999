@@ -339,8 +339,7 @@ namespace Module.fight
                 }
             }
 
-            GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, deck.HandCards);
-            await Task.Delay(200);
+            await Task.Delay(800);
         }
 
         // 发放大招牌

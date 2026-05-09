@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using Common.Defines;
 using Data.card;
 using Data.card.Extensions;
 using Module.fight.Component;
@@ -89,7 +90,8 @@ namespace Module.fight.CardMgr
             _handCardUIManager.AnimateCompositeCard(uiKept, uiDestroyed, newStarLevel, () =>
             {
                 uiDestroyed.IsInCompositeAnim = false;
-                _handCardUIManager.RefreshHandCardLayout();
+                var handCards = GameApp.CardManager.GetHandCards();
+                GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, handCards);
             });
         }
         #endregion
