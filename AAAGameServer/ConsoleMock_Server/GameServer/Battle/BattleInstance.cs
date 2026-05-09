@@ -359,8 +359,12 @@ namespace GameServer.Battle
                 while (_context.CheckAndAutoMerge(PLAYER_ID)) { }
 
                 int normalCount = getNormalHandCardCount();
-                Console.WriteLine($"[processRoundStartHandFix] 当前普通手牌数: {normalCount}, 目标: {targetNormalCount}");
+                int handTotal = normalCount + getUltimateHandCardCount();
+                Console.WriteLine($"[processRoundStartHandFix] 当前普通手牌数: {normalCount}, 目标: {targetNormalCount}, 手牌总数: {handTotal}");
                 if (normalCount >= targetNormalCount) break;
+
+                if (!_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) break;
+                if (deck.DrawPile.Count == 0 && deck.DiscardPile.Count == 0) break;
 
                 int needCount = targetNormalCount - normalCount;
                 _cardSystem.DrawCard(PLAYER_ID, needCount);
@@ -379,6 +383,21 @@ namespace GameServer.Battle
                     }
                 }
             }
+        }
+
+        // 获取手牌中大招牌的数量
+        private int getUltimateHandCardCount()
+        {
+            if (!_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) return 0;
+
+            int count = 0;
+            foreach (var card in deck.HandCards)
+            {
+                var config = _context.CardCatalog.Get(card.ConfigId);
+                if (config != null && config.CardType == CardType.Ultimate)
+                    count++;
+            }
+            return count;
         }
 
         // ==================== 实体与胜负 ====================
