@@ -149,11 +149,16 @@ namespace Module.fight.Component
             Rect.DOKill();
             transform.SetAsLastSibling();
 
+            Vector3 originalScale = Rect.localScale;
+
             Sequence seq = DOTween.Sequence();
-            seq.Append(Rect.DOAnchorPos(targetPos,AnimConfig.CompositeCommonDuration).SetEase(Ease.OutQuad));
-            seq.Append(Rect.DOShakeAnchorPos(AnimConfig.CompositeCommonDuration, AnimConfig.CompositeStrength,
-                AnimConfig.CompositeVibrato,
-                AnimConfig.CompositeRandomMess));//抖动
+            seq.Append(Rect.DOAnchorPos(targetPos, AnimConfig.CompositeMoveDuration).SetEase(Ease.OutQuad));
+            seq.Append(Rect.DOScale(originalScale * 1.35f, AnimConfig.CompositeScaleUpDuration).SetEase(Ease.OutQuad));
+            seq.Append(Rect.DOScale(originalScale * 0.85f, AnimConfig.CompositeScaleDownDuration).SetEase(Ease.InQuad));
+            seq.Append(Rect.DOShakeAnchorPos(AnimConfig.CompositeShakeDuration,
+                AnimConfig.CompositeStrength, AnimConfig.CompositeVibrato,
+                AnimConfig.CompositeRandomMess));
+            seq.Join(Rect.DOScale(originalScale, AnimConfig.CompositeSettleDuration).SetEase(Ease.OutBack));
             seq.OnComplete(() => onComplete?.Invoke());
         }
         

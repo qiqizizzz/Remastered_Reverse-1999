@@ -194,9 +194,11 @@ namespace Module.fight.CardMgr
             cardA.PlayCompositeAnim(centerPos);
             cardB.PlayCompositeAnim(centerPos, () =>
             {
-                cardB.HideCard();
-                cardB.transform.SetParent(_cardDeckTf, true);
-                onAnimComplete?.Invoke();
+                cardB.PlayFadeOutAnim(() =>
+                {
+                    cardB.transform.SetParent(_cardDeckTf, true);
+                    onAnimComplete?.Invoke();
+                });
             });
         }
 

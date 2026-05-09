@@ -47,7 +47,6 @@ namespace Module.fight.CardMgr
         
         public void InitCards(LevelModel model)
         {
-            _maxHandCardCount = 8;
             CardActionQueue.Clear();
             _currentCharacterConfigIds.Clear();
 
@@ -59,6 +58,7 @@ namespace Module.fight.CardMgr
                 if(character != null) _currentCharacterConfigIds.Add(character.Id);
             }
             
+            updateScalingRules();
             CombatSystem.InitDeck(LOCAL_PLAYER_ID, _currentCharacterConfigIds);
         }
 
@@ -107,8 +107,35 @@ namespace Module.fight.CardMgr
         
         public void RemoveDiedCharacterCard(CharacterDataSO character)
         {
-            _maxHandCardCount = Mathf.Max(0, _maxHandCardCount - 2);
             CombatSystem.RemoveCardsOfCharacter(LOCAL_PLAYER_ID, character.Id);
+            updateScalingRules();
+        }
+        
+        // 根据存活英雄数量更新手牌上限与行动队列上限
+        private void updateScalingRules()
+        {
+            int aliveHeroCount = GameApp.EntityManager.GetAliveHeroes().Count;
+
+            _maxHandCardCount = aliveHeroCount switch
+            {
+                4 => 8,
+                3 => 6,
+                2 => 6,
+                1 => 4,
+                _ => 8
+            };
+
+            int maxActionCount = aliveHeroCount switch
+            {
+                4 => 4,
+                3 => 3,
+                2 => 2,
+                1 => 2,
+                _ => 4
+            };
+            CardActionQueue.MaxActionCount = maxActionCount;
+
+            GameApp.MessageCenter.PostEvent(EventDefines.OnRemoveDiedCharacterCard);
         }
         
         public void ProcessRoundStartHandFix()

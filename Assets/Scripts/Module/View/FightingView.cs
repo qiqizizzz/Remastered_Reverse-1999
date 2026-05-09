@@ -185,6 +185,7 @@ namespace Module.View
         {
             _handCardUIManager.RemoveDiedCharacterCard(args);
             _actionQueueUIManager.UpdateCardQueueUI();
+            _actionQueueUIManager.RefreshHeroActionPointUI();
         }
         
         private void onUpdateLevelInfo(params object[] args)

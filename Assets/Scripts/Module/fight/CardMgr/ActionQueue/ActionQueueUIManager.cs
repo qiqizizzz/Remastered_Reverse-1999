@@ -82,26 +82,33 @@ namespace Module.fight.CardMgr
             int maxCount =  GameApp.CardManager.CardActionQueue.MaxActionCount;
             for (int i = 0; i < _uiActions.Count; i++)
             {
-                int currentIndex = i;
-                bool shouldActive = currentIndex < maxCount;
+                bool shouldActive = i < maxCount;
 
-                if (_uiActions[currentIndex].gameObject.activeSelf && !shouldActive)
+                if (_uiActions[i].gameObject.activeSelf != shouldActive)
                 {
-                    CanvasGroup cg = _uiActions[i].GetComponent<CanvasGroup>();
-                    if (cg != null)
+                    if (shouldActive)
                     {
-                        cg.DOKill();
-                        cg.DOFade(0, 0.5f).onComplete = () =>
-                        {
-                            _uiActions[currentIndex].gameObject.SetActive(false);
-                            cg.alpha = 1f;
-                        };
+                        _uiActions[i].gameObject.SetActive(true);
+                        CanvasGroup cg = _uiActions[i].GetComponent<CanvasGroup>();
+                        if (cg != null) cg.alpha = 1f;
                     }
                     else
                     {
-                        _uiActions[currentIndex].gameObject.SetActive(false);
+                        CanvasGroup cg = _uiActions[i].GetComponent<CanvasGroup>();
+                        if (cg != null)
+                        {
+                            cg.DOKill();
+                            cg.DOFade(0, 0.5f).onComplete = () =>
+                            {
+                                _uiActions[i].gameObject.SetActive(false);
+                                cg.alpha = 1f;
+                            };
+                        }
+                        else
+                        {
+                            _uiActions[i].gameObject.SetActive(false);
+                        }
                     }
-
                 }
             }
         }

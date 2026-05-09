@@ -8,9 +8,7 @@
 
 using System;
 using System.Collections.Generic;
-using Common.Defines;
 using Data.card;
-using Module.fight.Component;
 using Module.fight.Core.Entities;
 using UnityEngine;
 
@@ -55,13 +53,11 @@ namespace Module.fight.CardMgr
     public class CardActionQueue
     {
         private readonly Stack<CardAction> _actionStack;
-        public int MaxActionCount { get; private set; } = 4;
+        public int MaxActionCount { get; set; } = 4;
 
         public CardActionQueue()
         {
             _actionStack = new Stack<CardAction>();
-            
-            GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onReduceActionCount);
         }
 
         #region 主要函数
@@ -80,14 +76,6 @@ namespace Module.fight.CardMgr
         }
         #endregion
         
-        #region 事件函数
-        private void onReduceActionCount(System.Object args)
-        {
-            MaxActionCount = Mathf.Max(0, MaxActionCount - 1);
-        }
-
-        #endregion
-        
         #region 工具函数
         public bool CanPlayCard() => _actionStack.Count < MaxActionCount;
         
@@ -96,7 +84,6 @@ namespace Module.fight.CardMgr
         public void Clear()
         {
             _actionStack.Clear();
-            MaxActionCount = 4;
         }
         
         public int GetCurrentActionCount() => _actionStack.Count;

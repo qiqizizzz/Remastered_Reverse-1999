@@ -32,9 +32,13 @@ namespace Data.card
         public int PlayRotationLoop = 2;
         
         [Header("卡牌合成相关")]
-        public float CompositeCommonDuration = 0.2f;
-        public float CompositeStrength = 25f;
-        public int CompositeVibrato = 25;
-        public float CompositeRandomMess = 45f;
+        public float CompositeMoveDuration = 0.25f;//飞向中心
+        public float CompositeScaleUpDuration = 0.12f;//膨胀
+        public float CompositeScaleDownDuration = 0.1f;//收缩
+        public float CompositeShakeDuration = 0.3f;//抖动时长
+        public float CompositeSettleDuration = 0.2f;//回弹
+        public float CompositeStrength = 30f;//抖动强度
+        public int CompositeVibrato = 30;//抖动频率
+        public float CompositeRandomMess = 60f;//抖动随机度
     }
 }

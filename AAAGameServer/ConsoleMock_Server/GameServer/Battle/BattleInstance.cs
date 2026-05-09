@@ -42,7 +42,6 @@ namespace GameServer.Battle
         private const int PLAYER_ID = 1;
         private const int ENEMY_OWNER_START_ID = 2;
         private const int MAX_ACTION_POINT = 5;
-        private const int INITIAL_HAND_COUNT = 8;
 
         // ==================== 依赖系统 ====================
         private readonly CombatContext _context;
@@ -160,6 +159,7 @@ namespace GameServer.Battle
         {
             _cardSystem.InitDeck(PLAYER_ID, heroConfigIds);
             _cardSystem.PrepareHandsForNewLevel(PLAYER_ID, heroConfigIds);
+            updateScalingRules();
             processRoundStartHandFix();
 
             var battleStartEvent = new BattleEvent
@@ -439,6 +439,7 @@ namespace GameServer.Battle
         private void removeDeadEntities()
         {
             var deadEntities = _allEntities.Where(e => e.CurrentHp <= 0).ToList();
+            bool heroDied = false;
 
             foreach (var dead in deadEntities)
             {
@@ -448,8 +449,12 @@ namespace GameServer.Battle
                 {
                     _cardSystem.RemoveCardsOfCharacter(PLAYER_ID, dead.ConfigId);
                     _context.Entities.Remove(dead.ConfigId);
+                    heroDied = true;
                 }
             }
+
+            if (heroDied)
+                updateScalingRules();
         }
 
         // ==================== 工具函数 ====================
@@ -472,7 +477,29 @@ namespace GameServer.Battle
         private int getTargetNormalHandCount()
         {
             int aliveHeroCount = getAliveHeroes().Count;
-            return Math.Max(0, aliveHeroCount * 2);
+            return aliveHeroCount switch
+            {
+                4 => 8,
+                3 => 6,
+                2 => 6,
+                1 => 4,
+                _ => Math.Max(0, aliveHeroCount * 2)
+            };
+        }
+
+        // 根据存活英雄数量更新手牌上限与行动队列上限
+        private void updateScalingRules()
+        {
+            int aliveHeroCount = getAliveHeroes().Count;
+            int maxQueueSize = aliveHeroCount switch
+            {
+                4 => 4,
+                3 => 3,
+                2 => 2,
+                1 => 2,
+                _ => 4
+            };
+            _context.ActionQueue.MaxQueueSize = maxQueueSize;
         }
 
         // ==================== 快照与撤销 ====================
