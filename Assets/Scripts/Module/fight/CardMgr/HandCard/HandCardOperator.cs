@@ -106,6 +106,8 @@ namespace Module.fight.CardMgr
             }
             
             var card = item.BattleCardData;
+            int dataIndex = GameApp.CardManager.GetHandCards().FindIndex(c => c.InstanceId == card.InstanceId);
+            int originalIndex = dataIndex >= 0 ? dataIndex : index;
 
             _handCardUIManager.RemoveCardAt(index);
             _uiActionStack.Push(item);
@@ -114,7 +116,7 @@ namespace Module.fight.CardMgr
             {
                 ActionType = CardActionType.PlayCard,
                 cardEntity = card,
-                OriginalIndex = index,
+                OriginalIndex = originalIndex,
                 TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId,
                 Snapshot = GameApp.CardManager.TakeSnapshot()
             };

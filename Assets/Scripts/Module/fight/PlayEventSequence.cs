@@ -51,7 +51,16 @@ namespace Module.fight
                     for (int i = 0; i < events.Count; i++)
                     {
                         var evt = events[i];
-                        if (evt.EventType == BattleEventType.DamageTaken)
+                        if (evt.EventType == BattleEventType.DrawCard)
+                        {
+                            var batch = new List<BattleEvent> { evt };
+                            while (i + 1 < events.Count && events[i + 1].EventType == BattleEventType.DrawCard)
+                            {
+                                batch.Add(events[++i]);
+                            }
+                            await playDrawCardBatch(batch);
+                        }
+                        else if (evt.EventType == BattleEventType.DamageTaken)
                         {
                             var batch = new List<BattleEvent> { evt };
                             while (i + 1 < events.Count && events[i + 1].EventType == BattleEventType.DamageTaken)
@@ -226,6 +235,26 @@ namespace Module.fight
 
             GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, deck.HandCards);
             await Task.Delay(150);
+        }
+
+        // 批量抽牌（用于进关首轮发牌，避免逐张刷新导致中途位移）
+        private static async Task playDrawCardBatch(List<BattleEvent> events)
+        {
+            if (events == null || events.Count == 0) return;
+
+            var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
+            for (int i = 0; i < events.Count; i++)
+            {
+                var cardInfo = events[i].DrawCard.Card;
+                if (deck.HandCards.Exists(c => c.InstanceId == cardInfo.InstanceId)) continue;
+
+                var card = new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel);
+                deck.HandCards.Add(card);
+            }
+
+            GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, deck.HandCards);
+            int delayMs = Mathf.Clamp(200 + events.Count * 70, 200, 900);
+            await Task.Delay(delayMs);
         }
 
         // 弃牌
