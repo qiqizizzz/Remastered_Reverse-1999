@@ -6,6 +6,7 @@
 * └──────────────────────────────────┘
 */
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Defines;
@@ -38,16 +39,40 @@ namespace Module.fight
         {
             _isPlaying = true;
 
-            while (_eventQueue.Count > 0)
+            try
             {
-                var events = _eventQueue.Dequeue();
-                foreach (var evt in events)
+                while (_eventQueue.Count > 0)
                 {
-                    await playSingleEvent(evt);
+                    var events = _eventQueue.Dequeue();
+                    for (int i = 0; i < events.Count; i++)
+                    {
+                        var evt = events[i];
+                        if (evt.EventType == BattleEventType.DamageTaken)
+                        {
+                            var batch = new List<BattleEvent> { evt };
+                            while (i + 1 < events.Count && events[i + 1].EventType == BattleEventType.DamageTaken)
+                            {
+                                batch.Add(events[++i]);
+                            }
+                            await playDamageTakenBatch(batch);
+                        }
+                        else
+                        {
+                            await playSingleEvent(evt);
+                        }
+                    }
                 }
             }
-
-            _isPlaying = false;
+            catch (Exception ex)
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"[PlayEventSequence] 播放事件序列异常: {ex}");
+#endif
+            }
+            finally
+            {
+                _isPlaying = false;
+            }
         }
 
         // 播放单个事件
@@ -134,7 +159,10 @@ namespace Module.fight
             
             // 兼容旧版UI：玩家回合开始时触发 OnPlayerTurnStart
             if (evt.TurnStart.IsPlayerTurn)
+            {
+                GameApp.CardManager.CardActionQueue.Clear();
                 GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnStart);
+            }
             
             await Task.Delay(300);
         }
@@ -149,7 +177,15 @@ namespace Module.fight
             
             // 兼容旧版UI：玩家回合结束时触发 OnPlayerTurnOutput，驱动手牌隐藏等逻辑
             if (evt.TurnEnd.IsPlayerTurn)
+            {
+                var actions = GameApp.CardManager.CardActionQueue.GetAction();
+                for (int i = 0; i < actions.Length; i++)
+                {
+                    GameApp.MessageCenter.PostEvent(EventDefines.OnCardExecuteUI);
+                    await Task.Delay(200);
+                }
                 GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
+            }
             
             await Task.Delay(200);
         }
@@ -258,6 +294,20 @@ namespace Module.fight
             if (target == null) return;
 
             target.TakeDamage(evt.Damage.DamageValue, evt.Damage.IsCritical);
+            await Task.Delay(500);
+        }
+
+        // 批量受到伤害（同一张卡对多个目标时同时显示伤害字）
+        private static async Task playDamageTakenBatch(List<BattleEvent> events)
+        {
+            foreach (var evt in events)
+            {
+                var target = findCharacterByCombatInstanceId(evt.TargetId);
+                if (target != null)
+                {
+                    target.TakeDamage(evt.Damage.DamageValue, evt.Damage.IsCritical);
+                }
+            }
             await Task.Delay(500);
         }
 

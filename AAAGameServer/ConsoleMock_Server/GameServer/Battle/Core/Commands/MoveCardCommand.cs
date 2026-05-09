@@ -1,5 +1,6 @@
 ﻿using GameServer.Battle.Core.Entities;
 using GameServer.Battle.Core.Extensions;
+using GameServer.Battle.Data.Config;
 
 namespace GameServer.Battle.Core.Commands
 {
@@ -17,14 +18,23 @@ namespace GameServer.Battle.Core.Commands
         public override bool Execute(CombatContext context)
         {
             var deck = context.PlayerDecks[SenderPlayerId];
+            if (FromIndex < 0 || FromIndex >= deck.HandCards.Count) return false;
             if (ToIndex < 0 || ToIndex >= deck.HandCards.Count) return false;
 
-            var card = deck.HandCards[ToIndex];
-            var config = context.CardCatalog.Get(card.ConfigId);
-            int ownerId = config.OwnerId;
+            var cardA = deck.HandCards[FromIndex];
+            var cardB = deck.HandCards[ToIndex];
+            var configA = context.CardCatalog.Get(cardA.ConfigId);
+            var configB = context.CardCatalog.Get(cardB.ConfigId);
+            if (configA == null || configB == null) return false;
 
-            context.AddActionPoint(SenderPlayerId, ownerId, 1);
-            context.CheckAndAutoMerge(SenderPlayerId);
+            // 大招卡不参与交换
+            if (configA.CardType == CardType.Ultimate || configB.CardType == CardType.Ultimate)
+                return false;
+
+            (deck.HandCards[FromIndex], deck.HandCards[ToIndex]) = (deck.HandCards[ToIndex], deck.HandCards[FromIndex]);
+
+            context.EventBus?.OnHandCardSwapped?.Invoke(SenderPlayerId, FromIndex, ToIndex);
+            context.EventBus?.OnHandCardsUpdated?.Invoke(SenderPlayerId, new List<CardEntity>(deck.HandCards));
 
             return true;
         }

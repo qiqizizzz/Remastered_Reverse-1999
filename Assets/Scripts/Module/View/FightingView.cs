@@ -154,6 +154,7 @@ namespace Module.View
             if (newCards == null) return;
 
             _handCardUIManager.UpdateCardsUI(newCards, isUndo, null);
+            _actionQueueUIManager.RefreshHeroActionPointUI();
         }
         
 
@@ -167,10 +168,8 @@ namespace Module.View
         
         private void onQueueFull()
         {
-            DOVirtual.DelayedCall(2f, () =>
-            {
-                GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
-            });
+            // 输出环节由服务端事件序列驱动（PlayEventSequence.playTurnEnd），
+            // 此处仅发送结束回合请求，不再本地提前隐藏手牌，避免打断卡牌执行动画
         }
         #endregion
         

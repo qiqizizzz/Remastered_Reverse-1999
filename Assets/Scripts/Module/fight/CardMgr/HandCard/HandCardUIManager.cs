@@ -200,13 +200,14 @@ namespace Module.fight.CardMgr
             });
         }
 
-        public void AnimateUndoCard(UI_BaseCardItem undoItem)
+        public void AnimateUndoCard(UI_BaseCardItem undoItem, int originalIndex)
         {
             undoItem.Rect.DOKill();
             undoItem.IsInQueue = false;
             undoItem.SetBlockRaycasts(true);
             undoItem.transform.SetParent(_cardDeckTf, true);
-            InsertCard(0, undoItem);
+            int insertIndex = Mathf.Clamp(originalIndex, 0, _handCardItems.Count);
+            InsertCard(insertIndex, undoItem);
             
             RefreshHandCardLayout();
         }

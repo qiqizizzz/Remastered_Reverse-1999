@@ -161,18 +161,18 @@ namespace Module.fight.CardMgr
         public void RefreshHeroActionPointUI()
         {
             var currentActions = GameApp.CardManager.CardActionQueue.GetAction();
-            
+            bool isQueueFull = !GameApp.CardManager.CardActionQueue.CanPlayCard();
             CardAction firstAction = currentActions.Length > 0 ? currentActions[0] : null;
 
             foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
             {
                 int previewGain = 0;
 
-                if (firstAction is { Snapshot: not null })
+                if (!isQueueFull && firstAction is { Snapshot: not null })
                 {
-                    if(firstAction.Snapshot.HeroActionPoints.TryGetValue(hero.CharacterData.Id, out int baseActionPoint))
+                    if (firstAction.Snapshot.HeroActionPoints.TryGetValue(hero.CharacterData.Id, out int baseActionPoint))
                     {
-                        previewGain = hero.ActionPoint - baseActionPoint;
+                        previewGain = Mathf.Max(0, hero.ActionPoint - baseActionPoint);
                     }
                 }
                 

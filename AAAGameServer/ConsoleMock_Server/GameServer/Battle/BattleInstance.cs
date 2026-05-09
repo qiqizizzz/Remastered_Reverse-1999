@@ -427,7 +427,8 @@ namespace GameServer.Battle
                 HandCards = new List<CardEntity>(deck.HandCards),
                 DrawPile = new List<CardEntity>(deck.DrawPile),
                 DiscardPile = new List<CardEntity>(deck.DiscardPile),
-                CardStarLevels = new Dictionary<int, int>()
+                CardStarLevels = new Dictionary<int, int>(),
+                ActionQueue = new List<CardEntity>(_context.ActionQueue.QueuedCards)
             };
 
             foreach (var card in deck.HandCards) snapshot.CardStarLevels[card.InstanceId] = card.StarLevel;
@@ -446,6 +447,9 @@ namespace GameServer.Battle
             deck.HandCards = new List<CardEntity>(snapshot.HandCards);
             deck.DrawPile = new List<CardEntity>(snapshot.DrawPile);
             deck.DiscardPile = new List<CardEntity>(snapshot.DiscardPile);
+            _context.ActionQueue.QueuedCards = snapshot.ActionQueue != null
+                ? new List<CardEntity>(snapshot.ActionQueue)
+                : new List<CardEntity>();
 
             foreach (var kvp in snapshot.CardStarLevels)
             {

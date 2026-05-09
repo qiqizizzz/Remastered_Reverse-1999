@@ -104,13 +104,15 @@ namespace Module.fight.CardMgr
             _handCardUIManager.RemoveCardAt(index);
             _uiActionStack.Push(item);
             
-            _actionQueue.PushAction(new CardAction
+            var action = new CardAction
             {
                 ActionType = CardActionType.PlayCard,
                 cardEntity = card,
                 OriginalIndex = index,
-                TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId
-            });
+                TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId,
+                Snapshot = GameApp.CardManager.TakeSnapshot()
+            };
+            _actionQueue.PushAction(action);
             
             _handCardUIManager.AnimatePlayCard(item, _uiActionStack.Count - 1);
 
@@ -142,6 +144,7 @@ namespace Module.fight.CardMgr
                 return;
 
             _handCardUIManager.SwapCards(indexA, indexB);
+            _handCardUIManager.RefreshHandCardLayout();
 
             // 服务端事件驱动数据更新，此处仅更新UI
         }
@@ -154,8 +157,9 @@ namespace Module.fight.CardMgr
             if (_uiActionStack.Count <= 0) return;
 
             UI_BaseCardItem undoItem = _uiActionStack.Pop();
-            _actionQueue.UndoLastAction();
-            _handCardUIManager.AnimateUndoCard(undoItem);
+            var undoneAction = _actionQueue.UndoLastAction();
+            int originalIndex = undoneAction?.OriginalIndex ?? 0;
+            _handCardUIManager.AnimateUndoCard(undoItem, originalIndex);
             
             // 发送撤销请求，由服务端驱动数据回滚
             _battleNetwork.SendUndo();
@@ -184,12 +188,14 @@ namespace Module.fight.CardMgr
 
             float currentX = item.Rect.anchoredPosition.x;
 
+            float halfWidth = item.Rect.rect.width / 2f;
+
             // 向右拖动
             if (currentIndex < _handCardUIManager.Count - 1)
             {
                 float rightX = _handCardUIManager.GetCardAt(currentIndex + 1).Rect.anchoredPosition.x;
 
-                if (currentX > rightX - (item.AnimConfig.CardWidth / 2))
+                if (currentX > rightX - halfWidth)
                 {
                     swapCard(currentIndex, currentIndex + 1);
                     return;
@@ -200,7 +206,7 @@ namespace Module.fight.CardMgr
             if (currentIndex > 0)
             {
                 float leftX = _handCardUIManager.GetCardAt(currentIndex - 1).Rect.anchoredPosition.x;
-                if (currentX < leftX + (item.AnimConfig.CardWidth / 2))
+                if (currentX < leftX + halfWidth)
                 {
                     swapCard(currentIndex, currentIndex - 1);
                     return;

@@ -125,6 +125,7 @@ namespace GameServer.Battle.Core.Systems
             if (casterProp == null) return;
 
             float starMultiplier = calculateStarMultiplier(starLevel);
+            var diedTargets = new List<CombatEntity>();
 
             foreach (var target in targets)
             {
@@ -144,7 +145,13 @@ namespace GameServer.Battle.Core.Systems
                 _context.EventBus?.OnDamageTaken?.Invoke(target.InstanceId, damageValue, isCrit);
 
                 if (target.CurrentHp <= 0)
-                    _context.EventBus?.OnEntityDied?.Invoke(target.InstanceId);
+                    diedTargets.Add(target);
+            }
+
+            // 统一在最后触发死亡事件，确保 DamageTaken 事件连续
+            foreach (var target in diedTargets)
+            {
+                _context.EventBus?.OnEntityDied?.Invoke(target.InstanceId);
             }
         }
 

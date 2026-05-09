@@ -10,5 +10,6 @@ namespace GameServer.Battle.Data
         public List<CardEntity> DrawPile;
         public List<CardEntity> DiscardPile;
         public Dictionary<int, int> CardStarLevels;
+        public List<CardEntity> ActionQueue;
     }
 }
