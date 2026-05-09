@@ -55,11 +55,7 @@ namespace Data.card.Extensions
                         context.EventBus?.OnCardMerged?.Invoke(playerId, cardA, cardB, cardA.StarLevel);
                         context.EventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(hands));
 
-                        if (context.Entities.TryGetValue(configA.OwnerId, out var entity))
-                        {
-                            entity.ActionPoint = 1;
-                            context.EventBus?.OnActionPointChanged?.Invoke(playerId, configA.OwnerId, entity.ActionPoint);
-                        }
+                        context.AddActionPoint(playerId, configA.OwnerId, 1);
                         return true;
                     }
                 }

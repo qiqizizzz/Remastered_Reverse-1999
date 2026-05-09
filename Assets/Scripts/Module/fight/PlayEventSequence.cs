@@ -147,6 +147,7 @@ namespace Module.fight
         // 战斗开始
         private static async Task playBattleStart(BattleEvent evt)
         {
+            syncCharactersByBattleStart(evt.BattleStart.Entities);
 #if UNITY_EDITOR
             Debug.Log($"[PlayEvent] 战斗开始，关卡: {evt.BattleStart.LevelId}");
 #endif
@@ -199,6 +200,7 @@ namespace Module.fight
             // 玩家回合结束时，改为由服务端结算标记（EnqueueCard）逐张驱动出牌动画
             if (evt.TurnEnd.IsPlayerTurn)
             {
+                refreshAllHeroActionPointConstant();
                 var actions = GameApp.CardManager.CardActionQueue.GetAction();
                 _isPlayerTurnResolving = true;
                 _pendingPlayerPlayCardCount = 0;
@@ -379,11 +381,12 @@ namespace Module.fight
                 return;
             }
 
-            if (_isEnemyTurnResolving)
+            BaseCharacter sourceCharacter = findCharacterByCombatInstanceId(evt.SourceId);
+            bool isEnemySource = sourceCharacter is EnemyEntity;
+            if (_isEnemyTurnResolving || isEnemySource)
             {
-                BaseCharacter enemy = findCharacterByCombatInstanceId(evt.SourceId);
-                if (enemy != null && enemy.CurrentStateType != CharacterStateType.Die)
-                    enemy.ChangeState(CharacterStateType.Attack);
+                if (sourceCharacter != null && sourceCharacter.CurrentStateType != CharacterStateType.Die)
+                    sourceCharacter.ChangeState(CharacterStateType.Attack);
 
                 await Task.Delay(650);
                 return;
@@ -450,7 +453,26 @@ namespace Module.fight
             if (hero == null) return;
 
             hero.SetActionPoint(entityInfo.NewValue);
-            hero.HUD?.UpdateActionPoint(entityInfo.NewValue);
+            if (_isPlayerTurnResolving || _isEnemyTurnResolving)
+            {
+                hero.HUD?.UpdateActionPoint(entityInfo.NewValue, 0);
+            }
+            else
+            {
+                int previewGain = 0;
+                CardAction[] queuedActions = GameApp.CardManager.CardActionQueue.GetAction();
+                for (int i = 0; i < queuedActions.Length; i++)
+                {
+                    CardAction action = queuedActions[i];
+                    if (action.ActionType != CardActionType.PlayCard || action.cardEntity == null) continue;
+                    var config = action.cardEntity.GetConfig();
+                    if (config == null) continue;
+                    if (config.OwnerId == hero.CharacterData.Id) previewGain++;
+                }
+
+                int confirmedActionPoint = Mathf.Max(0, entityInfo.NewValue - previewGain);
+                hero.HUD?.UpdateActionPoint(confirmedActionPoint, previewGain);
+            }
             await Task.Delay(100);
         }
 
@@ -464,6 +486,7 @@ namespace Module.fight
             _isEnemyTurnResolving = false;
             _pendingPlayerPlayCardCount = 0;
             _pendingPlayerCasterOwnerIds.Clear();
+            refreshAllHeroActionPointConstant();
             GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
         }
 
@@ -477,6 +500,62 @@ namespace Module.fight
             if (caster == null || caster.CurrentStateType == CharacterStateType.Die) return;
 
             caster.ChangeState(CharacterStateType.Attack);
+        }
+
+        // 将所有英雄行动点恢复为常亮状态
+        private static void refreshAllHeroActionPointConstant()
+        {
+            var heroes = GameApp.EntityManager.GetAliveHeroes();
+            for (int i = 0; i < heroes.Count; i++)
+            {
+                HeroEntity hero = heroes[i];
+                hero.HUD?.UpdateActionPoint(hero.ActionPoint, 0);
+            }
+        }
+
+        // 用 BattleStart 实体快照对齐本地角色与服务端 InstanceId 映射
+        private static void syncCharactersByBattleStart(IList<CombatEntityInfo> entities)
+        {
+            if (entities == null || entities.Count == 0) return;
+
+            var heroes = new List<BaseCharacter>(GameApp.EntityManager.GetAliveHeroes());
+            var enemies = new List<BaseCharacter>(GameApp.EntityManager.GetAliveEnemies());
+            var usedHeroes = new HashSet<BaseCharacter>();
+            var usedEnemies = new HashSet<BaseCharacter>();
+
+            for (int i = 0; i < entities.Count; i++)
+            {
+                CombatEntityInfo info = entities[i];
+                var candidates = info.IsPlayerSide ? heroes : enemies;
+                var used = info.IsPlayerSide ? usedHeroes : usedEnemies;
+                BaseCharacter best = null;
+                float bestHpDiff = float.MaxValue;
+
+                for (int j = 0; j < candidates.Count; j++)
+                {
+                    BaseCharacter character = candidates[j];
+                    if (used.Contains(character)) continue;
+                    if (character.CharacterData == null || character.CharacterData.Id != info.ConfigId) continue;
+
+                    float hpDiff = Mathf.Abs(character.CurrentHp - info.CurrentHp);
+                    if (hpDiff < bestHpDiff)
+                    {
+                        bestHpDiff = hpDiff;
+                        best = character;
+                    }
+                }
+
+                if (best == null) continue;
+                used.Add(best);
+                best.SetCombatInstanceId(info.InstanceId);
+                best.SetHpFromSnapshot(info.CurrentHp, info.MaxHp);
+
+                if (best is HeroEntity hero)
+                {
+                    hero.SetActionPoint(info.ActionPoint);
+                    hero.HUD?.UpdateActionPoint(info.ActionPoint, 0);
+                }
+            }
         }
 
         // 根据 CombatInstanceId 查找角色

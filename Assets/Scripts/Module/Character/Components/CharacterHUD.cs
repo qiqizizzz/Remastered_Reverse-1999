@@ -57,8 +57,8 @@ namespace Module.Character.Components
             //思路：
             //1.玩家回合时,若 选择卡牌进入队列, 则为闪烁状态
             //2.玩家输出回合时,行动点常量（取消动画状态）
-            int confirmedValue = Mathf.Max(0, currentTotalAP - previewGain);
-            int totalValue = currentTotalAP;
+            int confirmedValue = Mathf.Max(0, currentTotalAP);
+            int totalValue = Mathf.Clamp(confirmedValue + Mathf.Max(0, previewGain), 0, _actionPoints.Count);
             
             for (int i = 0; i < _actionPoints.Count; i++)
             {

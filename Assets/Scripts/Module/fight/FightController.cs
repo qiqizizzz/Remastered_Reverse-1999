@@ -7,6 +7,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using Common.Defines;
 using Data.level;
 using GameProtocol;
@@ -124,6 +125,8 @@ namespace Module.fight
         // 根据服务端状态快照恢复本地战斗上下文
         private void restoreFromStateSnapshot(BattleStateSnapshot snapshot)
         {
+            syncCharactersFromSnapshot(snapshot.Entities);
+
             var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
             deck.HandCards.Clear();
             deck.DrawPile.Clear();
@@ -142,6 +145,51 @@ namespace Module.fight
             }
             
             GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, deck.HandCards);
+        }
+
+        // 根据服务端实体快照同步本地角色映射，避免 CombatInstanceId 漂移导致受击目标错乱
+        private void syncCharactersFromSnapshot(IList<CombatEntityInfo> entities)
+        {
+            if (entities == null || entities.Count == 0) return;
+
+            var heroes = new List<BaseCharacter>(GameApp.EntityManager.GetAliveHeroes());
+            var enemies = new List<BaseCharacter>(GameApp.EntityManager.GetAliveEnemies());
+            var usedHeroes = new HashSet<BaseCharacter>();
+            var usedEnemies = new HashSet<BaseCharacter>();
+
+            for (int i = 0; i < entities.Count; i++)
+            {
+                CombatEntityInfo info = entities[i];
+                var candidates = info.IsPlayerSide ? heroes : enemies;
+                var used = info.IsPlayerSide ? usedHeroes : usedEnemies;
+                BaseCharacter best = null;
+                float bestHpDiff = float.MaxValue;
+
+                for (int j = 0; j < candidates.Count; j++)
+                {
+                    BaseCharacter character = candidates[j];
+                    if (used.Contains(character)) continue;
+                    if (character.CharacterData == null || character.CharacterData.Id != info.ConfigId) continue;
+
+                    float hpDiff = Mathf.Abs(character.CurrentHp - info.CurrentHp);
+                    if (hpDiff < bestHpDiff)
+                    {
+                        bestHpDiff = hpDiff;
+                        best = character;
+                    }
+                }
+
+                if (best == null) continue;
+                used.Add(best);
+                best.SetCombatInstanceId(info.InstanceId);
+                best.SetHpFromSnapshot(info.CurrentHp, info.MaxHp);
+
+                if (best is HeroEntity hero)
+                {
+                    hero.SetActionPoint(info.ActionPoint);
+                    hero.HUD?.UpdateActionPoint(info.ActionPoint, 0);
+                }
+            }
         }
         #endregion
 

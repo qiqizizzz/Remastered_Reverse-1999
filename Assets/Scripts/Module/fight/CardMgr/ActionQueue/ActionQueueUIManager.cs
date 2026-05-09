@@ -201,8 +201,9 @@ namespace Module.fight.CardMgr
                     if (config == null || config.CardType == CardType.Ultimate) continue;
                     if (config.OwnerId == hero.CharacterData.Id) previewGain++;
                 }
-                
-                hero.HUD?.UpdateActionPoint(hero.ActionPoint, previewGain);
+
+                int confirmedActionPoint = Mathf.Max(0, hero.ActionPoint - previewGain);
+                hero.HUD?.UpdateActionPoint(confirmedActionPoint, previewGain);
             }
         }
         #endregion

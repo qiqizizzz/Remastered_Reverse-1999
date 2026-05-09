@@ -36,7 +36,7 @@ namespace GameServer.Battle.Core.Systems
             var cardConfig = _context.CardCatalog.Get(card.ConfigId);
             if (cardConfig?.Effects == null || cardConfig.Effects.Length == 0) return;
 
-            var caster = resolveCaster(cardConfig.OwnerId);
+            var caster = resolveCaster(playerId, cardConfig.OwnerId);
             if (caster == null) return;
 
             foreach (var effect in cardConfig.Effects)
@@ -62,10 +62,18 @@ namespace GameServer.Battle.Core.Systems
         }
 
         // 根据OwnerId（角色配置Id）查找施法者实体
-        private CombatEntity resolveCaster(int ownerId)
+        private CombatEntity resolveCaster(int playerId, int ownerId)
         {
-            _context.Entities.TryGetValue(ownerId, out var caster);
-            return caster;
+            for (int i = 0; i < _allEntities.Count; i++)
+            {
+                CombatEntity entity = _allEntities[i];
+                if (entity.CurrentHp <= 0) continue;
+                if (entity.OwnerPlayerId != playerId) continue;
+                if (entity.ConfigId != ownerId) continue;
+                return entity;
+            }
+
+            return null;
         }
 
         // 根据效果配置和手动选中的目标解析最终目标列表

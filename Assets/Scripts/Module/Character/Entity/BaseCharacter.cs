@@ -176,6 +176,20 @@ namespace Module.Character
             return anim?.Duration ?? 0f;
         }
 
+        // 同步服务端下发的战斗实例Id
+        public void SetCombatInstanceId(int combatInstanceId)
+        {
+            CombatInstanceId = combatInstanceId;
+        }
+
+        // 同步服务端下发的生命值状态
+        public void SetHpFromSnapshot(float currentHp, float maxHp)
+        {
+            MaxHp = maxHp;
+            CurrentHp = Mathf.Clamp(currentHp, 0f, maxHp);
+            _HUD?.UpdateHp(CurrentHp, MaxHp);
+        }
+
         // 重置战斗实例Id计数器，保证与服务端每场战斗从1开始一致
         public static void ResetCombatInstanceIdCounter()
         {
