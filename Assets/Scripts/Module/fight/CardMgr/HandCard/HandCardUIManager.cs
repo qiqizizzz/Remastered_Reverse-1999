@@ -81,7 +81,7 @@ namespace Module.fight.CardMgr
             {
                 CardEntity cardData = newCards[i];
                 
-                UI_BaseCardItem item = _handCardItems.Find(x => ReferenceEquals(x.BattleCardData, cardData));
+                UI_BaseCardItem item = _handCardItems.Find(x => x.BattleCardData != null && x.BattleCardData.InstanceId == cardData.InstanceId);
                 
                 bool isNewCard = false;
                 if (item == null)

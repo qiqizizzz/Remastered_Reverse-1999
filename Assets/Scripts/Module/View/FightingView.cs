@@ -70,6 +70,7 @@ namespace Module.View
 
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
             GameApp.MessageCenter.AddEvent(EventDefines.OnCardExecuteUI, onExecuteCardUI);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnMoveActionExecute, onMoveActionExecute);
             GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
             GameApp.MessageCenter.AddEvent(EventDefines.OnHandCardChanged, onHandCardChanged);
         }
@@ -97,6 +98,7 @@ namespace Module.View
         {
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnCardExecuteUI, onExecuteCardUI);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnMoveActionExecute, onMoveActionExecute);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnHandCardChanged, onHandCardChanged);
         }
@@ -150,6 +152,12 @@ namespace Module.View
         {
             List<CardEntity> newCards = args[0] as List<CardEntity>;
             bool isUndo = args.Length > 1 && args[1] is true;
+            
+            if (_handCardOperator != null && _handCardOperator.IsPendingUndo)
+            {
+                isUndo = true;
+                _handCardOperator.ClearPendingUndo();
+            }
 
             if (newCards == null) return;
 
@@ -164,6 +172,12 @@ namespace Module.View
         private void onExecuteCardUI(System.Object args = null)
         {
             _actionQueueUIManager.ExecuteCardUI(transform, _cardActionTf, _cardDeckTf);
+        }
+        
+        private void onMoveActionExecute(System.Object args = null)
+        {
+            int queueIndex = args is int idx ? idx : 0;
+            _actionQueueUIManager.FadeOutMoveIndicator(queueIndex);
         }
         
         private void onQueueFull()

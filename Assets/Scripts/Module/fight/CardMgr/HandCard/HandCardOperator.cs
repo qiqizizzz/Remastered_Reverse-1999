@@ -34,10 +34,15 @@ namespace Module.fight.CardMgr
         [Header("快照")]
         private CardSnapshot _tempSnapshot;
         
+        private bool _pendingUndo;
+        
         //事件
         public event Action OnQueueFull;
         public event Action OnRefreshMoveIndicators;
         public event Action OnRefreshActionPointUI;
+        
+        public bool IsPendingUndo => _pendingUndo;
+        public void ClearPendingUndo() => _pendingUndo = false;
 
         public HandCardOperator(HandCardUIManager handMgr, CardActionQueue actionQueue)
         {
@@ -61,6 +66,7 @@ namespace Module.fight.CardMgr
             _uiActionStack.Clear();
             _dragStartIndex = -1;
             _tempSnapshot = null;
+            _pendingUndo = false;
             
             GameApp.CardManager.EventBus.OnCardMerged -= OnCardMergedFromCore;
         }
@@ -151,16 +157,26 @@ namespace Module.fight.CardMgr
         #endregion
 
         #region 撤销卡牌
-        //撤销上一次出牌操作
+        //撤销上一次操作（出牌或移动）
         public void UndoLastPlayCard()
         {
-            if (_uiActionStack.Count <= 0) return;
-
-            UI_BaseCardItem undoItem = _uiActionStack.Pop();
             var undoneAction = _actionQueue.UndoLastAction();
-            int originalIndex = undoneAction?.OriginalIndex ?? 0;
-            _handCardUIManager.AnimateUndoCard(undoItem, originalIndex);
+            if (undoneAction == null) return;
+
+            if (undoneAction.ActionType == CardActionType.PlayCard)
+            {
+                if (_uiActionStack.Count > 0)
+                {
+                    UI_BaseCardItem undoItem = _uiActionStack.Pop();
+                    _handCardUIManager.AnimateUndoCard(undoItem, undoneAction.OriginalIndex);
+                }
+            }
+            else if (undoneAction.ActionType == CardActionType.MoveCard)
+            {
+                _handCardUIManager.RefreshHandCardLayout();
+            }
             
+            _pendingUndo = true;
             // 发送撤销请求，由服务端驱动数据回滚
             _battleNetwork.SendUndo();
         }
@@ -232,11 +248,26 @@ namespace Module.fight.CardMgr
 
             if (safeStartIndex != -1 && safeStartIndex != index && _actionQueue.CanPlayCard())
             {
+                var moveAction = new CardAction
+                {
+                    ActionType = CardActionType.MoveCard,
+                    MoveFromIndex = safeStartIndex,
+                    MoveToIndex = index,
+                    Snapshot = GameApp.CardManager.TakeSnapshot()
+                };
+                _actionQueue.PushAction(moveAction);
+                
                 // 发送移动卡牌请求，由服务端驱动数据更新
                 _battleNetwork.SendMoveCard(safeStartIndex, index);
 
                 OnRefreshMoveIndicators?.Invoke();
                 OnRefreshActionPointUI?.Invoke();
+                
+                if (!_actionQueue.CanPlayCard())
+                {
+                    OnQueueFull?.Invoke();
+                    _battleNetwork.SendEndTurn();
+                }
             }
             else
             {

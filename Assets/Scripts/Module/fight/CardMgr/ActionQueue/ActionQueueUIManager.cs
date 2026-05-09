@@ -157,6 +157,30 @@ namespace Module.fight.CardMgr
         #endregion
         
         #region 其他事件操作
+        //渐隐指定位置的Move占位符
+        public void FadeOutMoveIndicator(int queueIndex)
+        {
+            if (queueIndex < 0 || queueIndex >= _uiActions.Count) return;
+            
+            Transform imgMove = _uiActions[queueIndex].Find("Img_move");
+            if (imgMove == null) return;
+            
+            CanvasGroup cg = imgMove.GetComponent<CanvasGroup>();
+            if (cg != null)
+            {
+                cg.DOKill();
+                cg.DOFade(0f, 0.3f).OnComplete(() =>
+                {
+                    imgMove.gameObject.SetActive(false);
+                    cg.alpha = 1f;
+                });
+            }
+            else
+            {
+                imgMove.gameObject.SetActive(false);
+            }
+        }
+        
         //刷新英雄行动点
         public void RefreshHeroActionPointUI()
         {

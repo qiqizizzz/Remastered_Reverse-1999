@@ -181,8 +181,16 @@ namespace Module.fight
                 var actions = GameApp.CardManager.CardActionQueue.GetAction();
                 for (int i = 0; i < actions.Length; i++)
                 {
-                    GameApp.MessageCenter.PostEvent(EventDefines.OnCardExecuteUI);
-                    await Task.Delay(200);
+                    if (actions[i].ActionType == CardActionType.PlayCard)
+                    {
+                        GameApp.MessageCenter.PostEvent(EventDefines.OnCardExecuteUI);
+                        await Task.Delay(1150);
+                    }
+                    else if (actions[i].ActionType == CardActionType.MoveCard)
+                    {
+                        GameApp.MessageCenter.PostEvent(EventDefines.OnMoveActionExecute, i);
+                        await Task.Delay(350);
+                    }
                 }
                 GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
             }
