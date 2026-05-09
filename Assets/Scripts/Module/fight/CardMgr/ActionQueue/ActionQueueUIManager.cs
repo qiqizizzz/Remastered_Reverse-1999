@@ -7,6 +7,8 @@
 */
 
 using System.Collections.Generic;
+using Data.card;
+using Data.card.Extensions;
 using DG.Tweening;
 using Module.fight.Component;
 using UnityEngine;
@@ -185,19 +187,19 @@ namespace Module.fight.CardMgr
         public void RefreshHeroActionPointUI()
         {
             var currentActions = GameApp.CardManager.CardActionQueue.GetAction();
-            bool isQueueFull = !GameApp.CardManager.CardActionQueue.CanPlayCard();
-            CardAction firstAction = currentActions.Length > 0 ? currentActions[0] : null;
 
             foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
             {
                 int previewGain = 0;
 
-                if (!isQueueFull && firstAction is { Snapshot: not null })
+                for (int i = 0; i < currentActions.Length; i++)
                 {
-                    if (firstAction.Snapshot.HeroActionPoints.TryGetValue(hero.CharacterData.Id, out int baseActionPoint))
-                    {
-                        previewGain = Mathf.Max(0, hero.ActionPoint - baseActionPoint);
-                    }
+                    CardAction action = currentActions[i];
+                    if (action.ActionType != CardActionType.PlayCard || action.cardEntity == null) continue;
+
+                    CardDataSO config = action.cardEntity.GetConfig();
+                    if (config == null || config.CardType == CardType.Ultimate) continue;
+                    if (config.OwnerId == hero.CharacterData.Id) previewGain++;
                 }
                 
                 hero.HUD?.UpdateActionPoint(hero.ActionPoint, previewGain);

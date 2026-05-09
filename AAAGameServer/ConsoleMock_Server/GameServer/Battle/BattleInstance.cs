@@ -228,8 +228,20 @@ namespace GameServer.Battle
             resolvePlayerActions();
             if (_state == BattleState.BattleEnd) return;
 
+            _eventBuilder.AddEvent(new BattleEvent
+            {
+                EventType = BattleEventType.TurnStart,
+                TurnStart = new TurnStartParams { IsPlayerTurn = false, RoundNumber = _context.CurrentRound }
+            });
+
             resolveEnemyTurn();
             if (_state == BattleState.BattleEnd) return;
+
+            _eventBuilder.AddEvent(new BattleEvent
+            {
+                EventType = BattleEventType.TurnEnd,
+                TurnEnd = new TurnEndParams { IsPlayerTurn = false, RoundNumber = _context.CurrentRound }
+            });
 
             startNextRound();
         }
@@ -327,10 +339,11 @@ namespace GameServer.Battle
             while (_context.CheckAndAutoMerge(PLAYER_ID)) { }
 
             int normalCount = getNormalHandCardCount();
-            Console.WriteLine($"[processRoundStartHandFix] 当前普通手牌数: {normalCount}, 目标: {INITIAL_HAND_COUNT}");
-            if (normalCount < INITIAL_HAND_COUNT)
+            int targetNormalCount = getTargetNormalHandCount();
+            Console.WriteLine($"[processRoundStartHandFix] 当前普通手牌数: {normalCount}, 目标: {targetNormalCount}");
+            if (normalCount < targetNormalCount)
             {
-                int needCount = INITIAL_HAND_COUNT - normalCount;
+                int needCount = targetNormalCount - normalCount;
                 _cardSystem.DrawCard(PLAYER_ID, needCount);
                 while (_context.CheckAndAutoMerge(PLAYER_ID)) { }
             }
@@ -431,6 +444,13 @@ namespace GameServer.Battle
                     count++;
             }
             return count;
+        }
+
+        // 根据当前存活英雄数量计算回合补牌目标
+        private int getTargetNormalHandCount()
+        {
+            int aliveHeroCount = getAliveHeroes().Count;
+            return Math.Max(0, aliveHeroCount * 2);
         }
 
         // ==================== 快照与撤销 ====================
