@@ -135,6 +135,13 @@ namespace GameServer.Battle.Core.EventBus
         // 合成卡牌
         private void onCardMerged(int playerId, CardEntity kept, CardEntity destroyed, int newStar)
         {
+            int slotIndex = 0;
+            if (_context.PlayerDecks.TryGetValue(playerId, out var deck))
+            {
+                int index = deck.HandCards.FindIndex(c => c.InstanceId == kept.InstanceId);
+                if (index >= 0) slotIndex = index;
+            }
+
             _events.Add(new BattleEvent
             {
                 EventType = BattleEventType.MergeCard,
@@ -143,7 +150,7 @@ namespace GameServer.Battle.Core.EventBus
                     ResultCardInstanceId = kept.InstanceId,
                     ResultStarLevel = newStar,
                     ConsumedCardIds = { destroyed.InstanceId },
-                    SlotIndex = 0
+                    SlotIndex = slotIndex
                 }
             });
         }

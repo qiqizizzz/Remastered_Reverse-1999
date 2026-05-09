@@ -152,12 +152,6 @@ namespace Module.View
         {
             List<CardEntity> newCards = args[0] as List<CardEntity>;
             bool isUndo = args.Length > 1 && args[1] is true;
-            
-            if (_handCardOperator != null && _handCardOperator.IsPendingUndo)
-            {
-                isUndo = true;
-                _handCardOperator.ClearPendingUndo();
-            }
 
             if (newCards == null) return;
 

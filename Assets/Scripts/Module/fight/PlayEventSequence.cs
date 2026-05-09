@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Defines;
+using Data.card.Extensions;
 using GameProtocol;
 using Module.Character;
 using Module.fight.CardMgr;
@@ -24,6 +25,7 @@ namespace Module.fight
         private static readonly Queue<IList<BattleEvent>> _eventQueue = new Queue<IList<BattleEvent>>();
         private static bool _isPlayerTurnResolving;
         private static int _pendingPlayerPlayCardCount;
+        private static readonly Queue<int> _pendingPlayerCasterOwnerIds = new Queue<int>();
 
         // 播放事件序列
         public static void Play(IList<BattleEvent> events)
@@ -185,12 +187,19 @@ namespace Module.fight
                 var actions = GameApp.CardManager.CardActionQueue.GetAction();
                 _isPlayerTurnResolving = true;
                 _pendingPlayerPlayCardCount = 0;
+                _pendingPlayerCasterOwnerIds.Clear();
 
                 for (int i = 0; i < actions.Length; i++)
                 {
                     if (actions[i].ActionType == CardActionType.PlayCard)
                     {
                         _pendingPlayerPlayCardCount++;
+                        if (actions[i].cardEntity != null)
+                        {
+                            var cardConfig = actions[i].cardEntity.GetConfig();
+                            if (cardConfig != null)
+                                _pendingPlayerCasterOwnerIds.Enqueue(cardConfig.OwnerId);
+                        }
                     }
                     else if (actions[i].ActionType == CardActionType.MoveCard)
                     {
@@ -245,8 +254,12 @@ namespace Module.fight
             int from = evt.MoveCard.FromIndex;
             int to = evt.MoveCard.ToIndex;
 
-            if (from >= 0 && from < deck.HandCards.Count && to >= 0 && to < deck.HandCards.Count)
-                (deck.HandCards[from], deck.HandCards[to]) = (deck.HandCards[to], deck.HandCards[from]);
+            if (from >= 0 && from < deck.HandCards.Count && to >= 0 && to < deck.HandCards.Count && from != to)
+            {
+                CardEntity moveCard = deck.HandCards[from];
+                deck.HandCards.RemoveAt(from);
+                deck.HandCards.Insert(to, moveCard);
+            }
 
             GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, deck.HandCards);
             await Task.Delay(150);
@@ -256,18 +269,34 @@ namespace Module.fight
         private static async Task playMergeCard(BattleEvent evt)
         {
             var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
-            int slotIndex = evt.MergeCard.SlotIndex;
             int resultStar = evt.MergeCard.ResultStarLevel;
+            int resultCardInstanceId = evt.MergeCard.ResultCardInstanceId;
 
-            if (slotIndex >= 0 && slotIndex < deck.HandCards.Count)
-                deck.HandCards[slotIndex].StarLevel = resultStar;
+            CardEntity keptCard = deck.HandCards.Find(c => c.InstanceId == resultCardInstanceId);
+            if (keptCard != null)
+                keptCard.StarLevel = resultStar;
+
+            List<CardEntity> consumedCards = new List<CardEntity>();
+            foreach (int consumedId in evt.MergeCard.ConsumedCardIds)
+            {
+                CardEntity consumedCard = deck.HandCards.Find(c => c.InstanceId == consumedId);
+                if (consumedCard != null)
+                    consumedCards.Add(consumedCard);
+            }
 
             foreach (int consumedId in evt.MergeCard.ConsumedCardIds)
             {
                 deck.HandCards.RemoveAll(c => c.InstanceId == consumedId);
             }
 
-            GameApp.MessageCenter.PostEvent(EventDefines.OnHandCardMerged);
+            if (keptCard != null)
+            {
+                for (int i = 0; i < consumedCards.Count; i++)
+                {
+                    GameApp.CardManager.EventBus.OnCardMerged?.Invoke(1, keptCard, consumedCards[i], resultStar);
+                }
+            }
+
             GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, deck.HandCards);
             await Task.Delay(200);
         }
@@ -302,6 +331,7 @@ namespace Module.fight
             if (_isPlayerTurnResolving && _pendingPlayerPlayCardCount > 0)
             {
                 GameApp.MessageCenter.PostEvent(EventDefines.OnCardExecuteUI);
+                playNextPlayerCasterAttack();
                 _pendingPlayerPlayCardCount--;
                 if (_pendingPlayerPlayCardCount <= 0)
                     completePlayerTurnOutputIfNeeded();
@@ -383,7 +413,20 @@ namespace Module.fight
 
             _isPlayerTurnResolving = false;
             _pendingPlayerPlayCardCount = 0;
+            _pendingPlayerCasterOwnerIds.Clear();
             GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
+        }
+
+        // 触发下一张玩家出牌对应角色的攻击动作
+        private static void playNextPlayerCasterAttack()
+        {
+            if (_pendingPlayerCasterOwnerIds.Count <= 0) return;
+
+            int ownerId = _pendingPlayerCasterOwnerIds.Dequeue();
+            BaseCharacter caster = GameApp.EntityManager.GetCharacterById(ownerId);
+            if (caster == null || caster.CurrentStateType == CharacterStateType.Die) return;
+
+            caster.ChangeState(CharacterStateType.Attack);
         }
 
         // 根据 CombatInstanceId 查找角色

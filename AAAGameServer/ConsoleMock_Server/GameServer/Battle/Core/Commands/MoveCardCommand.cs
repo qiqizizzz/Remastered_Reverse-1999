@@ -20,21 +20,25 @@ namespace GameServer.Battle.Core.Commands
             var deck = context.PlayerDecks[SenderPlayerId];
             if (FromIndex < 0 || FromIndex >= deck.HandCards.Count) return false;
             if (ToIndex < 0 || ToIndex >= deck.HandCards.Count) return false;
+            if (FromIndex == ToIndex) return true;
 
-            var cardA = deck.HandCards[FromIndex];
-            var cardB = deck.HandCards[ToIndex];
-            var configA = context.CardCatalog.Get(cardA.ConfigId);
-            var configB = context.CardCatalog.Get(cardB.ConfigId);
-            if (configA == null || configB == null) return false;
+            var moveCard = deck.HandCards[FromIndex];
+            var targetCard = deck.HandCards[ToIndex];
+            var moveConfig = context.CardCatalog.Get(moveCard.ConfigId);
+            var targetConfig = context.CardCatalog.Get(targetCard.ConfigId);
+            if (moveConfig == null || targetConfig == null) return false;
 
             // 大招卡不参与交换
-            if (configA.CardType == CardType.Ultimate || configB.CardType == CardType.Ultimate)
+            if (moveConfig.CardType == CardType.Ultimate || targetConfig.CardType == CardType.Ultimate)
                 return false;
 
-            (deck.HandCards[FromIndex], deck.HandCards[ToIndex]) = (deck.HandCards[ToIndex], deck.HandCards[FromIndex]);
+            deck.HandCards.RemoveAt(FromIndex);
+            deck.HandCards.Insert(ToIndex, moveCard);
 
             context.EventBus?.OnHandCardSwapped?.Invoke(SenderPlayerId, FromIndex, ToIndex);
             context.EventBus?.OnHandCardsUpdated?.Invoke(SenderPlayerId, new List<CardEntity>(deck.HandCards));
+
+            while (context.CheckAndAutoMerge(SenderPlayerId)) { }
 
             return true;
         }

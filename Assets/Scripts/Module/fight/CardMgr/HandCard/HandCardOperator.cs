@@ -120,7 +120,7 @@ namespace Module.fight.CardMgr
             };
             _actionQueue.PushAction(action);
             
-            _handCardUIManager.AnimatePlayCard(item, _uiActionStack.Count - 1);
+            _handCardUIManager.AnimatePlayCard(item, _actionQueue.GetCurrentActionCount() - 1);
 
             // 发送网络请求，由服务端驱动实际逻辑
             _battleNetwork.SendPlayCard(card.InstanceId, GameApp.CardManager.CurrentSelectedTargetId);
@@ -168,7 +168,15 @@ namespace Module.fight.CardMgr
                 if (_uiActionStack.Count > 0)
                 {
                     UI_BaseCardItem undoItem = _uiActionStack.Pop();
-                    _handCardUIManager.AnimateUndoCard(undoItem, undoneAction.OriginalIndex);
+                    int restoreIndex = undoneAction.OriginalIndex;
+                    if (undoneAction.Snapshot?.HandCards != null)
+                    {
+                        int snapshotIndex = undoneAction.Snapshot.HandCards.FindIndex(
+                            c => c.InstanceId == undoItem.BattleCardData.InstanceId);
+                        if (snapshotIndex >= 0)
+                            restoreIndex = snapshotIndex;
+                    }
+                    _handCardUIManager.AnimateUndoCard(undoItem, restoreIndex);
                 }
             }
             else if (undoneAction.ActionType == CardActionType.MoveCard)
