@@ -289,12 +289,11 @@ namespace GameServer.Battle
         private void resolveEnemyTurn()
         {
             var enemies = getAliveEnemies();
-            var heroes = getAliveHeroes();
 
             foreach (var enemy in enemies)
             {
                 if (_state == BattleState.BattleEnd) break;
-                if (heroes.Count == 0) break;
+                if (getAliveHeroes().Count == 0) break;
 
                 // TODO: Step 4 接入 EnemyAI，此处先使用临时随机选牌
                 executeEnemyAction(enemy);
@@ -313,7 +312,25 @@ namespace GameServer.Battle
             if (decision == null) return;
 
             var card = new CardEntity(decision.CardConfigId);
+            _eventBuilder.AddEvent(buildEnemyExecuteEvent(enemy, card, decision.TargetInstanceId));
             _skillExecutor.ExecuteCardEffect(enemy.OwnerPlayerId, card, decision.TargetInstanceId);
+        }
+
+        // 构建敌方输出阶段的执行标记事件（用于客户端按敌人逐个播放）
+        private static BattleEvent buildEnemyExecuteEvent(CombatEntity enemy, CardEntity card, int targetInstanceId)
+        {
+            return new BattleEvent
+            {
+                EventType = BattleEventType.EnqueueCard,
+                SourceId = enemy.InstanceId,
+                TargetId = targetInstanceId,
+                EnqueueCard = new EnqueueCardParams
+                {
+                    Card = toProtoCard(card),
+                    QueueIndex = 0,
+                    ActionPointAfter = 0
+                }
+            };
         }
 
         // 开始下一回合
@@ -336,16 +353,17 @@ namespace GameServer.Battle
         // 回合开始手牌修正（合成、补牌、发大招）
         private void processRoundStartHandFix()
         {
-            while (_context.CheckAndAutoMerge(PLAYER_ID)) { }
-
-            int normalCount = getNormalHandCardCount();
             int targetNormalCount = getTargetNormalHandCount();
-            Console.WriteLine($"[processRoundStartHandFix] 当前普通手牌数: {normalCount}, 目标: {targetNormalCount}");
-            if (normalCount < targetNormalCount)
+            while (true)
             {
+                while (_context.CheckAndAutoMerge(PLAYER_ID)) { }
+
+                int normalCount = getNormalHandCardCount();
+                Console.WriteLine($"[processRoundStartHandFix] 当前普通手牌数: {normalCount}, 目标: {targetNormalCount}");
+                if (normalCount >= targetNormalCount) break;
+
                 int needCount = targetNormalCount - normalCount;
                 _cardSystem.DrawCard(PLAYER_ID, needCount);
-                while (_context.CheckAndAutoMerge(PLAYER_ID)) { }
             }
 
             foreach (var kvp in _context.Entities)

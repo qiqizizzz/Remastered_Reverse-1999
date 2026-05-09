@@ -24,6 +24,7 @@ namespace Module.fight
         private static bool _isPlaying;
         private static readonly Queue<IList<BattleEvent>> _eventQueue = new Queue<IList<BattleEvent>>();
         private static bool _isPlayerTurnResolving;
+        private static bool _isEnemyTurnResolving;
         private static int _pendingPlayerPlayCardCount;
         private static readonly Queue<int> _pendingPlayerCasterOwnerIds = new Queue<int>();
 
@@ -175,8 +176,13 @@ namespace Module.fight
             // 兼容旧版UI：玩家回合开始时触发 OnPlayerTurnStart
             if (evt.TurnStart.IsPlayerTurn)
             {
+                _isEnemyTurnResolving = false;
                 GameApp.CardManager.CardActionQueue.Clear();
                 GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnStart);
+            }
+            else
+            {
+                _isEnemyTurnResolving = true;
             }
             
             await Task.Delay(300);
@@ -219,6 +225,10 @@ namespace Module.fight
 
                 if (_pendingPlayerPlayCardCount == 0)
                     completePlayerTurnOutputIfNeeded();
+            }
+            else
+            {
+                _isEnemyTurnResolving = false;
             }
             
             await Task.Delay(200);
@@ -369,6 +379,16 @@ namespace Module.fight
                 return;
             }
 
+            if (_isEnemyTurnResolving)
+            {
+                BaseCharacter enemy = findCharacterByCombatInstanceId(evt.SourceId);
+                if (enemy != null && enemy.CurrentStateType != CharacterStateType.Die)
+                    enemy.ChangeState(CharacterStateType.Attack);
+
+                await Task.Delay(650);
+                return;
+            }
+
             await Task.Delay(100);
         }
 
@@ -441,6 +461,7 @@ namespace Module.fight
             if (!_isPlayerTurnResolving) return;
 
             _isPlayerTurnResolving = false;
+            _isEnemyTurnResolving = false;
             _pendingPlayerPlayCardCount = 0;
             _pendingPlayerCasterOwnerIds.Clear();
             GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);

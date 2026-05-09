@@ -75,8 +75,8 @@ namespace GameServer.Battle.Core.Systems
             bool isPlayerSide = caster.OwnerPlayerId == 1;
             var pool = buildTargetPool(isPlayerSide, effect.Target);
 
-            // 玩家手动选中的目标优先
-            if (isPlayerSide && effect.Target == TargetType.Enemy && manualTargetId != 0)
+            // 手动/AI选中的目标优先（玩家与敌人都生效）
+            if (effect.Target == TargetType.Enemy && manualTargetId != 0)
             {
                 var manualTarget = pool.Find(c => c.InstanceId == manualTargetId);
                 if (manualTarget != null && manualTarget.CurrentHp > 0)
