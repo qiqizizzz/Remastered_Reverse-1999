@@ -144,7 +144,7 @@ namespace Module.fight
             }
         }
 
-        // ==================== 战斗流程事件 ====================
+        #region 战斗流程事件
         // 战斗开始
         private static async Task playBattleStart(BattleEvent evt)
         {
@@ -236,8 +236,9 @@ namespace Module.fight
             
             await Task.Delay(200);
         }
+        #endregion
 
-        // ==================== 牌库与手牌事件 ====================
+        #region 牌库与手牌事件
         // 抽牌
         private static async Task playDrawCard(BattleEvent evt)
         {
@@ -401,8 +402,9 @@ namespace Module.fight
 
             await Task.Delay(100);
         }
+        #endregion
 
-        // ==================== 实体状态事件 ====================
+        #region 实体状态事件
         // 受到伤害
         private static async Task playDamageTaken(BattleEvent evt)
         {
@@ -486,8 +488,9 @@ namespace Module.fight
             }
             await Task.Delay(100);
         }
+        #endregion
 
-        // ==================== 工具函数 ====================
+        #region 工具函数
         // 完成玩家输出阶段并触发手牌区收尾
         private static void completePlayerTurnOutputIfNeeded()
         {
@@ -574,5 +577,6 @@ namespace Module.fight
         {
             return GameApp.EntityManager.GetCharacterByCombatInstanceId(instanceId);
         }
+        #endregion
     }
 }

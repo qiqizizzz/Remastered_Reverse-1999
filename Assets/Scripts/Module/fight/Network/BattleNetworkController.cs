@@ -43,6 +43,7 @@ namespace Module.fight.Network
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.RequestBattleState, onRequestBattleStateResponse);
         }
 
+        #region 发送请求
         // 发送进入PVE请求
         public void SendEnterPve(int levelId)
         {
@@ -54,7 +55,7 @@ namespace Module.fight.Network
             };
             GameApp.NetworkManager.Send(pack);
         }
-
+        
         // 发送出牌请求
         public void SendPlayCard(int cardInstanceId, int targetInstanceId)
         {
@@ -119,8 +120,10 @@ namespace Module.fight.Network
             };
             GameApp.NetworkManager.Send(pack);
         }
+        
+        #endregion
 
-        // ==================== 响应处理 ====================
+        #region 响应处理
         // 进入PVE响应
         private void onEnterPveResponse(MainPack pack)
         {
@@ -162,6 +165,7 @@ namespace Module.fight.Network
             if (!checkResponse(pack, ActionCode.RequestBattleState)) return;
             broadcastEvents(pack);
         }
+        #endregion
 
         // 检查响应是否成功
         private bool checkResponse(MainPack pack, ActionCode actionCode)
