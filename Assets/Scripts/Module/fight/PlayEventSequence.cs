@@ -22,6 +22,8 @@ namespace Module.fight
     {
         private static bool _isPlaying;
         private static readonly Queue<IList<BattleEvent>> _eventQueue = new Queue<IList<BattleEvent>>();
+        private static bool _isPlayerTurnResolving;
+        private static int _pendingPlayerPlayCardCount;
 
         // 播放事件序列
         public static void Play(IList<BattleEvent> events)
@@ -71,6 +73,7 @@ namespace Module.fight
             }
             finally
             {
+                completePlayerTurnOutputIfNeeded();
                 _isPlaying = false;
             }
         }
@@ -152,6 +155,7 @@ namespace Module.fight
         // 回合开始
         private static async Task playTurnStart(BattleEvent evt)
         {
+            completePlayerTurnOutputIfNeeded();
 #if UNITY_EDITOR
             Debug.Log($"[PlayEvent] 回合开始，轮数: {evt.TurnStart.RoundNumber}");
 #endif
@@ -175,16 +179,18 @@ namespace Module.fight
 #endif
             GameApp.MessageCenter.PostEvent(EventDefines.OnBattleTurnEnd, evt.TurnEnd.IsPlayerTurn);
             
-            // 兼容旧版UI：玩家回合结束时触发 OnPlayerTurnOutput，驱动手牌隐藏等逻辑
+            // 玩家回合结束时，改为由服务端结算标记（EnqueueCard）逐张驱动出牌动画
             if (evt.TurnEnd.IsPlayerTurn)
             {
                 var actions = GameApp.CardManager.CardActionQueue.GetAction();
+                _isPlayerTurnResolving = true;
+                _pendingPlayerPlayCardCount = 0;
+
                 for (int i = 0; i < actions.Length; i++)
                 {
                     if (actions[i].ActionType == CardActionType.PlayCard)
                     {
-                        GameApp.MessageCenter.PostEvent(EventDefines.OnCardExecuteUI);
-                        await Task.Delay(1150);
+                        _pendingPlayerPlayCardCount++;
                     }
                     else if (actions[i].ActionType == CardActionType.MoveCard)
                     {
@@ -192,7 +198,9 @@ namespace Module.fight
                         await Task.Delay(350);
                     }
                 }
-                GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
+
+                if (_pendingPlayerPlayCardCount == 0)
+                    completePlayerTurnOutputIfNeeded();
             }
             
             await Task.Delay(200);
@@ -291,6 +299,17 @@ namespace Module.fight
 #if UNITY_EDITOR
             Debug.Log($"[PlayEvent] 卡牌进入行动队列，index: {evt.EnqueueCard.QueueIndex}");
 #endif
+            if (_isPlayerTurnResolving && _pendingPlayerPlayCardCount > 0)
+            {
+                GameApp.MessageCenter.PostEvent(EventDefines.OnCardExecuteUI);
+                _pendingPlayerPlayCardCount--;
+                if (_pendingPlayerPlayCardCount <= 0)
+                    completePlayerTurnOutputIfNeeded();
+                
+                await Task.Delay(1150);
+                return;
+            }
+
             await Task.Delay(100);
         }
 
@@ -357,6 +376,16 @@ namespace Module.fight
         }
 
         // ==================== 工具函数 ====================
+        // 完成玩家输出阶段并触发手牌区收尾
+        private static void completePlayerTurnOutputIfNeeded()
+        {
+            if (!_isPlayerTurnResolving) return;
+
+            _isPlayerTurnResolving = false;
+            _pendingPlayerPlayCardCount = 0;
+            GameApp.MessageCenter.PostEvent(EventDefines.OnPlayerTurnOutput);
+        }
+
         // 根据 CombatInstanceId 查找角色
         private static BaseCharacter findCharacterByCombatInstanceId(int instanceId)
         {

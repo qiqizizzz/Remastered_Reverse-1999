@@ -239,12 +239,15 @@ namespace GameServer.Battle
         private void resolvePlayerActions()
         {
             var history = _commandProcessor.GetHistoryAndClear();
+            int executeIndex = 0;
 
             foreach (var cmd in history)
             {
                 if (!_isBattleActive()) break;
                 if (cmd is not PlayCardCommand playCmd) continue;
 
+                _eventBuilder.AddEvent(buildPlayerExecuteEvent(playCmd, executeIndex));
+                executeIndex++;
                 _skillExecutor.ExecuteCardEffect(playCmd.SenderPlayerId, playCmd.Card, playCmd.TargetInstanceId);
             }
 
@@ -252,6 +255,22 @@ namespace GameServer.Battle
 
             if (tryEndBattle(out var result))
                 endBattle(result);
+        }
+
+        // 构建玩家输出阶段的执行标记事件（用于客户端逐张驱动出牌动画）
+        private static BattleEvent buildPlayerExecuteEvent(PlayCardCommand playCmd, int executeIndex)
+        {
+            return new BattleEvent
+            {
+                EventType = BattleEventType.EnqueueCard,
+                TargetId = playCmd.TargetInstanceId,
+                EnqueueCard = new EnqueueCardParams
+                {
+                    Card = toProtoCard(playCmd.Card),
+                    QueueIndex = executeIndex,
+                    ActionPointAfter = 0
+                }
+            };
         }
 
         // 结算敌人回合
