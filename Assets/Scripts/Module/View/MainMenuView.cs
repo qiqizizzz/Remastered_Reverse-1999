@@ -7,6 +7,7 @@
 */
 
 using System;
+using System.Collections;
 using Common.Defines;
 using GameProtocol;
 using Module.Loading;
@@ -35,9 +36,12 @@ namespace Module.View
         private Button loginBtn;
         private Button forgotPasswordBtn;
         private Toggle acTogLogin;
-        
+
         private GameObject loginView;
         private GameObject registerView;
+        
+        private SpriteRenderer _menuBg;
+        private const string MAIN_MENU_BG_TAG = "MainMenuSceneBg";
         
         protected override void OnAwake()
         {
@@ -52,6 +56,7 @@ namespace Module.View
             passwordRegister = Find<TMP_InputField>("registerView/Txt_password");
             registerBtn = Find<Button>("registerView/btnsArea/Btn_register");
             acTogRegister = Find<Toggle>("registerView/btnsArea/Tog_ac");
+            
             
             loginView = Find("loginView").gameObject;
             registerView = Find("registerView").gameObject;
@@ -74,6 +79,37 @@ namespace Module.View
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.Logon, onRegisterCallback);
         }
 
+        public override void Open(params object[] args)
+        {
+            StartCoroutine(bindSceneBgAndShowCoroutine());
+        }
+        
+        private IEnumerator bindSceneBgAndShowCoroutine()
+        {
+            const int MAX_RETRY_FRAME = 10;
+ 
+            for (int i = 0; i < MAX_RETRY_FRAME; i++)
+            {
+                GameObject bgObj = GameObject.FindWithTag(MAIN_MENU_BG_TAG);
+                if (bgObj != null)
+                {
+                    _menuBg = bgObj.GetComponent<SpriteRenderer>();
+#if UNITY_EDITOR
+                    if (_menuBg == null) Debug.LogError($"[{nameof(MainMenuView)}] 找到 MainMenuSceneBg 但缺少 SpriteRenderer");
+#endif
+                    if (_menuBg != null) _menuBg.gameObject.SetActive(true);
+                    yield break;
+                }
+ 
+                yield return null;
+            }
+ 
+#if UNITY_EDITOR
+            Debug.LogError($"[{nameof(MainMenuView)}] 未找到 Tag={MAIN_MENU_BG_TAG} 的场景背景对象");
+#endif
+        }
+
+        #region 登陆/注册按钮事件
         private void onLoginBtnClick()
         {
             //构造Protobuf大包
@@ -138,6 +174,7 @@ namespace Module.View
                 //TODO：显示错误提示
             }
         }
+        #endregion
 
         private void onStartGameBtnClick()
         {
@@ -172,6 +209,8 @@ namespace Module.View
                 return;
             }
             
+            if (_menuBg != null)
+                _menuBg.gameObject.SetActive(false);
             
             GameApp.ViewManager.Close(ViewType.MainMenuView);
             ViewExtensions.LoadScene(this, SceneDefines.Game,(() =>

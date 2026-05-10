@@ -20,7 +20,7 @@ namespace Module.Loading
     public class LoadingController : BaseController
     {
         private AsyncOperation asyncOp;
-        private float delayTime = 2f;//延迟时间
+        private readonly float delayTime = 2f;//延迟时间
         
         public LoadingController() : base()
         {
