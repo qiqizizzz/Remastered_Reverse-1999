@@ -40,8 +40,8 @@ namespace Module.View
         private GameObject loginView;
         private GameObject registerView;
         
-        private SpriteRenderer _menuBg;
-        private const string MAIN_MENU_BG_TAG = "MainMenuSceneBg";
+        private SpriteRenderer[] _menuBgRenderers;
+        private const string MAIN_MENU_BG_ROOT = "MainMenuSceneBgRoot";
         
         protected override void OnAwake()
         {
@@ -56,7 +56,6 @@ namespace Module.View
             passwordRegister = Find<TMP_InputField>("registerView/Txt_password");
             registerBtn = Find<Button>("registerView/btnsArea/Btn_register");
             acTogRegister = Find<Toggle>("registerView/btnsArea/Tog_ac");
-            
             
             loginView = Find("loginView").gameObject;
             registerView = Find("registerView").gameObject;
@@ -84,28 +83,45 @@ namespace Module.View
             StartCoroutine(bindSceneBgAndShowCoroutine());
         }
         
+        // 绑定主菜单背景组
+        private void bindMenuBg()
+        {
+            GameObject bgRoot = GameObject.FindWithTag(MAIN_MENU_BG_ROOT);
+            _menuBgRenderers = bgRoot != null ? bgRoot.GetComponentsInChildren<SpriteRenderer>(true) : null;
+        }
+ 
+        // 统一控制背景显隐
+        private void setMenuBgVisible(bool isVisible)
+        {
+            if (_menuBgRenderers == null) return;
+ 
+            for (int i = 0; i < _menuBgRenderers.Length; i++)
+            {
+                if (_menuBgRenderers[i] != null)
+                    _menuBgRenderers[i].enabled = isVisible;
+            }
+        }
+        
+        // 等待场景背景创建完成后再显示
         private IEnumerator bindSceneBgAndShowCoroutine()
         {
             const int MAX_RETRY_FRAME = 10;
  
             for (int i = 0; i < MAX_RETRY_FRAME; i++)
             {
-                GameObject bgObj = GameObject.FindWithTag(MAIN_MENU_BG_TAG);
-                if (bgObj != null)
+                bindMenuBg();
+
+                if (_menuBgRenderers != null && _menuBgRenderers.Length > 0)
                 {
-                    _menuBg = bgObj.GetComponent<SpriteRenderer>();
-#if UNITY_EDITOR
-                    if (_menuBg == null) Debug.LogError($"[{nameof(MainMenuView)}] 找到 MainMenuSceneBg 但缺少 SpriteRenderer");
-#endif
-                    if (_menuBg != null) _menuBg.gameObject.SetActive(true);
+                    setMenuBgVisible(true);
                     yield break;
                 }
- 
+
                 yield return null;
             }
- 
+  
 #if UNITY_EDITOR
-            Debug.LogError($"[{nameof(MainMenuView)}] 未找到 Tag={MAIN_MENU_BG_TAG} 的场景背景对象");
+            Debug.LogError($"[{nameof(MainMenuView)}] 未找到背景根节点：{MAIN_MENU_BG_ROOT}");
 #endif
         }
 
@@ -209,8 +225,7 @@ namespace Module.View
                 return;
             }
             
-            if (_menuBg != null)
-                _menuBg.gameObject.SetActive(false);
+            setMenuBgVisible(false);
             
             GameApp.ViewManager.Close(ViewType.MainMenuView);
             ViewExtensions.LoadScene(this, SceneDefines.Game,(() =>
