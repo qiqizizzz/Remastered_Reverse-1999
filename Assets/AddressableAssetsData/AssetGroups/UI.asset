@@ -32,6 +32,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0dd0c7a675297594fa962ea0f8b11c72
+    m_Address: Effect/ClickRipple
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 19213d6ec3bf15e4ca5c576a16bb211e
     m_Address: UI/ChatView
     m_ReadOnly: 0

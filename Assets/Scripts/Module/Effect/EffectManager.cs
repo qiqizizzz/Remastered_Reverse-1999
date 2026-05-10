@@ -19,6 +19,7 @@ namespace Module.Effect
 
         public EffectManager(string effectKey = "Effect/ClickRipple")
         {
+            #region 鼠标点击特效
             _effectKey = effectKey;
 
             var go = new GameObject("[EffectCanvas]");
@@ -34,6 +35,7 @@ namespace Module.Effect
 
             go.AddComponent<UnityEngine.UI.GraphicRaycaster>();
             _canvasTf = go.transform;
+            #endregion
         }
 
         public void OnUpdate()
