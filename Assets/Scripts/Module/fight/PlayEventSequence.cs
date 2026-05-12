@@ -450,7 +450,7 @@ namespace Module.fight
         {
             if (configId <= 0 || target == null) return;
             
-            var cardData = GameApp.ConfigManager.Card.GetCardById(configId);
+            var cardData = GameApp.ConfigManager.Card.Get(configId);
             if (cardData != null && cardData.CardEffectPrefab != null)
             {
                 GameObject vfx = UnityEngine.Object.Instantiate(cardData.CardEffectPrefab, target.transform.position, Quaternion.identity);
