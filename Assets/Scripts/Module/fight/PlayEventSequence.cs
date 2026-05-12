@@ -412,6 +412,7 @@ namespace Module.fight
             if (target == null) return;
 
             target.TakeDamage(evt.Damage.DamageValue, evt.Damage.IsCritical);
+            tryPlayCardVfx(evt.SourceCardConfigId, target);
             await Task.Delay(500);
         }
 
@@ -424,6 +425,7 @@ namespace Module.fight
                 if (target != null)
                 {
                     target.TakeDamage(evt.Damage.DamageValue, evt.Damage.IsCritical);
+                    tryPlayCardVfx(evt.SourceCardConfigId, target);
                 }
             }
             await Task.Delay(500);
@@ -437,11 +439,25 @@ namespace Module.fight
 
             target.CurrentHp = Mathf.Min(target.MaxHp, target.CurrentHp + evt.Heal.HealValue);
             target.HUD?.UpdateHp(target.CurrentHp, target.MaxHp);
+            tryPlayCardVfx(evt.SourceCardConfigId, target);
             // TODO: 治疗数字飘字
             await Task.Delay(300);
         }
 
         // 实体死亡
+
+        private static void tryPlayCardVfx(int configId, BaseCharacter target)
+        {
+            if (configId <= 0 || target == null) return;
+            
+            var cardData = GameApp.ConfigManager.Card.GetCardById(configId);
+            if (cardData != null && cardData.CardEffectPrefab != null)
+            {
+                GameObject vfx = UnityEngine.Object.Instantiate(cardData.CardEffectPrefab, target.transform.position, Quaternion.identity);
+                UnityEngine.Object.Destroy(vfx, 3f); 
+            }
+        }
+
         private static async Task playEntityDied(BattleEvent evt)
         {
             var target = findCharacterByCombatInstanceId(evt.TargetId);
