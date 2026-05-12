@@ -3168,6 +3168,7 @@ namespace GameProtocol {
       eventType_ = other.eventType_;
       sourceId_ = other.sourceId_;
       targetId_ = other.targetId_;
+      sourceCardConfigId_ = other.sourceCardConfigId_;
       switch (other.EventParamsCase) {
         case EventParamsOneofCase.Damage:
           Damage = other.Damage.Clone();
@@ -3272,6 +3273,17 @@ namespace GameProtocol {
       get { return targetId_; }
       set {
         targetId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "sourceCardConfigId" field.</summary>
+    public const int SourceCardConfigIdFieldNumber = 4;
+    private int sourceCardConfigId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int SourceCardConfigId {
+      get { return sourceCardConfigId_; }
+      set {
+        sourceCardConfigId_ = value;
       }
     }
 
@@ -3548,6 +3560,7 @@ namespace GameProtocol {
       if (EventType != other.EventType) return false;
       if (SourceId != other.SourceId) return false;
       if (TargetId != other.TargetId) return false;
+      if (SourceCardConfigId != other.SourceCardConfigId) return false;
       if (!object.Equals(Damage, other.Damage)) return false;
       if (!object.Equals(Heal, other.Heal)) return false;
       if (!object.Equals(Death, other.Death)) return false;
@@ -3577,6 +3590,7 @@ namespace GameProtocol {
       if (EventType != global::GameProtocol.BattleEventType.None) hash ^= EventType.GetHashCode();
       if (SourceId != 0) hash ^= SourceId.GetHashCode();
       if (TargetId != 0) hash ^= TargetId.GetHashCode();
+      if (SourceCardConfigId != 0) hash ^= SourceCardConfigId.GetHashCode();
       if (eventParamsCase_ == EventParamsOneofCase.Damage) hash ^= Damage.GetHashCode();
       if (eventParamsCase_ == EventParamsOneofCase.Heal) hash ^= Heal.GetHashCode();
       if (eventParamsCase_ == EventParamsOneofCase.Death) hash ^= Death.GetHashCode();
@@ -3621,6 +3635,10 @@ namespace GameProtocol {
       if (TargetId != 0) {
         output.WriteRawTag(24);
         output.WriteInt32(TargetId);
+      }
+      if (SourceCardConfigId != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(SourceCardConfigId);
       }
       if (eventParamsCase_ == EventParamsOneofCase.Damage) {
         output.WriteRawTag(82);
@@ -3715,6 +3733,9 @@ namespace GameProtocol {
       if (TargetId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(TargetId);
       }
+      if (SourceCardConfigId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SourceCardConfigId);
+      }
       if (eventParamsCase_ == EventParamsOneofCase.Damage) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Damage);
       }
@@ -3791,6 +3812,9 @@ namespace GameProtocol {
       }
       if (other.TargetId != 0) {
         TargetId = other.TargetId;
+      }
+      if (other.SourceCardConfigId != 0) {
+        SourceCardConfigId = other.SourceCardConfigId;
       }
       switch (other.EventParamsCase) {
         case EventParamsOneofCase.Damage:
@@ -3930,6 +3954,10 @@ namespace GameProtocol {
           }
           case 24: {
             TargetId = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            SourceCardConfigId = input.ReadInt32();
             break;
           }
           case 82: {

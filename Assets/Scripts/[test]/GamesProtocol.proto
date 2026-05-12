@@ -217,6 +217,7 @@ message BattleEvent
     BattleEventType eventType = 1;
     int32 sourceId = 2; // 事件来源实体ID
     int32 targetId = 3; // 事件目标实体ID
+    int32 sourceCardConfigId = 4;
     
     oneof eventParams
     {
