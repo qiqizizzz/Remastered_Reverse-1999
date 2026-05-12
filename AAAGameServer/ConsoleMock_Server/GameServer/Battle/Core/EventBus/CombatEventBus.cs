@@ -77,15 +77,17 @@ namespace GameServer.Battle.Core.EventBus
         /// 参数1(int): 目标实例Id
         /// 参数2(int): 伤害数值
         /// 参数3(bool): 是否暴击
+        /// 参数4(int): 来源卡牌配置Id
         /// </summary>
-        public Action<int, int, bool> OnDamageTaken;
+        public Action<int, int, bool, int> OnDamageTaken;
 
         /// <summary>
         /// 实体受到治疗
         /// 参数1(int): 目标实例Id
         /// 参数2(int): 治疗数值
+        /// 参数3(int): 来源卡牌配置Id
         /// </summary>
-        public Action<int, int> OnHealTaken;
+        public Action<int, int, int> OnHealTaken;
 
         /// <summary>
         /// 实体死亡

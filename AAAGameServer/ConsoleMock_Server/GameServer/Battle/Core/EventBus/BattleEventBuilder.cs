@@ -56,23 +56,25 @@ namespace GameServer.Battle.Core.EventBus
 
         // ==================== 实体状态事件 ====================
         // 受到伤害
-        private void onDamageTaken(int targetId, int damage, bool isCrit)
+        private void onDamageTaken(int targetId, int damage, bool isCrit, int sourceCardConfigId)
         {
             _events.Add(new BattleEvent
             {
                 EventType = BattleEventType.DamageTaken,
                 TargetId = targetId,
+                SourceCardConfigId = sourceCardConfigId,
                 Damage = new DamageParams { DamageValue = damage, IsCritical = isCrit }
             });
         }
 
         // 受到治疗
-        private void onHealTaken(int targetId, int heal)
+        private void onHealTaken(int targetId, int heal, int sourceCardConfigId)
         {
             _events.Add(new BattleEvent
             {
                 EventType = BattleEventType.HealTaken,
                 TargetId = targetId,
+                SourceCardConfigId = sourceCardConfigId,
                 Heal = new HealParams { HealValue = heal, IsOverHeal = false }
             });
         }

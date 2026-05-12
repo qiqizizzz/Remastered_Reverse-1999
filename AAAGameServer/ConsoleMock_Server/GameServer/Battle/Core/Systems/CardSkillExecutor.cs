@@ -46,10 +46,10 @@ namespace GameServer.Battle.Core.Systems
                 switch (effect.EffectType)
                 {
                     case EffectType.Damage:
-                        applyDamage(caster, targets, effect, card.StarLevel);
+                        applyDamage(caster, targets, effect, card.StarLevel, card.ConfigId);
                         break;
                     case EffectType.Heal:
-                        applyHeal(caster, targets, effect, card.StarLevel);
+                        applyHeal(caster, targets, effect, card.StarLevel, card.ConfigId);
                         break;
                     case EffectType.Buff:
                         // TODO: Buff 逻辑待实现
@@ -127,7 +127,7 @@ namespace GameServer.Battle.Core.Systems
         }
 
         // 对目标列表应用伤害效果
-        private void applyDamage(CombatEntity caster, List<CombatEntity> targets, CardEffect effect, int starLevel)
+        private void applyDamage(CombatEntity caster, List<CombatEntity> targets, CardEffect effect, int starLevel, int sourceCardConfigId)
         {
             var casterProp = _configManager.GetCharacter(caster.ConfigId)?.Property;
             if (casterProp == null) return;
@@ -150,7 +150,7 @@ namespace GameServer.Battle.Core.Systems
                 int damageValue = (int)Math.Round(finalDamage);
                 target.CurrentHp = Math.Max(0, target.CurrentHp - damageValue);
 
-                _context.EventBus?.OnDamageTaken?.Invoke(target.InstanceId, damageValue, isCrit);
+                _context.EventBus?.OnDamageTaken?.Invoke(target.InstanceId, damageValue, isCrit, sourceCardConfigId);
 
                 if (target.CurrentHp <= 0)
                     diedTargets.Add(target);
@@ -164,7 +164,7 @@ namespace GameServer.Battle.Core.Systems
         }
 
         // 对目标列表应用治疗效果
-        private void applyHeal(CombatEntity caster, List<CombatEntity> targets, CardEffect effect, int starLevel)
+        private void applyHeal(CombatEntity caster, List<CombatEntity> targets, CardEffect effect, int starLevel, int sourceCardConfigId)
         {
             var casterProp = _configManager.GetCharacter(caster.ConfigId)?.Property;
             if (casterProp == null) return;
@@ -185,7 +185,7 @@ namespace GameServer.Battle.Core.Systems
 
                 int actualHeal = (int)Math.Round(target.CurrentHp - beforeHp);
 
-                _context.EventBus?.OnHealTaken?.Invoke(target.InstanceId, actualHeal);
+                _context.EventBus?.OnHealTaken?.Invoke(target.InstanceId, actualHeal, sourceCardConfigId);
             }
         }
 
