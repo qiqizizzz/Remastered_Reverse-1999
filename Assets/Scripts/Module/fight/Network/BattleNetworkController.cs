@@ -57,7 +57,7 @@ namespace Module.fight.Network
         }
         
         // 发送出牌请求
-        public void SendPlayCard(int cardInstanceId, int targetInstanceId)
+        public void SendPlayCard(int cardInstanceId, int targetInstanceId, int handIndex)
         {
             var pack = new MainPack
             {
@@ -66,7 +66,8 @@ namespace Module.fight.Network
                 BattlePack = new BattlePack
                 {
                     CardInstanceId = cardInstanceId,
-                    TargetEntityId = targetInstanceId
+                    TargetEntityId = targetInstanceId,
+                    SourceSlotIndex = handIndex
                 }
             };
             GameApp.NetworkManager.Send(pack);

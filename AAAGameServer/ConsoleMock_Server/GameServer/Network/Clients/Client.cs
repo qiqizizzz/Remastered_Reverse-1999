@@ -600,7 +600,10 @@ namespace Network
             }
 
             var events = battle.CollectEvents();
-            sendBattleResponse(ActionCode.EnterPve, events);
+            var response = new BattlePack();
+            response.Events.AddRange(events);
+            response.StateSnapshot = battle.GetStateSnapshot();
+            sendBattleResponse(ActionCode.EnterPve, response);
         }
 
         // 玩家出牌
@@ -616,7 +619,7 @@ namespace Network
             }
 
             var bp = pack.BattlePack;
-            bool success = battle.PlayCard(bp.CardInstanceId, bp.TargetEntityId, 0);
+            bool success = battle.PlayCard(bp.CardInstanceId, bp.TargetEntityId, bp.SourceSlotIndex);
             if (!success)
             {
                 sendBattleError(ActionCode.PlayCard, "出牌失败");

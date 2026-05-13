@@ -128,7 +128,7 @@ namespace Module.fight.CardMgr
             _handCardUIManager.AnimatePlayCard(item, _actionQueue.GetCurrentActionCount() - 1);
 
             // 发送网络请求，由服务端驱动实际逻辑
-            _battleNetwork.SendPlayCard(card.InstanceId, GameApp.CardManager.CurrentSelectedTargetId);
+            _battleNetwork.SendPlayCard(card.InstanceId, GameApp.CardManager.CurrentSelectedTargetId, originalIndex);
             
             bool isQueueFull = !_actionQueue.CanPlayCard();
 
