@@ -9,9 +9,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Common;
 using Common.Defines;
 using Data.card;
 using Data.card.Extensions;
+using DG.Tweening;
 using GameProtocol;
 using Module.Character;
 using Module.fight.CardMgr;
@@ -444,8 +446,6 @@ namespace Module.fight
             await Task.Delay(300);
         }
 
-        // 实体死亡
-
         private static void tryPlayCardVfx(int configId, BaseCharacter target)
         {
             if (configId <= 0 || target == null) return;
@@ -453,11 +453,20 @@ namespace Module.fight
             var cardData = GameApp.ConfigManager.Card.Get(configId);
             if (cardData != null && cardData.CardEffectPrefab != null)
             {
-                GameObject vfx = UnityEngine.Object.Instantiate(cardData.CardEffectPrefab, target.transform.position, Quaternion.identity);
-                UnityEngine.Object.Destroy(vfx, 3f); 
+                GameObject prefab = cardData.CardEffectPrefab;
+                Vector3 spawnPos = target.transform.position + Vector3.up * 1.25f;
+                GameObject vfx = ResManager.InstantiateFromPool(prefab);
+                if (vfx == null) return;
+
+                vfx.transform.SetPositionAndRotation(spawnPos, Quaternion.identity);
+                DOVirtual.DelayedCall(3f, () =>
+                {
+                    ResManager.ReleaseToPool(prefab, vfx);
+                });
             }
         }
 
+        // 实体死亡
         private static async Task playEntityDied(BattleEvent evt)
         {
             var target = findCharacterByCombatInstanceId(evt.TargetId);

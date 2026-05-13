@@ -18,10 +18,12 @@ namespace Common
     public static class ResManager
     {
         private static readonly Dictionary<string, Queue<GameObject>> _pool;
+        private static readonly Dictionary<GameObject, Queue<GameObject>> _prefabPool;
 
         static ResManager()
         {
             _pool = new Dictionary<string, Queue<GameObject>>();
+            _prefabPool = new Dictionary<GameObject, Queue<GameObject>>();
         }
 
         //同步加载实例
@@ -199,6 +201,77 @@ namespace Common
             foreach (var key in _pool.Keys)
                 ClearPool(key);
             _pool.Clear();
+        }
+        #endregion
+
+        #region 预制体对象池
+        //同步从预制体对象池加载实例
+        public static GameObject InstantiateFromPool(GameObject prefab, Transform parent = null)
+        {
+            if (prefab == null) return null;
+
+            if (_prefabPool.ContainsKey(prefab))
+            {
+                while (_prefabPool[prefab].Count > 0)
+                {
+                    GameObject obj = _prefabPool[prefab].Dequeue();
+                    if (obj == null) continue;
+
+                    obj.SetActive(true);
+                    if (parent != null)
+                        obj.transform.SetParent(parent);
+                    return obj;
+                }
+            }
+
+            GameObject go = UnityEngine.Object.Instantiate(prefab, parent);
+            go.name = prefab.name;
+            return go;
+        }
+
+        //释放实例到预制体对象池
+        public static void ReleaseToPool(GameObject prefab, GameObject obj, int maxPoolSize = 20)
+        {
+            if (prefab == null || obj == null) return;
+
+            obj.SetActive(false);
+            obj.transform.SetParent(null);
+
+            if (!_prefabPool.ContainsKey(prefab))
+                _prefabPool[prefab] = new Queue<GameObject>();
+
+            if (_prefabPool[prefab].Count < maxPoolSize)
+            {
+                _prefabPool[prefab].Enqueue(obj);
+            }
+            else
+            {
+                UnityEngine.Object.Destroy(obj);
+            }
+        }
+
+        //清理单个预制体对象池
+        public static void ClearPrefabPool(GameObject prefab)
+        {
+            if (prefab == null) return;
+            if (_prefabPool.TryGetValue(prefab, out var queue))
+            {
+                while (queue.Count > 0)
+                {
+                    var obj = queue.Dequeue();
+                    if (obj != null)
+                        UnityEngine.Object.Destroy(obj);
+                }
+                _prefabPool.Remove(prefab);
+            }
+        }
+
+        //清理所有预制体对象池
+        public static void ClearAllPrefabPools()
+        {
+            foreach (var key in new List<GameObject>(_prefabPool.Keys))
+                ClearPrefabPool(key);
+            _prefabPool.Clear();
         }
         #endregion
     }
