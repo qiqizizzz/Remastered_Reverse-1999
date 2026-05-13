@@ -108,19 +108,20 @@ namespace Module.fight.CardMgr
             }
             
             var card = item.BattleCardData;
-            int dataIndex = GameApp.CardManager.GetHandCards().FindIndex(c => c.InstanceId == card.InstanceId);
+            CardSnapshot beforeSnapshot = GameApp.CardManager.TakeSnapshot();
+            int dataIndex = beforeSnapshot.HandCards.FindIndex(c => c.InstanceId == card.InstanceId);
             int originalIndex = dataIndex >= 0 ? dataIndex : index;
 
             _handCardUIManager.RemoveCardAt(index);
             _uiActionStack.Push(item);
-            
+
             var action = new CardAction
             {
                 ActionType = CardActionType.PlayCard,
                 cardEntity = card,
                 OriginalIndex = originalIndex,
                 TargetInstanceId = GameApp.CardManager.CurrentSelectedTargetId,
-                Snapshot = GameApp.CardManager.TakeSnapshot()
+                Snapshot = beforeSnapshot
             };
             _actionQueue.PushAction(action);
             
@@ -164,6 +165,8 @@ namespace Module.fight.CardMgr
         //撤销上一次操作（出牌或移动）
         public void UndoLastPlayCard()
         {
+            if (_pendingUndo) return;
+
             var undoneAction = _actionQueue.UndoLastAction();
             if (undoneAction == null) return;
 
@@ -173,13 +176,17 @@ namespace Module.fight.CardMgr
                 {
                     UI_BaseCardItem undoItem = _uiActionStack.Pop();
                     int restoreIndex = undoneAction.OriginalIndex;
+                    int snapshotIndex = -1;
                     if (undoneAction.Snapshot?.HandCards != null)
                     {
-                        int snapshotIndex = undoneAction.Snapshot.HandCards.FindIndex(
+                        snapshotIndex = undoneAction.Snapshot.HandCards.FindIndex(
                             c => c.InstanceId == undoItem.BattleCardData.InstanceId);
                         if (snapshotIndex >= 0)
                             restoreIndex = snapshotIndex;
                     }
+#if UNITY_EDITOR
+                    Debug.Log($"[{nameof(HandCardOperator)}] 撤销出牌 InstanceId={undoItem.BattleCardData.InstanceId}, OriginalIndex={undoneAction.OriginalIndex}, SnapshotIndex={snapshotIndex}, RestoreIndex={restoreIndex}");
+#endif
                     _handCardUIManager.AnimateUndoCard(undoItem, restoreIndex);
                 }
             }
@@ -265,7 +272,7 @@ namespace Module.fight.CardMgr
                     ActionType = CardActionType.MoveCard,
                     MoveFromIndex = safeStartIndex,
                     MoveToIndex = index,
-                    Snapshot = GameApp.CardManager.TakeSnapshot()
+                    Snapshot = _tempSnapshot
                 };
                 _actionQueue.PushAction(moveAction);
                 

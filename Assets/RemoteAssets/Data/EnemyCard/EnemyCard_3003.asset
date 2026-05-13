@@ -19,4 +19,4 @@ MonoBehaviour:
   OwnerId: 5001
   Effects: []
   CardSprite: {fileID: 21300000, guid: 528d950a1be596a4f82ac8feeb6e4cad, type: 3}
-  CardEffectPrefab: {fileID: 0}
+  CardEffectPrefab: {fileID: 151244, guid: 8368975de5593844bbfaf74e342fb326, type: 3}

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep -l -i \"UnDoAction\\\\|handleUndo\\\\|Undo\\\\|undo.*card\\\\|undo.*snapshot\")",
+      "Bash(xargs grep -l -i \"snapshot\\\\|Snapshot\\\\|BattleStateSnapshot\\\\|StateSnapshot\")",
+      "Bash(xargs grep -l -i \"hand.*card.*sync\\\\|sync.*hand\\\\|SyncHand\\\\|SyncCard\\\\|SyncField\\\\|RequestBattleState\")",
+      "Bash(xargs grep -l \"AnimateUndoCard\\\\|AnimateUndo\")"
+    ]
+  }
+}

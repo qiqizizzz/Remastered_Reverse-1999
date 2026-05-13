@@ -7,6 +7,7 @@
 */
 
 using System.Collections.Generic;
+using System.Linq;
 using Common;
 using Common.Defines;
 using Data.card;
@@ -17,12 +18,15 @@ namespace Module.fight.CardMgr
 {
     public class CardPoolManager
     {
+        private const int COMMON_CARD_TEMP_BUFFER = 4;
+        private const int ULTIMATE_CARD_POOL_COUNT = 6;
+
         private readonly List<UI_CommonCardItem> _commonCardPool;
         private readonly List<UI_UltimateCardItem> _ultimateCardPool;
-        
+
         private int _totalPoolToLoad;
         private int _loadedPoolCount;
-        
+
         private readonly Transform _cardDeckTf;
 
         public CardPoolManager(Transform cardDeckTf)
@@ -52,19 +56,20 @@ namespace Module.fight.CardMgr
                 item = _commonCardPool.Find(x => !x.gameObject.activeSelf);
             }
             
+            if (item == null)
+            {
+#if UNITY_EDITOR
+                logPoolState(type, "卡牌对象池耗尽，自动扩容");
+#endif
+                item = createCardItem(type);
+            }
+
             if (item != null)
             {
                 item.transform.SetParent(_cardDeckTf, true);
-                
                 item.PrepareSpawn(); // 放回最左侧初始点
             }
-            else
-            {
-#if UNITY_EDITOR
-                Debug.LogError($"[{nameof(CardPoolManager)}] 卡牌对象池耗尽！请检查 {type} 生成配置。");
-#endif
-            }
-            
+
             return item;
         }
         #endregion
@@ -127,7 +132,10 @@ namespace Module.fight.CardMgr
         
         private void PreLoadCardItem()
         {
-            _totalPoolToLoad = GameApp.CardManager.maxHandCardCount + 8;
+            _totalPoolToLoad = getCommonCardPoolCount();
+#if UNITY_EDITOR
+            Debug.Log($"[{nameof(CardPoolManager)}] 普通卡对象池预加载数量: {_totalPoolToLoad}, 手牌上限: {GameApp.CardManager.maxHandCardCount}, 行动队列上限: {GameApp.CardManager.CardActionQueue.MaxActionCount}, 临时缓冲: {COMMON_CARD_TEMP_BUFFER}");
+#endif
             _loadedPoolCount = 0;
             for (int i = 0; i < _totalPoolToLoad; i++)
             {
@@ -153,9 +161,8 @@ namespace Module.fight.CardMgr
         
         private void PreLoadUltimateCardItem()
         { 
-            int maxUltimateCount = 6;
-            _totalPoolToLoad += maxUltimateCount;
-            for (int i = 0; i < maxUltimateCount; i++)
+            _totalPoolToLoad += ULTIMATE_CARD_POOL_COUNT;
+            for (int i = 0; i < ULTIMATE_CARD_POOL_COUNT; i++)
             {
                 ResManager.InstantiateAsync(AddressDefines.UI_small_UltimateCard, (go) =>
                 {
@@ -184,6 +191,48 @@ namespace Module.fight.CardMgr
                 GameApp.MessageCenter.PostEvent(EventDefines.FightingViewReady);
             }
         }
+
+        // 创建卡牌对象
+        private UI_BaseCardItem createCardItem(CardType type)
+        {
+            string keyName = type == CardType.Ultimate
+                ? AddressDefines.UI_small_UltimateCard
+                : AddressDefines.UI_small_CommonCard;
+            GameObject go = ResManager.Instantiate(keyName, _cardDeckTf);
+            if (go == null) return null;
+
+            UI_BaseCardItem item = go.GetComponent<UI_BaseCardItem>();
+            item.SetVisible(false);
+            if (item is UI_UltimateCardItem ultimateItem)
+                _ultimateCardPool.Add(ultimateItem);
+            else if (item is UI_CommonCardItem commonItem)
+                _commonCardPool.Add(commonItem);
+
+#if UNITY_EDITOR
+            logPoolState(type, "卡牌对象池扩容完成");
+#endif
+            return item;
+        }
+
+        // 计算普通卡池容量
+        private int getCommonCardPoolCount()
+        {
+            return GameApp.CardManager.maxHandCardCount +
+                   GameApp.CardManager.CardActionQueue.MaxActionCount +
+                   COMMON_CARD_TEMP_BUFFER;
+        }
+
+#if UNITY_EDITOR
+        // 输出对象池诊断信息
+        private void logPoolState(CardType type, string reason)
+        {
+            int commonActive = _commonCardPool.Count(x => x != null && x.gameObject.activeSelf);
+            int commonInactive = _commonCardPool.Count - commonActive;
+            int ultimateActive = _ultimateCardPool.Count(x => x != null && x.gameObject.activeSelf);
+            int ultimateInactive = _ultimateCardPool.Count - ultimateActive;
+            Debug.Log($"[{nameof(CardPoolManager)}] {reason} Type={type}, Common={commonActive}/{_commonCardPool.Count} active, CommonIdle={commonInactive}, Ultimate={ultimateActive}/{_ultimateCardPool.Count} active, UltimateIdle={ultimateInactive}");
+        }
+#endif
         #endregion
     }
 }

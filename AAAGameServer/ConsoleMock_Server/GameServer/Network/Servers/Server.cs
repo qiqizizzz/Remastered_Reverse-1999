@@ -129,10 +129,14 @@ namespace Network
         {
             lock(_lockObj)
             {
-                if(!string.IsNullOrEmpty(username) && _userClients.ContainsKey(username))
+                _clients.TryGetValue(clientId, out Client disconnectingClient);
+                if(!string.IsNullOrEmpty(username) &&
+                   _userClients.TryGetValue(username, out Client onlineClient) &&
+                   ReferenceEquals(onlineClient, disconnectingClient))
                 {
                     _userClients.Remove(username);
-                    Console.WriteLine($"[Server] 玩家 '{username}' 从在线字典移除");
+                    BattleManager.RemoveBattle(username);
+                    Console.WriteLine($"[Server] 玩家 '{username}' 从在线字典移除并清理战斗实例");
                 }
 
 

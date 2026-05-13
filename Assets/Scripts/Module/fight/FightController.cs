@@ -113,17 +113,27 @@ namespace Module.fight
         // 接收并播放服务端推送的战斗事件序列
         private void onBattleServerResponse(object args)
         {
-            var battlePack = args as BattlePack;
+            bool isUndo = false;
+            BattlePack battlePack = null;
+            if (args is object[] arr)
+            {
+                battlePack = arr.Length > 0 ? arr[0] as BattlePack : null;
+                isUndo = arr.Length > 1 && arr[1] is true;
+            }
+            else
+            {
+                battlePack = args as BattlePack;
+            }
             if (battlePack == null) return;
-            
+
             if (battlePack.StateSnapshot != null)
-                restoreFromStateSnapshot(battlePack.StateSnapshot);
-            
+                restoreFromStateSnapshot(battlePack.StateSnapshot, isUndo);
+
             PlayEventSequence.Play(battlePack.Events);
         }
         
         // 根据服务端状态快照恢复本地战斗上下文
-        private void restoreFromStateSnapshot(BattleStateSnapshot snapshot)
+        private void restoreFromStateSnapshot(BattleStateSnapshot snapshot, bool isUndo)
         {
             syncCharactersFromSnapshot(snapshot.Entities);
 
@@ -144,7 +154,7 @@ namespace Module.fight
                     deck.DiscardPile.Add(new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel));
             }
             
-            GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, deck.HandCards);
+            GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, new object[] { deck.HandCards, isUndo });
         }
 
         // 根据服务端实体快照同步本地角色映射，避免 CombatInstanceId 漂移导致受击目标错乱

@@ -24,4 +24,4 @@ MonoBehaviour:
     Target: 1
     TargetCount: 3
   CardSprite: {fileID: 21300000, guid: 8cc6267113c981440a7c26a77726392d, type: 3}
-  CardEffectPrefab: {fileID: 0}
+  CardEffectPrefab: {fileID: 157776, guid: 82bf03917e16d3d4cad30518cca28308, type: 3}

@@ -156,7 +156,8 @@ namespace Module.fight.Network
         private void onUndoResponse(MainPack pack)
         {
             if (!checkResponse(pack, ActionCode.UnDoAction)) return;
-            broadcastEvents(pack);
+            if (pack.BattlePack != null)
+                GameApp.MessageCenter.PostEvent(EventDefines.OnBattleServerResponse, new object[] { pack.BattlePack, true });
         }
 
         // 请求完整状态响应

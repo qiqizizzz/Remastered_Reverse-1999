@@ -41,6 +41,7 @@ namespace Module.View
 
         private Action m_refreshMoveIndicatorsHandler;
         private Action<object> m_onUpdateHandCardsHandler;
+        private bool m_isViewEventBound;
 
         #region 生命周期
         protected override void OnAwake()
@@ -64,14 +65,7 @@ namespace Module.View
 
         protected override void OnEnable()
         {
-            Find<Button>("OperationBtns/Btn_pause").onClick.AddListener(onPauseBtn);
-            Find<Button>("CardAction/Btn_Undo").onClick.AddListener(onUndoBtn);
-
-            GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
-            GameApp.MessageCenter.AddEvent(EventDefines.OnCardExecuteUI, onExecuteCardUI);
-            GameApp.MessageCenter.AddEvent(EventDefines.OnMoveActionExecute, onMoveActionExecute);
-            GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
-            GameApp.MessageCenter.AddEvent(EventDefines.OnHandCardChanged, onHandCardChanged);
+            bindViewEvents();
         }
 
         protected override void OnStart()
@@ -85,25 +79,20 @@ namespace Module.View
 
             _handCardOperator =
                 new HandCardOperator(_handCardUIManager, GameApp.CardManager.CardActionQueue);
-            _handCardOperator.Init();
 
             m_refreshMoveIndicatorsHandler = () => _actionQueueUIManager.RefreshMoveIndicators();
-            _handCardOperator.OnRefreshMoveIndicators += m_refreshMoveIndicatorsHandler;
-            _handCardOperator.OnQueueFull += onQueueFull;
-            _handCardOperator.OnRefreshActionPointUI +=  _actionQueueUIManager.RefreshHeroActionPointUI;
+            bindHandOperatorEvents();
         }
 
         protected override void OnDisable()
         {
-            GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
-            GameApp.MessageCenter.RemoveEvent(EventDefines.OnCardExecuteUI, onExecuteCardUI);
-            GameApp.MessageCenter.RemoveEvent(EventDefines.OnMoveActionExecute, onMoveActionExecute);
-            GameApp.MessageCenter.RemoveEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
-            GameApp.MessageCenter.RemoveEvent(EventDefines.OnHandCardChanged, onHandCardChanged);
+            unbindViewEvents();
         }
 
         protected override void OnDestroy()
         {
+            unbindViewEvents();
+
             if (m_onUpdateHandCardsHandler != null)
                 GameApp.MessageCenter.RemoveEvent(EventDefines.UpdateHandCards, m_onUpdateHandCardsHandler);
             Controller.UnRegisterFunc(EventDefines.ExitLevel, onExitLevel);
@@ -121,13 +110,90 @@ namespace Module.View
 
         public override void Open(params object[] args)
         {
+            bindViewEvents();
+            bindHandOperatorEvents();
             SetVisible(true);
 
             _actionQueueUIManager.SetVisible(true);
             _cardPoolManager.TryNotifyReady();
         }
 
+        public override void Close(params object[] args)
+        {
+            cleanupBattleView();
+            unbindViewEvents();
+            base.Close(args);
+        }
+
+        // 绑定手牌操作事件
+        private void bindHandOperatorEvents()
+        {
+            if (_handCardOperator == null) return;
+
+            _handCardOperator.OnRefreshMoveIndicators -= m_refreshMoveIndicatorsHandler;
+            _handCardOperator.OnQueueFull -= onQueueFull;
+            _handCardOperator.OnRefreshActionPointUI -= _actionQueueUIManager.RefreshHeroActionPointUI;
+            _handCardOperator.Init();
+            _handCardOperator.OnRefreshMoveIndicators += m_refreshMoveIndicatorsHandler;
+            _handCardOperator.OnQueueFull += onQueueFull;
+            _handCardOperator.OnRefreshActionPointUI += _actionQueueUIManager.RefreshHeroActionPointUI;
+        }
+
+        // 清理战斗视图状态
+        private void cleanupBattleView()
+        {
+            if (_handCardOperator != null)
+            {
+                _handCardOperator.Clear();
+                _handCardOperator.OnRefreshMoveIndicators -= m_refreshMoveIndicatorsHandler;
+                _handCardOperator.OnQueueFull -= onQueueFull;
+                _handCardOperator.OnRefreshActionPointUI -= _actionQueueUIManager.RefreshHeroActionPointUI;
+            }
+
+            _handCardUIManager?.Clear();
+            _cardPoolManager?.RecycleAllCards();
+        }
+
         #region UI事件
+        // 绑定视图事件
+        private void bindViewEvents()
+        {
+            if (m_isViewEventBound) return;
+            m_isViewEventBound = true;
+
+            Find<Button>("OperationBtns/Btn_pause").onClick.RemoveListener(onPauseBtn);
+            Find<Button>("OperationBtns/Btn_pause").onClick.AddListener(onPauseBtn);
+            Find<Button>("CardAction/Btn_Undo").onClick.RemoveListener(onUndoBtn);
+            Find<Button>("CardAction/Btn_Undo").onClick.AddListener(onUndoBtn);
+
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnCardExecuteUI, onExecuteCardUI);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnCardExecuteUI, onExecuteCardUI);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnMoveActionExecute, onMoveActionExecute);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnMoveActionExecute, onMoveActionExecute);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnHandCardChanged, onHandCardChanged);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnHandCardChanged, onHandCardChanged);
+        }
+
+        // 解绑视图事件
+        private void unbindViewEvents()
+        {
+            if (!m_isViewEventBound) return;
+            m_isViewEventBound = false;
+
+            Find<Button>("OperationBtns/Btn_pause").onClick.RemoveListener(onPauseBtn);
+            Find<Button>("CardAction/Btn_Undo").onClick.RemoveListener(onUndoBtn);
+
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnOutput, onHideAllHands);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnCardExecuteUI, onExecuteCardUI);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnMoveActionExecute, onMoveActionExecute);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnRemoveDiedCharacterCard, onRemoveDiedCharacterCardsUI);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnHandCardChanged, onHandCardChanged);
+        }
+
         #region 手牌事件
         private void onHideAllHands(System.Object args)
         {
@@ -149,10 +215,16 @@ namespace Module.View
         }
         private void onUpdateHandCards(params object[] args)
         {
+            if (args.Length == 1 && args[0] is object[] payload)
+                args = payload;
+
             List<CardEntity> newCards = args[0] as List<CardEntity>;
             bool isUndo = args.Length > 1 && args[1] is true;
 
             if (newCards == null) return;
+
+            if (isUndo)
+                _handCardOperator.ClearPendingUndo();
 
             _handCardUIManager.UpdateCardsUI(newCards, isUndo, null);
             _actionQueueUIManager.RefreshHeroActionPointUI();

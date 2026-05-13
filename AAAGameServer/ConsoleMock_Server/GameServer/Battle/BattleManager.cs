@@ -25,6 +25,8 @@ namespace GameServer.Battle
         // 为指定用户创建新战斗
         public BattleInstance CreateBattle(string username, int levelId, List<int> heroConfigIds = null)
         {
+            RemoveBattle(username);
+
             var levelConfig = _configManager.Levels.Find(l => l.Id == levelId);
             if (levelConfig == null) return null;
 
