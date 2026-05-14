@@ -52,7 +52,7 @@ namespace Module.Character.Components
         /// <param name="previewGain">因卡牌放入队列中而即将增加的点数</param>
         public void UpdateActionPoint(int currentTotalAP, int previewGain = 0)
         {
-            Debug.Log($"更新行动点显示: 当前点数={currentTotalAP}, 预览增加={previewGain}");
+            //Debug.Log($"更新行动点显示: 当前点数={currentTotalAP}, 预览增加={previewGain}");
             
             //思路：
             //1.玩家回合时,若 选择卡牌进入队列, 则为闪烁状态

@@ -24,8 +24,6 @@ namespace Module.fight.Core.Systems
         private readonly ICardCatalog _cardCatalog;
         private readonly CombatEventBus _eventBus;
         private readonly Random _random;
-
-        private static int num = 0;
         
         public CardCombatSystem(CombatContext context, ICardCatalog cardCatalog, CombatEventBus eventBus)
         {
@@ -66,38 +64,9 @@ namespace Module.fight.Core.Systems
             ShuffleCard(deck.DrawPile);
         }
 
-        #region 准备阶段与洗牌
-        //为新关卡准备初始手牌
-        public void PrepareHandsForNewLevel(int playerId, List<int> CharacterConfigIds)
-        {
-            //回合开始时（即新进入关卡时）,玩家当前手牌应为每个角色两张普通牌,加起来一共8张（4个角色）
-            if(!_context.PlayerDecks.TryGetValue(playerId, out var deck)) return;
-            
-            foreach (var charId in CharacterConfigIds)
-            {
-                var charCards = _cardCatalog.GetCharacterCards(charId);
-
-                foreach (var card in charCards)
-                {
-                    if(card.CardType == CardType.Ultimate) continue;
-                    
-                    deck.HandCards.Add(new CardEntity(card.Id));
-                }
-            }
-
-            #if UNITY_EDITOR
-            foreach (var handCard in deck.HandCards)
-            {
-                Debug.Log($"初始手牌: {handCard.GetConfig().Name} (InstanceId: {handCard.InstanceId})");
-            }
-            #endif
-            
-            ShuffleCard(deck.HandCards);
-            _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
-        }
-        
+        #region 洗牌
         //Fisher–Yates 洗牌算法
-        public void ShuffleCard(List<CardEntity> pile)
+        private void ShuffleCard(List<CardEntity> pile)
         {
             for (int i = 0; i < pile.Count; i++)
             {
@@ -108,12 +77,6 @@ namespace Module.fight.Core.Systems
         #endregion
 
         #region 卡牌主要操作
-        //出牌
-        public void PlayCard(int playerId, CardEntity card, int targetInstanceId)
-        {
-            
-        }
-        
         //抽牌
         public void DrawCard(int playerId, int count)
         {
@@ -155,21 +118,6 @@ namespace Module.fight.Core.Systems
             
             _eventBus?.OnCardDiscarded?.Invoke(playerId, card);
             _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
-        }
-        
-        //交换手牌
-        public void SwapHandCards(int playerId, int indexA, int indexB)
-        {
-            if(!_context.PlayerDecks.TryGetValue(playerId, out var deck)) return;
-            if (indexA < 0 || indexA >= deck.HandCards.Count || indexB < 0 || indexB >= deck.HandCards.Count) return;
-
-            (deck.HandCards[indexA], deck.HandCards[indexB]) = (deck.HandCards[indexB], deck.HandCards[indexA]);
-
-            _eventBus?.OnHandCardSwapped?.Invoke(playerId, indexA, indexB);
-            _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
-
-            // 交换后检查合成
-            _context.CheckAndAutoMerge(playerId);
         }
         
         //发放大招牌

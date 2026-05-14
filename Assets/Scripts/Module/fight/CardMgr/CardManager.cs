@@ -85,11 +85,6 @@ namespace Module.fight.CardMgr
         }
         
         #region 主要操作
-        public void PrepareHandsForNewLevel()
-        {
-            CombatSystem.PrepareHandsForNewLevel(LOCAL_PLAYER_ID, _currentCharacterConfigIds);
-        }
-
         public void DrawCard(int count)
         {
             CombatSystem.DrawCard(LOCAL_PLAYER_ID, count);

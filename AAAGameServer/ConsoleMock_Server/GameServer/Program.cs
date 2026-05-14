@@ -1,4 +1,5 @@
-﻿using Network;
+﻿using GameProtocol;
+using Network;
 using Network.DataBase;
 using GameServer.Battle;
 using GameServer.Battle.Data;
@@ -11,6 +12,8 @@ namespace GameServer
 
         static void Main(string[] args)
         {
+            RegisterProtocolHandlers();
+
             var configManager = new ConfigManager();
             configManager.LoadAll(Path.Combine(AppContext.BaseDirectory, "Battle", "Data", "json"));
 
@@ -22,7 +25,23 @@ namespace GameServer
             Console.ReadKey();
 
             Console.WriteLine("服务器已关闭");
+        }
 
+        private static void RegisterProtocolHandlers()
+        {
+            ProtocolRouter.Register(ActionCode.Logon, new LogonHandler());
+            ProtocolRouter.Register(ActionCode.Login, new LogonHandler());
+            ProtocolRouter.Register(ActionCode.ChatPrivate, new ChatHandler());
+            ProtocolRouter.Register(ActionCode.GetChatHistory, new ChatHandler());
+            ProtocolRouter.Register(ActionCode.FriendOperation, new FriendHandler());
+            ProtocolRouter.Register(ActionCode.Heartbeat, new HeartbeatHandler());
+            ProtocolRouter.Register(ActionCode.EnterPve, new BattleHandler());
+            ProtocolRouter.Register(ActionCode.PlayCard, new BattleHandler());
+            ProtocolRouter.Register(ActionCode.EndTurn, new BattleHandler());
+            ProtocolRouter.Register(ActionCode.CommitRound, new BattleHandler());
+            ProtocolRouter.Register(ActionCode.MoveCard, new BattleHandler());
+            ProtocolRouter.Register(ActionCode.UnDoAction, new BattleHandler());
+            ProtocolRouter.Register(ActionCode.RequestBattleState, new BattleHandler());
         }
     }
 }
