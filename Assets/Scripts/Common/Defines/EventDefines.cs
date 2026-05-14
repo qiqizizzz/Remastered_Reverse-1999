@@ -14,7 +14,7 @@ namespace Common.Defines
         public const string OpenGameView = "OpenGameView";
         public const string OpenMainMenuView = "OpenMainMenuView";
         public const string OpenMoreOptionsView = "OpenMoreOptionsView";
-        public const string OpenChatView = "OpenChatViewView";
+        public const string OpenChatView = "OpenChatView";
         public const string OpenTipBoxView = "OpenTipBoxView";
         public const string OpenNoticeView = "OpenNoticeView";
         public const string OpenSettingView = "OpenSettingView";
@@ -45,7 +45,6 @@ namespace Common.Defines
         //战斗相关事件
         public const string OnPlayerTurnStart = "OnPlayerTurnStart";
         public const string OnPlayerTurnOutput = "OnPlayerTurnOutput";
-        //public const string OnEnemyTurn = "OnEnemyTurn";
         public const string OnSelectEnemyTarget = "OnSelectEnemyTarget";
         public const string OnCardExecuteUI = "OnCardExecuteUI";
         public const string OnMoveActionExecute = "OnMoveActionExecute";
@@ -60,6 +59,5 @@ namespace Common.Defines
         public const string OnBattleServerResponse = "OnBattleServerResponse";
         public const string OnBattleTurnStart = "OnBattleTurnStart";
         public const string OnBattleTurnEnd = "OnBattleTurnEnd";
-        //public const string OnBattleStateChanged = "OnBattleStateChanged";
     }
 }

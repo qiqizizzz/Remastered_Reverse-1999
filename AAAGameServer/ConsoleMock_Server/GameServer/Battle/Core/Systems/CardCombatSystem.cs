@@ -15,8 +15,6 @@ namespace GameServer.Battle.Core.Systems
         private readonly CombatEventBus _eventBus;
         private readonly Random _random;
 
-        private static int num = 0;
-
         public CardCombatSystem(CombatContext context, ICardCatalog cardCatalog, CombatEventBus eventBus)
         {
             _context = context;

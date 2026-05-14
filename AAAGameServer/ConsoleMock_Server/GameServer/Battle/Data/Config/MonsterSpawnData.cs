@@ -10,7 +10,9 @@ namespace GameServer.Battle.Data.Config
 {
     public class MonsterSpawnData
     {
-        public int monsterId { get; set; }
-        public int count { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("monsterId")]
+        public int MonsterId { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("count")]
+        public int Count { get; set; }
     }
 }

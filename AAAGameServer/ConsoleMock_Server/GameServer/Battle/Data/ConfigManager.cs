@@ -19,6 +19,8 @@ namespace GameServer.Battle.Data
 
         private Dictionary<int, CharacterDataConfig> _heroDict;
         private Dictionary<int, CharacterDataConfig> _enemyDict;
+        private Dictionary<int, CardDataConfig> _cardDict;
+        private Dictionary<int, List<CardDataConfig>> _cardByOwnerDict;
 
         public void LoadAll(string configDir)
         {
@@ -32,6 +34,22 @@ namespace GameServer.Battle.Data
 
                 _heroDict = Heroes.ToDictionary(h => h.Id);
                 _enemyDict = Enemies.ToDictionary(e => e.Id);
+
+                var allCards = new List<CardDataConfig>();
+                allCards.AddRange(HeroCards);
+                allCards.AddRange(EnemyCards);
+                _cardDict = allCards.ToDictionary(c => c.Id);
+
+                _cardByOwnerDict = new Dictionary<int, List<CardDataConfig>>();
+                foreach (var card in allCards)
+                {
+                    if (!_cardByOwnerDict.TryGetValue(card.OwnerId, out var list))
+                    {
+                        list = new List<CardDataConfig>();
+                        _cardByOwnerDict[card.OwnerId] = list;
+                    }
+                    list.Add(card);
+                }
 
                 QLog.Info($"[ConfigManager] 配置加载完成: HeroCards={HeroCards.Count}, EnemyCards={EnemyCards.Count}, Heroes={Heroes.Count}, Enemies={Enemies.Count}, Levels={Levels.Count}");
             }
@@ -53,22 +71,16 @@ namespace GameServer.Battle.Data
         // ICardCatalog 实现：根据卡牌配置Id查找卡牌数据
         public CardDataConfig Get(int id)
         {
-            var heroCard = HeroCards?.Find(c => c.Id == id);
-            if (heroCard != null) return heroCard;
-
-            var enemyCard = EnemyCards?.Find(c => c.Id == id);
-            return enemyCard;
+            if (_cardDict != null && _cardDict.TryGetValue(id, out var card)) return card;
+            return null;
         }
 
         // ICardCatalog 实现：根据角色配置Id获取该角色的所有卡牌
         public IReadOnlyList<CardDataConfig> GetCharacterCards(int characterId)
         {
-            var result = new List<CardDataConfig>();
-            if (HeroCards != null)
-                result.AddRange(HeroCards.FindAll(c => c.OwnerId == characterId));
-            if (EnemyCards != null)
-                result.AddRange(EnemyCards.FindAll(c => c.OwnerId == characterId));
-            return result;
+            if (_cardByOwnerDict != null && _cardByOwnerDict.TryGetValue(characterId, out var cards))
+                return cards;
+            return Array.Empty<CardDataConfig>();
         }
 
         private List<T> LoadList<T>(string path)

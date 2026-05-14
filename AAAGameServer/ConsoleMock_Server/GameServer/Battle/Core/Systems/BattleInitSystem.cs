@@ -121,14 +121,14 @@ namespace GameServer.Battle.Core.Systems
 
             foreach (var spawn in monsterSpawns)
             {
-                var enemyConfig = _env.ConfigManager.GetCharacter(spawn.monsterId);
+                var enemyConfig = _env.ConfigManager.GetCharacter(spawn.MonsterId);
                 if (enemyConfig == null) continue;
 
-                for (int i = 0; i < spawn.count; i++)
+                for (int i = 0; i < spawn.Count; i++)
                 {
                     var entity = new CombatEntity(
                         _nextInstanceId++,
-                        spawn.monsterId,
+                        spawn.MonsterId,
                         enemyOwnerId++,
                         enemyConfig.Property.Hp,
                         0
