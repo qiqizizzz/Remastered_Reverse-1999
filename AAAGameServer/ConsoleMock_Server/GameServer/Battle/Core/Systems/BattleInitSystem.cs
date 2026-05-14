@@ -10,48 +10,28 @@ using System;
 using System.Collections.Generic;
 using GameProtocol;
 using GameServer.Battle.Core.Entities;
-using GameServer.Battle.Core.EventBus;
 using GameServer.Battle.Core.Extensions;
-using GameServer.Battle.Core.Serialization;
-using GameServer.Battle.Data;
 using GameServer.Battle.Data.Config;
 
 namespace GameServer.Battle.Core.Systems
 {
     internal class BattleInitSystem
     {
+        #region 字段
+
         private const int ENEMY_OWNER_START_ID = 2;
 
-        private readonly ConfigManager _configManager;
-        private readonly CombatContext _context;
-        private readonly CardCombatSystem _cardSystem;
-        private readonly BattleEventBuilder _eventBuilder;
-        private readonly BattleProtoSerializer _protoSerializer;
-        private readonly List<CombatEntity> _allEntities;
-        private readonly int _playerId;
-        private readonly int _maxActionPoint;
-
+        private readonly BattleEnv _env;
         private int _nextInstanceId;
 
-        public BattleInitSystem(
-            ConfigManager configManager,
-            CombatContext context,
-            CardCombatSystem cardSystem,
-            BattleEventBuilder eventBuilder,
-            BattleProtoSerializer protoSerializer,
-            List<CombatEntity> allEntities,
-            int playerId,
-            int maxActionPoint)
+        #endregion
+
+        public BattleInitSystem(BattleEnv env)
         {
-            _configManager = configManager;
-            _context = context;
-            _cardSystem = cardSystem;
-            _eventBuilder = eventBuilder;
-            _protoSerializer = protoSerializer;
-            _allEntities = allEntities;
-            _playerId = playerId;
-            _maxActionPoint = maxActionPoint;
+            _env = env;
         }
+
+        #region 公共接口
 
         public void Initialize(int levelId, List<int> heroConfigIds, List<MonsterSpawnData> monsterSpawns)
         {
@@ -67,30 +47,30 @@ namespace GameServer.Battle.Core.Systems
             int targetNormalCount = getTargetNormalHandCount();
             while (true)
             {
-                while (_context.CheckAndAutoMerge(_playerId)) { }
+                while (_env.Context.CheckAndAutoMerge(_env.PlayerId)) { }
 
                 int normalCount = getNormalHandCardCount();
                 int handTotal = normalCount + getUltimateHandCardCount();
                 Console.WriteLine($"[processRoundStartHandFix] 当前普通手牌数: {normalCount}, 目标: {targetNormalCount}, 手牌总数: {handTotal}");
                 if (normalCount >= targetNormalCount) break;
 
-                if (!_context.PlayerDecks.TryGetValue(_playerId, out var deck)) break;
+                if (!_env.Context.PlayerDecks.TryGetValue(_env.PlayerId, out var deck)) break;
                 if (deck.DrawPile.Count == 0 && deck.DiscardPile.Count == 0) break;
 
                 int needCount = targetNormalCount - normalCount;
-                _cardSystem.DrawCard(_playerId, needCount);
+                _env.CardSystem.DrawCard(_env.PlayerId, needCount);
             }
 
-            foreach (var kvp in _context.Entities)
+            foreach (var kvp in _env.Context.Entities)
             {
                 var entity = kvp.Value;
                 if (entity.CurrentHp <= 0) continue;
-                if (entity.ActionPoint >= _maxActionPoint)
+                if (entity.ActionPoint >= _env.MaxActionPoint)
                 {
-                    if (_cardSystem.TryGiveUltimateCard(_playerId, entity.ConfigId))
+                    if (_env.CardSystem.TryGiveUltimateCard(_env.PlayerId, entity.ConfigId))
                     {
                         entity.ActionPoint = 0;
-                        _context.EventBus?.OnActionPointChanged?.Invoke(_playerId, entity.ConfigId, 0);
+                        _env.Context.EventBus?.OnActionPointChanged?.Invoke(_env.PlayerId, entity.ConfigId, 0);
                     }
                 }
             }
@@ -107,27 +87,30 @@ namespace GameServer.Battle.Core.Systems
                 1 => 2,
                 _ => 4
             };
-            _context.ActionQueue.MaxQueueSize = maxQueueSize;
+            _env.Context.ActionQueue.MaxQueueSize = maxQueueSize;
         }
 
+        #endregion
+
         #region 实体创建与牌堆初始化
+
         private void createHeroEntities(List<int> heroConfigIds)
         {
             foreach (var heroId in heroConfigIds)
             {
-                var heroConfig = _configManager.GetCharacter(heroId);
+                var heroConfig = _env.ConfigManager.GetCharacter(heroId);
                 if (heroConfig == null) continue;
 
                 var entity = new CombatEntity(
                     _nextInstanceId++,
                     heroId,
-                    _playerId,
+                    _env.PlayerId,
                     heroConfig.Property.Hp,
                     0
                 );
 
-                _context.Entities[heroId] = entity;
-                _allEntities.Add(entity);
+                _env.Context.Entities[heroId] = entity;
+                _env.AllEntities.Add(entity);
             }
         }
 
@@ -137,7 +120,7 @@ namespace GameServer.Battle.Core.Systems
 
             foreach (var spawn in monsterSpawns)
             {
-                var enemyConfig = _configManager.GetCharacter(spawn.monsterId);
+                var enemyConfig = _env.ConfigManager.GetCharacter(spawn.monsterId);
                 if (enemyConfig == null) continue;
 
                 for (int i = 0; i < spawn.count; i++)
@@ -150,15 +133,15 @@ namespace GameServer.Battle.Core.Systems
                         0
                     );
 
-                    _allEntities.Add(entity);
+                    _env.AllEntities.Add(entity);
                 }
             }
         }
 
         private void initDecks(int levelId, List<int> heroConfigIds)
         {
-            _cardSystem.InitDeck(_playerId, heroConfigIds);
-            _cardSystem.PrepareHandsForNewLevel(_playerId, heroConfigIds);
+            _env.CardSystem.InitDeck(_env.PlayerId, heroConfigIds);
+            _env.CardSystem.PrepareHandsForNewLevel(_env.PlayerId, heroConfigIds);
             UpdateScalingRules();
             ProcessRoundStartHandFix();
 
@@ -167,16 +150,18 @@ namespace GameServer.Battle.Core.Systems
                 EventType = BattleEventType.BattleStart,
                 BattleStart = new BattleStartParams { LevelId = levelId }
             };
-            foreach (var entity in _allEntities)
+            foreach (var entity in _env.AllEntities)
             {
-                battleStartEvent.BattleStart.Entities.Add(_protoSerializer.ToProtoEntity(entity));
+                battleStartEvent.BattleStart.Entities.Add(_env.ProtoSerializer.ToProtoEntity(entity));
             }
-            _eventBuilder.AddEvent(battleStartEvent);
+            _env.EventBuilder.AddEvent(battleStartEvent);
             Console.WriteLine($"[initDecks] 牌库初始化完成, 英雄数: {heroConfigIds.Count}");
         }
+
         #endregion
 
         #region 工具函数
+
         private int getTargetNormalHandCount()
         {
             int aliveHeroCount = getAliveHeroCount();
@@ -192,12 +177,12 @@ namespace GameServer.Battle.Core.Systems
 
         private int getNormalHandCardCount()
         {
-            if (!_context.PlayerDecks.TryGetValue(_playerId, out var deck)) return 0;
+            if (!_env.Context.PlayerDecks.TryGetValue(_env.PlayerId, out var deck)) return 0;
 
             int count = 0;
             foreach (var card in deck.HandCards)
             {
-                var config = _context.CardCatalog.Get(card.ConfigId);
+                var config = _env.Context.CardCatalog.Get(card.ConfigId);
                 if (config != null && config.CardType != CardType.Ultimate)
                     count++;
             }
@@ -206,12 +191,12 @@ namespace GameServer.Battle.Core.Systems
 
         private int getUltimateHandCardCount()
         {
-            if (!_context.PlayerDecks.TryGetValue(_playerId, out var deck)) return 0;
+            if (!_env.Context.PlayerDecks.TryGetValue(_env.PlayerId, out var deck)) return 0;
 
             int count = 0;
             foreach (var card in deck.HandCards)
             {
-                var config = _context.CardCatalog.Get(card.ConfigId);
+                var config = _env.Context.CardCatalog.Get(card.ConfigId);
                 if (config != null && config.CardType == CardType.Ultimate)
                     count++;
             }
@@ -221,13 +206,14 @@ namespace GameServer.Battle.Core.Systems
         private int getAliveHeroCount()
         {
             int count = 0;
-            foreach (var entity in _allEntities)
+            foreach (var entity in _env.AllEntities)
             {
-                if (entity.OwnerPlayerId == _playerId && entity.CurrentHp > 0)
+                if (entity.OwnerPlayerId == _env.PlayerId && entity.CurrentHp > 0)
                     count++;
             }
             return count;
         }
+
         #endregion
     }
 }

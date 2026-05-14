@@ -6,6 +6,7 @@
 * └──────────────────────────────────┘
 */
 
+using System;
 using System.Collections.Generic;
 using GameProtocol;
 using GameServer.Battle.AI;
@@ -19,43 +20,31 @@ namespace GameServer.Battle.Core.Systems
 {
     internal class BattleTurnSystem
     {
-        private readonly CombatContext _context;
+        #region 字段
+
+        private readonly BattleEnv _env;
         private readonly CombatCommandProcessor _commandProcessor;
         private readonly CardSkillExecutor _skillExecutor;
         private readonly IEnemyAI _enemyAI;
-        private readonly BattleEventBuilder _eventBuilder;
-        private readonly CardCombatSystem _cardSystem;
         private readonly BattleInitSystem _initSystem;
-        private readonly ConfigManager _configManager;
-        private readonly BattleProtoSerializer _protoSerializer;
-        private readonly List<CombatEntity> _allEntities;
-        private readonly int _playerId;
+
+        #endregion
 
         public BattleTurnSystem(
-            CombatContext context,
+            BattleEnv env,
             CombatCommandProcessor commandProcessor,
             CardSkillExecutor skillExecutor,
             IEnemyAI enemyAI,
-            BattleEventBuilder eventBuilder,
-            CardCombatSystem cardSystem,
-            BattleInitSystem initSystem,
-            ConfigManager configManager,
-            BattleProtoSerializer protoSerializer,
-            List<CombatEntity> allEntities,
-            int playerId)
+            BattleInitSystem initSystem)
         {
-            _context = context;
+            _env = env;
             _commandProcessor = commandProcessor;
             _skillExecutor = skillExecutor;
             _enemyAI = enemyAI;
-            _eventBuilder = eventBuilder;
-            _cardSystem = cardSystem;
             _initSystem = initSystem;
-            _configManager = configManager;
-            _protoSerializer = protoSerializer;
-            _allEntities = allEntities;
-            _playerId = playerId;
         }
+
+        #region 公共接口
 
         public void ResolvePlayerActions()
         {
@@ -66,7 +55,7 @@ namespace GameServer.Battle.Core.Systems
             {
                 if (cmd is not PlayCardCommand playCmd) continue;
 
-                _eventBuilder.AddEvent(buildPlayerExecuteEvent(playCmd, executeIndex));
+                _env.EventBuilder.AddEvent(buildPlayerExecuteEvent(playCmd, executeIndex));
                 executeIndex++;
                 _skillExecutor.ExecuteCardEffect(playCmd.SenderPlayerId, playCmd.Card, playCmd.TargetInstanceId);
             }
@@ -75,9 +64,9 @@ namespace GameServer.Battle.Core.Systems
         public void ResolveEnemyTurn()
         {
             var enemies = new List<CombatEntity>();
-            foreach (var entity in _allEntities)
+            foreach (var entity in _env.AllEntities)
             {
-                if (entity.OwnerPlayerId != _playerId && entity.CurrentHp > 0)
+                if (entity.OwnerPlayerId != _env.PlayerId && entity.CurrentHp > 0)
                     enemies.Add(entity);
             }
 
@@ -91,18 +80,22 @@ namespace GameServer.Battle.Core.Systems
 
         public void StartNextRound()
         {
-            _context.ActionQueue.QueuedCards.Clear();
-            _context.CurrentRound++;
+            _env.Context.ActionQueue.QueuedCards.Clear();
+            _env.Context.CurrentRound++;
 
             _initSystem.ProcessRoundStartHandFix();
 
-            _eventBuilder.AddEvent(new BattleEvent
+            _env.EventBuilder.AddEvent(new BattleEvent
             {
                 EventType = BattleEventType.TurnStart,
-                TurnStart = new TurnStartParams { IsPlayerTurn = true, RoundNumber = _context.CurrentRound }
+                TurnStart = new TurnStartParams { IsPlayerTurn = true, RoundNumber = _env.Context.CurrentRound }
             });
-            Console.WriteLine($"[startNextRound] 第 {_context.CurrentRound} 回合开始");
+            Console.WriteLine($"[startNextRound] 第 {_env.Context.CurrentRound} 回合开始");
         }
+
+        #endregion
+
+        #region 事件构建
 
         private BattleEvent buildPlayerExecuteEvent(PlayCardCommand playCmd, int executeIndex)
         {
@@ -125,11 +118,11 @@ namespace GameServer.Battle.Core.Systems
             if (decision == null) return;
 
             var card = new CardEntity(decision.CardConfigId);
-            _eventBuilder.AddEvent(buildEnemyExecuteEvent(enemy, card, decision.TargetInstanceId));
+            _env.EventBuilder.AddEvent(buildEnemyExecuteEvent(enemy, card, decision.TargetInstanceId));
             _skillExecutor.ExecuteCardEffect(enemy.OwnerPlayerId, card, decision.TargetInstanceId);
         }
 
-        private static BattleEvent buildEnemyExecuteEvent(CombatEntity enemy, CardEntity card, int targetInstanceId)
+        private BattleEvent buildEnemyExecuteEvent(CombatEntity enemy, CardEntity card, int targetInstanceId)
         {
             return new BattleEvent
             {
@@ -145,14 +138,20 @@ namespace GameServer.Battle.Core.Systems
             };
         }
 
+        #endregion
+
+        #region 工具函数
+
         private bool hasAliveHeroes()
         {
-            foreach (var entity in _allEntities)
+            foreach (var entity in _env.AllEntities)
             {
-                if (entity.OwnerPlayerId == _playerId && entity.CurrentHp > 0)
+                if (entity.OwnerPlayerId == _env.PlayerId && entity.CurrentHp > 0)
                     return true;
             }
             return false;
         }
+
+        #endregion
     }
 }
