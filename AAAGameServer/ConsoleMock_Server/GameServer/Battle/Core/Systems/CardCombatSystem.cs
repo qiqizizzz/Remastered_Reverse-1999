@@ -1,4 +1,5 @@
-﻿using GameServer.Battle.Core.Entities;
+﻿using GameServer.Common;
+using GameServer.Battle.Core.Entities;
 using GameServer.Battle.Core.EventBus;
 using GameServer.Battle.Core.Extensions;
 using GameServer.Battle.Data;
@@ -40,7 +41,7 @@ namespace GameServer.Battle.Core.Systems
             foreach (var charId in CharacterConfigIds)
             {
                 var charCards = _cardCatalog.GetCharacterCards(charId);
-                Console.WriteLine($"[InitDeck] 角色 {charId} 的卡牌数量: {charCards.Count}");
+                QLog.Info($"[InitDeck] 角色 {charId} 的卡牌数量: {charCards.Count}");
 
                 foreach (var card in charCards)
                 {
@@ -54,7 +55,7 @@ namespace GameServer.Battle.Core.Systems
             }
 
             ShuffleCard(deck.DrawPile);
-            Console.WriteLine($"[InitDeck] 牌库初始化完成: DrawPile={deck.DrawPile.Count}, HandCards={deck.HandCards.Count}, DiscardPile={deck.DiscardPile.Count}");
+            QLog.Info($"[InitDeck] 牌库初始化完成: DrawPile={deck.DrawPile.Count}, HandCards={deck.HandCards.Count}, DiscardPile={deck.DiscardPile.Count}");
         }
 
         #region 准备阶段与洗牌
@@ -92,7 +93,7 @@ namespace GameServer.Battle.Core.Systems
 
             ShuffleCard(deck.HandCards);
             _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
-            Console.WriteLine($"[PrepareHandsForNewLevel] 初始手牌准备完成: HandCards={deck.HandCards.Count}, DrawPile={deck.DrawPile.Count}");
+            QLog.Info($"[PrepareHandsForNewLevel] 初始手牌准备完成: HandCards={deck.HandCards.Count}, DrawPile={deck.DrawPile.Count}");
         }
 
         //Fisher–Yates 洗牌算法
@@ -125,14 +126,14 @@ namespace GameServer.Battle.Core.Systems
                 {
                     if (deck.DiscardPile.Count == 0)
                     {
-                        Console.WriteLine($"[DrawCard] 抽牌失败: 牌堆({deck.DrawPile.Count})和弃牌堆({deck.DiscardPile.Count})都没有牌了, 请求抽{count}张, 实际抽了{drawn}张");
+                        QLog.Info($"[DrawCard] 抽牌失败: 牌堆({deck.DrawPile.Count})和弃牌堆({deck.DiscardPile.Count})都没有牌了, 请求抽{count}张, 实际抽了{drawn}张");
                         break;
                     }
 
                     deck.DrawPile.AddRange(deck.DiscardPile);
                     deck.DiscardPile.Clear();
                     ShuffleCard(deck.DrawPile);
-                    Console.WriteLine($"[DrawCard] 弃牌堆洗入抽牌堆, 当前抽牌堆数量: {deck.DrawPile.Count}");
+                    QLog.Info($"[DrawCard] 弃牌堆洗入抽牌堆, 当前抽牌堆数量: {deck.DrawPile.Count}");
                 }
 
                 CardEntity drawnCard = deck.DrawPile[^1];
@@ -143,7 +144,7 @@ namespace GameServer.Battle.Core.Systems
             }
 
             _eventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
-            Console.WriteLine($"[DrawCard] 抽牌完成: 请求{count}张, 实际{drawn}张, DrawPile={deck.DrawPile.Count}, HandCards={deck.HandCards.Count}, DiscardPile={deck.DiscardPile.Count}");
+            QLog.Info($"[DrawCard] 抽牌完成: 请求{count}张, 实际{drawn}张, DrawPile={deck.DrawPile.Count}, HandCards={deck.HandCards.Count}, DiscardPile={deck.DiscardPile.Count}");
         }
 
         //弃牌

@@ -1,4 +1,5 @@
-﻿using GameServer.Battle.Data;
+﻿using GameServer.Common;
+using GameServer.Battle.Data;
 using GameServer.Battle.Data.Config;
 using System;
 using System.Collections.Generic;
@@ -32,11 +33,11 @@ namespace GameServer.Battle.Data
                 _heroDict = Heroes.ToDictionary(h => h.Id);
                 _enemyDict = Enemies.ToDictionary(e => e.Id);
 
-                Console.WriteLine($"[ConfigManager] 配置加载完成: HeroCards={HeroCards.Count}, EnemyCards={EnemyCards.Count}, Heroes={Heroes.Count}, Enemies={Enemies.Count}, Levels={Levels.Count}");
+                QLog.Info($"[ConfigManager] 配置加载完成: HeroCards={HeroCards.Count}, EnemyCards={EnemyCards.Count}, Heroes={Heroes.Count}, Enemies={Enemies.Count}, Levels={Levels.Count}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[ConfigManager] 配置加载失败: {ex.Message}");
+                QLog.Info($"[ConfigManager] 配置加载失败: {ex.Message}");
                 throw;
             }
         }

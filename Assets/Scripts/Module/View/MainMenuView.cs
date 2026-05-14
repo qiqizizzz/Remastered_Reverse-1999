@@ -15,6 +15,7 @@ using MVC;
 using MVC.Extensions;
 using MVC.View;
 using TMPro;
+using Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -120,9 +121,7 @@ namespace Module.View
                 yield return null;
             }
   
-#if UNITY_EDITOR
-            Debug.LogError($"[{nameof(MainMenuView)}] 未找到背景根节点：{MAIN_MENU_BG_ROOT}");
-#endif
+            QLog.Error($"[{nameof(MainMenuView)}] 未找到背景根节点：{MAIN_MENU_BG_ROOT}");
         }
 
         #region 登陆/注册按钮事件
@@ -145,7 +144,7 @@ namespace Module.View
         {
             if (pack.ReturnCode == ReturnCode.Succeed)
             {
-                Debug.Log($"登陆成功，欢迎 {pack.LoginPack?.Username??accountLogin.text}!");
+                QLog.Info($"登陆成功，欢迎 {pack.LoginPack?.Username??accountLogin.text}!");
                 
                 loginView.SetActive(false);
                 GameApp.GameDataManager.SetPlayerName(accountLogin.text);
@@ -153,14 +152,14 @@ namespace Module.View
             }
             else
             {
-                Debug.LogError($"登陆失败，错误码: {pack.StrMsg}");
+                QLog.Error($"登陆失败，错误码: {pack.StrMsg}");
                 //TODO：显示错误提示
             }
         }
 
         private void onRegisterBtnClick()
         {
-            Debug.Log("点击了注册按钮,尝试注册中...");
+            QLog.Info("点击了注册按钮,尝试注册中...");
             
             MainPack pack = new MainPack();
             pack.RequestCode = RequestCode.User;
@@ -178,7 +177,7 @@ namespace Module.View
         {
             if (pack.ReturnCode == ReturnCode.Succeed)
             {
-                Debug.Log($"注册成功 {pack.LoginPack?.Username??accountLogin.text}!");
+                QLog.Info($"注册成功 {pack.LoginPack?.Username??accountLogin.text}!");
                 
                 //TODO：显示注册成功提示，并切换到登录界面
                 registerView.SetActive(false);
@@ -186,7 +185,7 @@ namespace Module.View
             }
             else
             {
-                Debug.LogError($"注册失败，错误码: {pack.StrMsg}");
+                QLog.Error($"注册失败，错误码: {pack.StrMsg}");
                 //TODO：显示错误提示
             }
         }
@@ -213,12 +212,12 @@ namespace Module.View
             {
                 GameApp.ViewManager.Open(ViewType.NoticeView, "失去连接,确认重新连接?", new Action(() =>
                     {
-                        Debug.Log("正在重新连接...");
+                        QLog.Info("正在重新连接...");
                         GameApp.NetworkManager.Connect();
                     }),
                     new Action(() =>
                     {
-                        Debug.Log("取消重新连接");
+                        QLog.Info("取消重新连接");
                         GameApp.ViewManager.CloseAll();
                         ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
                     }));

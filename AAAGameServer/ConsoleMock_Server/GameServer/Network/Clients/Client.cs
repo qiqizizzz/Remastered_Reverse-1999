@@ -1,4 +1,5 @@
 ﻿using GameProtocol;
+using GameServer.Common;
 using Google.Protobuf;
 using System.Net.Sockets;
 
@@ -51,7 +52,7 @@ namespace Network
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[{_clientId}] 开始接收失败:{ex.Message}");
+                QLog.Info($"[{_clientId}] 开始接收失败:{ex.Message}");
                 DisConnect();
             }
         }
@@ -67,7 +68,7 @@ namespace Network
                 if(receiveLength == 0)
                 {
                     //客户端主动断开连接
-                    Console.WriteLine($"[{_clientId}] 客户端已断开连接");
+                    QLog.Info($"[{_clientId}] 客户端已断开连接");
                     DisConnect();
                     return;
                 }
@@ -78,12 +79,12 @@ namespace Network
             }
             catch (SocketException se)
             {
-                Console.WriteLine($"[{_clientId}] Socket异常:{se.Message}");
+                QLog.Info($"[{_clientId}] Socket异常:{se.Message}");
                 DisConnect();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[{_clientId}] 接收异常:{ex.Message}");
+                QLog.Info($"[{_clientId}] 接收异常:{ex.Message}");
                 DisConnect();
             }
         }
@@ -105,11 +106,11 @@ namespace Network
                     _server.RemoveClient(_clientId ,UserName);
                 }
 
-                Console.WriteLine($"[{_clientId}] 连接已清理");
+                QLog.Info($"[{_clientId}] 连接已清理");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[{_clientId}] 断开异常:{ex.Message}");
+                QLog.Info($"[{_clientId}] 断开异常:{ex.Message}");
             }
         }
 
@@ -142,7 +143,7 @@ namespace Network
                         //检查消息长度合法性
                         if (_messageLength <= 0 || _messageLength > _messageBuffer.Length)
                         {
-                            Console.WriteLine($"[{_clientId}] 非法消息长度:{_messageLength}");
+                            QLog.Info($"[{_clientId}] 非法消息长度:{_messageLength}");
                             DisConnect();
                             return;
                         }
@@ -190,7 +191,7 @@ namespace Network
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[{_clientId}] 处理消息异常: {ex.Message}");
+                QLog.Info($"[{_clientId}] 处理消息异常: {ex.Message}");
             }
         }
 
@@ -199,7 +200,7 @@ namespace Network
         {
             MainPack pack = MainPack.Parser.ParseFrom(message);
             if (!ProtocolRouter.Route(this, pack))
-                Console.WriteLine($"[{_clientId}] 未知协议: {pack.ActionCode}");
+                QLog.Info($"[{_clientId}] 未知协议: {pack.ActionCode}");
         }
 
         #endregion
@@ -223,7 +224,7 @@ namespace Network
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[{_clientId}] 发送字节失败: {ex.Message}");
+                QLog.Info($"[{_clientId}] 发送字节失败: {ex.Message}");
             }
         }
 
@@ -238,7 +239,7 @@ namespace Network
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[{_clientId}] 发送回调异常: {ex.Message}");
+                QLog.Info($"[{_clientId}] 发送回调异常: {ex.Message}");
             }
         }
 

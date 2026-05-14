@@ -14,6 +14,7 @@ using DG.Tweening;
 using Module.Character.Components;
 using Spine;
 using Spine.Unity;
+using Common;
 using UnityEngine;
 using Event = Spine.Event;
 
@@ -145,7 +146,7 @@ namespace Module.Character
         {
             if (string.IsNullOrEmpty(animName))
             {
-                Debug.LogWarning($"{gameObject.name} 尝试播放一个空的动画");
+                QLog.Warning($"{gameObject.name} 尝试播放一个空的动画");
                 return;
             }
             

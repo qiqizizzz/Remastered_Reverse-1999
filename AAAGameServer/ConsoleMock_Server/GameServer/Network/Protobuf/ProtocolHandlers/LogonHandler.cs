@@ -7,6 +7,7 @@
 */
 
 using GameProtocol;
+using GameServer.Common;
 using Google.Protobuf;
 using GameServer.Battle;
 using Network.DataBase;
@@ -17,7 +18,7 @@ namespace Network
     {
         public void Handle(Client client, MainPack pack)
         {
-            Console.WriteLine($"[收到请求]:{pack.RequestCode} - {pack.ActionCode}");
+            QLog.Info($"[收到请求]:{pack.RequestCode} - {pack.ActionCode}");
 
             if (pack.ActionCode == ActionCode.Logon)
                 handleRegister(client, pack);
@@ -29,7 +30,7 @@ namespace Network
         {
             string username = pack.LoginPack.Username;
             string password = pack.LoginPack.Password;
-            Console.WriteLine($"[尝试注册] 用户名:{username} 密码:{password}");
+            QLog.Info($"[尝试注册] 用户名:{username} 密码:{password}");
 
             bool isSuccess = DBManager.Register(username, password);
 
@@ -41,7 +42,7 @@ namespace Network
                 StrMsg = isSuccess ? "注册成功!" : "注册失败!用户名已存在"
             };
 
-            Console.WriteLine(isSuccess ? $"{client} 注册成功" : $"{client} 注册失败 - 用户名已存在");
+            QLog.Info(isSuccess ? $"{client} 注册成功" : $"{client} 注册失败 - 用户名已存在");
             client.Send(resPack.ToByteArray());
         }
 
@@ -49,7 +50,7 @@ namespace Network
         {
             string username = pack.LoginPack.Username;
             string password = pack.LoginPack.Password;
-            Console.WriteLine($"[{client}] 尝试登录: 账号={username}");
+            QLog.Info($"[{client}] 尝试登录: 账号={username}");
 
             int loginResult = DBManager.Login(username, password);
 
@@ -66,7 +67,7 @@ namespace Network
 
                 resPack.ReturnCode = ReturnCode.Succeed;
                 resPack.StrMsg = "登录成功！";
-                Console.WriteLine($"[{client}] 登录成功");
+                QLog.Info($"[{client}] 登录成功");
 
                 DBManager.UpdateLastLoginTime(username);
             }
@@ -74,13 +75,13 @@ namespace Network
             {
                 resPack.ReturnCode = ReturnCode.Failed;
                 resPack.StrMsg = "登录失败，账号被封禁！";
-                Console.WriteLine($"[{client}] 登录失败: 账号被封禁");
+                QLog.Info($"[{client}] 登录失败: 账号被封禁");
             }
             else
             {
                 resPack.ReturnCode = ReturnCode.Failed;
                 resPack.StrMsg = "登录失败，用户名或密码错误！";
-                Console.WriteLine($"[{client}] 登录失败: 密码错误或用户不存在");
+                QLog.Info($"[{client}] 登录失败: 密码错误或用户不存在");
             }
 
             client.Send(resPack.ToByteArray());

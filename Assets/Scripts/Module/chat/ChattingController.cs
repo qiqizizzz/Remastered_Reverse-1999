@@ -13,6 +13,7 @@ using GameProtocol;
 using Module.View;
 using MVC;
 using MVC.Controller;
+using Common;
 using UnityEngine;
 
 namespace Module.chat
@@ -193,7 +194,7 @@ namespace Module.chat
         #region 接收请求
         private void onReceiveChatMsg(MainPack pack)
         {
-            Debug.Log($"收到聊天消息的服务器响应，返回码：{pack.ReturnCode}");
+            QLog.Info($"收到聊天消息的服务器响应，返回码：{pack.ReturnCode}");
             if (pack.ReturnCode == ReturnCode.Succeed)
             {
                 //如果是别人发来的消息
@@ -213,19 +214,19 @@ namespace Module.chat
                     };
                     
                     saveToModel(sender, msg);
-                    Debug.Log("收到来自 " + sender + " 的消息: " + content);
+                    QLog.Info("收到来自 " + sender + " 的消息: " + content);
 
                     ApplyFunc(EventDefines.ReceiveNewMessage, sender, msg);
                 }
                 else
                 {
-                    Debug.Log($"发送成功");
+                    QLog.Info($"发送成功");
                     //TODO：更新消息状态为成功，并且刷新界面显示
                 }
             }
             else
             {
-                Debug.Log($"发送失败,请检查网络连接");
+                QLog.Info($"发送失败,请检查网络连接");
                 GameApp.ViewManager.Open(ViewType.TipBoxView, TipBoxType.chat, "发送失败");
             }
         }
@@ -250,14 +251,14 @@ namespace Module.chat
                             getSearchedUser(pack);
                             break;
                         default:
-                            Debug.Log("未知的好友操作类型");
+                            QLog.Info("未知的好友操作类型");
                             break;
                     }
                 }
             }
             else
             {
-                Debug.Log("好友操作失败");
+                QLog.Info("好友操作失败");
                 //TODO: 显示错误提示
             }
         }
@@ -291,13 +292,13 @@ namespace Module.chat
                     saveToModel(targetUser, msg);
                 }
 
-                Debug.Log($"成功拉取与 {targetUser} 的历史记录，共 {pack.ChatHistoryPack.ChatList.Count} 条");
+                QLog.Info($"成功拉取与 {targetUser} 的历史记录，共 {pack.ChatHistoryPack.ChatList.Count} 条");
 
                 ApplyFunc(EventDefines.UpdateChatHistory, targetUser);
             }
             else
             {
-                Debug.Log("没有获取到历史记录");
+                QLog.Info("没有获取到历史记录");
             }
         }
         
@@ -309,10 +310,10 @@ namespace Module.chat
             foreach (var friend in pack.FriendPack.FriendList)
             {
                 Model.FriendList.Add(friend);
-                Debug.Log(friend);
+                QLog.Info(friend);
             }
             
-            Debug.Log($"成功获取到好友列表，好友数量：{Model.FriendList.Count}");
+            QLog.Info($"成功获取到好友列表，好友数量：{Model.FriendList.Count}");
             
             ApplyFunc(EventDefines.UpdateFriendList);//通知视图更新好友列表
         }
@@ -322,7 +323,7 @@ namespace Module.chat
             List<FriendInfo> searchedUser = new List<FriendInfo>(pack.FriendPack.FriendList);
             List<FriendInfo> finalSearched = new List<FriendInfo>(searchedUser).Except(Model.FriendList).ToList();
             
-            Debug.Log($"成功获取到搜索列表，搜索数量：{finalSearched.Count}");
+            QLog.Info($"成功获取到搜索列表，搜索数量：{finalSearched.Count}");
             
             ApplyFunc(EventDefines.UpdateSearchedFriends, finalSearched);//通知视图更新搜索结果
         }
@@ -331,7 +332,7 @@ namespace Module.chat
         {
             if (pack.ReturnCode == ReturnCode.Succeed)
             {
-                Debug.Log("好友添加成功");
+                QLog.Info("好友添加成功");
             }
         }
 

@@ -9,6 +9,7 @@
 using Common.Defines;
 using GameProtocol;
 using Network;
+using Common;
 using UnityEngine;
 
 namespace Module.fight.Network
@@ -174,9 +175,7 @@ namespace Module.fight.Network
         {
             if (pack.ReturnCode == ReturnCode.Succeed) return true;
 
-#if UNITY_EDITOR
-            Debug.LogWarning($"[BattleNetwork] {actionCode} 失败: {pack.StrMsg}");
-#endif
+            QLog.Warning($"[BattleNetwork] {actionCode} 失败: {pack.StrMsg}");
             return false;
         }
 

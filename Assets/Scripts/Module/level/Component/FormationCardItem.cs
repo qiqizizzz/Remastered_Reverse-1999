@@ -8,6 +8,7 @@
 
 using System;
 using TMPro;
+using Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -41,7 +42,7 @@ namespace Module.level.Component
 
         public void RefreshData(string name, Sprite icon)
         {
-            Debug.Log("刷新卡牌数据，索引：" + CardIndex + ", 名称：" + name);
+            QLog.Info("刷新卡牌数据，索引：" + CardIndex + ", 名称：" + name);
             _icon.sprite = icon;
             _txtName.text = name;
             //_icon.gameObject.SetActive(icon != null);
@@ -49,7 +50,7 @@ namespace Module.level.Component
         
         private void OnCardBtnClicked()
         {
-            Debug.Log("点击了卡牌按钮，索引：" + CardIndex);
+            QLog.Info("点击了卡牌按钮，索引：" + CardIndex);
             _onClickCallback?.Invoke(CardIndex);
         }
     }

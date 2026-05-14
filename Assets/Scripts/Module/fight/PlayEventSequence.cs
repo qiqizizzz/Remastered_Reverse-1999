@@ -38,9 +38,7 @@ namespace Module.fight
                 {
                     if (t.IsFaulted)
                     {
-#if UNITY_EDITOR
-                        Debug.LogError($"[PlayEventSequence] 队列异常终止: {t.Exception}");
-#endif
+                        QLog.Error($"[PlayEventSequence] 队列异常终止: {t.Exception}");
                     }
                 }, TaskScheduler.FromCurrentSynchronizationContext());
         }
@@ -80,9 +78,7 @@ namespace Module.fight
             }
             catch (Exception ex)
             {
-#if UNITY_EDITOR
-                Debug.LogError($"[PlayEventSequence] 播放事件序列异常: {ex}");
-#endif
+                QLog.Error($"[PlayEventSequence] 播放事件序列异常: {ex}");
             }
             finally
             {

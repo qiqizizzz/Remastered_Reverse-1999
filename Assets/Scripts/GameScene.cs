@@ -17,6 +17,7 @@ using Module.level;
 using Module.Loading;
 using Module.Cultivation;
 using MVC;
+using Common;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -55,7 +56,7 @@ namespace DefaultNamespace
 
             isAppInitialized = true;
             
-            Debug.Log("<color=cyan>游戏所有模块与配置加载完毕，游戏正式开始！</color>");
+            QLog.Info("<color=cyan>游戏所有模块与配置加载完毕，游戏正式开始！</color>");
         }
 
         private void Update()

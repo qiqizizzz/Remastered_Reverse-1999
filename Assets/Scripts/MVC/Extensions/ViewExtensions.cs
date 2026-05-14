@@ -26,7 +26,7 @@ namespace MVC.Extensions
             model.SetSceneName(sceneName);
             model.callback = () => 
             {
-                Debug.Log($"[Extension] 场景 {sceneName} 加载完成");
+                QLog.Info($"[Extension] 场景 {sceneName} 加载完成");
                 onComplete?.Invoke();
             };
             

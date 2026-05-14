@@ -108,7 +108,7 @@ namespace Sound
                 {
                     if (clip == null)
                     { 
-                        Debug.LogError($"该资源不存在" + res);
+                        QLog.Error($"该资源不存在" + res);
                         return;
                     }
                     
@@ -141,7 +141,7 @@ namespace Sound
                 {
                     if(clip == null)
                     {
-                        Debug.LogError($"该资源不存在" + res);
+                        QLog.Error($"该资源不存在" + res);
                         return;
                     }
 

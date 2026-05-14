@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using MVC.Model;
 using MVC.View;
+using Common;
 using UnityEngine;
 
 namespace MVC.Controller
@@ -72,7 +73,7 @@ namespace MVC.Controller
             if (message.ContainsKey(eventName))
                 message[eventName]?.Invoke(args);
             else
-                Debug.Log("Error: 不存在事件" + eventName);
+                QLog.Info("Error: 不存在事件" + eventName);
         }
 
         // 触发其他控制器事件

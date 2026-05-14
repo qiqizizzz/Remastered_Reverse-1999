@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using GameProtocol;
+using GameServer.Common;
 using GameServer.Battle.AI;
 using GameServer.Battle.Core.Commands;
 using GameServer.Battle.Core.Entities;
@@ -90,7 +91,7 @@ namespace GameServer.Battle.Core.Systems
                 EventType = BattleEventType.TurnStart,
                 TurnStart = new TurnStartParams { IsPlayerTurn = true, RoundNumber = _env.Context.CurrentRound }
             });
-            Console.WriteLine($"[startNextRound] 第 {_env.Context.CurrentRound} 回合开始");
+            QLog.Info($"[startNextRound] 第 {_env.Context.CurrentRound} 回合开始");
         }
 
         #endregion

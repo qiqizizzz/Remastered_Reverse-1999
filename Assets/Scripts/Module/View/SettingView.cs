@@ -143,9 +143,7 @@ namespace Module.View
         #region 分辨率设置
         private void onResolutionDropdown(int index)
         {
-#if UNITY_EDITOR
-            Debug.Log($"分辨率改变为{resolutionDropdown.options[index].text}");
-#endif
+            QLog.Info($"分辨率改变为{resolutionDropdown.options[index].text}");
             string text = resolutionDropdown.options[index].text;
 
             if (text == "窗口全屏" || text == "无边框全屏")

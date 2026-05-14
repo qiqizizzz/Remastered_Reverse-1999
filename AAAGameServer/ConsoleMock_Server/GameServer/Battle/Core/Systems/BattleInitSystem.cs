@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using GameProtocol;
+using GameServer.Common;
 using GameServer.Battle.Core.Entities;
 using GameServer.Battle.Core.Extensions;
 using GameServer.Battle.Data.Config;
@@ -51,7 +52,7 @@ namespace GameServer.Battle.Core.Systems
 
                 int normalCount = getNormalHandCardCount();
                 int handTotal = normalCount + getUltimateHandCardCount();
-                Console.WriteLine($"[processRoundStartHandFix] 当前普通手牌数: {normalCount}, 目标: {targetNormalCount}, 手牌总数: {handTotal}");
+                QLog.Info($"[processRoundStartHandFix] 当前普通手牌数: {normalCount}, 目标: {targetNormalCount}, 手牌总数: {handTotal}");
                 if (normalCount >= targetNormalCount) break;
 
                 if (!_env.Context.PlayerDecks.TryGetValue(_env.PlayerId, out var deck)) break;
@@ -155,7 +156,7 @@ namespace GameServer.Battle.Core.Systems
                 battleStartEvent.BattleStart.Entities.Add(_env.ProtoSerializer.ToProtoEntity(entity));
             }
             _env.EventBuilder.AddEvent(battleStartEvent);
-            Console.WriteLine($"[initDecks] 牌库初始化完成, 英雄数: {heroConfigIds.Count}");
+            QLog.Info($"[initDecks] 牌库初始化完成, 英雄数: {heroConfigIds.Count}");
         }
 
         #endregion

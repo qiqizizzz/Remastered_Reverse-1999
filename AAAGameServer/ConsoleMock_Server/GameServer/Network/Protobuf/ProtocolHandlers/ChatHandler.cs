@@ -7,6 +7,7 @@
 */
 
 using GameProtocol;
+using GameServer.Common;
 using Google.Protobuf;
 using Network.DataBase;
 using System;
@@ -77,7 +78,7 @@ namespace Network
             if (targetUser == client.UserName)
                 handleGetChatHistory(client, pack);
 
-            Console.WriteLine($"[私聊] {client.UserName} 发给 {targetUser}: {content}");
+            QLog.Info($"[私聊] {client.UserName} 发给 {targetUser}: {content}");
         }
 
         private void handleGetChatHistory(Client client, MainPack pack)

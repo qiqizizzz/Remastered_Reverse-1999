@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using GameServer.Battle;
+using GameServer.Common;
 
 namespace Network
 {
@@ -42,7 +43,7 @@ namespace Network
             _socket.Bind(iPEndPoint);
             _socket.Listen(backlog);
 
-            Console.WriteLine($"服务器已启动，监听IP：{_ip}，端口：{_port}");
+            QLog.Info($"服务器已启动，监听IP：{_ip}，端口：{_port}");
 
             BeginAccept();
 
@@ -57,7 +58,7 @@ namespace Network
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"监听异常:{ ex.Message}");
+                QLog.Info($"监听异常:{ ex.Message}");
             }
         }
 
@@ -67,7 +68,7 @@ namespace Network
             {
                 Socket clientSocket = _socket.EndAccept(ar);
                 string clientId = $"Client_{++_clientIdCounter}_{Guid.NewGuid().ToString("N").Substring(0, 6)}";
-                Console.WriteLine($"[{clientId}] 新客户端连接: {clientSocket.RemoteEndPoint}");
+                QLog.Info($"[{clientId}] 新客户端连接: {clientSocket.RemoteEndPoint}");
 
                 var client = new Client(clientSocket, clientId ,this);
 
@@ -80,7 +81,7 @@ namespace Network
                 BeginAccept();//继续接收
             }catch(Exception ex)
             {
-                Console.WriteLine($"接收连接异常,{ex.Message}");
+                QLog.Info($"接收连接异常,{ex.Message}");
                 BeginAccept();//出错也继续监听
             }
         }
@@ -103,7 +104,7 @@ namespace Network
             lock(_lockObj)
             {
                 _userClients[username] = client;
-                Console.WriteLine($"[Server] 玩家 '{username}' 已绑定在线字典");
+                QLog.Info($"[Server] 玩家 '{username}' 已绑定在线字典");
             }
         }
 
@@ -136,14 +137,14 @@ namespace Network
                 {
                     _userClients.Remove(username);
                     BattleManager.RemoveBattle(username);
-                    Console.WriteLine($"[Server] 玩家 '{username}' 从在线字典移除并清理战斗实例");
+                    QLog.Info($"[Server] 玩家 '{username}' 从在线字典移除并清理战斗实例");
                 }
 
 
                 if(_clients.ContainsKey(clientId))
                 {
                     _clients.Remove(clientId);
-                    Console.WriteLine($"[{clientId}]从管理列表移除");
+                    QLog.Info($"[{clientId}]从管理列表移除");
                 }
             }
         }

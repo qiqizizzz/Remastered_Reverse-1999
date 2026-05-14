@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MVC.Controller;
 using MVC.Model;
+using Common;
 using UnityEngine;
 
 namespace MVC
@@ -42,7 +43,7 @@ namespace MVC
             if (!_modules.ContainsKey(controllerKey))
                 _modules.Add(controllerKey, ctl);
             else
-                Debug.Log("Exit: 已经存在该控制器" + controllerKey);
+                QLog.Info("Exit: 已经存在该控制器" + controllerKey);
         }
         public void Register(ControllerType ctlType, BaseController ctl)
         {
@@ -55,7 +56,7 @@ namespace MVC
             if (_modules.ContainsKey(controllerKey))
                 _modules.Remove(controllerKey);
             else
-                Debug.Log("Error: 不存在改控制器,id为: " + controllerKey);
+                QLog.Info("Error: 不存在改控制器,id为: " + controllerKey);
         }
         
         //初始化所有控制器
@@ -84,7 +85,7 @@ namespace MVC
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError($"Error: Controller Destroy exception: {ex}");
+                    QLog.Error($"Error: Controller Destroy exception: {ex}");
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace MVC
             if (_modules.ContainsKey(controllerKey))
                 _modules[controllerKey].ApplyFunc(eventName, args);
             else
-                Debug.Log("Error: 不存在该控制器,id为: " + controllerKey);
+                QLog.Info("Error: 不存在该控制器,id为: " + controllerKey);
         }
 
         // 获取控制器的模型

@@ -23,18 +23,14 @@ namespace Module.fight.EventPlayer
         public static async Task PlayBattleStart(BattleEvent evt)
         {
             SyncCharacters(evt.BattleStart.Entities);
-#if UNITY_EDITOR
-            Debug.Log($"[PlayEvent] 战斗开始，关卡: {evt.BattleStart.LevelId}");
-#endif
+            QLog.Info($"[PlayEvent] 战斗开始，关卡: {evt.BattleStart.LevelId}");
             await Task.Delay(100);
         }
 
         public static async Task PlayBattleEnd(BattleEvent evt)
         {
             bool isWin = evt.BattleEnd.IsPlayerWin;
-#if UNITY_EDITOR
-            Debug.Log($"[PlayEvent] 战斗结束，玩家{(isWin ? "胜利" : "失败")}");
-#endif
+            QLog.Info($"[PlayEvent] 战斗结束，玩家{(isWin ? "胜利" : "失败")}");
             GameApp.MessageCenter.PostEvent(EventDefines.OpenFightSettleView, isWin);
             await Task.Delay(100);
         }
@@ -42,9 +38,7 @@ namespace Module.fight.EventPlayer
         public static async Task PlayTurnStart(BattleEvent evt)
         {
             CompletePlayerTurnOutputIfNeeded();
-#if UNITY_EDITOR
-            Debug.Log($"[PlayEvent] 回合开始，轮数: {evt.TurnStart.RoundNumber}");
-#endif
+            QLog.Info($"[PlayEvent] 回合开始，轮数: {evt.TurnStart.RoundNumber}");
             GameApp.MessageCenter.PostEvent(EventDefines.OnBattleTurnStart, evt.TurnStart.IsPlayerTurn);
 
             if (evt.TurnStart.IsPlayerTurn)
@@ -63,9 +57,7 @@ namespace Module.fight.EventPlayer
 
         public static async Task PlayTurnEnd(BattleEvent evt)
         {
-#if UNITY_EDITOR
-            Debug.Log($"[PlayEvent] 回合结束，轮数: {evt.TurnEnd.RoundNumber}");
-#endif
+            QLog.Info($"[PlayEvent] 回合结束，轮数: {evt.TurnEnd.RoundNumber}");
             GameApp.MessageCenter.PostEvent(EventDefines.OnBattleTurnEnd, evt.TurnEnd.IsPlayerTurn);
 
             if (evt.TurnEnd.IsPlayerTurn)

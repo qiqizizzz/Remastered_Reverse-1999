@@ -134,17 +134,13 @@ namespace Module.fight.EventPlayer
 
         public static async Task PlayShuffleDeck(BattleEvent evt)
         {
-#if UNITY_EDITOR
-            Debug.Log("[PlayEvent] 牌库已洗牌");
-#endif
+            QLog.Info("[PlayEvent] 牌库已洗牌");
             await Task.Delay(100);
         }
 
         public static async Task PlayEnqueueCard(BattleEvent evt)
         {
-#if UNITY_EDITOR
-            Debug.Log($"[PlayEvent] 卡牌进入行动队列，index: {evt.EnqueueCard.QueueIndex}");
-#endif
+            QLog.Info($"[PlayEvent] 卡牌进入行动队列，index: {evt.EnqueueCard.QueueIndex}");
             if (PlayEventSequence.IsPlayerTurnResolving && PlayEventSequence.PendingPlayerPlayCardCount > 0)
             {
                 GameApp.MessageCenter.PostEvent(EventDefines.OnCardExecuteUI);

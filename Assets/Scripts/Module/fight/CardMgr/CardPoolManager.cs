@@ -58,9 +58,7 @@ namespace Module.fight.CardMgr
             
             if (item == null)
             {
-#if UNITY_EDITOR
                 logPoolState(type, "卡牌对象池耗尽，自动扩容");
-#endif
                 item = createCardItem(type);
             }
 
@@ -133,9 +131,7 @@ namespace Module.fight.CardMgr
         private void PreLoadCardItem()
         {
             _totalPoolToLoad = getCommonCardPoolCount();
-#if UNITY_EDITOR
-            Debug.Log($"[{nameof(CardPoolManager)}] 普通卡对象池预加载数量: {_totalPoolToLoad}, 手牌上限: {GameApp.CardManager.maxHandCardCount}, 行动队列上限: {GameApp.CardManager.CardActionQueue.MaxActionCount}, 临时缓冲: {COMMON_CARD_TEMP_BUFFER}");
-#endif
+            QLog.Info($"[{nameof(CardPoolManager)}] 普通卡对象池预加载数量: {_totalPoolToLoad}, 手牌上限: {GameApp.CardManager.maxHandCardCount}, 行动队列上限: {GameApp.CardManager.CardActionQueue.MaxActionCount}, 临时缓冲: {COMMON_CARD_TEMP_BUFFER}");
             _loadedPoolCount = 0;
             for (int i = 0; i < _totalPoolToLoad; i++)
             {
@@ -143,7 +139,7 @@ namespace Module.fight.CardMgr
                 {
                     if (go == null)
                     {
-                        Debug.LogError("加载卡牌预制体失败");
+                        QLog.Error("加载卡牌预制体失败");
                         CheckAllPoolLoaded();
                         return;
                     }
@@ -168,7 +164,7 @@ namespace Module.fight.CardMgr
                 {
                     if (go == null)
                     {
-                        Debug.LogError("加载大招卡牌预制体失败");
+                        QLog.Error("加载大招卡牌预制体失败");
                         CheckAllPoolLoaded();
                         return;
                     }
@@ -208,9 +204,7 @@ namespace Module.fight.CardMgr
             else if (item is UI_CommonCardItem commonItem)
                 _commonCardPool.Add(commonItem);
 
-#if UNITY_EDITOR
             logPoolState(type, "卡牌对象池扩容完成");
-#endif
             return item;
         }
 
@@ -222,7 +216,6 @@ namespace Module.fight.CardMgr
                    COMMON_CARD_TEMP_BUFFER;
         }
 
-#if UNITY_EDITOR
         // 输出对象池诊断信息
         private void logPoolState(CardType type, string reason)
         {
@@ -230,9 +223,8 @@ namespace Module.fight.CardMgr
             int commonInactive = _commonCardPool.Count - commonActive;
             int ultimateActive = _ultimateCardPool.Count(x => x != null && x.gameObject.activeSelf);
             int ultimateInactive = _ultimateCardPool.Count - ultimateActive;
-            Debug.Log($"[{nameof(CardPoolManager)}] {reason} Type={type}, Common={commonActive}/{_commonCardPool.Count} active, CommonIdle={commonInactive}, Ultimate={ultimateActive}/{_ultimateCardPool.Count} active, UltimateIdle={ultimateInactive}");
+            QLog.Info($"[{nameof(CardPoolManager)}] {reason} Type={type}, Common={commonActive}/{_commonCardPool.Count} active, CommonIdle={commonInactive}, Ultimate={ultimateActive}/{_ultimateCardPool.Count} active, UltimateIdle={ultimateInactive}");
         }
-#endif
         #endregion
     }
 }

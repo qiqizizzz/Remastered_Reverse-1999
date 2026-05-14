@@ -17,6 +17,7 @@ using Module.fight.Core.Entities;
 using Module.fight.Network;
 using MVC;
 using MVC.Controller;
+using Common;
 using UnityEngine;
 
 namespace Module.fight
@@ -162,7 +163,7 @@ namespace Module.fight
         #region 战斗事件
         private void onPlayerTurnStart(object args)
         {
-            Debug.Log("==== 玩家回合开始 ====");
+            QLog.Info("==== 玩家回合开始 ====");
             _isPlayerTurnStart = true;
         }
 

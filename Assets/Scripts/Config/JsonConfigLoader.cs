@@ -6,6 +6,7 @@
 * └──────────────────────────────────┘
 */
 
+using Common;
 using UnityEngine;
 
 namespace Config
@@ -19,7 +20,7 @@ namespace Config
             
             if (asset == null)
             {
-                Debug.LogError($"Failed to load config at path: {path}");
+                QLog.Error($"Failed to load config at path: {path}");
                 return default;
             }
             
@@ -29,7 +30,7 @@ namespace Config
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"Failed to parse config at path: {path}, error: {e.Message}");
+                QLog.Error($"Failed to parse config at path: {path}, error: {e.Message}");
                 return default;
             }
         }

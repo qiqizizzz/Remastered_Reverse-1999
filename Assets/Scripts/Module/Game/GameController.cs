@@ -10,6 +10,7 @@ using System;
 using Common.Defines;
 using MVC;
 using MVC.Controller;
+using Common;
 using UnityEngine;
 
 namespace Module.Game
@@ -35,7 +36,7 @@ namespace Module.Game
             
             //Test
             //var data = GameApp.ConfigManager.GetCardData(2001);
-            //Debug.Log($"测试获取卡牌数据: {data.name}, {data.description}");
+            //QLog.Info($"测试获取卡牌数据: {data.name}, {data.description}");
         }
 
         public override void InitGlobalEvent()
@@ -55,12 +56,12 @@ namespace Module.Game
             GameApp.GameDataManager.isConnected = false;
             GameApp.ViewManager.Open(ViewType.NoticeView, "失去连接,确认重新连接?", new Action(() =>
                 {
-                    Debug.Log("正在重新连接...");
+                    QLog.Info("正在重新连接...");
                     GameApp.NetworkManager.Connect();
                 }),
                 new Action(() =>
                 {
-                    Debug.Log("取消重新连接");
+                    QLog.Info("取消重新连接");
                     GameApp.ViewManager.CloseAll();
                     ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenMainMenuView);
                 }));

@@ -8,6 +8,7 @@
 
 using GameProtocol;
 using Network.Config;
+using Common;
 using UnityEngine;
 
 namespace Network
@@ -32,12 +33,12 @@ namespace Network
         {
             if (!_server.IsConnected)
             {
-                Debug.Log($"正在尝试连接到 {NetworkConfig.DefaultIP}:{NetworkConfig.DefaultPort}...");
+                QLog.Info($"正在尝试连接到 {NetworkConfig.DefaultIP}:{NetworkConfig.DefaultPort}...");
                 _server.Connect(NetworkConfig.DefaultIP, NetworkConfig.DefaultPort);
             }
             else
             {
-                Debug.Log("当前已连接到服务器，无需重复连接");
+                QLog.Info("当前已连接到服务器，无需重复连接");
             }
         }
 

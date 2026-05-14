@@ -14,6 +14,7 @@ using Data.card.Extensions;
 using Module.fight.Component;
 using Module.fight.Core.Entities;
 using Module.fight.Network;
+using Common;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -103,7 +104,7 @@ namespace Module.fight.CardMgr
         {
             if (!_actionQueue.CanPlayCard())
             {
-                Debug.Log("已达到本轮出牌上限");
+                QLog.Info("已达到本轮出牌上限");
                 return;
             }
             
@@ -184,9 +185,7 @@ namespace Module.fight.CardMgr
                         if (snapshotIndex >= 0)
                             restoreIndex = snapshotIndex;
                     }
-#if UNITY_EDITOR
-                    Debug.Log($"[{nameof(HandCardOperator)}] 撤销出牌 InstanceId={undoItem.BattleCardData.InstanceId}, OriginalIndex={undoneAction.OriginalIndex}, SnapshotIndex={snapshotIndex}, RestoreIndex={restoreIndex}");
-#endif
+                    QLog.Info($"[{nameof(HandCardOperator)}] 撤销出牌 InstanceId={undoItem.BattleCardData.InstanceId}, OriginalIndex={undoneAction.OriginalIndex}, SnapshotIndex={snapshotIndex}, RestoreIndex={restoreIndex}");
                     _handCardUIManager.AnimateUndoCard(undoItem, restoreIndex);
                 }
             }

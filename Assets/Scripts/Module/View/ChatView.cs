@@ -126,7 +126,7 @@ namespace Module.View
 
             if (content == string.Empty)
             {
-                Debug.Log("输入不能为空");
+                QLog.Info("输入不能为空");
                 ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenTipBoxView, TipBoxType.chat, "输入不能为空");
                 return;
             }
@@ -478,13 +478,13 @@ namespace Module.View
             string searchName = _inputSearchField.text;
             
             ApplyFunc(EventDefines.GetSearchedFriends, searchName);
-            Debug.Log("搜索好友" + searchName);
+            QLog.Info("搜索好友" + searchName);
         }
 
         //发送添加好友请求
         private void onAddFriendRequest(string name)
         {
-            Debug.Log("发送添加好友请求给" + name);
+            QLog.Info("发送添加好友请求给" + name);
             ApplyFunc(EventDefines.AddFriendRequest, name);
         }
         

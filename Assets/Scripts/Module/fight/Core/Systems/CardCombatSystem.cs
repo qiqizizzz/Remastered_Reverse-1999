@@ -13,6 +13,7 @@ using Data.card.Extensions;
 using Module.Character;
 using Module.fight.Core.Entities;
 using Module.fight.Core.EventBus;
+using Common;
 using UnityEngine;
 using Random = System.Random;
 
@@ -88,7 +89,7 @@ namespace Module.fight.Core.Systems
                 {
                     if (deck.DiscardPile.Count == 0)
                     {
-                        Debug.LogWarning("抽牌失败: 牌堆和弃牌堆都没有牌了");
+                        QLog.Warning("抽牌失败: 牌堆和弃牌堆都没有牌了");
                         break;
                     }
                     

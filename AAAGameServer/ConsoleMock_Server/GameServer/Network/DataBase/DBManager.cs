@@ -1,4 +1,5 @@
 ﻿
+using GameServer.Common;
 using Network.DataBase.Entity;
 
 namespace Network.DataBase
@@ -17,7 +18,7 @@ namespace Network.DataBase
                     bool canConnect = db.Database.CanConnect();
                     if (canConnect)
                     {
-                        Console.WriteLine("[DBManager] 数据库连接成功");
+                        QLog.Info("[DBManager] 数据库连接成功");
                         return true;
                     }
                     return false;
@@ -25,7 +26,7 @@ namespace Network.DataBase
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[DBManager] 数据库连接失败: {ex.Message}");
+                QLog.Info($"[DBManager] 数据库连接失败: {ex.Message}");
                 return false;
             }
         }

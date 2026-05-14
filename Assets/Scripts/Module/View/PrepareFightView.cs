@@ -18,6 +18,7 @@ using MVC;
 using MVC.Extensions;
 using MVC.View;
 using TMPro;
+using Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -75,7 +76,7 @@ namespace Module.View
             LevelDataSO dataSo = GameApp.ConfigManager.Level.Get(_currentLevelId);
             if (dataSo == null)
             {
-                Debug.LogError("未找到关卡数据, id: " + _currentLevelId);
+                QLog.Error("未找到关卡数据, id: " + _currentLevelId);
                 return;
             }
 
@@ -109,7 +110,7 @@ namespace Module.View
             {
                 string cardName = formationCards[i].GetCardName();
                 CharacterDataSO data = GameApp.ConfigManager.Character.GetByName(cardName);
-                if(data == null) Debug.Log("未找到角色数据, name: " + cardName);
+                if(data == null) QLog.Info("未找到角色数据, name: " + cardName);
                 characters.Add(data); 
             }
 

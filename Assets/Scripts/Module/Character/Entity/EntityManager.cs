@@ -187,7 +187,7 @@ namespace Module.Character
                 totalRound += 1;
             }
             
-            Debug.Log("生成玩家与敌人等，关卡id：" + levelModel.LevelId);
+            QLog.Info("生成玩家与敌人等，关卡id：" + levelModel.LevelId);
         }
 
         private void ClearBattleEntities()

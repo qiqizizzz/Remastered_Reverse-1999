@@ -63,7 +63,7 @@ namespace Network
             //若超过超时限制，认为连接已断开
             if (currentTime - _lastReceiveTime > _timeoutLimit)
             {
-                Debug.LogError("[ServerProxy] 心跳超时，连接已断开");
+                QLog.Error("[ServerProxy] 心跳超时，连接已断开");
                 onError("网络连接超时");
                 
                 //主动断开连接
@@ -98,7 +98,7 @@ namespace Network
             }
             else
             {
-                Debug.Log("当前已连接到服务器，无需重复连接");
+                QLog.Info("当前已连接到服务器，无需重复连接");
             }
         }
         
@@ -111,7 +111,7 @@ namespace Network
             }
             else
             {
-                Debug.LogError("发送失败,未连接到服务器");
+                QLog.Error("发送失败,未连接到服务器");
             }
         }
 
@@ -125,7 +125,7 @@ namespace Network
             }
             else
             {
-                Debug.LogError("[ServerProxy] 发送失败，未连接到服务器");
+                QLog.Error("[ServerProxy] 发送失败，未连接到服务器");
             }
         }
         
@@ -155,7 +155,7 @@ namespace Network
         {
             GameApp.GameDataManager.isConnected = false;
             GameApp.MessageCenter.PostEvent(EventDefines.NetWork_Disconnect);
-            //Debug.LogError($"[ServerProxy] 网络发生异常掉线，原因: {msg}");
+            //QLog.Error($"[ServerProxy] 网络发生异常掉线，原因: {msg}");
         }
         
         //接收消息并解析
@@ -169,7 +169,7 @@ namespace Network
                 //过滤心跳消息，不分发
                 if(pack.ActionCode == ActionCode.Heartbeat) return;
                 
-                Debug.Log($"[ServerProxy] 解析到消息: Request={pack.RequestCode}, Action={pack.ActionCode}");
+                QLog.Info($"[ServerProxy] 解析到消息: Request={pack.RequestCode}, Action={pack.ActionCode}");
                 
                 //分发消息
                 if (_messageHandlers.TryGetValue(pack.ActionCode, out var handler))
@@ -178,12 +178,12 @@ namespace Network
                 }
                 else
                 {
-                    Debug.Log($"[ServerProxy] 未找到消息处理器: ActionCode={pack.ActionCode}");
+                    QLog.Info($"[ServerProxy] 未找到消息处理器: ActionCode={pack.ActionCode}");
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogError("解析Protobuf失败" + ex.Message);
+                QLog.Error("解析Protobuf失败" + ex.Message);
             }
         }
         

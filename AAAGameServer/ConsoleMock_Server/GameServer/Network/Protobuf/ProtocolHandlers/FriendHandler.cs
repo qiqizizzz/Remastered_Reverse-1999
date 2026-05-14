@@ -7,6 +7,7 @@
 */
 
 using GameProtocol;
+using GameServer.Common;
 using Google.Protobuf;
 using Network.DataBase;
 using Network.DataBase.Entity;
@@ -67,7 +68,7 @@ namespace Network
             {
                 bool isOnline = client.Server.GetClientByUsername(item.FriendUsername) != null;
 
-                Console.WriteLine($"[Server] 好友: {item}, 找到客户端: {client}, 判定在线: {isOnline}");
+                QLog.Info($"[Server] 好友: {item}, 找到客户端: {client}, 判定在线: {isOnline}");
                 resPack.FriendPack.FriendList.Add(new FriendInfo
                 {
                     Username = item.FriendUsername,
@@ -76,7 +77,7 @@ namespace Network
             }
 
             client.Send(resPack.ToByteArray());
-            Console.WriteLine($"[{client}] 获取好友列表,好友数量: {friends.Count}");
+            QLog.Info($"[{client}] 获取好友列表,好友数量: {friends.Count}");
         }
 
         private void handleAddFriend(Client client, MainPack pack)
@@ -97,12 +98,12 @@ namespace Network
             if (success)
             {
                 resPack.ReturnCode = ReturnCode.Succeed;
-                Console.WriteLine($"[{client}] 添加好友成功: {pack.FriendPack.TargetUser}");
+                QLog.Info($"[{client}] 添加好友成功: {pack.FriendPack.TargetUser}");
             }
             else
             {
                 resPack.ReturnCode = ReturnCode.Failed;
-                Console.WriteLine($"[{client}] 添加好友失败: {pack.FriendPack.TargetUser}");
+                QLog.Info($"[{client}] 添加好友失败: {pack.FriendPack.TargetUser}");
             }
 
             client.Send(resPack.ToByteArray());
@@ -126,12 +127,12 @@ namespace Network
             if (success)
             {
                 resPack.ReturnCode = ReturnCode.Succeed;
-                Console.WriteLine($"[{client}] 删除好友成功: {pack.FriendPack.TargetUser}");
+                QLog.Info($"[{client}] 删除好友成功: {pack.FriendPack.TargetUser}");
             }
             else
             {
                 resPack.ReturnCode = ReturnCode.Failed;
-                Console.WriteLine($"[{client}] 删除好友失败: {pack.FriendPack.TargetUser}");
+                QLog.Info($"[{client}] 删除好友失败: {pack.FriendPack.TargetUser}");
             }
 
             client.Send(resPack.ToByteArray());
@@ -154,13 +155,13 @@ namespace Network
 
             if (filteredList.Count == 0)
             {
-                Console.WriteLine($"[{client}] 搜索无结果: {pack.FriendPack.TargetUser}");
+                QLog.Info($"[{client}] 搜索无结果: {pack.FriendPack.TargetUser}");
             }
 
             if (filteredList.Count > 0)
             {
                 resPack.ReturnCode = ReturnCode.Succeed;
-                Console.WriteLine($"[Server] 发送搜索数据: {string.Join(", ", filteredList)}");
+                QLog.Info($"[Server] 发送搜索数据: {string.Join(", ", filteredList)}");
 
                 for (int i = 0; i < filteredList.Count; i++)
                 {
@@ -171,7 +172,7 @@ namespace Network
                     });
                 }
 
-                Console.WriteLine($"[Server] FriendList.Count = {resPack.FriendPack.FriendList.Count}");
+                QLog.Info($"[Server] FriendList.Count = {resPack.FriendPack.FriendList.Count}");
             }
 
             client.Send(resPack.ToByteArray());

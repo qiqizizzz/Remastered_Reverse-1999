@@ -46,7 +46,7 @@ namespace Config
 
             if (db == null)
             {
-                Debug.LogError("加载配置数据库失败!");
+                QLog.Error("加载配置数据库失败!");
                 return;
             }
             
@@ -54,7 +54,7 @@ namespace Config
             Character.Init(db.allHeroes.Concat(db.allEnemies));
             Level.Init(db.allLevels);
             
-            Debug.Log($"加载完成: {Card.GetAll().Count}张卡牌, {Character.GetAll().Count}个角色, {Level.GetAll().Count}个关卡");
+            QLog.Info($"加载完成: {Card.GetAll().Count}张卡牌, {Character.GetAll().Count}个角色, {Level.GetAll().Count}个关卡");
         }
     }
 }
