@@ -1,6 +1,6 @@
 /*
 * ┌──────────────────────────────────┐
-* │  描    述: 战斗实例，负责状态机与回合流转协调
+* │  描    述: 战斗实例，负责状态机与回合流转协调（PvE + PvP）
 * │  类    名: BattleInstance.cs
 * │  创    建: By qiqizizzz
 * └──────────────────────────────────┘
@@ -42,7 +42,8 @@ namespace GameServer.Battle
         #region 字段
 
         // ==================== 常量 ====================
-        private const int PLAYER_ID = 1;
+        private const int PLAYER1_ID = 1;
+        private const int PLAYER2_ID = 2;
         private const int MAX_ACTION_POINT = 5;
 
         // ==================== 运行环境 ====================
@@ -69,10 +70,10 @@ namespace GameServer.Battle
         public BattleResult Result => _result;
         public CombatContext Context => _env.Context;
         public IReadOnlyList<CombatEntity> AllEntities => _env.AllEntities;
+        public GameMode Mode => _env.Mode;
 
         #endregion
 
-        // 收集待发送的战斗事件
         public List<BattleEvent> CollectEvents()
         {
             return _env.EventBuilder.CollectAndClear();
@@ -82,10 +83,22 @@ namespace GameServer.Battle
 
         public BattleInstance(
             int levelId,
-            List<int> heroConfigIds,
+            List<int> heroIdsP1,
             List<MonsterSpawnData> monsterSpawns,
             ConfigManager configManager,
             ICardCatalog cardCatalog)
+            : this(levelId, heroIdsP1, null, monsterSpawns, configManager, cardCatalog, GameMode.PvE)
+        {
+        }
+
+        internal BattleInstance(
+            int levelId,
+            List<int> heroIdsP1,
+            List<int> heroIdsP2,
+            List<MonsterSpawnData> monsterSpawns,
+            ConfigManager configManager,
+            ICardCatalog cardCatalog,
+            GameMode gameMode)
         {
             _levelId = levelId;
             _random = new Random();
@@ -101,7 +114,8 @@ namespace GameServer.Battle
 
             _env = new BattleEnv(
                 configManager, context, cardSystem, eventBuilder,
-                protoSerializer, allEntities, PLAYER_ID, MAX_ACTION_POINT);
+                protoSerializer, allEntities,
+                PLAYER1_ID, PLAYER2_ID, MAX_ACTION_POINT, gameMode);
 
             _skillExecutor = new CardSkillExecutor(context, configManager, allEntities);
             _enemyAI = new EnemyAI(context, configManager, allEntities);
@@ -110,19 +124,23 @@ namespace GameServer.Battle
             _initSystem = new BattleInitSystem(_env);
             _turnSystem = new BattleTurnSystem(_env, _commandProcessor, _skillExecutor, _enemyAI, _initSystem);
 
-            _initSystem.Initialize(levelId, heroConfigIds, monsterSpawns);
+            if (gameMode == GameMode.PvE)
+                _initSystem.InitializePvE(levelId, heroIdsP1, monsterSpawns ?? new List<MonsterSpawnData>());
+            else
+                _initSystem.InitializePvP(heroIdsP1, heroIdsP2 ?? new List<int>());
+
             _state = BattleState.PlayerTurn;
         }
 
         #endregion
 
         #region 公共操作接口
-        // 玩家出牌
-        public bool PlayCard(int cardInstanceId, int targetInstanceId, int handIndex)
+
+        public bool PlayCard(int playerId, int cardInstanceId, int targetInstanceId, int handIndex)
         {
             if (_state != BattleState.PlayerTurn) return false;
-
-            if (!_env.Context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) return false;
+            if (!isCurrentPlayer(playerId)) return false;
+            if (!_env.Context.PlayerDecks.TryGetValue(playerId, out var deck)) return false;
 
             if (_env.Context.ActionQueue.QueuedCards.Count >= _env.Context.ActionQueue.MaxQueueSize)
                 return false;
@@ -130,33 +148,33 @@ namespace GameServer.Battle
             var card = deck.HandCards.Find(c => c.InstanceId == cardInstanceId);
             if (card == null) return false;
 
-            var command = new PlayCardCommand(PLAYER_ID, card, targetInstanceId, handIndex);
+            var command = new PlayCardCommand(playerId, card, targetInstanceId, handIndex);
             return _commandProcessor.Execute(command);
         }
 
-        // 玩家交换手牌
-        public bool MoveCard(int fromIndex, int toIndex)
+        public bool MoveCard(int playerId, int fromIndex, int toIndex)
         {
             if (_state != BattleState.PlayerTurn) return false;
+            if (!isCurrentPlayer(playerId)) return false;
 
-            var command = new MoveCardCommand(PLAYER_ID, fromIndex, toIndex);
+            var command = new MoveCardCommand(playerId, fromIndex, toIndex);
             return _commandProcessor.Execute(command);
         }
 
-        // 撤销上一次操作
-        public bool Undo()
+        public bool Undo(int playerId)
         {
             if (_state != BattleState.PlayerTurn) return false;
+            if (!isCurrentPlayer(playerId)) return false;
             if (_commandProcessor.ActionCount == 0) return false;
 
             _commandProcessor.Undo();
             return true;
         }
 
-        // 结束玩家回合，进入结算与敌人回合
-        public void EndTurn()
+        public void EndTurn(int playerId)
         {
             if (_state != BattleState.PlayerTurn) return;
+            if (!isCurrentPlayer(playerId)) return;
 
             _state = BattleState.Resolving;
 
@@ -167,10 +185,23 @@ namespace GameServer.Battle
             });
 
             _turnSystem.ResolvePlayerActions();
-            removeDeadEntities();
-            if (tryEndBattle(out var endResult))
+
+            if (_env.Mode == GameMode.PvE)
             {
-                endBattle(endResult);
+                endTurnPvE();
+            }
+            else
+            {
+                endTurnPvP();
+            }
+        }
+
+        private void endTurnPvE()
+        {
+            removeDeadEntities();
+            if (tryEndBattlePvE(out var r))
+            {
+                endBattle(r);
                 return;
             }
 
@@ -182,9 +213,9 @@ namespace GameServer.Battle
 
             _turnSystem.ResolveEnemyTurn();
             removeDeadEntities();
-            if (tryEndBattle(out var endResult2))
+            if (tryEndBattlePvE(out var r2))
             {
-                endBattle(endResult2);
+                endBattle(r2);
                 return;
             }
 
@@ -198,44 +229,87 @@ namespace GameServer.Battle
             _state = BattleState.PlayerTurn;
         }
 
+        private void endTurnPvP()
+        {
+            removeDeadEntities();
+            if (tryEndBattlePvP(out var r))
+            {
+                endBattle(r);
+                return;
+            }
+
+            // 切换到对手
+            _env.CurrentPlayerId = (_env.CurrentPlayerId == PLAYER1_ID) ? PLAYER2_ID : PLAYER1_ID;
+
+            if (_env.CurrentPlayerId == PLAYER1_ID)
+            {
+                // 双方都已操作完毕，进入下一轮
+                _turnSystem.StartNextRound();
+            }
+
+            _state = BattleState.PlayerTurn;
+        }
+
         #endregion
 
         #region 实体与胜负
-        // 获取存活英雄
+
+        private bool isCurrentPlayer(int playerId)
+        {
+            return _env.Mode == GameMode.PvE ? playerId == PLAYER1_ID
+                : playerId == _env.CurrentPlayerId;
+        }
+
         private List<CombatEntity> getAliveHeroes()
         {
-            return _env.AllEntities.Where(e => e.OwnerPlayerId == PLAYER_ID && e.CurrentHp > 0).ToList();
+            return _env.AllEntities.Where(e => e.OwnerPlayerId == PLAYER1_ID && e.CurrentHp > 0).ToList();
         }
 
-        // 获取存活敌人
         private List<CombatEntity> getAliveEnemies()
         {
-            return _env.AllEntities.Where(e => e.OwnerPlayerId != PLAYER_ID && e.CurrentHp > 0).ToList();
+            return _env.AllEntities.Where(e => e.OwnerPlayerId != PLAYER1_ID && e.CurrentHp > 0).ToList();
         }
 
-        // 尝试判断战斗是否结束
-        private bool tryEndBattle(out BattleResult res)
+        private bool tryEndBattlePvE(out BattleResult res)
         {
-            bool hasAliveHero = getAliveHeroes().Count > 0;
-            bool hasAliveEnemy = getAliveEnemies().Count > 0;
-
-            if (!hasAliveHero)
+            if (getAliveHeroes().Count == 0)
             {
                 res = BattleResult.PlayerLose;
                 return true;
             }
-
-            if (!hasAliveEnemy)
+            if (getAliveEnemies().Count == 0)
             {
                 res = BattleResult.PlayerWin;
                 return true;
             }
-
             res = BattleResult.None;
             return false;
         }
 
-        // 结束战斗
+        private bool tryEndBattlePvP(out BattleResult res)
+        {
+            bool p1Alive = _env.AllEntities.Any(e => e.OwnerPlayerId == PLAYER1_ID && e.CurrentHp > 0);
+            bool p2Alive = _env.AllEntities.Any(e => e.OwnerPlayerId == PLAYER2_ID && e.CurrentHp > 0);
+
+            if (!p1Alive && !p2Alive)
+            {
+                res = BattleResult.None; // 平局
+                return true;
+            }
+            if (!p1Alive)
+            {
+                res = BattleResult.PlayerLose;
+                return true;
+            }
+            if (!p2Alive)
+            {
+                res = BattleResult.PlayerWin;
+                return true;
+            }
+            res = BattleResult.None;
+            return false;
+        }
+
         private void endBattle(BattleResult res)
         {
             _state = BattleState.BattleEnd;
@@ -248,7 +322,6 @@ namespace GameServer.Battle
             });
         }
 
-        // 清理死亡实体及其卡牌
         private void removeDeadEntities()
         {
             var deadEntities = _env.AllEntities.Where(e => e.CurrentHp <= 0).ToList();
@@ -260,7 +333,8 @@ namespace GameServer.Battle
 
                 if (_env.Context.Entities.ContainsKey(dead.ConfigId))
                 {
-                    _env.CardSystem.RemoveCardsOfCharacter(PLAYER_ID, dead.ConfigId);
+                    _env.CardSystem.RemoveCardsOfCharacter(PLAYER1_ID, dead.ConfigId);
+                    _env.CardSystem.RemoveCardsOfCharacter(PLAYER2_ID, dead.ConfigId);
                     _env.Context.Entities.Remove(dead.ConfigId);
                     heroDied = true;
                 }
@@ -273,10 +347,11 @@ namespace GameServer.Battle
         #endregion
 
         #region 快照与撤销
-        // 记录当前状态快照
+
         private CardSnapshot takeSnapshot()
         {
-            if (!_env.Context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck))
+            int playerId = _env.CurrentPlayerId;
+            if (!_env.Context.PlayerDecks.TryGetValue(playerId, out var deck))
                 return new CardSnapshot();
 
             var snapshot = new CardSnapshot
@@ -296,11 +371,11 @@ namespace GameServer.Battle
             return snapshot;
         }
 
-        // 恢复快照
         private void restoreSnapshot(CardSnapshot snapshot)
         {
             if (snapshot == null) return;
-            if (!_env.Context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) return;
+            int playerId = _env.CurrentPlayerId;
+            if (!_env.Context.PlayerDecks.TryGetValue(playerId, out var deck)) return;
 
             deck.HandCards = new List<CardEntity>(snapshot.HandCards);
             deck.DrawPile = new List<CardEntity>(snapshot.DrawPile);
@@ -311,7 +386,7 @@ namespace GameServer.Battle
 
             foreach (var kvp in snapshot.CardStarLevels)
             {
-                var card = findCardByInstanceId(kvp.Key);
+                var card = findCardByInstanceId(playerId, kvp.Key);
                 if (card != null) card.StarLevel = kvp.Value;
             }
 
@@ -321,13 +396,12 @@ namespace GameServer.Battle
                     entity.ActionPoint = kvp.Value;
             }
 
-            _env.Context.EventBus?.OnHandCardsUpdated?.Invoke(PLAYER_ID, new List<CardEntity>(deck.HandCards));
+            _env.Context.EventBus?.OnHandCardsUpdated?.Invoke(playerId, new List<CardEntity>(deck.HandCards));
         }
 
-        // 根据实例Id查找卡牌
-        private CardEntity findCardByInstanceId(int instanceId)
+        private CardEntity findCardByInstanceId(int playerId, int instanceId)
         {
-            if (!_env.Context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) return null;
+            if (!_env.Context.PlayerDecks.TryGetValue(playerId, out var deck)) return null;
 
             var all = new List<CardEntity>();
             all.AddRange(deck.HandCards);
@@ -336,7 +410,6 @@ namespace GameServer.Battle
             return all.Find(c => c.InstanceId == instanceId);
         }
 
-        // 获取完整战斗状态快照（用于断线重连）
         public BattleStateSnapshot GetStateSnapshot()
         {
             var snapshot = new BattleStateSnapshot
@@ -348,7 +421,7 @@ namespace GameServer.Battle
             foreach (var entity in _env.AllEntities)
                 snapshot.Entities.Add(_env.ProtoSerializer.ToProtoEntity(entity));
 
-            if (_env.Context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck))
+            if (_env.Context.PlayerDecks.TryGetValue(PLAYER1_ID, out var deck))
             {
                 snapshot.PlayerDeck = new PlayerDeckInfo();
                 foreach (var card in deck.HandCards)

@@ -64,6 +64,8 @@ namespace GameServer.Battle.Core.Systems
 
         public void ResolveEnemyTurn()
         {
+            if (_env.Mode == GameMode.PvP) return;
+
             var enemies = new List<CombatEntity>();
             foreach (var entity in _env.AllEntities)
             {

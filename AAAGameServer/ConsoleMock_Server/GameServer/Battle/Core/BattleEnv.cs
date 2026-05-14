@@ -15,6 +15,12 @@ using GameServer.Battle.Data;
 
 namespace GameServer.Battle.Core
 {
+    public enum GameMode
+    {
+        PvE,
+        PvP
+    }
+
     internal class BattleEnv
     {
         public readonly ConfigManager ConfigManager;
@@ -24,7 +30,11 @@ namespace GameServer.Battle.Core
         public readonly BattleProtoSerializer ProtoSerializer;
         public readonly List<CombatEntity> AllEntities;
         public readonly int PlayerId;
+        public readonly int Player2Id;
         public readonly int MaxActionPoint;
+        public readonly GameMode Mode;
+
+        public int CurrentPlayerId;
 
         public BattleEnv(
             ConfigManager configManager,
@@ -34,7 +44,9 @@ namespace GameServer.Battle.Core
             BattleProtoSerializer protoSerializer,
             List<CombatEntity> allEntities,
             int playerId,
-            int maxActionPoint)
+            int player2Id,
+            int maxActionPoint,
+            GameMode mode)
         {
             ConfigManager = configManager;
             Context = context;
@@ -43,7 +55,10 @@ namespace GameServer.Battle.Core
             ProtoSerializer = protoSerializer;
             AllEntities = allEntities;
             PlayerId = playerId;
+            Player2Id = player2Id;
             MaxActionPoint = maxActionPoint;
+            Mode = mode;
+            CurrentPlayerId = playerId;
         }
     }
 }

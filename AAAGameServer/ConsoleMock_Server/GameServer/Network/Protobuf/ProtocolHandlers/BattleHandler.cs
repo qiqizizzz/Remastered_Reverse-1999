@@ -82,7 +82,7 @@ namespace Network
             }
 
             var bp = pack.BattlePack;
-            bool success = battle.PlayCard(bp.CardInstanceId, bp.TargetEntityId, bp.SourceSlotIndex);
+            bool success = battle.PlayCard(1, bp.CardInstanceId, bp.TargetEntityId, bp.SourceSlotIndex);
             if (!success)
             {
                 sendBattleError(client, ActionCode.PlayCard, "出牌失败");
@@ -104,7 +104,7 @@ namespace Network
                 return;
             }
 
-            battle.EndTurn();
+            battle.EndTurn(1);
             var events = battle.CollectEvents();
             sendBattleResponse(client, ActionCode.EndTurn, events);
 
@@ -124,7 +124,7 @@ namespace Network
             }
 
             var bp = pack.BattlePack;
-            bool success = battle.MoveCard(bp.SourceSlotIndex, bp.TargetSlotIndex);
+            bool success = battle.MoveCard(1, bp.SourceSlotIndex, bp.TargetSlotIndex);
             if (!success)
             {
                 sendBattleError(client, ActionCode.MoveCard, "移动卡牌失败");
@@ -146,7 +146,7 @@ namespace Network
                 return;
             }
 
-            bool success = battle.Undo();
+            bool success = battle.Undo(1);
             if (!success)
             {
                 sendBattleError(client, ActionCode.UnDoAction, "撤销失败");
