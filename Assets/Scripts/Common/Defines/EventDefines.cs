@@ -45,7 +45,7 @@ namespace Common.Defines
         //战斗相关事件
         public const string OnPlayerTurnStart = "OnPlayerTurnStart";
         public const string OnPlayerTurnOutput = "OnPlayerTurnOutput";
-        public const string OnEnemyTurn = "OnEnemyTurn";
+        //public const string OnEnemyTurn = "OnEnemyTurn";
         public const string OnSelectEnemyTarget = "OnSelectEnemyTarget";
         public const string OnCardExecuteUI = "OnCardExecuteUI";
         public const string OnMoveActionExecute = "OnMoveActionExecute";
@@ -60,6 +60,6 @@ namespace Common.Defines
         public const string OnBattleServerResponse = "OnBattleServerResponse";
         public const string OnBattleTurnStart = "OnBattleTurnStart";
         public const string OnBattleTurnEnd = "OnBattleTurnEnd";
-        public const string OnBattleStateChanged = "OnBattleStateChanged";
+        //public const string OnBattleStateChanged = "OnBattleStateChanged";
     }
 }
