@@ -14,7 +14,7 @@ using GameServer.Battle.AI;
 using GameServer.Battle.Core.Commands;
 using GameServer.Battle.Core.Entities;
 using GameServer.Battle.Core.EventBus;
-using GameServer.Battle.Core.Extensions;
+using GameServer.Battle.Core.Serialization;
 using GameServer.Battle.Core.Systems;
 using GameServer.Battle.Data;
 using GameServer.Battle.Data.Config;
@@ -40,7 +40,6 @@ namespace GameServer.Battle
     {
         // ==================== 常量 ====================
         private const int PLAYER_ID = 1;
-        private const int ENEMY_OWNER_START_ID = 2;
         private const int MAX_ACTION_POINT = 5;
 
         // ==================== 依赖系统 ====================
@@ -51,13 +50,15 @@ namespace GameServer.Battle
         private readonly ConfigManager _configManager;
         private readonly IEnemyAI _enemyAI;
         private readonly BattleEventBuilder _eventBuilder;
+        private readonly BattleProtoSerializer _protoSerializer;
+        private readonly BattleInitSystem _initSystem;
+        private readonly BattleTurnSystem _turnSystem;
         private readonly Random _random;
 
         // ==================== 状态字段 ====================
         private BattleState _state;
         private BattleResult _result;
         private int _levelId;
-        private int _nextInstanceId;
         private readonly List<CombatEntity> _allEntities;
 
         // ==================== 属性 ====================
@@ -82,7 +83,6 @@ namespace GameServer.Battle
             _levelId = levelId;
             _configManager = configManager;
             _random = new Random();
-            _nextInstanceId = 1;
             _state = BattleState.Idle;
             _result = BattleResult.None;
             _allEntities = new List<CombatEntity>();
@@ -94,85 +94,19 @@ namespace GameServer.Battle
             _enemyAI = new EnemyAI(_context, configManager, _allEntities);
             _eventBuilder = new BattleEventBuilder(_context);
             _commandProcessor = new CombatCommandProcessor(_context, takeSnapshot, restoreSnapshot);
+            _protoSerializer = new BattleProtoSerializer(configManager);
 
-            initBattle(heroConfigIds, monsterSpawns);
-        }
+            _initSystem = new BattleInitSystem(
+                configManager, _context, _cardSystem, _eventBuilder,
+                _protoSerializer, _allEntities, PLAYER_ID, MAX_ACTION_POINT);
 
-        // ==================== 战斗初始化 ====================
-        private void initBattle(List<int> heroConfigIds, List<MonsterSpawnData> monsterSpawns)
-        {
-            createHeroEntities(heroConfigIds);
-            createEnemyEntities(monsterSpawns);
-            initDecks(heroConfigIds);
+            _turnSystem = new BattleTurnSystem(
+                _context, _commandProcessor, _skillExecutor, _enemyAI,
+                _eventBuilder, _cardSystem, _initSystem,
+                configManager, _protoSerializer, _allEntities, PLAYER_ID);
 
+            _initSystem.Initialize(levelId, heroConfigIds, monsterSpawns);
             _state = BattleState.PlayerTurn;
-        }
-
-        // 创建玩家方英雄实体
-        private void createHeroEntities(List<int> heroConfigIds)
-        {
-            foreach (var heroId in heroConfigIds)
-            {
-                var heroConfig = _configManager.GetCharacter(heroId);
-                if (heroConfig == null) continue;
-
-                var entity = new CombatEntity(
-                    _nextInstanceId++,
-                    heroId,
-                    PLAYER_ID,
-                    heroConfig.Property.Hp,
-                    0
-                );
-
-                _context.Entities[heroId] = entity;
-                _allEntities.Add(entity);
-            }
-        }
-
-        // 创建敌方实体
-        private void createEnemyEntities(List<MonsterSpawnData> monsterSpawns)
-        {
-            int enemyOwnerId = ENEMY_OWNER_START_ID;
-
-            foreach (var spawn in monsterSpawns)
-            {
-                var enemyConfig = _configManager.GetCharacter(spawn.monsterId);
-                if (enemyConfig == null) continue;
-
-                for (int i = 0; i < spawn.count; i++)
-                {
-                    var entity = new CombatEntity(
-                        _nextInstanceId++,
-                        spawn.monsterId,
-                        enemyOwnerId++,
-                        enemyConfig.Property.Hp,
-                        0
-                    );
-
-                    _allEntities.Add(entity);
-                }
-            }
-        }
-
-        // 初始化牌库与手牌
-        private void initDecks(List<int> heroConfigIds)
-        {
-            _cardSystem.InitDeck(PLAYER_ID, heroConfigIds);
-            _cardSystem.PrepareHandsForNewLevel(PLAYER_ID, heroConfigIds);
-            updateScalingRules();
-            processRoundStartHandFix();
-
-            var battleStartEvent = new BattleEvent
-            {
-                EventType = BattleEventType.BattleStart,
-                BattleStart = new BattleStartParams { LevelId = _levelId }
-            };
-            foreach (var entity in _allEntities)
-            {
-                battleStartEvent.BattleStart.Entities.Add(toProtoEntity(entity));
-            }
-            _eventBuilder.AddEvent(battleStartEvent);
-            Console.WriteLine($"[initDecks] 牌库初始化完成, 英雄数: {heroConfigIds.Count}");
         }
 
         // ==================== 公共操作接口 ====================
@@ -225,8 +159,13 @@ namespace GameServer.Battle
                 TurnEnd = new TurnEndParams { IsPlayerTurn = true, RoundNumber = _context.CurrentRound }
             });
 
-            resolvePlayerActions();
-            if (_state == BattleState.BattleEnd) return;
+            _turnSystem.ResolvePlayerActions();
+            removeDeadEntities();
+            if (tryEndBattle(out var endResult))
+            {
+                endBattle(endResult);
+                return;
+            }
 
             _eventBuilder.AddEvent(new BattleEvent
             {
@@ -234,8 +173,13 @@ namespace GameServer.Battle
                 TurnStart = new TurnStartParams { IsPlayerTurn = false, RoundNumber = _context.CurrentRound }
             });
 
-            resolveEnemyTurn();
-            if (_state == BattleState.BattleEnd) return;
+            _turnSystem.ResolveEnemyTurn();
+            removeDeadEntities();
+            if (tryEndBattle(out var endResult2))
+            {
+                endBattle(endResult2);
+                return;
+            }
 
             _eventBuilder.AddEvent(new BattleEvent
             {
@@ -243,161 +187,8 @@ namespace GameServer.Battle
                 TurnEnd = new TurnEndParams { IsPlayerTurn = false, RoundNumber = _context.CurrentRound }
             });
 
-            startNextRound();
-        }
-
-        // ==================== 回合结算 ====================
-        // 结算玩家行动队列
-        private void resolvePlayerActions()
-        {
-            var history = _commandProcessor.GetHistoryAndClear();
-            int executeIndex = 0;
-
-            foreach (var cmd in history)
-            {
-                if (!_isBattleActive()) break;
-                if (cmd is not PlayCardCommand playCmd) continue;
-
-                _eventBuilder.AddEvent(buildPlayerExecuteEvent(playCmd, executeIndex));
-                executeIndex++;
-                _skillExecutor.ExecuteCardEffect(playCmd.SenderPlayerId, playCmd.Card, playCmd.TargetInstanceId);
-            }
-
-            removeDeadEntities();
-
-            if (tryEndBattle(out var result))
-                endBattle(result);
-        }
-
-        // 构建玩家输出阶段的执行标记事件（用于客户端逐张驱动出牌动画）
-        private static BattleEvent buildPlayerExecuteEvent(PlayCardCommand playCmd, int executeIndex)
-        {
-            return new BattleEvent
-            {
-                EventType = BattleEventType.EnqueueCard,
-                TargetId = playCmd.TargetInstanceId,
-                EnqueueCard = new EnqueueCardParams
-                {
-                    Card = toProtoCard(playCmd.Card),
-                    QueueIndex = executeIndex,
-                    ActionPointAfter = 0
-                }
-            };
-        }
-
-        // 结算敌人回合
-        private void resolveEnemyTurn()
-        {
-            var enemies = getAliveEnemies();
-
-            foreach (var enemy in enemies)
-            {
-                if (_state == BattleState.BattleEnd) break;
-                if (getAliveHeroes().Count == 0) break;
-
-                // TODO: Step 4 接入 EnemyAI，此处先使用临时随机选牌
-                executeEnemyAction(enemy);
-            }
-
-            removeDeadEntities();
-
-            if (tryEndBattle(out var result))
-                endBattle(result);
-        }
-
-        // 敌人执行一次出牌
-        private void executeEnemyAction(CombatEntity enemy)
-        {
-            var decision = _enemyAI.MakeDecision(enemy);
-            if (decision == null) return;
-
-            var card = new CardEntity(decision.CardConfigId);
-            _eventBuilder.AddEvent(buildEnemyExecuteEvent(enemy, card, decision.TargetInstanceId));
-            _skillExecutor.ExecuteCardEffect(enemy.OwnerPlayerId, card, decision.TargetInstanceId);
-        }
-
-        // 构建敌方输出阶段的执行标记事件（用于客户端按敌人逐个播放）
-        private static BattleEvent buildEnemyExecuteEvent(CombatEntity enemy, CardEntity card, int targetInstanceId)
-        {
-            return new BattleEvent
-            {
-                EventType = BattleEventType.EnqueueCard,
-                SourceId = enemy.InstanceId,
-                TargetId = targetInstanceId,
-                EnqueueCard = new EnqueueCardParams
-                {
-                    Card = toProtoCard(card),
-                    QueueIndex = 0,
-                    ActionPointAfter = 0
-                }
-            };
-        }
-
-        // 开始下一回合
-        private void startNextRound()
-        {
-            _context.ActionQueue.QueuedCards.Clear();
-            _context.CurrentRound++;
-
-            processRoundStartHandFix();
+            _turnSystem.StartNextRound();
             _state = BattleState.PlayerTurn;
-
-            _eventBuilder.AddEvent(new BattleEvent
-            {
-                EventType = BattleEventType.TurnStart,
-                TurnStart = new TurnStartParams { IsPlayerTurn = true, RoundNumber = _context.CurrentRound }
-            });
-            Console.WriteLine($"[startNextRound] 第 {_context.CurrentRound} 回合开始");
-        }
-
-        // 回合开始手牌修正（合成、补牌、发大招）
-        private void processRoundStartHandFix()
-        {
-            int targetNormalCount = getTargetNormalHandCount();
-            while (true)
-            {
-                while (_context.CheckAndAutoMerge(PLAYER_ID)) { }
-
-                int normalCount = getNormalHandCardCount();
-                int handTotal = normalCount + getUltimateHandCardCount();
-                Console.WriteLine($"[processRoundStartHandFix] 当前普通手牌数: {normalCount}, 目标: {targetNormalCount}, 手牌总数: {handTotal}");
-                if (normalCount >= targetNormalCount) break;
-
-                if (!_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) break;
-                if (deck.DrawPile.Count == 0 && deck.DiscardPile.Count == 0) break;
-
-                int needCount = targetNormalCount - normalCount;
-                _cardSystem.DrawCard(PLAYER_ID, needCount);
-            }
-
-            foreach (var kvp in _context.Entities)
-            {
-                var entity = kvp.Value;
-                if (entity.CurrentHp <= 0) continue;
-                if (entity.ActionPoint >= MAX_ACTION_POINT)
-                {
-                    if (_cardSystem.TryGiveUltimateCard(PLAYER_ID, entity.ConfigId))
-                    {
-                        entity.ActionPoint = 0;
-                        _context.EventBus?.OnActionPointChanged?.Invoke(PLAYER_ID, entity.ConfigId, 0);
-                    }
-                }
-            }
-        }
-
-        // 获取手牌中大招牌的数量
-        private int getUltimateHandCardCount()
-        {
-            if (!_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) return 0;
-
-            int count = 0;
-            foreach (var card in deck.HandCards)
-            {
-                var config = _context.CardCatalog.Get(card.ConfigId);
-                if (config != null && config.CardType == CardType.Ultimate)
-                    count++;
-            }
-            return count;
         }
 
         // ==================== 实体与胜负 ====================
@@ -413,44 +204,38 @@ namespace GameServer.Battle
             return _allEntities.Where(e => e.OwnerPlayerId != PLAYER_ID && e.CurrentHp > 0).ToList();
         }
 
-        // 战斗是否仍在进行
-        private bool _isBattleActive()
-        {
-            return _state != BattleState.BattleEnd;
-        }
-
         // 尝试判断战斗是否结束
-        private bool tryEndBattle(out BattleResult result)
+        private bool tryEndBattle(out BattleResult res)
         {
             bool hasAliveHero = getAliveHeroes().Count > 0;
             bool hasAliveEnemy = getAliveEnemies().Count > 0;
 
             if (!hasAliveHero)
             {
-                result = BattleResult.PlayerLose;
+                res = BattleResult.PlayerLose;
                 return true;
             }
 
             if (!hasAliveEnemy)
             {
-                result = BattleResult.PlayerWin;
+                res = BattleResult.PlayerWin;
                 return true;
             }
 
-            result = BattleResult.None;
+            res = BattleResult.None;
             return false;
         }
 
         // 结束战斗
-        private void endBattle(BattleResult result)
+        private void endBattle(BattleResult res)
         {
             _state = BattleState.BattleEnd;
-            _result = result;
+            _result = res;
 
             _eventBuilder.AddEvent(new BattleEvent
             {
                 EventType = BattleEventType.BattleEnd,
-                BattleEnd = new BattleEndParams { IsPlayerWin = result == BattleResult.PlayerWin }
+                BattleEnd = new BattleEndParams { IsPlayerWin = res == BattleResult.PlayerWin }
             });
         }
 
@@ -473,52 +258,7 @@ namespace GameServer.Battle
             }
 
             if (heroDied)
-                updateScalingRules();
-        }
-
-        // ==================== 工具函数 ====================
-        // 获取手牌中非大招牌的数量
-        private int getNormalHandCardCount()
-        {
-            if (!_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck)) return 0;
-
-            int count = 0;
-            foreach (var card in deck.HandCards)
-            {
-                var config = _context.CardCatalog.Get(card.ConfigId);
-                if (config != null && config.CardType != CardType.Ultimate)
-                    count++;
-            }
-            return count;
-        }
-
-        // 根据当前存活英雄数量计算回合补牌目标
-        private int getTargetNormalHandCount()
-        {
-            int aliveHeroCount = getAliveHeroes().Count;
-            return aliveHeroCount switch
-            {
-                4 => 8,
-                3 => 6,
-                2 => 6,
-                1 => 4,
-                _ => Math.Max(0, aliveHeroCount * 2)
-            };
-        }
-
-        // 根据存活英雄数量更新手牌上限与行动队列上限
-        private void updateScalingRules()
-        {
-            int aliveHeroCount = getAliveHeroes().Count;
-            int maxQueueSize = aliveHeroCount switch
-            {
-                4 => 4,
-                3 => 3,
-                2 => 2,
-                1 => 2,
-                _ => 4
-            };
-            _context.ActionQueue.MaxQueueSize = maxQueueSize;
+                _initSystem.UpdateScalingRules();
         }
 
         // ==================== 快照与撤销 ====================
@@ -595,57 +335,26 @@ namespace GameServer.Battle
             };
 
             foreach (var entity in _allEntities)
-            {
-                snapshot.Entities.Add(toProtoEntity(entity));
-            }
+                snapshot.Entities.Add(_protoSerializer.ToProtoEntity(entity));
 
             if (_context.PlayerDecks.TryGetValue(PLAYER_ID, out var deck))
             {
                 snapshot.PlayerDeck = new PlayerDeckInfo();
                 foreach (var card in deck.HandCards)
-                    snapshot.PlayerDeck.HandCards.Add(toProtoCard(card));
+                    snapshot.PlayerDeck.HandCards.Add(BattleProtoSerializer.ToProtoCard(card));
                 foreach (var card in deck.DrawPile)
-                    snapshot.PlayerDeck.DrawPile.Add(toProtoCard(card));
+                    snapshot.PlayerDeck.DrawPile.Add(BattleProtoSerializer.ToProtoCard(card));
                 foreach (var card in deck.DiscardPile)
-                    snapshot.PlayerDeck.DiscardPile.Add(toProtoCard(card));
+                    snapshot.PlayerDeck.DiscardPile.Add(BattleProtoSerializer.ToProtoCard(card));
                 snapshot.PlayerDeck.DrawPileCount = deck.DrawPile.Count;
             }
 
             snapshot.ActionQueue = new ActionQueueInfo();
             foreach (var card in _context.ActionQueue.QueuedCards)
-                snapshot.ActionQueue.QueuedCards.Add(toProtoCard(card));
+                snapshot.ActionQueue.QueuedCards.Add(BattleProtoSerializer.ToProtoCard(card));
             snapshot.ActionQueue.MaxSize = _context.ActionQueue.MaxQueueSize;
 
             return snapshot;
-        }
-
-        // 将内部 CombatEntity 转为 Proto CombatEntityInfo
-        private CombatEntityInfo toProtoEntity(CombatEntity entity)
-        {
-            var charConfig = _configManager.GetCharacter(entity.ConfigId);
-            int maxHp = charConfig != null ? (int)charConfig.Property.Hp : 0;
-
-            return new CombatEntityInfo
-            {
-                InstanceId = entity.InstanceId,
-                ConfigId = entity.ConfigId,
-                IsPlayerSide = entity.OwnerPlayerId == 1,
-                CurrentHp = (int)entity.CurrentHp,
-                MaxHp = maxHp,
-                ActionPoint = entity.ActionPoint,
-                MaxActionPoint = MAX_ACTION_POINT
-            };
-        }
-
-        // 将内部 CardEntity 转为 Proto CardEntityInfo
-        private static CardEntityInfo toProtoCard(CardEntity card)
-        {
-            return new CardEntityInfo
-            {
-                InstanceId = card.InstanceId,
-                ConfigId = card.ConfigId,
-                StarLevel = card.StarLevel
-            };
         }
     }
 }

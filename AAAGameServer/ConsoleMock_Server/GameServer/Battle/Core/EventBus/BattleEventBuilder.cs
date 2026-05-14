@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using GameProtocol;
 using GameServer.Battle.Core.Entities;
+using GameServer.Battle.Core.Serialization;
 
 namespace GameServer.Battle.Core.EventBus
 {
@@ -114,7 +115,7 @@ namespace GameServer.Battle.Core.EventBus
                 EventType = BattleEventType.DrawCard,
                 DrawCard = new DrawCardParams
                 {
-                    Card = toProtoCard(card),
+                    Card = BattleProtoSerializer.ToProtoCard(card),
                     SlotIndex = 0
                 }
             });
@@ -128,7 +129,7 @@ namespace GameServer.Battle.Core.EventBus
                 EventType = BattleEventType.DiscardCard,
                 DiscardCard = new DiscardCardParams
                 {
-                    Card = toProtoCard(card),
+                    Card = BattleProtoSerializer.ToProtoCard(card),
                     SlotIndex = 0
                 }
             });
@@ -186,7 +187,7 @@ namespace GameServer.Battle.Core.EventBus
                 TargetId = targetInstanceId,
                 EnqueueCard = new EnqueueCardParams
                 {
-                    Card = toProtoCard(card),
+                    Card = BattleProtoSerializer.ToProtoCard(card),
                     QueueIndex = queueIndex < 0 ? 0 : queueIndex,
                     ActionPointAfter = actionPoint
                 }
@@ -201,7 +202,7 @@ namespace GameServer.Battle.Core.EventBus
                 EventType = BattleEventType.GrantUltimate,
                 GrantUltimate = new GrantUltimateParams
                 {
-                    Card = toProtoCard(ultimateCard),
+                    Card = BattleProtoSerializer.ToProtoCard(ultimateCard),
                     SlotIndex = 0
                 }
             });
@@ -215,18 +216,6 @@ namespace GameServer.Battle.Core.EventBus
                 EventType = BattleEventType.ShuffleDeck,
                 ShuffleDeck = new ShuffleDeckParams { DeckOwnerId = playerId }
             });
-        }
-
-        // ==================== 工具函数 ====================
-        // 将内部 CardEntity 转为 Proto CardEntityInfo
-        private static CardEntityInfo toProtoCard(CardEntity card)
-        {
-            return new CardEntityInfo
-            {
-                InstanceId = card.InstanceId,
-                ConfigId = card.ConfigId,
-                StarLevel = card.StarLevel
-            };
         }
     }
 }
