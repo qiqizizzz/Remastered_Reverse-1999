@@ -32,10 +32,17 @@ namespace Module.View
         private TextMeshProUGUI levelTargetText1;
         private TextMeshProUGUI levelTargetText2;
         private Transform selectFormationArea;
+        private Transform pvpArea;
         
         [Header("编队卡牌")]
         private FormationCardItem[] formationCards;
         private int _currentFormationCardIndex = 0;//默认从卡牌0开始
+
+        [Header("Pvp区域")] 
+        private TextMeshProUGUI pvpPlayer1_NameTxt;
+        private TextMeshProUGUI pvpPlayer1_ReadyTxt;
+        private TextMeshProUGUI pvpPlayer2_NameTxt;
+        private TextMeshProUGUI pvpPlayer2_ReadyTxt;
         
         private int _currentLevelId = 0;//当前关卡id
         private bool _isPvpMode;
@@ -53,6 +60,12 @@ namespace Module.View
             levelTargetText1 = Find<TextMeshProUGUI>("LevelDetailArea/Target/Img_content1/Txt_content1");
             levelTargetText2 = Find<TextMeshProUGUI>("LevelDetailArea/Target/Img_content2/Txt_content2");
             selectFormationArea = Find<Transform>("SelectFormationArea");
+            pvpArea = Find<Transform>("PvpArea");
+            
+            pvpPlayer1_NameTxt = Find<TextMeshProUGUI>("PvpArea/PlayerDetail/player_1/Txt_name");
+            pvpPlayer1_ReadyTxt = Find<TextMeshProUGUI>("PvpArea/PlayerDetail/player_1/Txt_ready");
+            pvpPlayer2_NameTxt = Find<TextMeshProUGUI>("PvpArea/PlayerDetail/player_2/Txt_name");
+            pvpPlayer2_ReadyTxt = Find<TextMeshProUGUI>("PvpArea/PlayerDetail/player_2/Txt_ready");
             
             bindFormationBtn();
             Find<Button>("SelectFormationArea/Btn_confirm").onClick.AddListener(onFormationConfirmBtn);
@@ -77,6 +90,8 @@ namespace Module.View
 
         public override void Open(params object[] args)
         {
+            //TODO:只有pvp的时候PvpArea才会显示
+            
             _battleNetwork.InitPvpPrepare();
             GameApp.MessageCenter.AddEvent(EventDefines.OnPvpTeamWaiting, onPvpTeamWaiting);
             GameApp.MessageCenter.AddEvent(EventDefines.OnPvpBattleStart, onPvpBattleStart);
@@ -124,6 +139,8 @@ namespace Module.View
         {
             _isPvpMode = true;
             _pvpPrepareData = pvpPrepareData;
+            
+            //TODO：下面的内容需要更改
             levelTargetText1.text = "选择你的PvP阵容";
             levelTargetText2.text = $"玩家编号：{pvpPrepareData.PlayerId}";
         }
@@ -141,6 +158,8 @@ namespace Module.View
             if (_isPvpMode)
             {
                 _battleNetwork.SendSubmitPvpTeam(getSelectedHeroIds());
+                
+                //TODO:这里也需要更改
                 levelTargetText1.text = "阵容已提交";
                 levelTargetText2.text = "等待对手确认阵容...";
                 return;
@@ -193,6 +212,8 @@ namespace Module.View
         // 处理PVP等待对手提交
         private void onPvpTeamWaiting(object arg)
         {
+            //这里也需要更改
+            
             levelTargetText1.text = "阵容已提交";
             levelTargetText2.text = "等待对手确认阵容...";
         }
