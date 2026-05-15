@@ -18,5 +18,6 @@ namespace MVC
         CultivationController, //角色
         Inventory, //背包
         Fight, //战斗
+        Matchmaking, //匹配
     }
 }

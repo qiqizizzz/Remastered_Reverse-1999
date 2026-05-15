@@ -18,6 +18,7 @@ using Module.Loading;
 using Module.Cultivation;
 using MVC;
 using Common;
+using Module.Matchmaking;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -90,6 +91,7 @@ namespace DefaultNamespace
             GameApp.ControllerManager.Register(ControllerType.Inventory, new InventoryController());
             GameApp.ControllerManager.Register(ControllerType.CultivationController, new CultivationController());
             GameApp.ControllerManager.Register(ControllerType.Fight, new FightController());
+            GameApp.ControllerManager.Register(ControllerType.Matchmaking, new MatchmakingController());
         }
         
         // 初始化所有模块
