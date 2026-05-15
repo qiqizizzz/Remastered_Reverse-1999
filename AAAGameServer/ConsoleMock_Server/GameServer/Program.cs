@@ -42,6 +42,8 @@ namespace GameServer
             ProtocolRouter.Register(ActionCode.MoveCard, new BattleHandler());
             ProtocolRouter.Register(ActionCode.UnDoAction, new BattleHandler());
             ProtocolRouter.Register(ActionCode.RequestBattleState, new BattleHandler());
+            ProtocolRouter.Register(ActionCode.JoinPvP, new BattleHandler());
+            ProtocolRouter.Register(ActionCode.LeavePvP, new BattleHandler());
         }
     }
 }

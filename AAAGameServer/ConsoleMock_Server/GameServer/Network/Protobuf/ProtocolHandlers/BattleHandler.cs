@@ -38,6 +38,12 @@ namespace Network
                 case ActionCode.RequestBattleState:
                     handleRequestBattleState(client, pack);
                     break;
+                case ActionCode.JoinPvP:
+                    handleJoinPvP(client, pack);
+                    break;
+                case ActionCode.LeavePvP:
+                    handleLeavePvP(client, pack);
+                    break;
             }
         }
 
@@ -82,7 +88,7 @@ namespace Network
             }
 
             var bp = pack.BattlePack;
-            bool success = battle.PlayCard(1, bp.CardInstanceId, bp.TargetEntityId, bp.SourceSlotIndex);
+            bool success = battle.PlayCard(bp.PlayerId, bp.CardInstanceId, bp.TargetEntityId, bp.SourceSlotIndex);
             if (!success)
             {
                 sendBattleError(client, ActionCode.PlayCard, "出牌失败");
@@ -104,7 +110,8 @@ namespace Network
                 return;
             }
 
-            battle.EndTurn(1);
+            var bp = pack.BattlePack;
+            battle.EndTurn(bp.PlayerId);
             var events = battle.CollectEvents();
             sendBattleResponse(client, ActionCode.EndTurn, events);
 
@@ -124,7 +131,7 @@ namespace Network
             }
 
             var bp = pack.BattlePack;
-            bool success = battle.MoveCard(1, bp.SourceSlotIndex, bp.TargetSlotIndex);
+            bool success = battle.MoveCard(bp.PlayerId, bp.SourceSlotIndex, bp.TargetSlotIndex);
             if (!success)
             {
                 sendBattleError(client, ActionCode.MoveCard, "移动卡牌失败");
@@ -146,7 +153,8 @@ namespace Network
                 return;
             }
 
-            bool success = battle.Undo(1);
+            var bp = pack.BattlePack;
+            bool success = battle.Undo(bp.PlayerId);
             if (!success)
             {
                 sendBattleError(client, ActionCode.UnDoAction, "撤销失败");
@@ -182,6 +190,64 @@ namespace Network
                 BattlePack = new BattlePack { StateSnapshot = snapshot }
             };
             resPack.BattlePack.Events.AddRange(events);
+            client.Send(resPack.ToByteArray());
+        }
+
+        private void handleJoinPvP(Client client, MainPack pack)
+        {
+            if (!checkLogin(client, ActionCode.JoinPvP)) return;
+
+            client.Server.BattleManager.JoinQueue(client.UserName);
+
+            var matchResult = client.Server.BattleManager.TryMatch();
+            if (matchResult == null)
+            {
+                var waitPack = new MainPack
+                {
+                    RequestCode = RequestCode.Battle,
+                    ActionCode = ActionCode.JoinPvP,
+                    ReturnCode = ReturnCode.Succeed,
+                    StrMsg = "匹配中，等待对手..."
+                };
+                client.Send(waitPack.ToByteArray());
+                return;
+            }
+
+            var (p1, p2, battle) = matchResult.Value;
+            var events = battle.CollectEvents();
+
+            var clientP1 = client.Server.GetClientByUsername(p1);
+            if (clientP1 != null)
+            {
+                var res1 = new BattlePack { PlayerId = 1 };
+                res1.Events.AddRange(events);
+                res1.StateSnapshot = battle.GetStateSnapshot();
+                sendBattleResponse(clientP1, ActionCode.JoinPvP, res1);
+            }
+
+            var clientP2 = client.Server.GetClientByUsername(p2);
+            if (clientP2 != null)
+            {
+                var res2 = new BattlePack { PlayerId = 2 };
+                res2.Events.AddRange(events);
+                res2.StateSnapshot = battle.GetStateSnapshot();
+                sendBattleResponse(clientP2, ActionCode.JoinPvP, res2);
+            }
+        }
+
+        private void handleLeavePvP(Client client, MainPack pack)
+        {
+            if (!checkLogin(client, ActionCode.LeavePvP)) return;
+
+            client.Server.BattleManager.LeaveQueue(client.UserName);
+
+            var resPack = new MainPack
+            {
+                RequestCode = RequestCode.Battle,
+                ActionCode = ActionCode.LeavePvP,
+                ReturnCode = ReturnCode.Succeed,
+                StrMsg = "已离开匹配队列"
+            };
             client.Send(resPack.ToByteArray());
         }
 

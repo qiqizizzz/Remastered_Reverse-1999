@@ -256,8 +256,9 @@ namespace GameServer.Battle
 
         private bool isCurrentPlayer(int playerId)
         {
-            return _env.Mode == GameMode.PvE ? playerId == PLAYER1_ID
-                : playerId == _env.CurrentPlayerId;
+            return _env.Mode == GameMode.PvP
+                ? playerId == _env.CurrentPlayerId
+                : playerId == 0 || playerId == PLAYER1_ID;
         }
 
         private List<CombatEntity> getAliveHeroes()

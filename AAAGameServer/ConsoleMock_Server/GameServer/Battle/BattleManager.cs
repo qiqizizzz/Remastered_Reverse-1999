@@ -1,4 +1,4 @@
-/*
+﻿/*
 * ┌──────────────────────────────────┐
 * │  描    述: 战斗管理器，管理所有进行中的战斗实例（PvE + PvP）
 * │  类    名: BattleManager.cs
@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GameServer.Battle.Core;
 using GameServer.Battle.Data;
+using Network.Matchmaking;
 
 namespace GameServer.Battle
 {
@@ -17,6 +18,7 @@ namespace GameServer.Battle
     {
         private readonly Dictionary<string, BattleInstance> _battles;
         private readonly ConfigManager _configManager;
+        private readonly MatchmakingQueue _matchQueue = new();
 
         public BattleManager(ConfigManager configManager)
         {
@@ -25,7 +27,7 @@ namespace GameServer.Battle
         }
 
         // 为指定用户创建 PvE 战斗
-        public BattleInstance CreateBattle(string username, int levelId, List<int> heroConfigIds = null)
+        public BattleInstance CreateBattle(string username, int levelId, List<int>? heroConfigIds = null)
         {
             RemoveBattle(username);
 
@@ -42,7 +44,7 @@ namespace GameServer.Battle
 
         // 为两个玩家创建 PvP 战斗
         public BattleInstance CreatePvPBattle(string player1, string player2,
-            List<int> heroIdsP1 = null, List<int> heroIdsP2 = null)
+            List<int>? heroIdsP1 = null, List<int>? heroIdsP2 = null)
         {
             RemoveBattle(player1);
             RemoveBattle(player2);
@@ -77,6 +79,21 @@ namespace GameServer.Battle
         public void RemoveBattle(string username)
         {
             _battles.Remove(username);
+        }
+
+        public void JoinQueue(string username) => _matchQueue.Enqueue(username);
+
+        public void LeaveQueue(string username) => _matchQueue.Dequeue(username);
+
+        public (string p1, string p2, BattleInstance)? TryMatch()
+        {
+            if (!_matchQueue.CanMatch) return null;
+
+            var (p1, p2) = _matchQueue.PopMatch();
+            var battle = CreatePvPBattle(p1, p2);
+            _battles[p1] = battle;
+            _battles[p2] = battle;
+            return (p1, p2, battle);
         }
     }
 }

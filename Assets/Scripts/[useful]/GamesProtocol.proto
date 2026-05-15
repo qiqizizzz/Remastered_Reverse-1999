@@ -42,6 +42,10 @@ enum ActionCode
     CommitRound = 13;
     //客户端请求完整状态同步(断线重连用)
     RequestBattleState = 14;
+    //进入PVP匹配队列
+    JoinPvP = 15;
+    //离开PVP匹配队列
+    LeavePvP = 16;
 }
 
 enum ReturnCode
@@ -206,6 +210,7 @@ message BattlePack
 
     int32 sourceSlotIndex = 4; // 卡牌来源槽位索引(MoveCard时用)
     int32 targetSlotIndex = 5; // 卡牌目标槽位索引
+    int32 playerId = 6; // 操作者ID（PvE=1, PvP=1或2）
 
     repeated BattleEvent events = 10; // 战斗事件列表
     BattleStateSnapshot stateSnapshot = 11; // 完整状态快照
