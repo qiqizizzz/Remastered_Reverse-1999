@@ -44,6 +44,7 @@ namespace GameServer
             ProtocolRouter.Register(ActionCode.RequestBattleState, new BattleHandler());
             ProtocolRouter.Register(ActionCode.JoinPvP, new BattleHandler());
             ProtocolRouter.Register(ActionCode.LeavePvP, new BattleHandler());
+            ProtocolRouter.Register(ActionCode.SubmitPvPteam, new BattleHandler());
         }
     }
 }

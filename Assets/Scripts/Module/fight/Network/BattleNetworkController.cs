@@ -10,6 +10,7 @@ using Common.Defines;
 using GameProtocol;
 using Network;
 using Common;
+using Module.Matchmaking;
 using UnityEngine;
 
 namespace Module.fight.Network
@@ -29,6 +30,9 @@ namespace Module.fight.Network
             GameApp.NetworkManager.AddMessageHandler(ActionCode.MoveCard, onMoveCardResponse);
             GameApp.NetworkManager.AddMessageHandler(ActionCode.UnDoAction, onUndoResponse);
             GameApp.NetworkManager.AddMessageHandler(ActionCode.RequestBattleState, onRequestBattleStateResponse);
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.JoinPvP, onJoinPvpResponse);
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.LeavePvP, onLeavePvpResponse);
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.SubmitPvPteam, onSubmitPvpTeamResponse);
         }
 
         public void UnInit()
@@ -42,6 +46,9 @@ namespace Module.fight.Network
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.MoveCard, onMoveCardResponse);
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.UnDoAction, onUndoResponse);
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.RequestBattleState, onRequestBattleStateResponse);
+            GameApp.NetworkManager.RemoveMessageHandler(ActionCode.JoinPvP, onJoinPvpResponse);
+            GameApp.NetworkManager.RemoveMessageHandler(ActionCode.LeavePvP, onLeavePvpResponse);
+            GameApp.NetworkManager.RemoveMessageHandler(ActionCode.SubmitPvPteam, onSubmitPvpTeamResponse);
         }
 
         #region 发送请求
@@ -57,6 +64,47 @@ namespace Module.fight.Network
             GameApp.NetworkManager.Send(pack);
         }
         
+        // 发送进入PVP匹配队列请求
+        public void SendJoinPvp()
+        {
+            var pack = new MainPack
+            {
+                RequestCode = RequestCode.Battle,
+                ActionCode = ActionCode.JoinPvP
+            };
+            GameApp.NetworkManager.Send(pack);
+        }
+
+        // 发送离开PVP匹配队列或准备房间请求
+        public void SendLeavePvp()
+        {
+            var pack = new MainPack
+            {
+                RequestCode = RequestCode.Battle,
+                ActionCode = ActionCode.LeavePvP
+            };
+            GameApp.NetworkManager.Send(pack);
+        }
+
+        // 发送PVP阵容提交请求
+        public void SendSubmitPvpTeam(System.Collections.Generic.List<int> heroIds)
+        {
+            var battlePack = new BattlePack
+            {
+                MatchId = GameApp.PvpSession.MatchId,
+                PlayerId = getCurrentPlayerId()
+            };
+            battlePack.HeroIds.AddRange(heroIds);
+
+            var pack = new MainPack
+            {
+                RequestCode = RequestCode.Battle,
+                ActionCode = ActionCode.SubmitPvPteam,
+                BattlePack = battlePack
+            };
+            GameApp.NetworkManager.Send(pack);
+        }
+
         // 发送出牌请求
         public void SendPlayCard(int cardInstanceId, int targetInstanceId, int handIndex)
         {
@@ -66,6 +114,7 @@ namespace Module.fight.Network
                 ActionCode = ActionCode.PlayCard,
                 BattlePack = new BattlePack
                 {
+                    PlayerId = getCurrentPlayerId(),
                     CardInstanceId = cardInstanceId,
                     TargetEntityId = targetInstanceId,
                     SourceSlotIndex = handIndex
@@ -80,7 +129,8 @@ namespace Module.fight.Network
             var pack = new MainPack
             {
                 RequestCode = RequestCode.Battle,
-                ActionCode = ActionCode.EndTurn
+                ActionCode = ActionCode.EndTurn,
+                BattlePack = new BattlePack { PlayerId = getCurrentPlayerId() }
             };
             GameApp.NetworkManager.Send(pack);
         }
@@ -94,6 +144,7 @@ namespace Module.fight.Network
                 ActionCode = ActionCode.MoveCard,
                 BattlePack = new BattlePack
                 {
+                    PlayerId = getCurrentPlayerId(),
                     SourceSlotIndex = fromIndex,
                     TargetSlotIndex = toIndex
                 }
@@ -107,7 +158,8 @@ namespace Module.fight.Network
             var pack = new MainPack
             {
                 RequestCode = RequestCode.Battle,
-                ActionCode = ActionCode.UnDoAction
+                ActionCode = ActionCode.UnDoAction,
+                BattlePack = new BattlePack { PlayerId = getCurrentPlayerId() }
             };
             GameApp.NetworkManager.Send(pack);
         }
@@ -168,7 +220,55 @@ namespace Module.fight.Network
             if (!checkResponse(pack, ActionCode.RequestBattleState)) return;
             broadcastEvents(pack);
         }
+
+        // PVP匹配响应
+        private void onJoinPvpResponse(MainPack pack)
+        {
+            if (!checkResponse(pack, ActionCode.JoinPvP))
+            {
+                GameApp.MessageCenter.PostEvent(EventDefines.OnPvpMatchFailed, pack.StrMsg);
+                return;
+            }
+
+            if (pack.BattlePack == null || !pack.BattlePack.IsMatchSuccess) return;
+
+            GameApp.PvpSession.SetPrepareRoom(pack.BattlePack.MatchId, pack.BattlePack.PlayerId);
+            GameApp.MessageCenter.PostEvent(EventDefines.OnPvpMatchSuccess,
+                new PvpPrepareData(pack.BattlePack.MatchId, pack.BattlePack.PlayerId));
+        }
+
+        // 离开PVP响应
+        private void onLeavePvpResponse(MainPack pack)
+        {
+            if (!checkResponse(pack, ActionCode.LeavePvP)) return;
+            GameApp.PvpSession.Clear();
+        }
+
+        // PVP阵容提交响应
+        private void onSubmitPvpTeamResponse(MainPack pack)
+        {
+            if (!checkResponse(pack, ActionCode.SubmitPvPteam)) return;
+            if (pack.BattlePack == null) return;
+
+            if (!pack.BattlePack.IsTeamReady)
+            {
+                GameApp.MessageCenter.PostEvent(EventDefines.OnPvpTeamWaiting, pack.BattlePack);
+                return;
+            }
+
+            GameApp.MessageCenter.PostEvent(EventDefines.OnPvpBattleStart,
+                new PvpBattleStartData(pack.BattlePack.PlayerId, pack.BattlePack));
+        }
         #endregion
+
+        // 获取当前操作者编号
+        private int getCurrentPlayerId()
+        {
+            if (GameApp.PvpSession != null && GameApp.PvpSession.IsInPvp)
+                return GameApp.PvpSession.CurrentPlayerId;
+
+            return 1;
+        }
 
         // 检查响应是否成功
         private bool checkResponse(MainPack pack, ActionCode actionCode)

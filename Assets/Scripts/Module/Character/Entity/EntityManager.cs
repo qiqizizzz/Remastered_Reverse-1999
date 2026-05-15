@@ -20,7 +20,7 @@ namespace Module.Character
     public class EntityManager
     {
         private readonly List<HeroEntity> AliveHeroes;
-        private readonly List<EnemyEntity> AliveEnemies;
+        private readonly List<BaseCharacter> AliveEnemies;
         
         private Dictionary<int, Vector3> heroSpawnPositions = new Dictionary<int, Vector3>()
         {
@@ -43,12 +43,43 @@ namespace Module.Character
         public EntityManager()
         {
             AliveHeroes = new List<HeroEntity>();
-            AliveEnemies = new List<EnemyEntity>();
+            AliveEnemies = new List<BaseCharacter>();
         }
 
         public int GetTotalRound() => totalRound;
         public List<HeroEntity> GetAliveHeroes() => AliveHeroes;
-        public List<EnemyEntity> GetAliveEnemies() => AliveEnemies;
+        public List<BaseCharacter> GetAliveEnemies() => AliveEnemies;
+
+        // 根据服务端快照生成PvP实体
+        public void SpawnPvpBattleEntities(GameProtocol.BattleStateSnapshot snapshot, Action onComplete)
+        {
+            ClearBattleEntities();
+
+            int heroSpawnCount = 0;
+            int enemySpawnCount = 0;
+            for (int i = 0; i < snapshot.Entities.Count; i++)
+            {
+                if (snapshot.Entities[i].IsPlayerSide)
+                    heroSpawnCount++;
+                else
+                    enemySpawnCount++;
+            }
+
+            for (int i = 0; i < snapshot.Entities.Count; i++)
+            {
+                GameProtocol.CombatEntityInfo entityInfo = snapshot.Entities[i];
+                CharacterDataSO characterData = GameApp.ConfigManager.Character.Get(entityInfo.ConfigId);
+                if (characterData == null || string.IsNullOrEmpty(characterData.En_Name)) continue;
+
+                if (entityInfo.IsPlayerSide)
+                    spawnPvpHero(characterData, entityInfo, heroSpawnCount, enemySpawnCount, onComplete);
+                else
+                    spawnPvpEnemy(characterData, entityInfo, heroSpawnCount, enemySpawnCount, onComplete);
+            }
+
+            if (heroSpawnCount == 0 && enemySpawnCount == 0)
+                onComplete?.Invoke();
+        }
         
         #region 查找实体
         public BaseCharacter GetCharacterById(int id)
@@ -213,26 +244,72 @@ namespace Module.Character
         private void setHeroEntityData(GameObject go, CharacterDataSO heroData)
         {
             HeroEntity heroEntity = go.GetComponent<HeroEntity>();
+            heroEntity.SetEnemySide(false);
             heroEntity.Init(heroData);
             go.transform.position = heroSpawnPositions[++hasSpawnedHeroCount];//设置生成位置
-            
+
             AliveHeroes.Add(heroEntity);
         }
 
         private void setEnemyEntityData(GameObject go, CharacterDataSO enemyData)
         {
-            EnemyEntity enemyEntity = go.GetComponent<EnemyEntity>();
+            BaseCharacter enemyEntity = go.GetComponent<BaseCharacter>();
+            enemyEntity.SetEnemySide(true);
             enemyEntity.Init(enemyData);
-            
+
             int temp = hasSpawnedEnemyCount;
             go.transform.position = enemySpawnPositions[(temp % 3) + 1];
             hasSpawnedEnemyCount++;
 
             AliveEnemies.Add(enemyEntity);
-            
+
             //隐藏超过3只的敌人
             if(hasSpawnedEnemyCount > 3)
                 go.SetActive(false);
+        }
+
+        // 生成PvP己方英雄
+        private void spawnPvpHero(CharacterDataSO characterData, GameProtocol.CombatEntityInfo entityInfo, int heroSpawnCount, int enemySpawnCount, Action onComplete)
+        {
+            string heroRes = AddressDefines.Character_Hero + characterData.En_Name;
+            ResManager.InstantiateAsync(heroRes, (go) =>
+            {
+                HeroEntity heroEntity = go.GetComponent<HeroEntity>();
+                heroEntity.SetEnemySide(false);
+                heroEntity.Init(characterData);
+                heroEntity.SetCombatInstanceId(entityInfo.InstanceId);
+                heroEntity.SetHpFromSnapshot(entityInfo.CurrentHp, entityInfo.MaxHp);
+                heroEntity.SetActionPoint(entityInfo.ActionPoint);
+                go.transform.position = heroSpawnPositions[++hasSpawnedHeroCount];
+                AliveHeroes.Add(heroEntity);
+
+                if (AliveHeroes.Count == heroSpawnCount && AliveEnemies.Count == enemySpawnCount)
+                    onComplete?.Invoke();
+            });
+        }
+
+        // 生成PvP敌方单位
+        private void spawnPvpEnemy(CharacterDataSO characterData, GameProtocol.CombatEntityInfo entityInfo, int heroSpawnCount, int enemySpawnCount, Action onComplete)
+        {
+            string enemyRes = AddressDefines.Character_Hero + characterData.En_Name;
+            ResManager.InstantiateAsync(enemyRes, (go) =>
+            {
+                BaseCharacter enemyEntity = go.GetComponent<BaseCharacter>();
+                enemyEntity.SetEnemySide(true);
+                enemyEntity.Init(characterData);
+                enemyEntity.SetCombatInstanceId(entityInfo.InstanceId);
+                enemyEntity.SetHpFromSnapshot(entityInfo.CurrentHp, entityInfo.MaxHp);
+                int temp = hasSpawnedEnemyCount;
+                go.transform.position = enemySpawnPositions[(temp % 3) + 1];
+                hasSpawnedEnemyCount++;
+                AliveEnemies.Add(enemyEntity);
+
+                if (hasSpawnedEnemyCount > 3)
+                    go.SetActive(false);
+
+                if (AliveHeroes.Count == heroSpawnCount && AliveEnemies.Count == enemySpawnCount)
+                    onComplete?.Invoke();
+            });
         }
         #endregion
     }

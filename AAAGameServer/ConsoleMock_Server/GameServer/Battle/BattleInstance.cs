@@ -411,7 +411,7 @@ namespace GameServer.Battle
             return all.Find(c => c.InstanceId == instanceId);
         }
 
-        public BattleStateSnapshot GetStateSnapshot()
+        public BattleStateSnapshot GetStateSnapshot(int viewerPlayerId = PLAYER1_ID)
         {
             var snapshot = new BattleStateSnapshot
             {
@@ -420,9 +420,9 @@ namespace GameServer.Battle
             };
 
             foreach (var entity in _env.AllEntities)
-                snapshot.Entities.Add(_env.ProtoSerializer.ToProtoEntity(entity));
+                snapshot.Entities.Add(_env.ProtoSerializer.ToProtoEntity(entity, viewerPlayerId));
 
-            if (_env.Context.PlayerDecks.TryGetValue(PLAYER1_ID, out var deck))
+            if (_env.Context.PlayerDecks.TryGetValue(viewerPlayerId, out var deck))
             {
                 snapshot.PlayerDeck = new PlayerDeckInfo();
                 foreach (var card in deck.HandCards)

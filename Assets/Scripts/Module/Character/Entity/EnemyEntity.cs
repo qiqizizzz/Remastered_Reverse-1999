@@ -17,14 +17,9 @@ namespace Module.Character
 {
     public class EnemyEntity : BaseCharacter
     {
-        private void OnMouseDown()
+        protected override void OnMouseDown()
         {
-            if(CurrentStateType == CharacterStateType.Die) return;
-            
-            QLog.Info($"点击了敌人：{_characterData.Name}");
-            
-            //TODO:通知更新UI并传递InstanceID
-            GameApp.MessageCenter.PostEvent(EventDefines.OnSelectEnemyTarget, CombatInstanceId);
+            base.OnMouseDown();
         }
     }
 }

@@ -12,6 +12,7 @@ using DefaultNamespace;
 using Module.Character;
 using Module.Effect;
 using Module.fight.CardMgr;
+using Module.Matchmaking;
 using Module.Timer;
 using MVC;
 using Network;
@@ -30,6 +31,7 @@ public class GameApp : Singleton<GameApp>
     public static EntityManager EntityManager;
     public static CardManager CardManager;
     public static EffectManager EffectManager;
+    public static PvpSession PvpSession;
     
     public override void Init()
     {
@@ -44,6 +46,7 @@ public class GameApp : Singleton<GameApp>
         EntityManager = new EntityManager();
         CardManager = new CardManager();
         EffectManager = new EffectManager();
+        PvpSession = new PvpSession();
     }
 
     public override void Update(float dt)

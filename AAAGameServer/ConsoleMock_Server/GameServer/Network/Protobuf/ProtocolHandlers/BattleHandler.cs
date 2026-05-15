@@ -44,6 +44,9 @@ namespace Network
                 case ActionCode.LeavePvP:
                     handleLeavePvP(client, pack);
                     break;
+                case ActionCode.SubmitPvPteam:
+                    handleSubmitPvPTeam(client, pack);
+                    break;
             }
         }
 
@@ -164,7 +167,7 @@ namespace Network
             var events = battle.CollectEvents();
             var response = new BattlePack();
             response.Events.AddRange(events);
-            response.StateSnapshot = battle.GetStateSnapshot();
+            response.StateSnapshot = battle.GetStateSnapshot(bp.PlayerId);
             sendBattleResponse(client, ActionCode.UnDoAction, response);
         }
 
@@ -179,7 +182,8 @@ namespace Network
                 return;
             }
 
-            var snapshot = battle.GetStateSnapshot();
+            int playerId = pack.BattlePack?.PlayerId ?? 1;
+            var snapshot = battle.GetStateSnapshot(playerId);
             var events = battle.CollectEvents();
 
             var resPack = new MainPack
@@ -199,40 +203,23 @@ namespace Network
 
             client.Server.BattleManager.JoinQueue(client.UserName);
 
-            var matchResult = client.Server.BattleManager.TryMatch();
-            if (matchResult == null)
+            var room = client.Server.BattleManager.TryMatch();
+            if (room == null)
             {
                 var waitPack = new MainPack
                 {
                     RequestCode = RequestCode.Battle,
                     ActionCode = ActionCode.JoinPvP,
                     ReturnCode = ReturnCode.Succeed,
-                    StrMsg = "匹配中，等待对手..."
+                    StrMsg = "匹配中，等待对手...",
+                    BattlePack = new BattlePack { IsMatchSuccess = false }
                 };
                 client.Send(waitPack.ToByteArray());
                 return;
             }
 
-            var (p1, p2, battle) = matchResult.Value;
-            var events = battle.CollectEvents();
-
-            var clientP1 = client.Server.GetClientByUsername(p1);
-            if (clientP1 != null)
-            {
-                var res1 = new BattlePack { PlayerId = 1 };
-                res1.Events.AddRange(events);
-                res1.StateSnapshot = battle.GetStateSnapshot();
-                sendBattleResponse(clientP1, ActionCode.JoinPvP, res1);
-            }
-
-            var clientP2 = client.Server.GetClientByUsername(p2);
-            if (clientP2 != null)
-            {
-                var res2 = new BattlePack { PlayerId = 2 };
-                res2.Events.AddRange(events);
-                res2.StateSnapshot = battle.GetStateSnapshot();
-                sendBattleResponse(clientP2, ActionCode.JoinPvP, res2);
-            }
+            sendMatchSuccess(client.Server.GetClientByUsername(room.Player1), room, 1);
+            sendMatchSuccess(client.Server.GetClientByUsername(room.Player2), room, 2);
         }
 
         private void handleLeavePvP(Client client, MainPack pack)
@@ -251,9 +238,65 @@ namespace Network
             client.Send(resPack.ToByteArray());
         }
 
+        // 提交PvP阵容
+        private void handleSubmitPvPTeam(Client client, MainPack pack)
+        {
+            if (!checkLogin(client, ActionCode.SubmitPvPteam)) return;
+
+            var room = client.Server.BattleManager.GetPrepareRoom(client.UserName);
+            if (room == null)
+            {
+                sendBattleError(client, ActionCode.SubmitPvPteam, "当前不在PvP准备房间中");
+                return;
+            }
+
+            var battle = client.Server.BattleManager.SubmitPvpTeam(client.UserName, new List<int>(pack.BattlePack.HeroIds));
+            if (battle == null)
+            {
+                sendBattleResponse(client, ActionCode.SubmitPvPteam, new BattlePack
+                {
+                    MatchId = room.MatchId,
+                    PlayerId = room.GetPlayerId(client.UserName),
+                    IsTeamReady = false
+                });
+                return;
+            }
+
+            sendPvpBattleStart(client.Server.GetClientByUsername(room.Player1), battle, 1);
+            sendPvpBattleStart(client.Server.GetClientByUsername(room.Player2), battle, 2);
+        }
+
         #endregion
         
         #region 发送消息
+        // 发送PvP匹配成功消息
+        private void sendMatchSuccess(Client client, Network.Matchmaking.PvpPrepareRoom room, int playerId)
+        {
+            if (client == null) return;
+
+            sendBattleResponse(client, ActionCode.JoinPvP, new BattlePack
+            {
+                MatchId = room.MatchId,
+                PlayerId = playerId,
+                IsMatchSuccess = true
+            });
+        }
+
+        // 发送PvP战斗开始消息
+        private void sendPvpBattleStart(Client client, BattleInstance battle, int playerId)
+        {
+            if (client == null) return;
+
+            var battlePack = new BattlePack
+            {
+                PlayerId = playerId,
+                IsTeamReady = true,
+                StateSnapshot = battle.GetStateSnapshot(playerId)
+            };
+            battlePack.Events.AddRange(battle.CollectEvents());
+            sendBattleResponse(client, ActionCode.SubmitPvPteam, battlePack);
+        }
+
         private void sendBattleError(Client client, ActionCode actionCode, string msg)
         {
             var resPack = new MainPack

@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using Common.Defines;
 using Data.card;
 using Data.level;
+using Module.fight.Network;
 using Module.level;
 using Module.level.Component;
 using Module.Loading;
+using Module.Matchmaking;
 using MVC;
 using MVC.Extensions;
 using MVC.View;
@@ -36,14 +38,19 @@ namespace Module.View
         private int _currentFormationCardIndex = 0;//默认从卡牌0开始
         
         private int _currentLevelId = 0;//当前关卡id
-        
+        private bool _isPvpMode;
+        private PvpPrepareData _pvpPrepareData;
+        private BattleNetworkController _battleNetwork;
+
         public string targetSelectCharacterName = string.Empty;//记录滚动列表当前选择的角色
 
         protected override void OnAwake()
         {
             Find<Button>("Btn_return").onClick.AddListener(onReturnBtn);
             Find<Button>("Btn_action").onClick.AddListener(onActionBtn);
-            
+            _battleNetwork = new BattleNetworkController();
+            _battleNetwork.Init();
+
             levelTargetText1 = Find<TextMeshProUGUI>("LevelDetailArea/Target/Img_content1/Txt_content1");
             levelTargetText2 = Find<TextMeshProUGUI>("LevelDetailArea/Target/Img_content2/Txt_content2");
             selectFormationArea = Find<Transform>("SelectFormationArea");
@@ -71,7 +78,30 @@ namespace Module.View
 
         public override void Open(params object[] args)
         {
-            //args[0]为关卡id,根据关卡id显示对应的界面内容
+            GameApp.MessageCenter.AddEvent(EventDefines.OnPvpTeamWaiting, onPvpTeamWaiting);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnPvpBattleStart, onPvpBattleStart);
+
+            if (args.Length > 0 && args[0] is PvpPrepareData pvpPrepareData)
+            {
+                openPvpPrepare(pvpPrepareData);
+                return;
+            }
+
+            openPvePrepare(args);
+        }
+
+        public override void Close(params object[] args)
+        {
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnPvpTeamWaiting, onPvpTeamWaiting);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnPvpBattleStart, onPvpBattleStart);
+            base.Close(args);
+        }
+
+        // 打开PVE准备界面
+        private void openPvePrepare(params object[] args)
+        {
+            _isPvpMode = false;
+            _pvpPrepareData = null;
             _currentLevelId = (int)args[0];
             LevelDataSO dataSo = GameApp.ConfigManager.Level.Get(_currentLevelId);
             if (dataSo == null)
@@ -88,13 +118,33 @@ namespace Module.View
             }
         }
 
+        // 打开PVP准备界面
+        private void openPvpPrepare(PvpPrepareData pvpPrepareData)
+        {
+            _isPvpMode = true;
+            _pvpPrepareData = pvpPrepareData;
+            levelTargetText1.text = "选择你的PvP阵容";
+            levelTargetText2.text = $"玩家编号：{pvpPrepareData.PlayerId}";
+        }
+
         private void onReturnBtn()
         {
+            if (_isPvpMode)
+                _battleNetwork.SendLeavePvp();
+
             GameApp.ViewManager.NavigateBack();
         }
 
         private void onActionBtn()
         {
+            if (_isPvpMode)
+            {
+                _battleNetwork.SendSubmitPvpTeam(getSelectedHeroIds());
+                levelTargetText1.text = "阵容已提交";
+                levelTargetText2.text = "等待对手确认阵容...";
+                return;
+            }
+
             ViewExtensions.LoadScene(this, SceneDefines.Fight,() =>
             {
                 ApplyControllerFunc(ControllerType.Fight, EventDefines.OpenFightingView, GetLevelInitData());
@@ -103,22 +153,56 @@ namespace Module.View
 
         private LevelModel GetLevelInitData()
         {
+            List<CharacterDataSO> characters = getSelectedCharacters();
+            List<MonsterSpawnData> monsterSpawnData = GameApp.ConfigManager.Level.GetLevelMonsterSpawnData(_currentLevelId);
+            LevelModel model = new LevelModel(characters, monsterSpawnData, _currentLevelId);
+
+            return model;
+        }
+
+        // 获取当前编队角色
+        private List<CharacterDataSO> getSelectedCharacters()
+        {
             List<CharacterDataSO> characters = new List<CharacterDataSO>();
-            List<MonsterSpawnData> monsterSpawnData = new List<MonsterSpawnData>();
-            
             for (int i = 0; i < formationCards.Length; i++)
             {
                 string cardName = formationCards[i].GetCardName();
                 CharacterDataSO data = GameApp.ConfigManager.Character.GetByName(cardName);
                 if(data == null) QLog.Info("未找到角色数据, name: " + cardName);
-                characters.Add(data); 
+                characters.Add(data);
             }
 
-            monsterSpawnData = GameApp.ConfigManager.Level.GetLevelMonsterSpawnData(_currentLevelId);
-            
-            LevelModel model = new LevelModel(characters, monsterSpawnData, _currentLevelId);
+            return characters;
+        }
 
-            return model;
+        // 获取当前编队角色配置Id
+        private List<int> getSelectedHeroIds()
+        {
+            List<int> heroIds = new List<int>();
+            List<CharacterDataSO> characters = getSelectedCharacters();
+            for (int i = 0; i < characters.Count; i++)
+            {
+                if (characters[i] != null)
+                    heroIds.Add(characters[i].Id);
+            }
+
+            return heroIds;
+        }
+
+        // 处理PVP等待对手提交
+        private void onPvpTeamWaiting(object arg)
+        {
+            levelTargetText1.text = "阵容已提交";
+            levelTargetText2.text = "等待对手确认阵容...";
+        }
+
+        // 处理PVP战斗开始
+        private void onPvpBattleStart(object arg)
+        {
+            ViewExtensions.LoadScene(this, SceneDefines.Fight,() =>
+            {
+                ApplyControllerFunc(ControllerType.Fight, EventDefines.OpenFightingView, arg as PvpBattleStartData);
+            });
         }
 
         #region 编队相关

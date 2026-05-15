@@ -154,7 +154,7 @@ namespace Module.fight.EventPlayer
             }
 
             BaseCharacter sourceCharacter = EventPlayer_CharacterShift.FindCharacterByCombatInstanceId(evt.SourceId);
-            bool isEnemySource = sourceCharacter is EnemyEntity;
+            bool isEnemySource = sourceCharacter != null && sourceCharacter.IsEnemySide;
             if (PlayEventSequence.IsEnemyTurnResolving || isEnemySource)
             {
                 if (sourceCharacter != null && sourceCharacter.CurrentStateType != CharacterStateType.Die)

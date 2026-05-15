@@ -40,7 +40,7 @@ namespace Module.View
 
         private void onMatchmakingBtn()
         {
-            //TODO:打开匹配界面，发送网络请求。。。
+            GameApp.ViewManager.Open(ViewType.MatchmakingView);
         }
         
         private void onReturnBtn()

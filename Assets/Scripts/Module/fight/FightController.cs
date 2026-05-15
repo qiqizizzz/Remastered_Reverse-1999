@@ -15,6 +15,7 @@ using Module.Character;
 using Module.fight.CardMgr;
 using Module.fight.Core.Entities;
 using Module.fight.Network;
+using Module.Matchmaking;
 using MVC;
 using MVC.Controller;
 using Common;
@@ -25,6 +26,8 @@ namespace Module.fight
     public class FightController : BaseController
     {
         private LevelModel _currentModel;
+        private PvpBattleStartData _pvpBattleStartData;
+        private bool _isPvpMode;
         private bool _isBattleActive;//是否还在战斗中
         private bool _isPlayerTurnStart; //是否是玩家回合开始（不包括输出回合）
         private readonly BattleNetworkController _battleNetwork;
@@ -89,8 +92,17 @@ namespace Module.fight
         #region UI事件
         private void onOpenFightView(System.Object[] args)
         {
+            if (args[0] is PvpBattleStartData pvpBattleStartData)
+            {
+                _isPvpMode = true;
+                _pvpBattleStartData = pvpBattleStartData;
+                GameApp.PvpSession.SetPrepareRoom(GameApp.PvpSession.MatchId, pvpBattleStartData.PlayerId);
+                GameApp.EntityManager.SpawnPvpBattleEntities(pvpBattleStartData.BattlePack.StateSnapshot, onSpawnPvpBattleCallback);
+                return;
+            }
+
+            _isPvpMode = false;
             _currentModel = args[0] as LevelModel;
-            
             GameApp.EntityManager.SpawnBattleEntities(_currentModel, onSpawnBattleCallback);//生成玩家与敌人等
         }
         
@@ -138,7 +150,8 @@ namespace Module.fight
         {
             PlayEventSequence.SyncCharacters(snapshot.Entities);
 
-            var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
+            int playerId = GameApp.PvpSession != null && GameApp.PvpSession.IsInPvp ? GameApp.PvpSession.CurrentPlayerId : 1;
+            var deck = GameApp.CardManager.BattleContext.PlayerDecks[playerId];
             deck.HandCards.Clear();
             deck.DrawPile.Clear();
             deck.DiscardPile.Clear();
@@ -186,14 +199,16 @@ namespace Module.fight
             
             if (deadChar == null) return;
 
-            if (deadChar is HeroEntity hero)
+            if (deadChar.IsEnemySide)
+            {
+                GameApp.EntityManager.GetAliveEnemies().Remove(deadChar);
+            }
+            else if (deadChar is HeroEntity hero)
             {
                 GameApp.EntityManager.GetAliveHeroes().Remove(hero);
                 GameApp.CardManager.RemoveDiedCharacterCard(deadChar.CharacterData);
             }
-            else if (deadChar is EnemyEntity enemy)
-                GameApp.EntityManager.GetAliveEnemies().Remove(enemy);
-            
+
             // 胜负判断由服务端 BattleEnd 事件驱动（PlayEventSequence 处理）
         }
 
@@ -205,23 +220,53 @@ namespace Module.fight
             _isBattleActive = true;
 
             GameApp.CardManager.InitCards(_currentModel);
-            
+            initLocalCombatEntities(1);
+
+            GameApp.ViewManager.CloseAll();
+            GameApp.ViewManager.Open(ViewType.FightingView);
+
+            // 由服务端驱动战斗初始化与回合流转
+            _battleNetwork.SendEnterPve(_currentModel.LevelId);
+        }
+
+        // PvP实体生成完成回调
+        private void onSpawnPvpBattleCallback()
+        {
+            _isBattleActive = true;
+            int playerId = _pvpBattleStartData.PlayerId;
+            GameApp.CardManager.InitPvpCards(playerId, getAliveHeroConfigIds());
+            initLocalCombatEntities(playerId);
+            GameApp.ViewManager.CloseAll();
+            GameApp.ViewManager.Open(ViewType.FightingView);
+            onBattleServerResponse(_pvpBattleStartData.BattlePack);
+        }
+
+        // 初始化本地战斗实体缓存
+        private void initLocalCombatEntities(int playerId)
+        {
             foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
             {
                 GameApp.CardManager.BattleContext.Entities[hero.CharacterData.Id] = new CombatEntity(
                     hero.CombatInstanceId,
                     hero.CharacterData.Id,
-                    1,
+                    playerId,
                     hero.CurrentHp,
                     hero.ActionPoint
                 );
             }
-            
-            GameApp.ViewManager.CloseAll();
-            GameApp.ViewManager.Open(ViewType.FightingView);
-            
-            // 由服务端驱动战斗初始化与回合流转
-            _battleNetwork.SendEnterPve(_currentModel.LevelId);
+        }
+
+        // 获取当前存活英雄配置Id
+        private List<int> getAliveHeroConfigIds()
+        {
+            List<int> heroIds = new List<int>();
+            foreach (var hero in GameApp.EntityManager.GetAliveHeroes())
+            {
+                if (hero != null && hero.CharacterData != null)
+                    heroIds.Add(hero.CharacterData.Id);
+            }
+
+            return heroIds;
         }
         #endregion
     }

@@ -52,14 +52,26 @@ namespace Module.fight.CardMgr
 
             BattleContext.Entities.Clear();
             BattleContext.SequenceCardInstanceId = 1000;
-            
+
             foreach (var character in model.Characters)
             {
                 if(character != null) _currentCharacterConfigIds.Add(character.Id);
             }
-            
+
             updateScalingRules();
             CombatSystem.InitDeck(LOCAL_PLAYER_ID, _currentCharacterConfigIds);
+        }
+
+        // 初始化PvP本地卡牌上下文
+        public void InitPvpCards(int playerId, List<int> characterConfigIds)
+        {
+            CardActionQueue.Clear();
+            _currentCharacterConfigIds.Clear();
+            _currentCharacterConfigIds.AddRange(characterConfigIds);
+            BattleContext.Entities.Clear();
+            BattleContext.SequenceCardInstanceId = 1000;
+            updateScalingRules();
+            CombatSystem.InitDeck(playerId, _currentCharacterConfigIds);
         }
 
         private void InitEventBus()

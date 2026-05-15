@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Common.Defines;
 using Data.card;
 using DG.Tweening;
 using Module.Character.Components;
@@ -68,6 +69,7 @@ namespace Module.Character
         public CharacterDataSO CharacterData => _characterData;
         public string InstanceID => _instanceId;
         public int CombatInstanceId { get; private set; }
+        public bool IsEnemySide { get; private set; }
         public CharacterHUD HUD => _HUD;
         
         #region 生命周期、初始化
@@ -189,6 +191,21 @@ namespace Module.Character
             MaxHp = maxHp;
             CurrentHp = Mathf.Clamp(currentHp, 0f, maxHp);
             _HUD?.UpdateHp(CurrentHp, MaxHp);
+        }
+
+        // 设置当前角色是否作为敌方目标
+        public void SetEnemySide(bool isEnemySide)
+        {
+            IsEnemySide = isEnemySide;
+        }
+
+        // 处理敌方目标点击
+        protected virtual void OnMouseDown()
+        {
+            if (!IsEnemySide || CurrentStateType == CharacterStateType.Die) return;
+
+            QLog.Info($"点击了敌人：{_characterData.Name}");
+            GameApp.MessageCenter.PostEvent(EventDefines.OnSelectEnemyTarget, CombatInstanceId);
         }
 
         // 重置战斗实例Id计数器，保证与服务端每场战斗从1开始一致

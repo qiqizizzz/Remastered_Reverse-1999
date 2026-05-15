@@ -22,7 +22,7 @@ namespace GameServer.Battle.Core.Serialization
             _configManager = configManager;
         }
 
-        public CombatEntityInfo ToProtoEntity(CombatEntity entity)
+        public CombatEntityInfo ToProtoEntity(CombatEntity entity, int viewerPlayerId = 1)
         {
             var charConfig = _configManager.GetCharacter(entity.ConfigId);
             int maxHp = charConfig != null ? (int)charConfig.Property.Hp : 0;
@@ -31,7 +31,7 @@ namespace GameServer.Battle.Core.Serialization
             {
                 InstanceId = entity.InstanceId,
                 ConfigId = entity.ConfigId,
-                IsPlayerSide = entity.OwnerPlayerId == 1,
+                IsPlayerSide = entity.OwnerPlayerId == viewerPlayerId,
                 CurrentHp = (int)entity.CurrentHp,
                 MaxHp = maxHp,
                 ActionPoint = entity.ActionPoint,

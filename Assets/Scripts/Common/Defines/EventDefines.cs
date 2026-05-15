@@ -59,5 +59,9 @@ namespace Common.Defines
         public const string OnBattleServerResponse = "OnBattleServerResponse";
         public const string OnBattleTurnStart = "OnBattleTurnStart";
         public const string OnBattleTurnEnd = "OnBattleTurnEnd";
+        public const string OnPvpMatchSuccess = "OnPvpMatchSuccess";
+        public const string OnPvpMatchFailed = "OnPvpMatchFailed";
+        public const string OnPvpTeamWaiting = "OnPvpTeamWaiting";
+        public const string OnPvpBattleStart = "OnPvpBattleStart";
     }
 }
