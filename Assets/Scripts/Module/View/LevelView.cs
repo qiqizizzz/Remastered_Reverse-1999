@@ -19,6 +19,7 @@ namespace Module.View
         protected override void OnAwake()
         {
             Find<Button>("Btn_return").onClick.AddListener(onReturnBtn);
+            Find<Button>("Btn_matchMaking").onClick.AddListener(onMatchmakingBtn);
             bindLevelBtn();
         }
 
@@ -35,6 +36,11 @@ namespace Module.View
                     ApplyFunc(EventDefines.OpenPrepareFightView, levelId);
                 });
             }
+        }
+
+        private void onMatchmakingBtn()
+        {
+            //TODO:打开匹配界面，发送网络请求。。。
         }
         
         private void onReturnBtn()
