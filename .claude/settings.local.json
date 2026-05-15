@@ -5,7 +5,13 @@
       "Bash(xargs grep -l -i \"snapshot\\\\|Snapshot\\\\|BattleStateSnapshot\\\\|StateSnapshot\")",
       "Bash(xargs grep -l -i \"hand.*card.*sync\\\\|sync.*hand\\\\|SyncHand\\\\|SyncCard\\\\|SyncField\\\\|RequestBattleState\")",
       "Bash(xargs grep -l \"AnimateUndoCard\\\\|AnimateUndo\")",
-      "Bash(dotnet build *)"
+      "Bash(dotnet build *)",
+      "Skill(superpowers:brainstorming)",
+      "Bash(rtk git *)",
+      "Bash(rtk ls *)",
+      "Skill(superpowers:writing-plans)",
+      "Skill(superpowers:subagent-driven-development)",
+      "Skill(superpowers:using-git-worktrees)"
     ]
   }
 }

@@ -44,8 +44,10 @@ enum ActionCode
     RequestBattleState = 14;
     //进入PVP匹配队列
     JoinPvP = 15;
-    //离开PVP匹配队列
+    //离开PVP匹配队列或准备房间
     LeavePvP = 16;
+    //提交PVP阵容
+    SubmitPvPTeam = 17;
 }
 
 enum ReturnCode
@@ -211,9 +213,13 @@ message BattlePack
     int32 sourceSlotIndex = 4; // 卡牌来源槽位索引(MoveCard时用)
     int32 targetSlotIndex = 5; // 卡牌目标槽位索引
     int32 playerId = 6; // 操作者ID（PvE=1, PvP=1或2）
+    repeated int32 heroIds = 7; // PVP提交阵容的角色配置ID
+    string matchId = 8; // PVP准备房间ID
+    bool isMatchSuccess = 9; // 是否已经匹配到对手
 
     repeated BattleEvent events = 10; // 战斗事件列表
     BattleStateSnapshot stateSnapshot = 11; // 完整状态快照
+    bool isTeamReady = 12; // PVP双方阵容是否都已提交
 }
 
 // 单个战斗表现事件
