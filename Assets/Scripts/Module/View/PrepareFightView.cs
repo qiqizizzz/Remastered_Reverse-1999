@@ -96,16 +96,15 @@ namespace Module.View
             GameApp.MessageCenter.AddEvent(EventDefines.OnPvpTeamWaiting, onPvpTeamWaiting);
             GameApp.MessageCenter.AddEvent(EventDefines.OnPvpBattleStart, onPvpBattleStart);
 
+            pvpPlayer1_ReadyTxt.text = "<color=red>未准备</color>";
+            pvpPlayer2_ReadyTxt.text = "<color=red>未准备</color>";
+
             if (args.Length > 0 && args[0] is PvpPrepareData pvpPrepareData)
             {
                 openPvpPrepare(pvpPrepareData);
                 return;
             }
 
-            //TODO:如果是pvp,每次打开这个界面的时候需要重置为下面内容，但是刚刚没有重置,这里需要修复
-            // pvpPlayer1_ReadyTxt.text = "<color=red>未准备</color>";
-            // pvpPlayer2_ReadyTxt.text = "<color=red>未准备</color>";
-            
             openPvePrepare(args);
         }
 
@@ -146,10 +145,8 @@ namespace Module.View
             _pvpPrepareData = pvpPrepareData;
             
             pvpArea.gameObject.SetActive(true);
-            
-            //TODO:这里需要改成玩家的真实名字,根据PlayerId的顺序来
-            pvpPlayer1_NameTxt.text = "玩家1";
-            pvpPlayer2_NameTxt.text = "玩家2";
+            pvpPlayer1_NameTxt.text = pvpPrepareData.Player1Name;
+            pvpPlayer2_NameTxt.text = pvpPrepareData.Player2Name;
             pvpPlayer1_ReadyTxt.text = "<color=red>未准备</color>";
             pvpPlayer2_ReadyTxt.text = "<color=red>未准备</color>";
             timeTxt.text = string.Empty;
@@ -168,9 +165,6 @@ namespace Module.View
             if (_isPvpMode)
             {
                 _battleNetwork.SendSubmitPvpTeam(getSelectedHeroIds());
-                
-                levelTargetText1.text = "阵容已提交";
-                levelTargetText2.text = "等待对手确认阵容...";
 
                 if (_pvpPrepareData.PlayerId == 1)
                     pvpPlayer1_ReadyTxt.text = "<color=green>准备就绪</color>";
@@ -229,20 +223,9 @@ namespace Module.View
             if (arg is GameProtocol.BattlePack pack)
             {
                 if (pack.PlayerId == 1)
-                {
                     pvpPlayer1_ReadyTxt.text = "<color=green>准备就绪</color>";
-                }
                 else if (pack.PlayerId == 2)
-                {
                     pvpPlayer2_ReadyTxt.text = "<color=green>准备就绪</color>";
-                }
-
-                if (pack.PlayerId == _pvpPrepareData.PlayerId)
-                {
-                    //这里的逻辑请删除，不能改这两个txt
-                    levelTargetText1.text = "阵容已提交";
-                    levelTargetText2.text = "等待对手确认阵容...";
-                }
             }
         }
 

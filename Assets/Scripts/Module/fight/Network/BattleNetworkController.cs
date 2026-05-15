@@ -251,9 +251,18 @@ namespace Module.fight.Network
 
             if (pack.BattlePack == null || !pack.BattlePack.IsMatchSuccess) return;
 
+            string p1Name = "玩家1";
+            string p2Name = "玩家2";
+            if (!string.IsNullOrEmpty(pack.StrMsg))
+            {
+                var names = pack.StrMsg.Split('|');
+                if (names.Length > 0) p1Name = names[0];
+                if (names.Length > 1) p2Name = names[1];
+            }
+
             GameApp.PvpSession.SetPrepareRoom(pack.BattlePack.MatchId, pack.BattlePack.PlayerId);
             GameApp.MessageCenter.PostEvent(EventDefines.OnPvpMatchSuccess,
-                new PvpPrepareData(pack.BattlePack.MatchId, pack.BattlePack.PlayerId));
+                new PvpPrepareData(pack.BattlePack.MatchId, pack.BattlePack.PlayerId, p1Name, p2Name));
         }
 
         // 离开PVP响应

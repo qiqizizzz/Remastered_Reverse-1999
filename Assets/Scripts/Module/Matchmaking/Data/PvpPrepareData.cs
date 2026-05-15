@@ -12,12 +12,15 @@ namespace Module.Matchmaking
     {
         public string MatchId { get; private set; }
         public int PlayerId { get; private set; }
-        //TODO：需要加一个玩家名字。
+        public string Player1Name { get; private set; }
+        public string Player2Name { get; private set; }
 
-        public PvpPrepareData(string matchId, int playerId)
+        public PvpPrepareData(string matchId, int playerId, string p1Name = "玩家1", string p2Name = "玩家2")
         {
             MatchId = matchId;
             PlayerId = playerId;
+            Player1Name = p1Name;
+            Player2Name = p2Name;
         }
     }
 }

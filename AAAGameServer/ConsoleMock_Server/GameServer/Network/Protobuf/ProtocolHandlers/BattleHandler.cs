@@ -278,12 +278,20 @@ namespace Network
         {
             if (client == null) return;
 
-            sendBattleResponse(client, ActionCode.JoinPvP, new BattlePack
+            var resPack = new MainPack
             {
-                MatchId = room.MatchId,
-                PlayerId = playerId,
-                IsMatchSuccess = true
-            });
+                RequestCode = RequestCode.Battle,
+                ActionCode = ActionCode.JoinPvP,
+                ReturnCode = ReturnCode.Succeed,
+                StrMsg = $"{room.Player1}|{room.Player2}",
+                BattlePack = new BattlePack
+                {
+                    MatchId = room.MatchId,
+                    PlayerId = playerId,
+                    IsMatchSuccess = true
+                }
+            };
+            client.Send(resPack.ToByteArray());
         }
 
         // 发送PvP战斗开始消息
