@@ -43,6 +43,7 @@ namespace Module.View
         private TextMeshProUGUI pvpPlayer1_ReadyTxt;
         private TextMeshProUGUI pvpPlayer2_NameTxt;
         private TextMeshProUGUI pvpPlayer2_ReadyTxt;
+        private TextMeshProUGUI timeTxt;
         
         private int _currentLevelId = 0;//当前关卡id
         private bool _isPvpMode;
@@ -60,8 +61,9 @@ namespace Module.View
             levelTargetText1 = Find<TextMeshProUGUI>("LevelDetailArea/Target/Img_content1/Txt_content1");
             levelTargetText2 = Find<TextMeshProUGUI>("LevelDetailArea/Target/Img_content2/Txt_content2");
             selectFormationArea = Find<Transform>("SelectFormationArea");
-            pvpArea = Find<Transform>("PvpArea");
             
+            pvpArea = Find<Transform>("PvpArea");
+            timeTxt = Find<TextMeshProUGUI>("PvpArea/PlayerDetail/Txt_time");
             pvpPlayer1_NameTxt = Find<TextMeshProUGUI>("PvpArea/PlayerDetail/player_1/Txt_name");
             pvpPlayer1_ReadyTxt = Find<TextMeshProUGUI>("PvpArea/PlayerDetail/player_1/Txt_ready");
             pvpPlayer2_NameTxt = Find<TextMeshProUGUI>("PvpArea/PlayerDetail/player_2/Txt_name");
