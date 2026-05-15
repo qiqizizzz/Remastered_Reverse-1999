@@ -26,6 +26,7 @@ namespace GameServer.Battle
             _battles = new Dictionary<string, BattleInstance>();
         }
 
+        #region 战斗类型
         // 为指定用户创建 PvE 战斗
         public BattleInstance CreateBattle(string username, int levelId, List<int>? heroConfigIds = null)
         {
@@ -67,7 +68,9 @@ namespace GameServer.Battle
             _battles[player2] = battle;
             return battle;
         }
+        #endregion
 
+        #region 战斗实例
         // 获取指定用户的战斗实例
         public BattleInstance GetBattle(string username)
         {
@@ -80,7 +83,9 @@ namespace GameServer.Battle
         {
             _battles.Remove(username);
         }
+        #endregion
 
+        #region 匹配系统
         public void JoinQueue(string username) => _matchQueue.Enqueue(username);
 
         public void LeaveQueue(string username) => _matchQueue.Dequeue(username);
@@ -95,5 +100,6 @@ namespace GameServer.Battle
             _battles[p2] = battle;
             return (p1, p2, battle);
         }
+        #endregion
     }
 }
