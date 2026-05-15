@@ -25,7 +25,6 @@ namespace Module.View
         {
             _txt = Find<TextMeshProUGUI>("txt");
             _battleNetwork = new BattleNetworkController();
-            _battleNetwork.Init();
 
             Find<Button>("Btn_cancel").onClick.AddListener(onCancelBtn);
         }
@@ -33,6 +32,7 @@ namespace Module.View
         public override void Open(params object[] args)
         {
             base.Open(args);
+            _battleNetwork.InitPvpPrepare();
             _txt.text = "匹配中...";
             GameApp.MessageCenter.AddEvent(EventDefines.OnPvpMatchSuccess, onPvpMatchSuccess);
             GameApp.MessageCenter.AddEvent(EventDefines.OnPvpMatchFailed, onPvpMatchFailed);
@@ -43,6 +43,7 @@ namespace Module.View
         {
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPvpMatchSuccess, onPvpMatchSuccess);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPvpMatchFailed, onPvpMatchFailed);
+            _battleNetwork.UnInitPvpPrepare();
             base.Close(args);
         }
 

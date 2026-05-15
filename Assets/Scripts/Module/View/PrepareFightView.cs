@@ -49,7 +49,6 @@ namespace Module.View
             Find<Button>("Btn_return").onClick.AddListener(onReturnBtn);
             Find<Button>("Btn_action").onClick.AddListener(onActionBtn);
             _battleNetwork = new BattleNetworkController();
-            _battleNetwork.Init();
 
             levelTargetText1 = Find<TextMeshProUGUI>("LevelDetailArea/Target/Img_content1/Txt_content1");
             levelTargetText2 = Find<TextMeshProUGUI>("LevelDetailArea/Target/Img_content2/Txt_content2");
@@ -78,6 +77,7 @@ namespace Module.View
 
         public override void Open(params object[] args)
         {
+            _battleNetwork.InitPvpPrepare();
             GameApp.MessageCenter.AddEvent(EventDefines.OnPvpTeamWaiting, onPvpTeamWaiting);
             GameApp.MessageCenter.AddEvent(EventDefines.OnPvpBattleStart, onPvpBattleStart);
 
@@ -94,6 +94,7 @@ namespace Module.View
         {
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPvpTeamWaiting, onPvpTeamWaiting);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPvpBattleStart, onPvpBattleStart);
+            _battleNetwork.UnInitPvpPrepare();
             base.Close(args);
         }
 

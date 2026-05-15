@@ -114,6 +114,7 @@ namespace Module.fight.CardMgr
             int originalIndex = dataIndex >= 0 ? dataIndex : index;
 
             _handCardUIManager.RemoveCardAt(index);
+            _handCardUIManager.RefreshHandCardLayout();
             _uiActionStack.Push(item);
 
             var action = new CardAction

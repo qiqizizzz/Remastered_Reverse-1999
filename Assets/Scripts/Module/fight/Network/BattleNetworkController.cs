@@ -17,12 +17,14 @@ namespace Module.fight.Network
 {
     public class BattleNetworkController
     {
-        private bool _isInitialized;
+        private bool _isBattleInitialized;
+        private bool _isPvpPrepareInitialized;
 
+        // 注册战斗内协议响应
         public void Init()
         {
-            if (_isInitialized) return;
-            _isInitialized = true;
+            if (_isBattleInitialized) return;
+            _isBattleInitialized = true;
 
             GameApp.NetworkManager.AddMessageHandler(ActionCode.EnterPve, onEnterPveResponse);
             GameApp.NetworkManager.AddMessageHandler(ActionCode.PlayCard, onPlayCardResponse);
@@ -30,15 +32,13 @@ namespace Module.fight.Network
             GameApp.NetworkManager.AddMessageHandler(ActionCode.MoveCard, onMoveCardResponse);
             GameApp.NetworkManager.AddMessageHandler(ActionCode.UnDoAction, onUndoResponse);
             GameApp.NetworkManager.AddMessageHandler(ActionCode.RequestBattleState, onRequestBattleStateResponse);
-            GameApp.NetworkManager.AddMessageHandler(ActionCode.JoinPvP, onJoinPvpResponse);
-            GameApp.NetworkManager.AddMessageHandler(ActionCode.LeavePvP, onLeavePvpResponse);
-            GameApp.NetworkManager.AddMessageHandler(ActionCode.SubmitPvPteam, onSubmitPvpTeamResponse);
         }
 
+        // 反注册战斗内协议响应
         public void UnInit()
         {
-            if (!_isInitialized) return;
-            _isInitialized = false;
+            if (!_isBattleInitialized) return;
+            _isBattleInitialized = false;
 
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.EnterPve, onEnterPveResponse);
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.PlayCard, onPlayCardResponse);
@@ -46,6 +46,25 @@ namespace Module.fight.Network
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.MoveCard, onMoveCardResponse);
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.UnDoAction, onUndoResponse);
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.RequestBattleState, onRequestBattleStateResponse);
+        }
+
+        // 注册PvP准备阶段协议响应
+        public void InitPvpPrepare()
+        {
+            if (_isPvpPrepareInitialized) return;
+            _isPvpPrepareInitialized = true;
+
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.JoinPvP, onJoinPvpResponse);
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.LeavePvP, onLeavePvpResponse);
+            GameApp.NetworkManager.AddMessageHandler(ActionCode.SubmitPvPteam, onSubmitPvpTeamResponse);
+        }
+
+        // 反注册PvP准备阶段协议响应
+        public void UnInitPvpPrepare()
+        {
+            if (!_isPvpPrepareInitialized) return;
+            _isPvpPrepareInitialized = false;
+
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.JoinPvP, onJoinPvpResponse);
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.LeavePvP, onLeavePvpResponse);
             GameApp.NetworkManager.RemoveMessageHandler(ActionCode.SubmitPvPteam, onSubmitPvpTeamResponse);
