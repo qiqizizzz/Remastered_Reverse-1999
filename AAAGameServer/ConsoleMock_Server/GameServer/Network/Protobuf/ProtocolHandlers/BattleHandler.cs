@@ -250,15 +250,19 @@ namespace Network
                 return;
             }
 
+            int submitterPlayerId = room.GetPlayerId(client.UserName);
             var battle = client.Server.BattleManager.SubmitPvpTeam(client.UserName, new List<int>(pack.BattlePack.HeroIds));
             if (battle == null)
             {
-                sendBattleResponse(client, ActionCode.SubmitPvPteam, new BattlePack
+                var notifyPack = new BattlePack
                 {
                     MatchId = room.MatchId,
-                    PlayerId = room.GetPlayerId(client.UserName),
+                    PlayerId = submitterPlayerId,
                     IsTeamReady = false
-                });
+                };
+                
+                sendBattleResponse(client.Server.GetClientByUsername(room.Player1), ActionCode.SubmitPvPteam, notifyPack);
+                sendBattleResponse(client.Server.GetClientByUsername(room.Player2), ActionCode.SubmitPvPteam, notifyPack);
                 return;
             }
 

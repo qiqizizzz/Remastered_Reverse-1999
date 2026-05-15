@@ -92,8 +92,6 @@ namespace Module.View
 
         public override void Open(params object[] args)
         {
-            //TODO:只有pvp的时候PvpArea才会显示
-            
             _battleNetwork.InitPvpPrepare();
             GameApp.MessageCenter.AddEvent(EventDefines.OnPvpTeamWaiting, onPvpTeamWaiting);
             GameApp.MessageCenter.AddEvent(EventDefines.OnPvpBattleStart, onPvpBattleStart);
@@ -104,6 +102,10 @@ namespace Module.View
                 return;
             }
 
+            //TODO:如果是pvp,每次打开这个界面的时候需要重置为下面内容，但是刚刚没有重置,这里需要修复
+            // pvpPlayer1_ReadyTxt.text = "<color=red>未准备</color>";
+            // pvpPlayer2_ReadyTxt.text = "<color=red>未准备</color>";
+            
             openPvePrepare(args);
         }
 
@@ -120,6 +122,7 @@ namespace Module.View
         {
             _isPvpMode = false;
             _pvpPrepareData = null;
+            pvpArea.gameObject.SetActive(false);
             _currentLevelId = (int)args[0];
             LevelDataSO dataSo = GameApp.ConfigManager.Level.Get(_currentLevelId);
             if (dataSo == null)
@@ -142,9 +145,14 @@ namespace Module.View
             _isPvpMode = true;
             _pvpPrepareData = pvpPrepareData;
             
-            //TODO：下面的内容需要更改
-            levelTargetText1.text = "选择你的PvP阵容";
-            levelTargetText2.text = $"玩家编号：{pvpPrepareData.PlayerId}";
+            pvpArea.gameObject.SetActive(true);
+            
+            //TODO:这里需要改成玩家的真实名字,根据PlayerId的顺序来
+            pvpPlayer1_NameTxt.text = "玩家1";
+            pvpPlayer2_NameTxt.text = "玩家2";
+            pvpPlayer1_ReadyTxt.text = "<color=red>未准备</color>";
+            pvpPlayer2_ReadyTxt.text = "<color=red>未准备</color>";
+            timeTxt.text = string.Empty;
         }
 
         private void onReturnBtn()
@@ -161,9 +169,14 @@ namespace Module.View
             {
                 _battleNetwork.SendSubmitPvpTeam(getSelectedHeroIds());
                 
-                //TODO:这里也需要更改
                 levelTargetText1.text = "阵容已提交";
                 levelTargetText2.text = "等待对手确认阵容...";
+
+                if (_pvpPrepareData.PlayerId == 1)
+                    pvpPlayer1_ReadyTxt.text = "<color=green>准备就绪</color>";
+                else
+                    pvpPlayer2_ReadyTxt.text = "<color=green>准备就绪</color>";
+
                 return;
             }
 
@@ -211,22 +224,64 @@ namespace Module.View
             return heroIds;
         }
 
-        // 处理PVP等待对手提交
         private void onPvpTeamWaiting(object arg)
         {
-            //这里也需要更改
-            
-            levelTargetText1.text = "阵容已提交";
-            levelTargetText2.text = "等待对手确认阵容...";
+            if (arg is GameProtocol.BattlePack pack)
+            {
+                if (pack.PlayerId == 1)
+                {
+                    pvpPlayer1_ReadyTxt.text = "<color=green>准备就绪</color>";
+                }
+                else if (pack.PlayerId == 2)
+                {
+                    pvpPlayer2_ReadyTxt.text = "<color=green>准备就绪</color>";
+                }
+
+                if (pack.PlayerId == _pvpPrepareData.PlayerId)
+                {
+                    //这里的逻辑请删除，不能改这两个txt
+                    levelTargetText1.text = "阵容已提交";
+                    levelTargetText2.text = "等待对手确认阵容...";
+                }
+            }
         }
+
+        private float _countdownTime = 0f;
+        private bool _isCountdown = false;
+        private PvpBattleStartData _pendingBattleStartData;
 
         // 处理PVP战斗开始
         private void onPvpBattleStart(object arg)
         {
-            ViewExtensions.LoadScene(this, SceneDefines.Fight,() =>
+            pvpPlayer1_ReadyTxt.text = "<color=green>准备就绪</color>";
+            pvpPlayer2_ReadyTxt.text = "<color=green>准备就绪</color>";
+            
+            _pendingBattleStartData = arg as PvpBattleStartData;
+            _countdownTime = 5f;
+            _isCountdown = true;
+            timeTxt.text = "5s后进入对局";
+
+            // 注册TimeManager，5秒后执行场景加载
+            GameApp.TimerManager.Register(5f, () =>
             {
-                ApplyControllerFunc(ControllerType.Fight, EventDefines.OpenFightingView, arg as PvpBattleStartData);
+                _isCountdown = false;
+                ViewExtensions.LoadScene(this, SceneDefines.Fight, () =>
+                {
+                    ApplyControllerFunc(ControllerType.Fight, EventDefines.OpenFightingView, _pendingBattleStartData);
+                });
             });
+        }
+
+        protected override void OnUpdate()
+        {
+            if (_isCountdown)
+            {
+                _countdownTime -= Time.deltaTime;
+                if (_countdownTime > 0)
+                {
+                    timeTxt.text = $"{Mathf.CeilToInt(_countdownTime)}s后进入对局";
+                }
+            }
         }
 
         #region 编队相关
