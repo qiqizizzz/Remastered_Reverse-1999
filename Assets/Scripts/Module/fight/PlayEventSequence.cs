@@ -87,8 +87,24 @@ namespace Module.fight
             }
         }
 
+        private static bool isPurePrivateCardEvent(BattleEventType type)
+        {
+            //TODO：我感觉这个函数有点多余。。。
+            
+            return type == BattleEventType.DrawCard ||
+                   type == BattleEventType.DiscardCard ||
+                   type == BattleEventType.CardMoved ||
+                   type == BattleEventType.MergeCard ||
+                   type == BattleEventType.GrantUltimate ||
+                   type == BattleEventType.ShuffleDeck;
+        }
+        
         private static async Task playSingleEvent(BattleEvent evt)
         {
+            //拦截非本地玩家事件并且需要匹配ID
+            //if(isPurePrivateCardEvent(evt.EventType) && evt.EventOwnerId != GameApp.CardManager.)
+                //return;
+            
             switch (evt.EventType)
             {
                 case BattleEventType.BattleStart:        await EventPlayer_CharacterShift.PlayBattleStart(evt); break;

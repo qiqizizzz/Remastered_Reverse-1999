@@ -228,7 +228,8 @@ message BattleEvent
     BattleEventType eventType = 1;
     int32 sourceId = 2; // 事件来源实体ID
     int32 targetId = 3; // 事件目标实体ID
-    int32 sourceCardConfigId = 4;
+    int32 sourceCardConfigId = 4; // 事件来源卡牌配置ID
+    int32 eventOwnerId = 5; // 事件所有者ID(玩家ID）
     
     oneof eventParams
     {

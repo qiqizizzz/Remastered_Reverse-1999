@@ -67,80 +67,80 @@ namespace GameProtocol {
             "dGNoU3VjY2VzcxgJIAEoCBIpCgZldmVudHMYCiADKAsyGS5HYW1lUHJvdG9j",
             "b2wuQmF0dGxlRXZlbnQSOAoNc3RhdGVTbmFwc2hvdBgLIAEoCzIhLkdhbWVQ",
             "cm90b2NvbC5CYXR0bGVTdGF0ZVNuYXBzaG90EhMKC2lzVGVhbVJlYWR5GAwg",
-            "ASgIIpYJCgtCYXR0bGVFdmVudBIwCglldmVudFR5cGUYASABKA4yHS5HYW1l",
+            "ASgIIqwJCgtCYXR0bGVFdmVudBIwCglldmVudFR5cGUYASABKA4yHS5HYW1l",
             "UHJvdG9jb2wuQmF0dGxlRXZlbnRUeXBlEhAKCHNvdXJjZUlkGAIgASgFEhAK",
-            "CHRhcmdldElkGAMgASgFEhoKEnNvdXJjZUNhcmRDb25maWdJZBgEIAEoBRIs",
-            "CgZkYW1hZ2UYCiABKAsyGi5HYW1lUHJvdG9jb2wuRGFtYWdlUGFyYW1zSAAS",
-            "KAoEaGVhbBgLIAEoCzIYLkdhbWVQcm90b2NvbC5IZWFsUGFyYW1zSAASKgoF",
-            "ZGVhdGgYDCABKAsyGS5HYW1lUHJvdG9jb2wuRGVhdGhQYXJhbXNIABIyCglz",
-            "a2lsbENhc3QYDSABKAsyHS5HYW1lUHJvdG9jb2wuU2tpbGxDYXN0UGFyYW1z",
-            "SAASMAoIZHJhd0NhcmQYFCABKAsyHC5HYW1lUHJvdG9jb2wuRHJhd0NhcmRQ",
-            "YXJhbXNIABI2CgtkaXNjYXJkQ2FyZBgVIAEoCzIfLkdhbWVQcm90b2NvbC5E",
-            "aXNjYXJkQ2FyZFBhcmFtc0gAEjAKCG1vdmVDYXJkGBYgASgLMhwuR2FtZVBy",
-            "b3RvY29sLk1vdmVDYXJkUGFyYW1zSAASMgoJbWVyZ2VDYXJkGBcgASgLMh0u",
-            "R2FtZVByb3RvY29sLk1lcmdlQ2FyZFBhcmFtc0gAEjoKDWdyYW50VWx0aW1h",
-            "dGUYGCABKAsyIS5HYW1lUHJvdG9jb2wuR3JhbnRVbHRpbWF0ZVBhcmFtc0gA",
-            "EjYKC3NodWZmbGVEZWNrGBkgASgLMh8uR2FtZVByb3RvY29sLlNodWZmbGVE",
-            "ZWNrUGFyYW1zSAASNgoLZW5xdWV1ZUNhcmQYHiABKAsyHy5HYW1lUHJvdG9j",
-            "b2wuRW5xdWV1ZUNhcmRQYXJhbXNIABI2CgtkZXF1ZXVlQ2FyZBgfIAEoCzIf",
-            "LkdhbWVQcm90b2NvbC5EZXF1ZXVlQ2FyZFBhcmFtc0gAEkAKEGNsZWFyQWN0",
-            "aW9uUXVldWUYICABKAsyJC5HYW1lUHJvdG9jb2wuQ2xlYXJBY3Rpb25RdWV1",
-            "ZVBhcmFtc0gAEkQKEmFjdGlvblBvaW50Q2hhbmdlZBgoIAEoCzImLkdhbWVQ",
-            "cm90b2NvbC5BY3Rpb25Qb2ludENoYW5nZWRQYXJhbXNIABJCChFlbmVteVNl",
-            "bGVjdFRhcmdldBgpIAEoCzIlLkdhbWVQcm90b2NvbC5FbmVteVNlbGVjdFRh",
-            "cmdldFBhcmFtc0gAEjIKCXR1cm5TdGFydBgqIAEoCzIdLkdhbWVQcm90b2Nv",
-            "bC5UdXJuU3RhcnRQYXJhbXNIABIuCgd0dXJuRW5kGCsgASgLMhsuR2FtZVBy",
-            "b3RvY29sLlR1cm5FbmRQYXJhbXNIABI2CgtiYXR0bGVTdGFydBgsIAEoCzIf",
-            "LkdhbWVQcm90b2NvbC5CYXR0bGVTdGFydFBhcmFtc0gAEjIKCWJhdHRsZUVu",
-            "ZBgtIAEoCzIdLkdhbWVQcm90b2NvbC5CYXR0bGVFbmRQYXJhbXNIAEINCgtl",
-            "dmVudFBhcmFtcyI3CgxEYW1hZ2VQYXJhbXMSEwoLZGFtYWdlVmFsdWUYASAB",
-            "KAUSEgoKaXNDcml0aWNhbBgCIAEoCCIzCgpIZWFsUGFyYW1zEhEKCWhlYWxW",
-            "YWx1ZRgBIAEoBRISCgppc092ZXJIZWFsGAIgASgIIg0KC0RlYXRoUGFyYW1z",
-            "IjUKD1NraWxsQ2FzdFBhcmFtcxIPCgdza2lsbElkGAEgASgFEhEKCXRhcmdl",
-            "dElkcxgCIAMoBSJPCg5EcmF3Q2FyZFBhcmFtcxIqCgRjYXJkGAEgASgLMhwu",
-            "R2FtZVByb3RvY29sLkNhcmRFbnRpdHlJbmZvEhEKCXNsb3RJbmRleBgCIAEo",
-            "BSJSChFEaXNjYXJkQ2FyZFBhcmFtcxIqCgRjYXJkGAEgASgLMhwuR2FtZVBy",
-            "b3RvY29sLkNhcmRFbnRpdHlJbmZvEhEKCXNsb3RJbmRleBgCIAEoBSI0Cg5N",
-            "b3ZlQ2FyZFBhcmFtcxIRCglmcm9tSW5kZXgYASABKAUSDwoHdG9JbmRleBgC",
-            "IAEoBSJ0Cg9NZXJnZUNhcmRQYXJhbXMSHAoUcmVzdWx0Q2FyZEluc3RhbmNl",
-            "SWQYASABKAUSFwoPcmVzdWx0U3RhckxldmVsGAIgASgFEhcKD2NvbnN1bWVk",
-            "Q2FyZElkcxgDIAMoBRIRCglzbG90SW5kZXgYBCABKAUiVAoTR3JhbnRVbHRp",
-            "bWF0ZVBhcmFtcxIqCgRjYXJkGAEgASgLMhwuR2FtZVByb3RvY29sLkNhcmRF",
-            "bnRpdHlJbmZvEhEKCXNsb3RJbmRleBgCIAEoBSIoChFTaHVmZmxlRGVja1Bh",
-            "cmFtcxITCgtkZWNrT3duZXJJZBgBIAEoBSJtChFFbnF1ZXVlQ2FyZFBhcmFt",
-            "cxIqCgRjYXJkGAEgASgLMhwuR2FtZVByb3RvY29sLkNhcmRFbnRpdHlJbmZv",
-            "EhIKCnF1ZXVlSW5kZXgYAiABKAUSGAoQYWN0aW9uUG9pbnRBZnRlchgDIAEo",
-            "BSJCChFEZXF1ZXVlQ2FyZFBhcmFtcxISCgpxdWV1ZUluZGV4GAEgASgFEhkK",
-            "EXJlc3RvcmVkU2xvdEluZGV4GAIgASgFIhgKFkNsZWFyQWN0aW9uUXVldWVQ",
-            "YXJhbXMiUAoYQWN0aW9uUG9pbnRDaGFuZ2VkUGFyYW1zEhAKCGVudGl0eUlk",
-            "GAEgASgFEhAKCG5ld1ZhbHVlGAIgASgFEhAKCG1heFZhbHVlGAMgASgFIjwK",
-            "F0VuZW15U2VsZWN0VGFyZ2V0UGFyYW1zEg8KB2VuZW15SWQYASABKAUSEAoI",
-            "dGFyZ2V0SWQYAiABKAUiPAoPVHVyblN0YXJ0UGFyYW1zEhQKDGlzUGxheWVy",
-            "VHVybhgBIAEoCBITCgtyb3VuZE51bWJlchgCIAEoBSI6Cg1UdXJuRW5kUGFy",
-            "YW1zEhQKDGlzUGxheWVyVHVybhgBIAEoCBITCgtyb3VuZE51bWJlchgCIAEo",
-            "BSJWChFCYXR0bGVTdGFydFBhcmFtcxIPCgdsZXZlbElkGAEgASgFEjAKCGVu",
-            "dGl0aWVzGAIgAygLMh4uR2FtZVByb3RvY29sLkNvbWJhdEVudGl0eUluZm8i",
-            "JgoPQmF0dGxlRW5kUGFyYW1zEhMKC2lzUGxheWVyV2luGAEgASgIKkAKC1Jl",
-            "cXVlc3RDb2RlEg8KC1JlcXVlc3ROb25lEAASCAoEVXNlchABEgoKBkZyaWVu",
-            "ZBACEgoKBkJhdHRsZRADKq4CCgpBY3Rpb25Db2RlEg4KCkFjdGlvbk5vbmUQ",
-            "ABIJCgVMb2dvbhABEgkKBUxvZ2luEAISDQoJSGVhcnRiZWF0EAMSDwoLQ2hh",
-            "dFByaXZhdGUQBBITCg9GcmllbmRPcGVyYXRpb24QBRISCg5HZXRDaGF0SGlz",
-            "dG9yeRAGEgwKCEVudGVyUHZlEAcSDAoIUGxheUNhcmQQCBILCgdFbmRUdXJu",
-            "EAkSEwoPU3luY0JhdHRsZUV2ZW50EAoSDAoITW92ZUNhcmQQCxIOCgpVbkRv",
-            "QWN0aW9uEAwSDwoLQ29tbWl0Um91bmQQDRIWChJSZXF1ZXN0QmF0dGxlU3Rh",
-            "dGUQDhILCgdKb2luUHZQEA8SDAoITGVhdmVQdlAQEBIRCg1TdWJtaXRQdlBU",
-            "ZWFtEBEqNQoKUmV0dXJuQ29kZRIOCgpSZXR1cm5Ob25lEAASCwoHU3VjY2Vl",
-            "ZBABEgoKBkZhaWxlZBACKl4KDEZyaWVuZE9wVHlwZRIQCgxGcmllbmRPcE5v",
-            "bmUQABILCgdHZXRMaXN0EAESDQoJQWRkRnJpZW5kEAISEAoMUmVtb3ZlRnJp",
-            "ZW5kEAMSDgoKU2VhcmNoVXNlchAEKt4CCg9CYXR0bGVFdmVudFR5cGUSCAoE",
-            "Tm9uZRAAEg8KC0JhdHRsZVN0YXJ0EAESDQoJQmF0dGxlRW5kEAISDQoJVHVy",
-            "blN0YXJ0EAoSCwoHVHVybkVuZBALEgwKCERyYXdDYXJkEAwSDwoLRGlzY2Fy",
-            "ZENhcmQQDRINCglDYXJkTW92ZWQQDhINCglNZXJnZUNhcmQQDxIRCg1HcmFu",
-            "dFVsdGltYXRlEBASDwoLRW5xdWV1ZUNhcmQQERIPCgtEZXF1ZXVlQ2FyZBAS",
-            "EhQKEENsZWFyQWN0aW9uUXVldWUQExINCglTa2lsbENhc3QQFBIPCgtEYW1h",
-            "Z2VUYWtlbhAeEg0KCUhlYWxUYWtlbhAfEg4KCkVudGl0eURpZWQQIBIWChJB",
-            "Y3Rpb25Qb2ludENoYW5nZWQQIRIPCgtTaHVmZmxlRGVjaxAoEhUKEUVuZW15",
-            "U2VsZWN0VGFyZ2V0ECliBnByb3RvMw=="));
+            "CHRhcmdldElkGAMgASgFEhoKEnNvdXJjZUNhcmRDb25maWdJZBgEIAEoBRIU",
+            "CgxldmVudE93bmVySWQYBSABKAUSLAoGZGFtYWdlGAogASgLMhouR2FtZVBy",
+            "b3RvY29sLkRhbWFnZVBhcmFtc0gAEigKBGhlYWwYCyABKAsyGC5HYW1lUHJv",
+            "dG9jb2wuSGVhbFBhcmFtc0gAEioKBWRlYXRoGAwgASgLMhkuR2FtZVByb3Rv",
+            "Y29sLkRlYXRoUGFyYW1zSAASMgoJc2tpbGxDYXN0GA0gASgLMh0uR2FtZVBy",
+            "b3RvY29sLlNraWxsQ2FzdFBhcmFtc0gAEjAKCGRyYXdDYXJkGBQgASgLMhwu",
+            "R2FtZVByb3RvY29sLkRyYXdDYXJkUGFyYW1zSAASNgoLZGlzY2FyZENhcmQY",
+            "FSABKAsyHy5HYW1lUHJvdG9jb2wuRGlzY2FyZENhcmRQYXJhbXNIABIwCght",
+            "b3ZlQ2FyZBgWIAEoCzIcLkdhbWVQcm90b2NvbC5Nb3ZlQ2FyZFBhcmFtc0gA",
+            "EjIKCW1lcmdlQ2FyZBgXIAEoCzIdLkdhbWVQcm90b2NvbC5NZXJnZUNhcmRQ",
+            "YXJhbXNIABI6Cg1ncmFudFVsdGltYXRlGBggASgLMiEuR2FtZVByb3RvY29s",
+            "LkdyYW50VWx0aW1hdGVQYXJhbXNIABI2CgtzaHVmZmxlRGVjaxgZIAEoCzIf",
+            "LkdhbWVQcm90b2NvbC5TaHVmZmxlRGVja1BhcmFtc0gAEjYKC2VucXVldWVD",
+            "YXJkGB4gASgLMh8uR2FtZVByb3RvY29sLkVucXVldWVDYXJkUGFyYW1zSAAS",
+            "NgoLZGVxdWV1ZUNhcmQYHyABKAsyHy5HYW1lUHJvdG9jb2wuRGVxdWV1ZUNh",
+            "cmRQYXJhbXNIABJAChBjbGVhckFjdGlvblF1ZXVlGCAgASgLMiQuR2FtZVBy",
+            "b3RvY29sLkNsZWFyQWN0aW9uUXVldWVQYXJhbXNIABJEChJhY3Rpb25Qb2lu",
+            "dENoYW5nZWQYKCABKAsyJi5HYW1lUHJvdG9jb2wuQWN0aW9uUG9pbnRDaGFu",
+            "Z2VkUGFyYW1zSAASQgoRZW5lbXlTZWxlY3RUYXJnZXQYKSABKAsyJS5HYW1l",
+            "UHJvdG9jb2wuRW5lbXlTZWxlY3RUYXJnZXRQYXJhbXNIABIyCgl0dXJuU3Rh",
+            "cnQYKiABKAsyHS5HYW1lUHJvdG9jb2wuVHVyblN0YXJ0UGFyYW1zSAASLgoH",
+            "dHVybkVuZBgrIAEoCzIbLkdhbWVQcm90b2NvbC5UdXJuRW5kUGFyYW1zSAAS",
+            "NgoLYmF0dGxlU3RhcnQYLCABKAsyHy5HYW1lUHJvdG9jb2wuQmF0dGxlU3Rh",
+            "cnRQYXJhbXNIABIyCgliYXR0bGVFbmQYLSABKAsyHS5HYW1lUHJvdG9jb2wu",
+            "QmF0dGxlRW5kUGFyYW1zSABCDQoLZXZlbnRQYXJhbXMiNwoMRGFtYWdlUGFy",
+            "YW1zEhMKC2RhbWFnZVZhbHVlGAEgASgFEhIKCmlzQ3JpdGljYWwYAiABKAgi",
+            "MwoKSGVhbFBhcmFtcxIRCgloZWFsVmFsdWUYASABKAUSEgoKaXNPdmVySGVh",
+            "bBgCIAEoCCINCgtEZWF0aFBhcmFtcyI1Cg9Ta2lsbENhc3RQYXJhbXMSDwoH",
+            "c2tpbGxJZBgBIAEoBRIRCgl0YXJnZXRJZHMYAiADKAUiTwoORHJhd0NhcmRQ",
+            "YXJhbXMSKgoEY2FyZBgBIAEoCzIcLkdhbWVQcm90b2NvbC5DYXJkRW50aXR5",
+            "SW5mbxIRCglzbG90SW5kZXgYAiABKAUiUgoRRGlzY2FyZENhcmRQYXJhbXMS",
+            "KgoEY2FyZBgBIAEoCzIcLkdhbWVQcm90b2NvbC5DYXJkRW50aXR5SW5mbxIR",
+            "CglzbG90SW5kZXgYAiABKAUiNAoOTW92ZUNhcmRQYXJhbXMSEQoJZnJvbUlu",
+            "ZGV4GAEgASgFEg8KB3RvSW5kZXgYAiABKAUidAoPTWVyZ2VDYXJkUGFyYW1z",
+            "EhwKFHJlc3VsdENhcmRJbnN0YW5jZUlkGAEgASgFEhcKD3Jlc3VsdFN0YXJM",
+            "ZXZlbBgCIAEoBRIXCg9jb25zdW1lZENhcmRJZHMYAyADKAUSEQoJc2xvdElu",
+            "ZGV4GAQgASgFIlQKE0dyYW50VWx0aW1hdGVQYXJhbXMSKgoEY2FyZBgBIAEo",
+            "CzIcLkdhbWVQcm90b2NvbC5DYXJkRW50aXR5SW5mbxIRCglzbG90SW5kZXgY",
+            "AiABKAUiKAoRU2h1ZmZsZURlY2tQYXJhbXMSEwoLZGVja093bmVySWQYASAB",
+            "KAUibQoRRW5xdWV1ZUNhcmRQYXJhbXMSKgoEY2FyZBgBIAEoCzIcLkdhbWVQ",
+            "cm90b2NvbC5DYXJkRW50aXR5SW5mbxISCgpxdWV1ZUluZGV4GAIgASgFEhgK",
+            "EGFjdGlvblBvaW50QWZ0ZXIYAyABKAUiQgoRRGVxdWV1ZUNhcmRQYXJhbXMS",
+            "EgoKcXVldWVJbmRleBgBIAEoBRIZChFyZXN0b3JlZFNsb3RJbmRleBgCIAEo",
+            "BSIYChZDbGVhckFjdGlvblF1ZXVlUGFyYW1zIlAKGEFjdGlvblBvaW50Q2hh",
+            "bmdlZFBhcmFtcxIQCghlbnRpdHlJZBgBIAEoBRIQCghuZXdWYWx1ZRgCIAEo",
+            "BRIQCghtYXhWYWx1ZRgDIAEoBSI8ChdFbmVteVNlbGVjdFRhcmdldFBhcmFt",
+            "cxIPCgdlbmVteUlkGAEgASgFEhAKCHRhcmdldElkGAIgASgFIjwKD1R1cm5T",
+            "dGFydFBhcmFtcxIUCgxpc1BsYXllclR1cm4YASABKAgSEwoLcm91bmROdW1i",
+            "ZXIYAiABKAUiOgoNVHVybkVuZFBhcmFtcxIUCgxpc1BsYXllclR1cm4YASAB",
+            "KAgSEwoLcm91bmROdW1iZXIYAiABKAUiVgoRQmF0dGxlU3RhcnRQYXJhbXMS",
+            "DwoHbGV2ZWxJZBgBIAEoBRIwCghlbnRpdGllcxgCIAMoCzIeLkdhbWVQcm90",
+            "b2NvbC5Db21iYXRFbnRpdHlJbmZvIiYKD0JhdHRsZUVuZFBhcmFtcxITCgtp",
+            "c1BsYXllcldpbhgBIAEoCCpACgtSZXF1ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9u",
+            "ZRAAEggKBFVzZXIQARIKCgZGcmllbmQQAhIKCgZCYXR0bGUQAyquAgoKQWN0",
+            "aW9uQ29kZRIOCgpBY3Rpb25Ob25lEAASCQoFTG9nb24QARIJCgVMb2dpbhAC",
+            "Eg0KCUhlYXJ0YmVhdBADEg8KC0NoYXRQcml2YXRlEAQSEwoPRnJpZW5kT3Bl",
+            "cmF0aW9uEAUSEgoOR2V0Q2hhdEhpc3RvcnkQBhIMCghFbnRlclB2ZRAHEgwK",
+            "CFBsYXlDYXJkEAgSCwoHRW5kVHVybhAJEhMKD1N5bmNCYXR0bGVFdmVudBAK",
+            "EgwKCE1vdmVDYXJkEAsSDgoKVW5Eb0FjdGlvbhAMEg8KC0NvbW1pdFJvdW5k",
+            "EA0SFgoSUmVxdWVzdEJhdHRsZVN0YXRlEA4SCwoHSm9pblB2UBAPEgwKCExl",
+            "YXZlUHZQEBASEQoNU3VibWl0UHZQVGVhbRARKjUKClJldHVybkNvZGUSDgoK",
+            "UmV0dXJuTm9uZRAAEgsKB1N1Y2NlZWQQARIKCgZGYWlsZWQQAipeCgxGcmll",
+            "bmRPcFR5cGUSEAoMRnJpZW5kT3BOb25lEAASCwoHR2V0TGlzdBABEg0KCUFk",
+            "ZEZyaWVuZBACEhAKDFJlbW92ZUZyaWVuZBADEg4KClNlYXJjaFVzZXIQBCre",
+            "AgoPQmF0dGxlRXZlbnRUeXBlEggKBE5vbmUQABIPCgtCYXR0bGVTdGFydBAB",
+            "Eg0KCUJhdHRsZUVuZBACEg0KCVR1cm5TdGFydBAKEgsKB1R1cm5FbmQQCxIM",
+            "CghEcmF3Q2FyZBAMEg8KC0Rpc2NhcmRDYXJkEA0SDQoJQ2FyZE1vdmVkEA4S",
+            "DQoJTWVyZ2VDYXJkEA8SEQoNR3JhbnRVbHRpbWF0ZRAQEg8KC0VucXVldWVD",
+            "YXJkEBESDwoLRGVxdWV1ZUNhcmQQEhIUChBDbGVhckFjdGlvblF1ZXVlEBMS",
+            "DQoJU2tpbGxDYXN0EBQSDwoLRGFtYWdlVGFrZW4QHhINCglIZWFsVGFrZW4Q",
+            "HxIOCgpFbnRpdHlEaWVkECASFgoSQWN0aW9uUG9pbnRDaGFuZ2VkECESDwoL",
+            "U2h1ZmZsZURlY2sQKBIVChFFbmVteVNlbGVjdFRhcmdldBApYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProtocol.RequestCode), typeof(global::GameProtocol.ActionCode), typeof(global::GameProtocol.ReturnCode), typeof(global::GameProtocol.FriendOpType), typeof(global::GameProtocol.BattleEventType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -156,7 +156,7 @@ namespace GameProtocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.ActionQueueInfo), global::GameProtocol.ActionQueueInfo.Parser, new[]{ "QueuedCards", "MaxSize" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.BattleStateSnapshot), global::GameProtocol.BattleStateSnapshot.Parser, new[]{ "CurrentRound", "IsPlayerTurn", "Entities", "PlayerDeck", "ActionQueue" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.BattlePack), global::GameProtocol.BattlePack.Parser, new[]{ "LevelId", "CardInstanceId", "TargetEntityId", "SourceSlotIndex", "TargetSlotIndex", "PlayerId", "HeroIds", "MatchId", "IsMatchSuccess", "Events", "StateSnapshot", "IsTeamReady" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.BattleEvent), global::GameProtocol.BattleEvent.Parser, new[]{ "EventType", "SourceId", "TargetId", "SourceCardConfigId", "Damage", "Heal", "Death", "SkillCast", "DrawCard", "DiscardCard", "MoveCard", "MergeCard", "GrantUltimate", "ShuffleDeck", "EnqueueCard", "DequeueCard", "ClearActionQueue", "ActionPointChanged", "EnemySelectTarget", "TurnStart", "TurnEnd", "BattleStart", "BattleEnd" }, new[]{ "EventParams" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.BattleEvent), global::GameProtocol.BattleEvent.Parser, new[]{ "EventType", "SourceId", "TargetId", "SourceCardConfigId", "EventOwnerId", "Damage", "Heal", "Death", "SkillCast", "DrawCard", "DiscardCard", "MoveCard", "MergeCard", "GrantUltimate", "ShuffleDeck", "EnqueueCard", "DequeueCard", "ClearActionQueue", "ActionPointChanged", "EnemySelectTarget", "TurnStart", "TurnEnd", "BattleStart", "BattleEnd" }, new[]{ "EventParams" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.DamageParams), global::GameProtocol.DamageParams.Parser, new[]{ "DamageValue", "IsCritical" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.HealParams), global::GameProtocol.HealParams.Parser, new[]{ "HealValue", "IsOverHeal" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProtocol.DeathParams), global::GameProtocol.DeathParams.Parser, null, null, null, null, null),
@@ -3333,6 +3333,7 @@ namespace GameProtocol {
       sourceId_ = other.sourceId_;
       targetId_ = other.targetId_;
       sourceCardConfigId_ = other.sourceCardConfigId_;
+      eventOwnerId_ = other.eventOwnerId_;
       switch (other.EventParamsCase) {
         case EventParamsOneofCase.Damage:
           Damage = other.Damage.Clone();
@@ -3443,11 +3444,28 @@ namespace GameProtocol {
     /// <summary>Field number for the "sourceCardConfigId" field.</summary>
     public const int SourceCardConfigIdFieldNumber = 4;
     private int sourceCardConfigId_;
+    /// <summary>
+    /// 事件来源卡牌配置ID
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int SourceCardConfigId {
       get { return sourceCardConfigId_; }
       set {
         sourceCardConfigId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "eventOwnerId" field.</summary>
+    public const int EventOwnerIdFieldNumber = 5;
+    private int eventOwnerId_;
+    /// <summary>
+    /// 事件所有者ID(玩家ID）
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int EventOwnerId {
+      get { return eventOwnerId_; }
+      set {
+        eventOwnerId_ = value;
       }
     }
 
@@ -3725,6 +3743,7 @@ namespace GameProtocol {
       if (SourceId != other.SourceId) return false;
       if (TargetId != other.TargetId) return false;
       if (SourceCardConfigId != other.SourceCardConfigId) return false;
+      if (EventOwnerId != other.EventOwnerId) return false;
       if (!object.Equals(Damage, other.Damage)) return false;
       if (!object.Equals(Heal, other.Heal)) return false;
       if (!object.Equals(Death, other.Death)) return false;
@@ -3755,6 +3774,7 @@ namespace GameProtocol {
       if (SourceId != 0) hash ^= SourceId.GetHashCode();
       if (TargetId != 0) hash ^= TargetId.GetHashCode();
       if (SourceCardConfigId != 0) hash ^= SourceCardConfigId.GetHashCode();
+      if (EventOwnerId != 0) hash ^= EventOwnerId.GetHashCode();
       if (eventParamsCase_ == EventParamsOneofCase.Damage) hash ^= Damage.GetHashCode();
       if (eventParamsCase_ == EventParamsOneofCase.Heal) hash ^= Heal.GetHashCode();
       if (eventParamsCase_ == EventParamsOneofCase.Death) hash ^= Death.GetHashCode();
@@ -3803,6 +3823,10 @@ namespace GameProtocol {
       if (SourceCardConfigId != 0) {
         output.WriteRawTag(32);
         output.WriteInt32(SourceCardConfigId);
+      }
+      if (EventOwnerId != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(EventOwnerId);
       }
       if (eventParamsCase_ == EventParamsOneofCase.Damage) {
         output.WriteRawTag(82);
@@ -3900,6 +3924,9 @@ namespace GameProtocol {
       if (SourceCardConfigId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(SourceCardConfigId);
       }
+      if (EventOwnerId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(EventOwnerId);
+      }
       if (eventParamsCase_ == EventParamsOneofCase.Damage) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Damage);
       }
@@ -3979,6 +4006,9 @@ namespace GameProtocol {
       }
       if (other.SourceCardConfigId != 0) {
         SourceCardConfigId = other.SourceCardConfigId;
+      }
+      if (other.EventOwnerId != 0) {
+        EventOwnerId = other.EventOwnerId;
       }
       switch (other.EventParamsCase) {
         case EventParamsOneofCase.Damage:
@@ -4122,6 +4152,10 @@ namespace GameProtocol {
           }
           case 32: {
             SourceCardConfigId = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            EventOwnerId = input.ReadInt32();
             break;
           }
           case 82: {

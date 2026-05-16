@@ -1,4 +1,4 @@
-/*
+﻿/*
 * ┌──────────────────────────────────┐
 * │  描    述: 战斗事件构建器，将 CombatEventBus 事件转为 Proto BattleEvent
 * │  类    名: BattleEventBuilder.cs
@@ -39,7 +39,7 @@ namespace GameServer.Battle.Core.EventBus
             _events.Add(evt);
         }
 
-        // ==================== 订阅 CombatEventBus 事件 ====================
+        // 订阅 CombatEventBus 事件
         private void subscribeEvents(CombatEventBus eventBus)
         {
             eventBus.OnDamageTaken += onDamageTaken;
@@ -55,7 +55,7 @@ namespace GameServer.Battle.Core.EventBus
             eventBus.OnDeckShuffled += onDeckShuffled;
         }
 
-        // ==================== 实体状态事件 ====================
+        #region 实体状态事件
         // 受到伤害
         private void onDamageTaken(int targetId, int damage, bool isCrit, int sourceCardConfigId)
         {
@@ -106,19 +106,23 @@ namespace GameServer.Battle.Core.EventBus
             });
         }
 
-        // ==================== 牌库与手牌事件 ====================
+        #endregion
+
+        #region 牌库与手牌事件
         // 抽牌
         private void onCardDrawn(int playerId, CardEntity card)
         {
             _events.Add(new BattleEvent
             {
                 EventType = BattleEventType.DrawCard,
+                EventOwnerId = playerId,
                 DrawCard = new DrawCardParams
                 {
                     Card = BattleProtoSerializer.ToProtoCard(card),
                     SlotIndex = 0
                 }
             });
+
         }
 
         // 弃牌
@@ -127,6 +131,7 @@ namespace GameServer.Battle.Core.EventBus
             _events.Add(new BattleEvent
             {
                 EventType = BattleEventType.DiscardCard,
+                EventOwnerId = playerId,
                 DiscardCard = new DiscardCardParams
                 {
                     Card = BattleProtoSerializer.ToProtoCard(card),
@@ -148,6 +153,7 @@ namespace GameServer.Battle.Core.EventBus
             _events.Add(new BattleEvent
             {
                 EventType = BattleEventType.MergeCard,
+                EventOwnerId = playerId,
                 MergeCard = new MergeCardParams
                 {
                     ResultCardInstanceId = kept.InstanceId,
@@ -164,6 +170,7 @@ namespace GameServer.Battle.Core.EventBus
             _events.Add(new BattleEvent
             {
                 EventType = BattleEventType.CardMoved,
+                EventOwnerId = playerId,
                 MoveCard = new MoveCardParams
                 {
                     FromIndex = fromIndex,
@@ -185,6 +192,7 @@ namespace GameServer.Battle.Core.EventBus
             {
                 EventType = BattleEventType.EnqueueCard,
                 TargetId = targetInstanceId,
+                EventOwnerId = playerId,
                 EnqueueCard = new EnqueueCardParams
                 {
                     Card = BattleProtoSerializer.ToProtoCard(card),
@@ -200,6 +208,7 @@ namespace GameServer.Battle.Core.EventBus
             _events.Add(new BattleEvent
             {
                 EventType = BattleEventType.GrantUltimate,
+                EventOwnerId = playerId,
                 GrantUltimate = new GrantUltimateParams
                 {
                     Card = BattleProtoSerializer.ToProtoCard(ultimateCard),
@@ -214,8 +223,11 @@ namespace GameServer.Battle.Core.EventBus
             _events.Add(new BattleEvent
             {
                 EventType = BattleEventType.ShuffleDeck,
+                EventOwnerId = playerId,
                 ShuffleDeck = new ShuffleDeckParams { DeckOwnerId = playerId }
             });
         }
+
+        #endregion
     }
 }
