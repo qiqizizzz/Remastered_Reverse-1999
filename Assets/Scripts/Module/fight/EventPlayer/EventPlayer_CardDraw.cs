@@ -14,7 +14,6 @@ using Data.card;
 using Data.card.Extensions;
 using GameProtocol;
 using Module.Character;
-using Module.fight.CardMgr;
 using Module.fight.Core.Entities;
 using UnityEngine;
 
@@ -22,10 +21,23 @@ namespace Module.fight.EventPlayer
 {
     public static class EventPlayer_CardDraw
     {
+        // 获取当前客户端可见的事件归属牌库
+        private static bool tryGetVisibleDeck(BattleEvent evt, out PlayerDeckEntity deck)
+        {
+            int eventOwnerId = evt.EventOwnerId == 0 ? 1 : evt.EventOwnerId;
+            if (GameApp.PvpSession != null && GameApp.PvpSession.IsInPvp && eventOwnerId != GameApp.PvpSession.CurrentPlayerId)
+            {
+                deck = null;
+                return false;
+            }
+
+            return GameApp.CardManager.BattleContext.PlayerDecks.TryGetValue(eventOwnerId, out deck);
+        }
+
         public static async Task PlayDrawCard(BattleEvent evt)
         {
             var cardInfo = evt.DrawCard.Card;
-            var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
+            if (!tryGetVisibleDeck(evt, out var deck)) return;
             var card = new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel);
             deck.HandCards.Insert(0, card);
 
@@ -37,17 +49,22 @@ namespace Module.fight.EventPlayer
         {
             if (events == null || events.Count == 0) return;
 
-            var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
+            PlayerDeckEntity updatedDeck = null;
             for (int i = 0; i < events.Count; i++)
             {
-                var cardInfo = events[i].DrawCard.Card;
+                var evt = events[i];
+                if (!tryGetVisibleDeck(evt, out var deck)) continue;
+
+                var cardInfo = evt.DrawCard.Card;
                 if (deck.HandCards.Exists(c => c.InstanceId == cardInfo.InstanceId)) continue;
 
                 var card = new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel);
                 deck.HandCards.Insert(0, card);
+                updatedDeck = deck;
             }
 
-            GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, deck.HandCards);
+            if (updatedDeck != null)
+                GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, updatedDeck.HandCards);
             int delayMs = Mathf.Clamp(200 + events.Count * 70, 200, 900);
             await Task.Delay(delayMs);
         }
@@ -55,7 +72,7 @@ namespace Module.fight.EventPlayer
         public static async Task PlayDiscardCard(BattleEvent evt)
         {
             var cardInfo = evt.DiscardCard.Card;
-            var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
+            if (!tryGetVisibleDeck(evt, out var deck)) return;
 
             int index = deck.HandCards.FindIndex(c => c.InstanceId == cardInfo.InstanceId);
             if (index >= 0)
@@ -72,7 +89,7 @@ namespace Module.fight.EventPlayer
 
         public static async Task PlayCardMoved(BattleEvent evt)
         {
-            var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
+            if (!tryGetVisibleDeck(evt, out var deck)) return;
             int from = evt.MoveCard.FromIndex;
             int to = evt.MoveCard.ToIndex;
 
@@ -89,7 +106,7 @@ namespace Module.fight.EventPlayer
 
         public static async Task PlayMergeCard(BattleEvent evt)
         {
-            var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
+            if (!tryGetVisibleDeck(evt, out var deck)) return;
             int resultStar = evt.MergeCard.ResultStarLevel;
             int resultCardInstanceId = evt.MergeCard.ResultCardInstanceId;
 
@@ -114,7 +131,7 @@ namespace Module.fight.EventPlayer
             {
                 for (int i = 0; i < consumedCards.Count; i++)
                 {
-                    GameApp.CardManager.EventBus.OnCardMerged?.Invoke(1, keptCard, consumedCards[i], resultStar);
+                    GameApp.CardManager.EventBus.OnCardMerged?.Invoke(evt.EventOwnerId == 0 ? 1 : evt.EventOwnerId, keptCard, consumedCards[i], resultStar);
                 }
             }
 
@@ -124,7 +141,7 @@ namespace Module.fight.EventPlayer
         public static async Task PlayGrantUltimate(BattleEvent evt)
         {
             var cardInfo = evt.GrantUltimate.Card;
-            var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
+            if (!tryGetVisibleDeck(evt, out var deck)) return;
             var card = new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel);
             deck.HandCards.Insert(0, card);
 
@@ -167,7 +184,7 @@ namespace Module.fight.EventPlayer
             var cardInfo = evt.EnqueueCard.Card;
             if (cardInfo != null)
             {
-                var deck = GameApp.CardManager.BattleContext.PlayerDecks[1];
+                if (!tryGetVisibleDeck(evt, out var deck)) return;
                 deck.HandCards.RemoveAll(c => c.InstanceId == cardInfo.InstanceId);
             }
 

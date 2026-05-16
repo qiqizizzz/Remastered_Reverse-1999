@@ -11,7 +11,18 @@
       "Bash(rtk ls *)",
       "Skill(superpowers:writing-plans)",
       "Skill(superpowers:subagent-driven-development)",
-      "Skill(superpowers:using-git-worktrees)"
+      "Skill(superpowers:using-git-worktrees)",
+      "Skill(superpowers:systematic-debugging)",
+      "Skill(superpowers:test-driven-development)",
+      "Skill(superpowers:using-superpowers)",
+      "Skill(superpowers:executing-plans)",
+      "Skill(superpowers:verification-before-completion)",
+      "Bash(dotnet test *)",
+      "Bash(command -v Unity)",
+      "Bash(command -v unity)",
+      "Bash(command -v Unity.exe)",
+      "Skill(superpowers:finishing-a-development-branch)",
+      "Bash(rtk dotnet *)"
     ]
   }
 }

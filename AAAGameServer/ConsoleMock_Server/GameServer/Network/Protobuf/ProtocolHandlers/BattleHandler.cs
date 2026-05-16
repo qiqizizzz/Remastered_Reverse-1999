@@ -266,8 +266,9 @@ namespace Network
                 return;
             }
 
-            sendPvpBattleStart(client.Server.GetClientByUsername(room.Player1), battle, 1);
-            sendPvpBattleStart(client.Server.GetClientByUsername(room.Player2), battle, 2);
+            var initialEvents = battle.CollectEvents();
+            sendPvpBattleStart(client.Server.GetClientByUsername(room.Player1), battle, 1, initialEvents);
+            sendPvpBattleStart(client.Server.GetClientByUsername(room.Player2), battle, 2, initialEvents);
         }
 
         #endregion
@@ -295,7 +296,7 @@ namespace Network
         }
 
         // 发送PvP战斗开始消息
-        private void sendPvpBattleStart(Client client, BattleInstance battle, int playerId)
+        private void sendPvpBattleStart(Client client, BattleInstance battle, int playerId, List<BattleEvent> initialEvents)
         {
             if (client == null) return;
 
@@ -305,8 +306,34 @@ namespace Network
                 IsTeamReady = true,
                 StateSnapshot = battle.GetStateSnapshot(playerId)
             };
-            battlePack.Events.AddRange(battle.CollectEvents());
+            battlePack.Events.AddRange(filterVisiblePvpEvents(initialEvents, playerId));
             sendBattleResponse(client, ActionCode.SubmitPvPteam, battlePack);
+        }
+
+        // 按玩家可见性过滤PVP事件
+        private static List<BattleEvent> filterVisiblePvpEvents(List<BattleEvent> events, int viewerPlayerId)
+        {
+            var visibleEvents = new List<BattleEvent>();
+            foreach (var evt in events)
+            {
+                if (isPrivateCardEvent(evt.EventType) && evt.EventOwnerId != viewerPlayerId)
+                    continue;
+
+                visibleEvents.Add(evt);
+            }
+
+            return visibleEvents;
+        }
+
+        // 判断是否为只属于单个玩家可见的手牌事件
+        private static bool isPrivateCardEvent(BattleEventType eventType)
+        {
+            return eventType == BattleEventType.DrawCard ||
+                   eventType == BattleEventType.DiscardCard ||
+                   eventType == BattleEventType.CardMoved ||
+                   eventType == BattleEventType.MergeCard ||
+                   eventType == BattleEventType.GrantUltimate ||
+                   eventType == BattleEventType.ShuffleDeck;
         }
 
         private void sendBattleError(Client client, ActionCode actionCode, string msg)
