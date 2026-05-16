@@ -30,6 +30,7 @@ namespace Module.fight.CardMgr
         public readonly CombatEventBus  EventBus;
         
         private const int LOCAL_PLAYER_ID = 1;
+        private int _currentPlayerId = LOCAL_PLAYER_ID;
         private int _maxHandCardCount = 8;
         private readonly List<int> _currentCharacterConfigIds;
 
@@ -47,6 +48,7 @@ namespace Module.fight.CardMgr
         
         public void InitCards(LevelModel model)
         {
+            _currentPlayerId = LOCAL_PLAYER_ID;
             CardActionQueue.Clear();
             _currentCharacterConfigIds.Clear();
 
@@ -65,6 +67,7 @@ namespace Module.fight.CardMgr
         // 初始化PvP本地卡牌上下文
         public void InitPvpCards(int playerId, List<int> characterConfigIds)
         {
+            _currentPlayerId = playerId;
             CardActionQueue.Clear();
             _currentCharacterConfigIds.Clear();
             _currentCharacterConfigIds.AddRange(characterConfigIds);
@@ -78,6 +81,8 @@ namespace Module.fight.CardMgr
         {
             EventBus.OnHandCardsUpdated += (playerId, handCards) =>
             {
+                if (playerId != _currentPlayerId) return;
+
                 GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, handCards);
             };
 
@@ -99,22 +104,22 @@ namespace Module.fight.CardMgr
         #region 主要操作
         public void DrawCard(int count)
         {
-            CombatSystem.DrawCard(LOCAL_PLAYER_ID, count);
+            CombatSystem.DrawCard(_currentPlayerId, count);
         }
         
         public void DiscardCard(CardEntity card)
         {
-            CombatSystem.DiscardCard(LOCAL_PLAYER_ID, card);
+            CombatSystem.DiscardCard(_currentPlayerId, card);
         }
         
         public bool TryGiveUltimateCard(int ownerId)
         {
-            return CombatSystem.TryGiveUltimateCard(LOCAL_PLAYER_ID, ownerId);
+            return CombatSystem.TryGiveUltimateCard(_currentPlayerId, ownerId);
         }
         
         public void RemoveDiedCharacterCard(CharacterDataSO character)
         {
-            CombatSystem.RemoveCardsOfCharacter(LOCAL_PLAYER_ID, character.Id);
+            CombatSystem.RemoveCardsOfCharacter(_currentPlayerId, character.Id);
             updateScalingRules();
         }
         
@@ -148,7 +153,7 @@ namespace Module.fight.CardMgr
         public void ProcessRoundStartHandFix()
         {
             // 连环合成
-            while (BattleContext.CheckAndAutoMerge(LOCAL_PLAYER_ID)) { }
+            while (BattleContext.CheckAndAutoMerge(_currentPlayerId)) { }
             
             // 补牌
             int normalCount = GetNormalHandCardCount();
@@ -156,7 +161,7 @@ namespace Module.fight.CardMgr
             {
                 int needCount = maxHandCardCount - normalCount;
                 DrawCard(needCount);
-                while (BattleContext.CheckAndAutoMerge(LOCAL_PLAYER_ID)) { }
+                while (BattleContext.CheckAndAutoMerge(_currentPlayerId)) { }
             }
             
             // 发大招
@@ -174,7 +179,7 @@ namespace Module.fight.CardMgr
         //记录快照
         public CardSnapshot TakeSnapshot()
         {
-            var deck = BattleContext.PlayerDecks[LOCAL_PLAYER_ID];
+            var deck = BattleContext.PlayerDecks[_currentPlayerId];
             var snapshot = new CardSnapshot()
             {
                 HeroActionPoints = new Dictionary<int, int>(),
@@ -203,7 +208,7 @@ namespace Module.fight.CardMgr
         public void RestoreSnapshot(CardSnapshot snapshot)
         {
             if(snapshot == null) return;
-            var deck = BattleContext.PlayerDecks[LOCAL_PLAYER_ID];
+            var deck = BattleContext.PlayerDecks[_currentPlayerId];
             
             deck.HandCards = new List<CardEntity>(snapshot.HandCards);
             deck.DrawPile = new List<CardEntity>(snapshot.DrawPile);
@@ -228,12 +233,12 @@ namespace Module.fight.CardMgr
             }
 
             // 统一广播一次手牌更新
-            EventBus.OnHandCardsUpdated?.Invoke(LOCAL_PLAYER_ID, new List<CardEntity>(deck.HandCards));
+            EventBus.OnHandCardsUpdated?.Invoke(_currentPlayerId, new List<CardEntity>(deck.HandCards));
         }
 
         private CardEntity FindCardByInstanceId(int instanceId)
         {
-            var deck = BattleContext.PlayerDecks[LOCAL_PLAYER_ID];
+            var deck = BattleContext.PlayerDecks[_currentPlayerId];
             var all = new List<CardEntity>();
             all.AddRange(deck.HandCards);
             all.AddRange(deck.DrawPile);
@@ -245,7 +250,7 @@ namespace Module.fight.CardMgr
         #region 工具函数
         public int GetNormalHandCardCount()
         {
-            var deck = BattleContext.PlayerDecks[LOCAL_PLAYER_ID];
+            var deck = BattleContext.PlayerDecks[_currentPlayerId];
             int count = 0;
             foreach (var card in deck.HandCards)
             {
@@ -257,7 +262,7 @@ namespace Module.fight.CardMgr
         
         public List<CardEntity> GetHandCards()
         {
-            return BattleContext.PlayerDecks[LOCAL_PLAYER_ID].HandCards;
+            return BattleContext.PlayerDecks[_currentPlayerId].HandCards;
         }
 
         public int maxHandCardCount => _maxHandCardCount;

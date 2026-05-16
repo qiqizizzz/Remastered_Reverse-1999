@@ -125,9 +125,15 @@ namespace GameServer.Battle
             _turnSystem = new BattleTurnSystem(_env, _commandProcessor, _skillExecutor, _enemyAI, _initSystem);
 
             if (gameMode == GameMode.PvE)
+            {
                 _initSystem.InitializePvE(levelId, heroIdsP1, monsterSpawns ?? new List<MonsterSpawnData>());
+            }
             else
+            {
                 _initSystem.InitializePvP(heroIdsP1, heroIdsP2 ?? new List<int>());
+                _env.CurrentPlayerId = PLAYER2_ID;
+                addPvpTurnStartEvent();
+            }
 
             _state = BattleState.PlayerTurn;
         }
@@ -241,24 +247,13 @@ namespace GameServer.Battle
 
             _env.Context.ActionQueue.QueuedCards.Clear();
 
-            // 切换到对手
-            _env.CurrentPlayerId = (_env.CurrentPlayerId == PLAYER1_ID) ? PLAYER2_ID : PLAYER1_ID;
+            int previousPlayerId = _env.CurrentPlayerId;
+            _env.CurrentPlayerId = getOpponentPlayerId(previousPlayerId);
 
-            if (_env.CurrentPlayerId == PLAYER1_ID)
-            {
-                // 双方都已操作完毕，进入下一轮
+            if (previousPlayerId == PLAYER1_ID)
                 _turnSystem.StartNextRound();
-            }
             else
-            {
-                _env.EventBuilder.AddEvent(new BattleEvent
-                {
-                    EventType = BattleEventType.TurnStart,
-                    EventOwnerId = _env.CurrentPlayerId,
-                    TurnStart = new TurnStartParams { IsPlayerTurn = true, RoundNumber = _env.Context.CurrentRound }
-                });
-                // TODO: 后续在客户端补充PVP换人回合UI动画
-            }
+                addPvpTurnStartEvent();
 
             _state = BattleState.PlayerTurn;
         }
@@ -272,6 +267,23 @@ namespace GameServer.Battle
             return _env.Mode == GameMode.PvP
                 ? playerId == _env.CurrentPlayerId
                 : playerId == 0 || playerId == PLAYER1_ID;
+        }
+
+        // 获取PVP当前玩家的对手玩家Id
+        private static int getOpponentPlayerId(int playerId)
+        {
+            return playerId == PLAYER1_ID ? PLAYER2_ID : PLAYER1_ID;
+        }
+
+        // 添加PVP玩家回合开始事件
+        private void addPvpTurnStartEvent()
+        {
+            _env.EventBuilder.AddEvent(new BattleEvent
+            {
+                EventType = BattleEventType.TurnStart,
+                EventOwnerId = _env.CurrentPlayerId,
+                TurnStart = new TurnStartParams { IsPlayerTurn = true, RoundNumber = _env.Context.CurrentRound }
+            });
         }
 
         private List<CombatEntity> getAliveHeroes()

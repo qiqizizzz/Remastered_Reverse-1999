@@ -69,6 +69,8 @@ namespace Module.fight
             RegisterFunc(EventDefines.OpenFightSettleView, onOpenFightSettleView);
             
             GameApp.MessageCenter.AddEvent(EventDefines.FightingViewReady, onFightingViewReady);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnBattleTurnStart, onBattleTurnStart);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnBattleTurnEnd, onBattleTurnEnd);
             GameApp.MessageCenter.AddEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
             GameApp.MessageCenter.AddEvent(EventDefines.OnSelectEnemyTarget, onSelectEnemyTarget);
             GameApp.MessageCenter.AddEvent(EventDefines.OnCharacterDie, onCharacterDie);
@@ -82,6 +84,8 @@ namespace Module.fight
             UnRegisterFunc(EventDefines.OpenFightSettleView, onOpenFightSettleView);
             
             GameApp.MessageCenter.RemoveEvent(EventDefines.FightingViewReady, onFightingViewReady);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnBattleTurnStart, onBattleTurnStart);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnBattleTurnEnd, onBattleTurnEnd);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnPlayerTurnStart, onPlayerTurnStart);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnSelectEnemyTarget, onSelectEnemyTarget);
             GameApp.MessageCenter.RemoveEvent(EventDefines.OnCharacterDie, onCharacterDie);
@@ -179,6 +183,17 @@ namespace Module.fight
         #endregion
 
         #region 战斗事件
+        private void onBattleTurnStart(object args)
+        {
+            _isPlayerTurnStart = args is true;
+        }
+
+        private void onBattleTurnEnd(object args)
+        {
+            if (args is true)
+                _isPlayerTurnStart = false;
+        }
+
         private void onPlayerTurnStart(object args)
         {
             QLog.Info("==== 玩家回合开始 ====");

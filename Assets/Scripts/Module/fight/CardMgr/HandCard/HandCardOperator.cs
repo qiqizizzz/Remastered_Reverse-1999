@@ -37,7 +37,8 @@ namespace Module.fight.CardMgr
         private CardSnapshot _tempSnapshot;
         
         private bool _pendingUndo;
-        
+        private bool _isLocalTurn;
+
         //事件
         public event Action OnQueueFull;
         public event Action OnRefreshMoveIndicators;
@@ -58,7 +59,9 @@ namespace Module.fight.CardMgr
         {
             _handCardUIManager.SetCardEventHandlers(
                 onCardBeginDrag, onCardDrag, onCardEndDrag, onCardClick);
-            
+
+            GameApp.MessageCenter.AddEvent(EventDefines.OnBattleTurnStart, onBattleTurnStart);
+            GameApp.MessageCenter.AddEvent(EventDefines.OnBattleTurnEnd, onBattleTurnEnd);
             GameApp.CardManager.EventBus.OnCardMerged -= OnCardMergedFromCore;
             GameApp.CardManager.EventBus.OnCardMerged += OnCardMergedFromCore;
         }
@@ -69,7 +72,10 @@ namespace Module.fight.CardMgr
             _dragStartIndex = -1;
             _tempSnapshot = null;
             _pendingUndo = false;
-            
+            _isLocalTurn = false;
+
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnBattleTurnStart, onBattleTurnStart);
+            GameApp.MessageCenter.RemoveEvent(EventDefines.OnBattleTurnEnd, onBattleTurnEnd);
             GameApp.CardManager.EventBus.OnCardMerged -= OnCardMergedFromCore;
         }
 
@@ -80,6 +86,17 @@ namespace Module.fight.CardMgr
         }
 
         #region 卡牌事件
+        private void onBattleTurnStart(object args)
+        {
+            _isLocalTurn = args is true;
+        }
+
+        private void onBattleTurnEnd(object args)
+        {
+            if (args is true)
+                _isLocalTurn = false;
+        }
+
         private void OnCardMergedFromCore(int playerId, CardEntity kept, CardEntity destroyed, int newStarLevel)
         {
             var uiKept = _handCardUIManager.FindUIByCardEntity(kept);
@@ -102,6 +119,8 @@ namespace Module.fight.CardMgr
         // 执行出牌
         private void playCard(UI_BaseCardItem item, int index)
         {
+            if (!canOperateHand()) return;
+
             if (!_actionQueue.CanPlayCard())
             {
                 QLog.Info("已达到本轮出牌上限");
@@ -167,6 +186,7 @@ namespace Module.fight.CardMgr
         //撤销上一次操作（出牌或移动）
         public void UndoLastPlayCard()
         {
+            if (!canOperateHand()) return;
             if (_pendingUndo) return;
 
             var undoneAction = _actionQueue.UndoLastAction();
@@ -206,6 +226,7 @@ namespace Module.fight.CardMgr
         // 卡牌开始拖拽
         private void onCardBeginDrag(UI_BaseCardItem item, PointerEventData eventData)
         {
+            if (!canOperateHand()) return;
             if (item.BattleCardData.GetConfig().CardType == CardType.Ultimate || item.IsInQueue) return;
 
             _dragStartIndex = _handCardUIManager.GetCardIndex(item);
@@ -216,6 +237,7 @@ namespace Module.fight.CardMgr
         // 卡牌拖拽中
         private void onCardDrag(UI_BaseCardItem item, PointerEventData eventData)
         {
+            if (!canOperateHand()) return;
             if (!_actionQueue.CanPlayCard()) return;
 
             int currentIndex = _handCardUIManager.GetCardIndex(item);
@@ -252,6 +274,13 @@ namespace Module.fight.CardMgr
         // 卡牌结束拖拽
         private void onCardEndDrag(UI_BaseCardItem item, PointerEventData eventData)
         {
+            if (!canOperateHand())
+            {
+                _dragStartIndex = -1;
+                _tempSnapshot = null;
+                return;
+            }
+
             _lastDragEndTime = Time.time;
             int safeStartIndex = _dragStartIndex;
             _dragStartIndex = -1;
@@ -299,6 +328,7 @@ namespace Module.fight.CardMgr
         // 卡牌点击
         private void onCardClick(UI_BaseCardItem item)
         {
+            if (!canOperateHand()) return;
             if (_dragStartIndex != -1) return;
 
             if (Time.time - _lastDragEndTime < 0.2f) return;
@@ -306,6 +336,14 @@ namespace Module.fight.CardMgr
             int index = _handCardUIManager.GetCardIndex(item);
             if (index != -1)
                 playCard(item, index);
+        }
+        // 判断当前是否允许操作手牌
+        private bool canOperateHand()
+        {
+            if (GameApp.PvpSession == null || !GameApp.PvpSession.IsInPvp)
+                return true;
+
+            return _isLocalTurn;
         }
         #endregion
     }
