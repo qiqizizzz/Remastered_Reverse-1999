@@ -27,6 +27,7 @@ namespace Module.fight
     {
         private LevelModel _currentModel;
         private PvpBattleStartData _pvpBattleStartData;
+        private BattlePack _pendingPvpBattlePack;
         private bool _isPvpMode;
         private bool _isBattleActive;//是否还在战斗中
         private bool _isPlayerTurnStart; //是否是玩家回合开始（不包括输出回合）
@@ -120,7 +121,11 @@ namespace Module.fight
         
         private void onFightingViewReady(System.Object args)
         {
-            // 战斗准备就绪，等待服务端事件驱动
+            if (_pendingPvpBattlePack == null) return;
+
+            BattlePack battlePack = _pendingPvpBattlePack;
+            _pendingPvpBattlePack = null;
+            onBattleServerResponse(battlePack);
         }
 
         // 接收并播放服务端推送的战斗事件序列
@@ -236,9 +241,9 @@ namespace Module.fight
             int playerId = _pvpBattleStartData.PlayerId;
             GameApp.CardManager.InitPvpCards(playerId, getAliveHeroConfigIds());
             initLocalCombatEntities(playerId);
+            _pendingPvpBattlePack = _pvpBattleStartData.BattlePack;
             GameApp.ViewManager.CloseAll();
             GameApp.ViewManager.Open(ViewType.FightingView);
-            onBattleServerResponse(_pvpBattleStartData.BattlePack);
         }
 
         // 初始化本地战斗实体缓存
