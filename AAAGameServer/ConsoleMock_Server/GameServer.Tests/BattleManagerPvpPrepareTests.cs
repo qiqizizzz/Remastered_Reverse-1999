@@ -52,6 +52,23 @@ public class BattleManagerPvpPrepareTests
     }
 
     [Fact]
+    public void GetBattleParticipants_ForPvpBattle_ShouldReturnBothPlayersWithPlayerIds()
+    {
+        var manager = createBattleManager();
+        manager.JoinQueue("alice");
+        manager.JoinQueue("bob");
+        manager.TryMatch();
+        manager.SubmitPvpTeam("alice", new List<int> { 1001, 1002 });
+        var battle = manager.SubmitPvpTeam("bob", new List<int> { 1001, 1002 });
+        Assert.NotNull(battle);
+
+        var participants = manager.GetBattleParticipants(battle);
+
+        Assert.Contains(participants, p => p.Username == "alice" && p.PlayerId == 1);
+        Assert.Contains(participants, p => p.Username == "bob" && p.PlayerId == 2);
+    }
+
+    [Fact]
     public void LeaveQueue_RemovesPrepareRoom()
     {
         var manager = createBattleManager();

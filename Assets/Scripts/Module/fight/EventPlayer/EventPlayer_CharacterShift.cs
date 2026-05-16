@@ -22,7 +22,9 @@ namespace Module.fight.EventPlayer
     {
         public static async Task PlayBattleStart(BattleEvent evt)
         {
-            SyncCharacters(evt.BattleStart.Entities);
+            if (GameApp.PvpSession == null || !GameApp.PvpSession.IsInPvp)
+                SyncCharacters(evt.BattleStart.Entities);
+
             QLog.Info($"[PlayEvent] 战斗开始，关卡: {evt.BattleStart.LevelId}");
             await Task.Delay(100);
         }
@@ -38,10 +40,11 @@ namespace Module.fight.EventPlayer
         public static async Task PlayTurnStart(BattleEvent evt)
         {
             CompletePlayerTurnOutputIfNeeded();
+            bool isLocalPlayerTurn = isLocalPlayerEvent(evt);
             QLog.Info($"[PlayEvent] 回合开始，轮数: {evt.TurnStart.RoundNumber}");
-            GameApp.MessageCenter.PostEvent(EventDefines.OnBattleTurnStart, evt.TurnStart.IsPlayerTurn);
+            GameApp.MessageCenter.PostEvent(EventDefines.OnBattleTurnStart, isLocalPlayerTurn);
 
-            if (evt.TurnStart.IsPlayerTurn)
+            if (isLocalPlayerTurn)
             {
                 PlayEventSequence.IsEnemyTurnResolving = false;
                 GameApp.CardManager.CardActionQueue.Clear();
@@ -57,10 +60,11 @@ namespace Module.fight.EventPlayer
 
         public static async Task PlayTurnEnd(BattleEvent evt)
         {
+            bool isLocalPlayerTurn = isLocalPlayerEvent(evt);
             QLog.Info($"[PlayEvent] 回合结束，轮数: {evt.TurnEnd.RoundNumber}");
-            GameApp.MessageCenter.PostEvent(EventDefines.OnBattleTurnEnd, evt.TurnEnd.IsPlayerTurn);
+            GameApp.MessageCenter.PostEvent(EventDefines.OnBattleTurnEnd, isLocalPlayerTurn);
 
-            if (evt.TurnEnd.IsPlayerTurn)
+            if (isLocalPlayerTurn)
             {
                 refreshAllHeroActionPointConstant();
                 var actions = GameApp.CardManager.CardActionQueue.GetAction();
@@ -145,6 +149,15 @@ namespace Module.fight.EventPlayer
         public static BaseCharacter FindCharacterByCombatInstanceId(int instanceId)
         {
             return GameApp.EntityManager.GetCharacterByCombatInstanceId(instanceId);
+        }
+
+        // 判断事件是否属于本地玩家视角
+        private static bool isLocalPlayerEvent(BattleEvent evt)
+        {
+            if (GameApp.PvpSession == null || !GameApp.PvpSession.IsInPvp)
+                return evt.TurnStart?.IsPlayerTurn == true || evt.TurnEnd?.IsPlayerTurn == true;
+
+            return evt.EventOwnerId == GameApp.PvpSession.CurrentPlayerId;
         }
 
         public static void PlayNextPlayerCasterAttack()

@@ -91,6 +91,7 @@ namespace GameServer.Battle.Core.Systems
             _env.EventBuilder.AddEvent(new BattleEvent
             {
                 EventType = BattleEventType.TurnStart,
+                EventOwnerId = _env.CurrentPlayerId,
                 TurnStart = new TurnStartParams { IsPlayerTurn = true, RoundNumber = _env.Context.CurrentRound }
             });
             QLog.Info($"[startNextRound] 第 {_env.Context.CurrentRound} 回合开始");
@@ -102,9 +103,12 @@ namespace GameServer.Battle.Core.Systems
 
         private BattleEvent buildPlayerExecuteEvent(PlayCardCommand playCmd, int executeIndex)
         {
+            int sourceId = resolveCasterInstanceId(playCmd.SenderPlayerId, playCmd.Card.ConfigId);
             return new BattleEvent
             {
                 EventType = BattleEventType.EnqueueCard,
+                EventOwnerId = playCmd.SenderPlayerId,
+                SourceId = sourceId,
                 TargetId = playCmd.TargetInstanceId,
                 EnqueueCard = new EnqueueCardParams
                 {
@@ -144,6 +148,21 @@ namespace GameServer.Battle.Core.Systems
         #endregion
 
         #region 工具函数
+
+        // 根据出牌玩家和卡牌配置查找施法者实例Id
+        private int resolveCasterInstanceId(int playerId, int cardConfigId)
+        {
+            var cardConfig = _env.Context.CardCatalog.Get(cardConfigId);
+            if (cardConfig == null) return 0;
+
+            foreach (var entity in _env.AllEntities)
+            {
+                if (entity.OwnerPlayerId == playerId && entity.ConfigId == cardConfig.OwnerId && entity.CurrentHp > 0)
+                    return entity.InstanceId;
+            }
+
+            return 0;
+        }
 
         private bool hasAliveHeroes()
         {

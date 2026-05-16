@@ -168,9 +168,12 @@ namespace GameServer.Battle.Core.Systems
                     EventType = BattleEventType.BattleStart,
                     BattleStart = new BattleStartParams { LevelId = levelId }
                 };
-                foreach (var entity in _env.AllEntities)
+                if (_env.Mode == GameMode.PvE)
                 {
-                    battleStartEvent.BattleStart.Entities.Add(_env.ProtoSerializer.ToProtoEntity(entity));
+                    foreach (var entity in _env.AllEntities)
+                    {
+                        battleStartEvent.BattleStart.Entities.Add(_env.ProtoSerializer.ToProtoEntity(entity));
+                    }
                 }
                 _env.EventBuilder.AddEvent(battleStartEvent);
             }

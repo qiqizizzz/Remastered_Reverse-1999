@@ -181,6 +181,7 @@ namespace GameServer.Battle
             _env.EventBuilder.AddEvent(new BattleEvent
             {
                 EventType = BattleEventType.TurnEnd,
+                EventOwnerId = playerId,
                 TurnEnd = new TurnEndParams { IsPlayerTurn = true, RoundNumber = _env.Context.CurrentRound }
             });
 
@@ -238,6 +239,8 @@ namespace GameServer.Battle
                 return;
             }
 
+            _env.Context.ActionQueue.QueuedCards.Clear();
+
             // 切换到对手
             _env.CurrentPlayerId = (_env.CurrentPlayerId == PLAYER1_ID) ? PLAYER2_ID : PLAYER1_ID;
 
@@ -245,6 +248,16 @@ namespace GameServer.Battle
             {
                 // 双方都已操作完毕，进入下一轮
                 _turnSystem.StartNextRound();
+            }
+            else
+            {
+                _env.EventBuilder.AddEvent(new BattleEvent
+                {
+                    EventType = BattleEventType.TurnStart,
+                    EventOwnerId = _env.CurrentPlayerId,
+                    TurnStart = new TurnStartParams { IsPlayerTurn = true, RoundNumber = _env.Context.CurrentRound }
+                });
+                // TODO: 后续在客户端补充PVP换人回合UI动画
             }
 
             _state = BattleState.PlayerTurn;

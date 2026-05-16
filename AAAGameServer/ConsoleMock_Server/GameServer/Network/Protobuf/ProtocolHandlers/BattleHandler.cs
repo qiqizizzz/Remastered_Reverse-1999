@@ -116,10 +116,14 @@ namespace Network
             var bp = pack.BattlePack;
             battle.EndTurn(bp.PlayerId);
             var events = battle.CollectEvents();
-            sendBattleResponse(client, ActionCode.EndTurn, events);
+
+            if (battle.Mode == GameServer.Battle.Core.GameMode.PvP)
+                sendPvpBattleEvents(client.Server, battle, ActionCode.EndTurn, events);
+            else
+                sendBattleResponse(client, ActionCode.EndTurn, events);
 
             if (battle.Result != BattleResult.None)
-                client.Server.BattleManager.RemoveBattle(client.UserName);
+                removeBattleParticipants(client.Server, battle);
         }
 
         private void handleMoveCard(Client client, MainPack pack)
@@ -308,6 +312,28 @@ namespace Network
             };
             battlePack.Events.AddRange(filterVisiblePvpEvents(initialEvents, playerId));
             sendBattleResponse(client, ActionCode.SubmitPvPteam, battlePack);
+        }
+
+        // 广播PVP战斗事件给双方玩家
+        private void sendPvpBattleEvents(Server server, BattleInstance battle, ActionCode actionCode, List<BattleEvent> events)
+        {
+            var participants = server.BattleManager.GetBattleParticipants(battle);
+            foreach (var participant in participants)
+            {
+                var battlePack = new BattlePack { PlayerId = participant.PlayerId };
+                battlePack.Events.AddRange(filterVisiblePvpEvents(events, participant.PlayerId));
+                sendBattleResponse(server.GetClientByUsername(participant.Username), actionCode, battlePack);
+            }
+        }
+
+        // 清理PVP双方战斗实例
+        private void removeBattleParticipants(Server server, BattleInstance battle)
+        {
+            var participants = server.BattleManager.GetBattleParticipants(battle);
+            foreach (var participant in participants)
+            {
+                server.BattleManager.RemoveBattle(participant.Username);
+            }
         }
 
         // 按玩家可见性过滤PVP事件

@@ -14,9 +14,22 @@ using Network.Matchmaking;
 
 namespace GameServer.Battle
 {
+    internal readonly struct BattleParticipant
+    {
+        public string Username { get; }
+        public int PlayerId { get; }
+
+        public BattleParticipant(string username, int playerId)
+        {
+            Username = username;
+            PlayerId = playerId;
+        }
+    }
+
     internal class BattleManager
     {
         private readonly Dictionary<string, BattleInstance> _battles;
+        private readonly Dictionary<string, int> _battlePlayerIds;
         private readonly Dictionary<string, PvpPrepareRoom> _prepareRooms;
         private readonly ConfigManager _configManager;
         private readonly MatchmakingQueue _matchQueue = new();
@@ -25,6 +38,7 @@ namespace GameServer.Battle
         {
             _configManager = configManager;
             _battles = new Dictionary<string, BattleInstance>();
+            _battlePlayerIds = new Dictionary<string, int>();
             _prepareRooms = new Dictionary<string, PvpPrepareRoom>();
         }
 
@@ -42,6 +56,7 @@ namespace GameServer.Battle
 
             var battle = new BattleInstance(levelId, heroConfigIds, levelConfig.MonsterSpawns, _configManager, _configManager);
             _battles[username] = battle;
+            _battlePlayerIds[username] = 1;
             return battle;
         }
 
@@ -67,7 +82,9 @@ namespace GameServer.Battle
                 gameMode: GameMode.PvP);
 
             _battles[player1] = battle;
+            _battlePlayerIds[player1] = 1;
             _battles[player2] = battle;
+            _battlePlayerIds[player2] = 2;
             return battle;
         }
         #endregion
@@ -80,10 +97,25 @@ namespace GameServer.Battle
             return battle;
         }
 
+        // 获取共享战斗实例的玩家列表
+        public List<BattleParticipant> GetBattleParticipants(BattleInstance battle)
+        {
+            var participants = new List<BattleParticipant>();
+            foreach (var kvp in _battles)
+            {
+                if (!ReferenceEquals(kvp.Value, battle)) continue;
+                if (!_battlePlayerIds.TryGetValue(kvp.Key, out int playerId)) continue;
+                participants.Add(new BattleParticipant(kvp.Key, playerId));
+            }
+
+            return participants;
+        }
+
         // 移除指定用户的战斗实例
         public void RemoveBattle(string username)
         {
             _battles.Remove(username);
+            _battlePlayerIds.Remove(username);
         }
         #endregion
 
