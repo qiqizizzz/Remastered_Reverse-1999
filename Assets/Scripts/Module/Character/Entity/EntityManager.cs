@@ -33,7 +33,8 @@ namespace Module.Character
         {
             {1, new Vector3(-8f, -1.25f, 0)},
             {2, new Vector3(-6.5f, -1.5f, 0)},
-            {3, new Vector3(-5f, -1.25f, 0)}
+            {3, new Vector3(-5f, -1.25f, 0)},
+            {4, new Vector3(-3.5f, -1.5f, 0)}
         };
         
         private int hasSpawnedHeroCount = 0;//已生成的英雄数量
@@ -299,13 +300,8 @@ namespace Module.Character
                 enemyEntity.Init(characterData);
                 enemyEntity.SetCombatInstanceId(entityInfo.InstanceId);
                 enemyEntity.SetHpFromSnapshot(entityInfo.CurrentHp, entityInfo.MaxHp);
-                int temp = hasSpawnedEnemyCount;
-                go.transform.position = enemySpawnPositions[(temp % 3) + 1];
-                hasSpawnedEnemyCount++;
+                go.transform.position = enemySpawnPositions[++hasSpawnedEnemyCount];
                 AliveEnemies.Add(enemyEntity);
-
-                if (hasSpawnedEnemyCount > 3)
-                    go.SetActive(false);
 
                 if (AliveHeroes.Count == heroSpawnCount && AliveEnemies.Count == enemySpawnCount)
                     onComplete?.Invoke();
