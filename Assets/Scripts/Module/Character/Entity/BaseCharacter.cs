@@ -199,6 +199,13 @@ namespace Module.Character
             IsEnemySide = isEnemySide;
         }
 
+        // 设置 Spine 骨骼水平翻转
+        public void SetSkeletonFlipX(bool flipX)
+        {
+            if (_skeAnim != null && _skeAnim.Skeleton != null)
+                _skeAnim.Skeleton.ScaleX = flipX ? -1f : 1f;
+        }
+
         // 处理敌方目标点击
         protected virtual void OnMouseDown()
         {

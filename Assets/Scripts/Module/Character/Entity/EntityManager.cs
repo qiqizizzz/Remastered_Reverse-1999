@@ -300,6 +300,7 @@ namespace Module.Character
                 enemyEntity.Init(characterData);
                 enemyEntity.SetCombatInstanceId(entityInfo.InstanceId);
                 enemyEntity.SetHpFromSnapshot(entityInfo.CurrentHp, entityInfo.MaxHp);
+                enemyEntity.SetSkeletonFlipX(true);
                 go.transform.position = enemySpawnPositions[++hasSpawnedEnemyCount];
                 AliveEnemies.Add(enemyEntity);
 
