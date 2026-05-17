@@ -21,11 +21,13 @@ namespace Module.fight.Core.Systems
 {
     public class CardCombatSystem
     {
+        private const int NORMAL_CARD_COPY_COUNT = 5;
+
         private readonly CombatContext _context;
         private readonly ICardCatalog _cardCatalog;
         private readonly CombatEventBus _eventBus;
         private readonly Random _random;
-        
+
         public CardCombatSystem(CombatContext context, ICardCatalog cardCatalog, CombatEventBus eventBus)
         {
             _context = context;
@@ -35,7 +37,7 @@ namespace Module.fight.Core.Systems
         }
 
         //初始化玩家牌库
-        public void InitDeck(int playerId, List<int> CharacterConfigIds, int normalCardMaxLimit = 3)
+        public void InitDeck(int playerId, List<int> CharacterConfigIds, int normalCardMaxLimit = NORMAL_CARD_COPY_COUNT)
         {
             if(!_context.PlayerDecks.TryGetValue(playerId, out var deck))
             {

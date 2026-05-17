@@ -67,7 +67,6 @@ namespace GameServer.Battle.Core.Systems
                 if (normalCount >= targetNormalCount) break;
 
                 if (!_env.Context.PlayerDecks.TryGetValue(playerId, out var deck)) break;
-                if (deck.DrawPile.Count == 0 && deck.DiscardPile.Count == 0) break;
 
                 int needCount = targetNormalCount - normalCount;
                 _env.CardSystem.DrawCard(playerId, needCount);
@@ -90,7 +89,7 @@ namespace GameServer.Battle.Core.Systems
 
         public void UpdateScalingRules()
         {
-            int aliveHeroCount = getAliveHeroCount();
+            int aliveHeroCount = getAliveHeroCount(_env.CurrentPlayerId);
             int maxQueueSize = aliveHeroCount switch
             {
                 4 => 4,

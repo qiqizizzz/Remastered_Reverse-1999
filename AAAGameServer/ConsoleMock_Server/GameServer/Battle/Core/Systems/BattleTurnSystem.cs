@@ -86,6 +86,7 @@ namespace GameServer.Battle.Core.Systems
             _env.Context.ActionQueue.QueuedCards.Clear();
             _env.Context.CurrentRound++;
 
+            _initSystem.UpdateScalingRules();
             _initSystem.ProcessRoundStartHandFix();
 
             _env.EventBuilder.AddEvent(new BattleEvent

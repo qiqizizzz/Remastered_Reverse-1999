@@ -10,21 +10,25 @@ namespace GameServer.Battle.Core.Systems
 {
     internal class CardCombatSystem
     {
+        private const int NORMAL_CARD_COPY_COUNT = 5;
+
         private readonly CombatContext _context;
         private readonly ICardCatalog _cardCatalog;
         private readonly CombatEventBus _eventBus;
         private readonly Random _random;
+        private readonly IReadOnlyList<CombatEntity> _allEntities;
 
-        public CardCombatSystem(CombatContext context, ICardCatalog cardCatalog, CombatEventBus eventBus)
+        public CardCombatSystem(CombatContext context, ICardCatalog cardCatalog, CombatEventBus eventBus, IReadOnlyList<CombatEntity> allEntities = null)
         {
             _context = context;
             _cardCatalog = cardCatalog;
             _eventBus = eventBus;
             _random = new Random();
+            _allEntities = allEntities;
         }
 
         //初始化玩家牌库
-        public void InitDeck(int playerId, List<int> CharacterConfigIds, int normalCardMaxLimit = 3)
+        public void InitDeck(int playerId, List<int> CharacterConfigIds, int normalCardMaxLimit = NORMAL_CARD_COPY_COUNT)
         {
             if (!_context.PlayerDecks.TryGetValue(playerId, out var deck))
             {
@@ -120,18 +124,10 @@ namespace GameServer.Battle.Core.Systems
             int drawn = 0;
             for (int i = 0; i < count; i++)
             {
-                if (deck.DrawPile.Count == 0)
+                if (!ensureDrawableCards(playerId, deck))
                 {
-                    if (deck.DiscardPile.Count == 0)
-                    {
-                        QLog.Info($"[DrawCard] 抽牌失败: 牌堆({deck.DrawPile.Count})和弃牌堆({deck.DiscardPile.Count})都没有牌了, 请求抽{count}张, 实际抽了{drawn}张");
-                        break;
-                    }
-
-                    deck.DrawPile.AddRange(deck.DiscardPile);
-                    deck.DiscardPile.Clear();
-                    ShuffleCard(deck.DrawPile);
-                    QLog.Info($"[DrawCard] 弃牌堆洗入抽牌堆, 当前抽牌堆数量: {deck.DrawPile.Count}");
+                    QLog.Info($"[DrawCard] 抽牌失败: 牌堆({deck.DrawPile.Count})和弃牌堆({deck.DiscardPile.Count})都没有牌了, 请求抽{count}张, 实际抽了{drawn}张");
+                    break;
                 }
 
                 CardEntity drawnCard = deck.DrawPile[^1];
@@ -204,6 +200,44 @@ namespace GameServer.Battle.Core.Systems
             }
 
             return false;
+        }
+
+        //根据存活角色补充可抽普通牌
+        private bool ensureDrawableCards(int playerId, PlayerDeckEntity deck)
+        {
+            if (deck.DrawPile.Count > 0) return true;
+
+            if (deck.DiscardPile.Count > 0)
+            {
+                deck.DrawPile.AddRange(deck.DiscardPile);
+                deck.DiscardPile.Clear();
+                ShuffleCard(deck.DrawPile);
+                QLog.Info($"[DrawCard] 弃牌堆洗入抽牌堆, 当前抽牌堆数量: {deck.DrawPile.Count}");
+                return true;
+            }
+
+            replenishNormalCardsForAliveCharacters(playerId, deck);
+            return deck.DrawPile.Count > 0;
+        }
+
+        //为存活角色生成普通牌
+        private void replenishNormalCardsForAliveCharacters(int playerId, PlayerDeckEntity deck)
+        {
+            IEnumerable<CombatEntity> entities = _allEntities != null ? _allEntities : _context.Entities.Values;
+            foreach (var entity in entities)
+            {
+                if (entity.OwnerPlayerId != playerId || entity.CurrentHp <= 0) continue;
+
+                var characterCards = _cardCatalog.GetCharacterCards(entity.ConfigId);
+                foreach (var card in characterCards)
+                {
+                    if (card.CardType == CardType.Ultimate) continue;
+                    deck.DrawPile.Add(new CardEntity(card.Id));
+                }
+            }
+
+            ShuffleCard(deck.DrawPile);
+            QLog.Info($"[DrawCard] 存活角色补充普通牌, 当前抽牌堆数量: {deck.DrawPile.Count}");
         }
 
         //移除角色卡牌

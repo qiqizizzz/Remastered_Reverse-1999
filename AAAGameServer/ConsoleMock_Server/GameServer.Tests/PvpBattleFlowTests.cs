@@ -8,13 +8,31 @@
 
 using GameProtocol;
 using GameServer.Battle;
+using GameServer.Battle.Core.Entities;
 using GameServer.Battle.Data;
+using GameServer.Battle.Data.Config;
 using Xunit;
 
 namespace GameServer.Tests;
 
 public class PvpBattleFlowTests
 {
+    [Fact]
+    public void InitDeck_InPvp_ShouldCreateFiveCopiesPerNormalCard()
+    {
+        var manager = createBattleManager();
+        manager.JoinQueue("alice");
+        manager.JoinQueue("bob");
+        manager.TryMatch();
+        manager.SubmitPvpTeam("alice", new List<int> { 1001, 1002, 1003, 1004 });
+        var battle = manager.SubmitPvpTeam("bob", new List<int> { 1001, 1002, 1003, 1004 });
+        Assert.NotNull(battle);
+
+        int totalPlayer2NormalCards = countAllNormalCards(battle, 2);
+
+        Assert.Equal(40, totalPlayer2NormalCards);
+    }
+
     [Fact]
     public void BattleStart_InPvp_ShouldNotCarryDefaultViewerEntities()
     {
@@ -181,6 +199,109 @@ public class PvpBattleFlowTests
         var player2Target = battle.AllEntities.First(e => e.OwnerPlayerId == 2);
 
         Assert.True(battle.PlayCard(1, player1Card.InstanceId, player2Target.InstanceId, 0));
+    }
+
+    [Fact]
+    public void EntityDied_InPvp_ShouldOnlyRemoveCardsFromDeadOwnerDeck()
+    {
+        var manager = createBattleManager();
+        manager.JoinQueue("alice");
+        manager.JoinQueue("bob");
+        manager.TryMatch();
+        manager.SubmitPvpTeam("alice", new List<int> { 1001, 1002 });
+        var battle = manager.SubmitPvpTeam("bob", new List<int> { 1001, 1002 });
+        Assert.NotNull(battle);
+        battle.CollectEvents();
+
+        var deadPlayer2Hero = battle.AllEntities.First(e => e.OwnerPlayerId == 2 && e.ConfigId == 1001);
+        deadPlayer2Hero.CurrentHp = 0;
+        int player1OwnerCardCountBefore = countCardsOwnedBy(battle, 1, 1001);
+
+        battle.EndTurn(2);
+
+        Assert.True(player1OwnerCardCountBefore > 0);
+        Assert.True(countCardsOwnedBy(battle, 1, 1001) > 0);
+        Assert.Equal(0, countCardsOwnedBy(battle, 2, 1001));
+    }
+
+    [Fact]
+    public void EndTurn_InPvp_ShouldScaleQueueSizeByNextCurrentPlayerAliveHeroes()
+    {
+        var manager = createBattleManager();
+        manager.JoinQueue("alice");
+        manager.JoinQueue("bob");
+        manager.TryMatch();
+        manager.SubmitPvpTeam("alice", new List<int> { 1001, 1002, 1003, 1004 });
+        var battle = manager.SubmitPvpTeam("bob", new List<int> { 1001, 1002, 1003, 1004 });
+        Assert.NotNull(battle);
+        battle.CollectEvents();
+
+        battle.EndTurn(2);
+        battle.CollectEvents();
+        foreach (var entity in battle.AllEntities.Where(e => e.OwnerPlayerId == 2).Skip(1))
+            entity.CurrentHp = 0;
+
+        battle.EndTurn(1);
+        battle.CollectEvents();
+
+        Assert.Equal(2, battle.Context.ActionQueue.MaxQueueSize);
+    }
+
+    [Fact]
+    public void EndTurn_InPvpOneHeroLeft_ShouldRefillEnoughNormalCardsForRound()
+    {
+        var manager = createBattleManager();
+        manager.JoinQueue("alice");
+        manager.JoinQueue("bob");
+        manager.TryMatch();
+        manager.SubmitPvpTeam("alice", new List<int> { 1001, 1002, 1003, 1004 });
+        var battle = manager.SubmitPvpTeam("bob", new List<int> { 1001, 1002, 1003, 1004 });
+        Assert.NotNull(battle);
+        battle.CollectEvents();
+
+        var alivePlayer2Hero = battle.AllEntities.First(e => e.OwnerPlayerId == 2);
+        foreach (var entity in battle.AllEntities.Where(e => e.OwnerPlayerId == 2 && e.InstanceId != alivePlayer2Hero.InstanceId))
+            entity.CurrentHp = 0;
+
+        var player2Deck = battle.Context.PlayerDecks[2];
+        var aliveHeroCard = player2Deck.HandCards
+            .Concat(player2Deck.DrawPile)
+            .Concat(player2Deck.DiscardPile)
+            .First(c => battle.Context.CardCatalog.Get(c.ConfigId).OwnerId == alivePlayer2Hero.ConfigId);
+        player2Deck.HandCards = new List<CardEntity> { aliveHeroCard };
+        player2Deck.DrawPile.Clear();
+        player2Deck.DiscardPile.Clear();
+
+        battle.EndTurn(2);
+        battle.CollectEvents();
+        battle.EndTurn(1);
+        battle.CollectEvents();
+
+        Assert.Equal(4, countNormalHandCards(battle, 2));
+        Assert.Equal(2, battle.Context.ActionQueue.MaxQueueSize);
+    }
+
+    // 统计指定玩家牌库中指定角色拥有的卡牌数量
+    private static int countCardsOwnedBy(BattleInstance battle, int playerId, int ownerId)
+    {
+        var deck = battle.Context.PlayerDecks[playerId];
+        return deck.HandCards.Concat(deck.DrawPile).Concat(deck.DiscardPile)
+            .Count(c => battle.Context.CardCatalog.Get(c.ConfigId).OwnerId == ownerId);
+    }
+
+    // 统计指定玩家所有区域中的普通卡牌数量
+    private static int countAllNormalCards(BattleInstance battle, int playerId)
+    {
+        var deck = battle.Context.PlayerDecks[playerId];
+        return deck.HandCards.Concat(deck.DrawPile).Concat(deck.DiscardPile)
+            .Count(c => battle.Context.CardCatalog.Get(c.ConfigId).CardType != CardType.Ultimate);
+    }
+
+    // 统计指定玩家手牌中的普通卡牌数量
+    private static int countNormalHandCards(BattleInstance battle, int playerId)
+    {
+        var deck = battle.Context.PlayerDecks[playerId];
+        return deck.HandCards.Count(c => battle.Context.CardCatalog.Get(c.ConfigId).CardType != CardType.Ultimate);
     }
 
     // 创建带配置的战斗管理器

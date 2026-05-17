@@ -108,7 +108,7 @@ namespace GameServer.Battle
             var allEntities = new List<CombatEntity>();
             var eventBus = new CombatEventBus();
             var context = new CombatContext(cardCatalog, eventBus);
-            var cardSystem = new CardCombatSystem(context, cardCatalog, eventBus);
+            var cardSystem = new CardCombatSystem(context, cardCatalog, eventBus, allEntities);
             var eventBuilder = new BattleEventBuilder(context);
             var protoSerializer = new BattleProtoSerializer(configManager);
 
@@ -359,8 +359,7 @@ namespace GameServer.Battle
 
                 if (_env.Context.Entities.ContainsKey(dead.ConfigId))
                 {
-                    _env.CardSystem.RemoveCardsOfCharacter(PLAYER1_ID, dead.ConfigId);
-                    _env.CardSystem.RemoveCardsOfCharacter(PLAYER2_ID, dead.ConfigId);
+                    _env.CardSystem.RemoveCardsOfCharacter(dead.OwnerPlayerId, dead.ConfigId);
                     _env.Context.Entities.Remove(dead.ConfigId);
                     heroDied = true;
                 }
