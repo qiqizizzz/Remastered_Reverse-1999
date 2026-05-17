@@ -25,5 +25,6 @@ namespace MVC
         PauseFightView, //战斗暂停界面
         FightSettleView, //战斗结算界面
         MatchmakingView, //匹配界面
+        RoundTipView, //回合提示界面
     }
 }

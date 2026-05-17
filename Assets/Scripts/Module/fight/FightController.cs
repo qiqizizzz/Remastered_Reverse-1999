@@ -57,7 +57,13 @@ namespace Module.fight
                 parentTf = GameApp.ViewManager.canvasTf,
                 Sorting_Order = 10
             });
-            
+            GameApp.ViewManager.Register(ViewType.RoundTipView, new ViewInfo()
+            {
+                PrefabName =  AddressDefines.UI_RoundTipView,
+                controller = this,
+                parentTf = GameApp.ViewManager.canvasTf,
+                Sorting_Order = 11
+            }); 
             
             InitModuleEvent();
         }

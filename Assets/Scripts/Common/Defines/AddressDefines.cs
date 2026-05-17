@@ -26,6 +26,7 @@ namespace Common.Defines
         public const string UI_PauseFightView = "UI/PauseFightView";
         public const string UI_FightSettleView = "UI/FightSettleView";
         public const string UI_MatchmakingView = "UI/MatchmakingView";
+        public const string UI_RoundTipView = "UI/RoundTipView";
         
         //UI_small预制体
         public const string UI_Small_Btn_friTemp = "UI_small/Btn_friTemp";
