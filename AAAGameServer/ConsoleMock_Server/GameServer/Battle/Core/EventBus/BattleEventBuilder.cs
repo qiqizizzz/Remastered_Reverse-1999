@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using GameProtocol;
 using GameServer.Battle.Core.Entities;
+using GameServer.Battle.Core.Extensions;
 using GameServer.Battle.Core.Serialization;
 
 namespace GameServer.Battle.Core.EventBus
@@ -185,7 +186,7 @@ namespace GameServer.Battle.Core.EventBus
             int queueIndex = _context.ActionQueue.QueuedCards.Count - 1;
             int actionPoint = 0;
             var cardConfig = _context.CardCatalog.Get(card.ConfigId);
-            if (cardConfig != null && _context.Entities.TryGetValue(cardConfig.OwnerId, out var entity))
+            if (cardConfig != null && _context.Entities.TryGetValue(CombatContextExtension.GetEntityKey(playerId, cardConfig.OwnerId), out var entity))
                 actionPoint = entity.ActionPoint;
 
             _events.Add(new BattleEvent

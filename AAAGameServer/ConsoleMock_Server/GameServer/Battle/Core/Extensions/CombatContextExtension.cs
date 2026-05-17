@@ -6,10 +6,24 @@ namespace GameServer.Battle.Core.Extensions
 {
     internal static class CombatContextExtension
     {
+        private const int ENTITY_KEY_MULTIPLIER = 1000000;
+
+        #region 实体查找
+        public static int GetEntityKey(int playerId, int ownerId)
+        {
+            return playerId * ENTITY_KEY_MULTIPLIER + ownerId;
+        }
+
+        public static bool TryGetEntity(this CombatContext context, int playerId, int ownerId, out CombatEntity entity)
+        {
+            return context.Entities.TryGetValue(GetEntityKey(playerId, ownerId), out entity);
+        }
+        #endregion
+
         #region 行动点相关
         public static void AddActionPoint(this CombatContext context, int playerId, int ownerId, int delta)
         {
-            if (context.Entities.TryGetValue(ownerId, out var entity))
+            if (context.TryGetEntity(playerId, ownerId, out var entity))
             {
                 entity.ActionPoint += delta;
                 context.EventBus?.OnActionPointChanged?.Invoke(playerId, ownerId, entity.ActionPoint);
@@ -18,7 +32,7 @@ namespace GameServer.Battle.Core.Extensions
 
         public static void ClearActionPoint(this CombatContext context, int playerId, int ownerId)
         {
-            if (context.Entities.TryGetValue(ownerId, out var entity))
+            if (context.TryGetEntity(playerId, ownerId, out var entity))
             {
                 entity.ActionPoint = 0;
                 context.EventBus?.OnActionPointChanged?.Invoke(playerId, ownerId, 0);

@@ -112,7 +112,8 @@ namespace GameServer.Battle.Core.Systems
                     0
                 );
 
-                _env.Context.Entities[heroId] = entity;
+                int entityKey = CombatContextExtension.GetEntityKey(ownerPlayerId, heroId);
+                _env.Context.Entities[entityKey] = entity;
                 _env.AllEntities.Add(entity);
             }
         }

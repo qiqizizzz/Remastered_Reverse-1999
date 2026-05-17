@@ -320,30 +320,51 @@ public class PvpBattleFlowTests
     }
 
     [Fact]
-    public void EndTurn_InPvp_ShouldScaleQueueSizeByNextCurrentPlayerAliveHeroes()
+    public void InitDeck_InPvp_ShouldKeepSameHeroConfigSeparatedBetweenBothPlayers()
     {
         var manager = createBattleManager();
         manager.JoinQueue("alice");
         manager.JoinQueue("bob");
         manager.TryMatch();
-        manager.SubmitPvpTeam("alice", new List<int> { 1001, 1002, 1003, 1004 });
-        var battle = manager.SubmitPvpTeam("bob", new List<int> { 1001, 1002, 1003, 1004 });
+        manager.SubmitPvpTeam("alice", new List<int> { 1001, 1002, 1003 });
+        var battle = manager.SubmitPvpTeam("bob", new List<int> { 1001, 1002, 1003 });
+        Assert.NotNull(battle);
+
+        Assert.Equal(3, battle.AllEntities.Count(e => e.OwnerPlayerId == 1));
+        Assert.Equal(3, battle.AllEntities.Count(e => e.OwnerPlayerId == 2));
+        Assert.Equal(6, countNormalHandCards(battle, 1));
+        Assert.Equal(6, countNormalHandCards(battle, 2));
+    }
+
+    [Fact]
+    public void EndTurn_InPvp_ShouldKeepCardsSeparatedWhenOneSideHasOneHero()
+    {
+        var manager = createBattleManager();
+        manager.JoinQueue("alice");
+        manager.JoinQueue("bob");
+        manager.TryMatch();
+        manager.SubmitPvpTeam("alice", new List<int> { 1001 });
+        var battle = manager.SubmitPvpTeam("bob", new List<int> { 1001, 1002, 1003 });
         Assert.NotNull(battle);
         battle.CollectEvents();
+
+        var player1Hero = battle.AllEntities.First(e => e.OwnerPlayerId == 1);
+        var player2Hero = battle.AllEntities.First(e => e.OwnerPlayerId == 2);
+        Assert.Equal(4, countNormalHandCards(battle, 1));
+        Assert.Equal(6, countNormalHandCards(battle, 2));
+        Assert.Equal(3, battle.Context.ActionQueue.MaxQueueSize);
 
         playCardsUntilQueueFull(battle, 2, 1);
         battle.EndTurn(2);
         battle.CollectEvents();
-        var alivePlayer2Hero = battle.AllEntities.First(e => e.OwnerPlayerId == 2);
-        alivePlayer2Hero.CurrentHp = 999999;
-        foreach (var entity in battle.AllEntities.Where(e => e.OwnerPlayerId == 2 && e.InstanceId != alivePlayer2Hero.InstanceId))
-            entity.CurrentHp = 0;
 
-        playCardsUntilQueueFull(battle, 1, 2);
-        battle.EndTurn(1);
-        battle.CollectEvents();
-
+        Assert.Equal(4, countNormalHandCards(battle, 1));
+        Assert.Equal(3, countNormalHandCards(battle, 2));
         Assert.Equal(1, battle.Context.ActionQueue.MaxQueueSize);
+        Assert.Equal(4, battle.GetStateSnapshot(1).PlayerDeck.HandCards.Count);
+        Assert.Equal(3, battle.GetStateSnapshot(2).PlayerDeck.HandCards.Count);
+        Assert.True(player1Hero.CurrentHp > 0);
+        Assert.True(player2Hero.CurrentHp > 0);
     }
 
     // 将指定玩家行动队列补满

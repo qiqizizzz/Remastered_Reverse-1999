@@ -13,6 +13,7 @@ using GameProtocol;
 using GameServer.Battle.AI;
 using GameServer.Battle.Core;
 using GameServer.Battle.Core.Commands;
+using GameServer.Battle.Core.Extensions;
 using GameServer.Battle.Core.Entities;
 using GameServer.Battle.Core.EventBus;
 using GameServer.Battle.Core.Serialization;
@@ -360,10 +361,10 @@ namespace GameServer.Battle
             {
                 _env.Context.EventBus?.OnEntityDied?.Invoke(dead.InstanceId);
 
-                if (_env.Context.Entities.ContainsKey(dead.ConfigId))
+                if (_env.Context.TryGetEntity(dead.OwnerPlayerId, dead.ConfigId, out var _))
                 {
                     _env.CardSystem.RemoveCardsOfCharacter(dead.OwnerPlayerId, dead.ConfigId);
-                    _env.Context.Entities.Remove(dead.ConfigId);
+                    _env.Context.Entities.Remove(GameServer.Battle.Core.Extensions.CombatContextExtension.GetEntityKey(dead.OwnerPlayerId, dead.ConfigId));
                     heroDied = true;
                 }
             }
