@@ -35,6 +35,8 @@ namespace Module.fight.EventPlayer
         {
             bool isWin = evt.BattleEnd.IsPlayerWin;
             QLog.Info($"[PlayEvent] 战斗结束，玩家{(isWin ? "胜利" : "失败")}");
+            
+            //TODO:没有打开这个界面？？Pve和Pvp都没打开，怀疑是客户端没有向服务端发送消息证明已经胜利/失败了
             GameApp.MessageCenter.PostEvent(EventDefines.OpenFightSettleView, isWin);
             await Task.Delay(100);
         }

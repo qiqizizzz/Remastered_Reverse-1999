@@ -7,7 +7,7 @@
             "CharacterType": 1,
             "InspirationType": 0,
             "Property": {
-                "Hp": 20000.0,
+                "Hp": 4000.0,
                 "Attack": 100.0,
                 "Defense": 40.0,
                 "CritRate": 0.05000000074505806,
