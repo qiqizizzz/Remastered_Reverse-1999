@@ -345,10 +345,23 @@ namespace Network
                 if (isPrivateCardEvent(evt.EventType) && evt.EventOwnerId != viewerPlayerId)
                     continue;
 
-                visibleEvents.Add(evt);
+                visibleEvents.Add(toViewerPerspectiveEvent(evt, viewerPlayerId));
             }
 
             return visibleEvents;
+        }
+
+        // 转换为接收玩家视角的事件
+        private static BattleEvent toViewerPerspectiveEvent(BattleEvent evt, int viewerPlayerId)
+        {
+            if (evt.EventType != BattleEventType.BattleEnd || evt.BattleEnd == null)
+                return evt;
+
+            var battleEndEvent = evt.Clone();
+            if (viewerPlayerId == 2)
+                battleEndEvent.BattleEnd.IsPlayerWin = !battleEndEvent.BattleEnd.IsPlayerWin;
+
+            return battleEndEvent;
         }
 
         // 判断是否为只属于单个玩家可见的手牌事件

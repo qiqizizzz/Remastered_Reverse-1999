@@ -23,7 +23,8 @@
       "Bash(command -v Unity.exe)",
       "Skill(superpowers:finishing-a-development-branch)",
       "Bash(rtk dotnet *)",
-      "Skill(superpowers:dispatching-parallel-agents)"
+      "Skill(superpowers:dispatching-parallel-agents)",
+      "Bash(python *)"
     ]
   }
 }
