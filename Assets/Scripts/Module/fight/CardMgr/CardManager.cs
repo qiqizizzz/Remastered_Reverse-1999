@@ -127,25 +127,8 @@ namespace Module.fight.CardMgr
         private void updateScalingRules()
         {
             int aliveHeroCount = GameApp.EntityManager.GetAliveHeroes().Count;
-
-            _maxHandCardCount = aliveHeroCount switch
-            {
-                4 => 8,
-                3 => 6,
-                2 => 6,
-                1 => 4,
-                _ => 8
-            };
-
-            int maxActionCount = aliveHeroCount switch
-            {
-                4 => 4,
-                3 => 3,
-                2 => 2,
-                1 => 2,
-                _ => 4
-            };
-            CardActionQueue.MaxActionCount = maxActionCount;
+            _maxHandCardCount = System.Math.Max(4, aliveHeroCount * 2);
+            CardActionQueue.MaxActionCount = System.Math.Max(1, aliveHeroCount);
 
             GameApp.MessageCenter.PostEvent(EventDefines.OnRemoveDiedCharacterCard);
         }

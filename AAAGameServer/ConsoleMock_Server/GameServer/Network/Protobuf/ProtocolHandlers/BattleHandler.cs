@@ -122,7 +122,7 @@ namespace Network
             else
                 sendBattleResponse(client, ActionCode.EndTurn, events);
 
-            if (battle.Result != BattleResult.None)
+            if (battle.State == BattleState.BattleEnd)
                 removeBattleParticipants(client.Server, battle);
         }
 
@@ -321,6 +321,8 @@ namespace Network
             foreach (var participant in participants)
             {
                 var battlePack = new BattlePack { PlayerId = participant.PlayerId };
+                if (actionCode == ActionCode.EndTurn)
+                    battlePack.StateSnapshot = battle.GetStateSnapshot(participant.PlayerId);
                 battlePack.Events.AddRange(filterVisiblePvpEvents(events, participant.PlayerId));
                 sendBattleResponse(server.GetClientByUsername(participant.Username), actionCode, battlePack);
             }

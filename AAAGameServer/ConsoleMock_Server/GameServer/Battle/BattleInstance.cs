@@ -181,6 +181,7 @@ namespace GameServer.Battle
         {
             if (_state != BattleState.PlayerTurn) return;
             if (!isCurrentPlayer(playerId)) return;
+            if (_env.Mode == GameMode.PvP && _env.Context.ActionQueue.QueuedCards.Count < _env.Context.ActionQueue.MaxQueueSize) return;
 
             _state = BattleState.Resolving;
 
@@ -250,11 +251,13 @@ namespace GameServer.Battle
             int previousPlayerId = _env.CurrentPlayerId;
             _env.CurrentPlayerId = getOpponentPlayerId(previousPlayerId);
 
-            if (previousPlayerId == PLAYER1_ID)
-                _turnSystem.StartNextRound();
-            else
-                addPvpTurnStartEvent();
+            _initSystem.UpdateScalingRules();
+            _initSystem.ProcessRoundStartHandFix();
 
+            if (previousPlayerId == PLAYER1_ID)
+                _env.Context.CurrentRound++;
+
+            addPvpTurnStartEvent();
             _state = BattleState.PlayerTurn;
         }
 

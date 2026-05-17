@@ -90,15 +90,7 @@ namespace GameServer.Battle.Core.Systems
         public void UpdateScalingRules()
         {
             int aliveHeroCount = getAliveHeroCount(_env.CurrentPlayerId);
-            int maxQueueSize = aliveHeroCount switch
-            {
-                4 => 4,
-                3 => 3,
-                2 => 2,
-                1 => 2,
-                _ => 4
-            };
-            _env.Context.ActionQueue.MaxQueueSize = maxQueueSize;
+            _env.Context.ActionQueue.MaxQueueSize = Math.Max(1, aliveHeroCount);
         }
 
         #endregion
@@ -153,10 +145,10 @@ namespace GameServer.Battle.Core.Systems
         {
             _env.CardSystem.InitDeck(playerId, heroConfigIds);
             _env.CardSystem.PrepareHandsForNewLevel(playerId, heroConfigIds);
-            UpdateScalingRules();
 
             int previousPlayerId = _env.CurrentPlayerId;
             _env.CurrentPlayerId = playerId;
+            UpdateScalingRules();
             ProcessRoundStartHandFix();
             _env.CurrentPlayerId = previousPlayerId;
 
@@ -186,14 +178,7 @@ namespace GameServer.Battle.Core.Systems
         private int getTargetNormalHandCount(int playerId)
         {
             int aliveHeroCount = getAliveHeroCount(playerId);
-            return aliveHeroCount switch
-            {
-                4 => 8,
-                3 => 6,
-                2 => 6,
-                1 => 4,
-                _ => Math.Max(0, aliveHeroCount * 2)
-            };
+            return Math.Max(4, aliveHeroCount * 2);
         }
 
         private int getNormalHandCardCount(int playerId)

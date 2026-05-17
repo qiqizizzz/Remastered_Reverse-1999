@@ -24,7 +24,8 @@
       "Skill(superpowers:finishing-a-development-branch)",
       "Bash(rtk dotnet *)",
       "Skill(superpowers:dispatching-parallel-agents)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(rtk read *)"
     ]
   }
 }

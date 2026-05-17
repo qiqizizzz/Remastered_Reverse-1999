@@ -120,8 +120,31 @@ namespace Module.fight
         private void onOpenFightSettleView(System.Object[] args)
         {
             bool isWin = (bool)args[0];
-            
+
             GameApp.ViewManager.Open(ViewType.FightSettleView, isWin);
+            clearBattleRuntimeState();
+        }
+
+        // 清理战斗运行时状态，避免上一局残留影响下一局
+        private void clearBattleRuntimeState()
+        {
+            _isBattleActive = false;
+            _isPlayerTurnStart = false;
+            _pendingPvpBattlePack = null;
+
+            PlayEventSequence.IsPlayerTurnResolving = false;
+            PlayEventSequence.IsEnemyTurnResolving = false;
+            PlayEventSequence.PendingPlayerPlayCardCount = 0;
+            PlayEventSequence.PendingPlayerCasterOwnerIds.Clear();
+
+            GameApp.CardManager.CardActionQueue.Clear();
+            GameApp.CardManager.CurrentSelectedTargetId = 0;
+
+            if (_isPvpMode && GameApp.PvpSession != null)
+                GameApp.PvpSession.Clear();
+
+            _isPvpMode = false;
+            _pvpBattleStartData = null;
         }
 
         private void onOpenPauseFightView(System.Object[] args)
@@ -165,24 +188,29 @@ namespace Module.fight
         {
             PlayEventSequence.SyncCharacters(snapshot.Entities);
 
-            int playerId = GameApp.PvpSession != null && GameApp.PvpSession.IsInPvp ? GameApp.PvpSession.CurrentPlayerId : 1;
-            var deck = GameApp.CardManager.BattleContext.PlayerDecks[playerId];
+            int playerId = _pvpBattleStartData != null ? _pvpBattleStartData.PlayerId : 1;
+            if (!GameApp.CardManager.BattleContext.PlayerDecks.TryGetValue(playerId, out var deck))
+                return;
+
             deck.HandCards.Clear();
             deck.DrawPile.Clear();
             deck.DiscardPile.Clear();
-            
+
             if (snapshot.PlayerDeck != null)
             {
                 foreach (var cardInfo in snapshot.PlayerDeck.HandCards)
                     deck.HandCards.Add(new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel));
-                
+
                 foreach (var cardInfo in snapshot.PlayerDeck.DrawPile)
                     deck.DrawPile.Add(new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel));
-                
+
                 foreach (var cardInfo in snapshot.PlayerDeck.DiscardPile)
                     deck.DiscardPile.Add(new CardEntity(cardInfo.InstanceId, cardInfo.ConfigId, cardInfo.StarLevel));
             }
-            
+
+            if (snapshot.ActionQueue != null)
+                GameApp.CardManager.CardActionQueue.MaxActionCount = snapshot.ActionQueue.MaxSize;
+
             GameApp.MessageCenter.PostEvent(EventDefines.UpdateHandCards, new object[] { deck.HandCards, isUndo });
         }
 
@@ -260,6 +288,7 @@ namespace Module.fight
         {
             _isBattleActive = true;
             int playerId = _pvpBattleStartData.PlayerId;
+            GameApp.CardManager.CardActionQueue.Clear();
             GameApp.CardManager.InitPvpCards(playerId, getAliveHeroConfigIds());
             initLocalCombatEntities(playerId);
             _pendingPvpBattlePack = _pvpBattleStartData.BattlePack;
