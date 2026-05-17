@@ -42,6 +42,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1dda63bf90b65644aa79d6f40cfc8879
+    m_Address: UI/RoundTipView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 20c7c3726c88d0745b5746e3dcfc6ba9
     m_Address: UI/GameView
     m_ReadOnly: 0

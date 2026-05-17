@@ -6,6 +6,7 @@
 * └──────────────────────────────────┘
 */
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common;
@@ -14,6 +15,7 @@ using Data.card.Extensions;
 using GameProtocol;
 using Module.Character;
 using Module.fight.CardMgr;
+using MVC;
 using UnityEngine;
 
 namespace Module.fight.EventPlayer
@@ -41,6 +43,13 @@ namespace Module.fight.EventPlayer
         {
             CompletePlayerTurnOutputIfNeeded();
             bool isLocalPlayerTurn = isLocalPlayerEvent(evt);
+
+            // 播放回合提示动画并等待完成
+            var tcs = new TaskCompletionSource<object>();
+            string tipText = isLocalPlayerTurn ? "我方回合" : "敌方回合";
+            GameApp.ViewManager.Open(ViewType.RoundTipView, tipText, new Action(() => tcs.TrySetResult(null)));
+            await tcs.Task;
+
             QLog.Info($"[PlayEvent] 回合开始，轮数: {evt.TurnStart.RoundNumber}");
             GameApp.MessageCenter.PostEvent(EventDefines.OnBattleTurnStart, isLocalPlayerTurn);
 
