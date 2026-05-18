@@ -90,12 +90,12 @@ namespace Module.View
             GameObject bgRoot = GameObject.FindWithTag(MAIN_MENU_BG_ROOT);
             _menuBgRenderers = bgRoot != null ? bgRoot.GetComponentsInChildren<SpriteRenderer>(true) : null;
         }
- 
+        
         // 统一控制背景显隐
         private void setMenuBgVisible(bool isVisible)
         {
             if (_menuBgRenderers == null) return;
- 
+            
             for (int i = 0; i < _menuBgRenderers.Length; i++)
             {
                 if (_menuBgRenderers[i] != null)

@@ -13,6 +13,7 @@ using Module.Character;
 using Module.Effect;
 using Module.fight.CardMgr;
 using Module.Matchmaking;
+using Module.RedDot;
 using Module.Timer;
 using MVC;
 using Network;
@@ -32,6 +33,7 @@ public class GameApp : Singleton<GameApp>
     public static CardManager CardManager;
     public static EffectManager EffectManager;
     public static PvpSession PvpSession;
+    public static RedDotManager  RedDotManager;
     
     public override void Init()
     {
@@ -47,6 +49,7 @@ public class GameApp : Singleton<GameApp>
         CardManager = new CardManager();
         EffectManager = new EffectManager();
         PvpSession = new PvpSession();
+        RedDotManager = new RedDotManager();
     }
 
     public override void Update(float dt)
@@ -59,5 +62,6 @@ public class GameApp : Singleton<GameApp>
     public override void Destroy()
     {
         ControllerManager.Destroy();
+        RedDotManager.Destroy();
     }
 }
