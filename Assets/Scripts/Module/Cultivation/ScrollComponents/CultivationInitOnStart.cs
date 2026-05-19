@@ -6,6 +6,7 @@
 * └──────────────────────────────────┘
 */
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,13 +15,13 @@ namespace Module.Cultivation.ScrollComponents
 {
     [RequireComponent(typeof(UnityEngine.UI.LoopVerticalScrollRect))]
     [DisallowMultipleComponent]
-    public class InitOnStart : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDataSource
+    public class CultivationInitOnStart : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDataSource
     {
         public GameObject item;
 
         // Implement your own Cache Pool here. The following is just for example.
         Stack<Transform> pool = new Stack<Transform>();
-
+        
         public GameObject GetObject(int index)
         {
             if (pool.Count == 0)

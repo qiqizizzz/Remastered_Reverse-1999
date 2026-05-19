@@ -714,7 +714,7 @@ TextureImporter:
         width: 47
         height: 47
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -722,6 +722,90 @@ TextureImporter:
       bones: []
       spriteID: 5d830be30e06049429358459a3e4ba4a
       internalID: -1474991207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedDot_1
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 1788
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e9929376ab07f3479f0506214f3dc84
+      internalID: -801322748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedDot_2
+      rect:
+        serializedVersion: 2
+        x: 1543
+        y: 1625
+        width: 100
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c72d105eecdb96438415c5fcd7b933b
+      internalID: -843966314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedDot_3
+      rect:
+        serializedVersion: 2
+        x: 1209
+        y: 1659
+        width: 69
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33b7b50fb861eab44bbeb03748fd35e4
+      internalID: -2118795780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedDot_4
+      rect:
+        serializedVersion: 2
+        x: 631
+        y: 1654
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54ad9af46ef024d41a4bd79e8cb0880c
+      internalID: 2011932954
       vertices: []
       indices: 
       edges: []
@@ -737,6 +821,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      RedDot_1: -801322748
+      RedDot_2: -843966314
+      RedDot_3: -2118795780
+      RedDot_4: 2011932954
       com_ui_0: -1891347711
       com_ui_1: -1499040623
       com_ui_Btn_detail: -17029964

@@ -18,7 +18,7 @@ namespace Config.Editor
     {
         private const string RED_DOT_PREFIX = "RedDot@";
 
-        [MenuItem("一键烘培红点系统")]
+        [MenuItem("GameObject/MVC工具/一键烘培红点系统", false, 0)]
         public static void BakeRedDots()
         {
             GameObject selectedObj = Selection.activeGameObject;
