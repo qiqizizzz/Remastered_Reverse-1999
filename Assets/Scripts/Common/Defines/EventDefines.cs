@@ -24,6 +24,7 @@ namespace Common.Defines
         public const string OpenFightingView = "OpenFightingView";
         public const string OpenPauseFightView = "OpenPauseFightView";
         public const string OpenFightSettleView = "OpenFightSettleView";
+        public const string OpenBulletinView = "OpenBulletinView";
         public const string LoadingScene = "LoadingScene";
         public const string UpdateFriendList = "UpdateFriendList";
         public const string UpdateChatHistory = "UpdateChatHistory";

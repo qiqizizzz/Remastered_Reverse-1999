@@ -29,6 +29,7 @@ namespace Module.View
             Find<Button>("LeftUpArea/Btn_return").onClick.AddListener(onReturnGameViewBtn);
             Find<Button>("LeftDownArea/btns_1/Btn_hy").onClick.AddListener(onOpenChatViewBtn);
             Find<Button>("LeftDownArea/btns_2/Btn_sz").onClick.AddListener(onOpenSettingViewBtn);
+            Find<Button>("LeftDownArea/btns_2/Btn_gg").onClick.AddListener(onOpenBulletinViewBtn);
         }
 
         public override void Open(params object[] args)
@@ -37,7 +38,8 @@ namespace Module.View
             _fadeTween?.Kill();
             _fadeTween = _canvasGroup.DOFade(1f, 0.2f).SetEase(Ease.OutQuad);
         }
-        
+
+        #region 按钮点击事件
         private void onReturnGameViewBtn()
         {
             _fadeTween?.Kill();
@@ -54,7 +56,16 @@ namespace Module.View
         {
             GameApp.ViewManager.Open(ViewType.SettingView);
         }
+        
+        private void onOpenBulletinViewBtn()
+        {
+            ApplyControllerFunc(ControllerType.GameUI, EventDefines.OpenBulletinView);
+        }
+        
+        #endregion
 
+
+        #region 生命周期
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -67,5 +78,6 @@ namespace Module.View
             _fadeTween?.Kill();
             base.OnDestroy();
         }
+        #endregion
     }
 }

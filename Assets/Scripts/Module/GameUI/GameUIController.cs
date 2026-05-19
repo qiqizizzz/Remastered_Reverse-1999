@@ -57,7 +57,14 @@ namespace Module.GameUI
                 PrefabName = AddressDefines.UI_SettingView,
                 parentTf = GameApp.ViewManager.canvasTf,
                 controller = this,
-                Sorting_Order = 10
+                Sorting_Order = 2
+            });
+            GameApp.ViewManager.Register(ViewType.BulletinView, new ViewInfo()
+            {
+                PrefabName = AddressDefines.UI_BulletinView,
+                parentTf = GameApp.ViewManager.canvasTf,
+                controller = this,
+                Sorting_Order = 2
             });
 
             //初始化事件
@@ -74,6 +81,19 @@ namespace Module.GameUI
             RegisterFunc(EventDefines.OpenTipBoxView, onOpenTipBoxView);
             RegisterFunc(EventDefines.OpenNoticeView, onOpenNoticeView);
             RegisterFunc(EventDefines.OpenSettingView, onOpenSettingView);
+            RegisterFunc(EventDefines.OpenBulletinView, onOpenBulletinView);
+        }
+
+        public override void RemoveModuleEvent()
+        {
+            UnRegisterFunc(EventDefines.OpenGameView, onOpenGameView);
+            UnRegisterFunc(EventDefines.OpenMainMenuView, onOpenMainMenuView);
+            UnRegisterFunc(EventDefines.OpenMoreOptionsView, onOpenMoreOptionsView);
+            UnRegisterFunc(EventDefines.OpenTipBoxView, onOpenTipBoxView);
+            UnRegisterFunc(EventDefines.OpenNoticeView, onOpenNoticeView);
+            UnRegisterFunc(EventDefines.OpenSettingView, onOpenSettingView);
+            UnRegisterFunc(EventDefines.OpenBulletinView, onOpenBulletinView);
+            
         }
 
         //打开主要面板
@@ -114,6 +134,12 @@ namespace Module.GameUI
         private void onOpenSettingView(System.Object[] args)
         {
             GameApp.ViewManager.Open(ViewType.SettingView, args);
+        }
+        
+        //打开公告界面
+        private void onOpenBulletinView(System.Object[] args)
+        {
+            GameApp.ViewManager.Open(ViewType.BulletinView, args);
         }
     }
 }
