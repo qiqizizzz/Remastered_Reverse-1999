@@ -17,7 +17,7 @@ namespace Module.GameUI.Bulletin
     public class BulletinInitOnStart : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDataSource
     {
         public GameObject item;
-        public int totalCount = 60;
+        public int totalCount = 11;
 
         // Implement your own Cache Pool here. The following is just for example.
         private readonly Stack<Transform> pool = new Stack<Transform>();

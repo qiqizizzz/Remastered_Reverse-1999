@@ -34,9 +34,13 @@ namespace Module.Game
             
             GameApp.SoundManager.PlayBGM(AddressDefines.Audio_BGM_Game);
             
-            //Test
-            //var data = GameApp.ConfigManager.GetCardData(2001);
-            //QLog.Info($"测试获取卡牌数据: {data.name}, {data.description}");
+            // -- 测试红点系统 --
+            GameApp.RedDotManager.SetNodeValue("More/Bulletin/Event/0",1);
+            GameApp.RedDotManager.SetNodeValue("More/Bulletin/Event/2",1);
+            GameApp.RedDotManager.SetNodeValue("More/Bulletin/Event/5",1);
+            GameApp.RedDotManager.SetNodeValue("More/Bulletin/Event/6",1);
+            GameApp.RedDotManager.SetNodeValue("More/Bulletin/Event/7",1);
+            GameApp.RedDotManager.SetNodeValue("More/Bulletin/Event/9",1);
         }
 
         public override void InitGlobalEvent()

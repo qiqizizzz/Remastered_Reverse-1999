@@ -32,6 +32,8 @@ namespace Module.RedDot
         //核心寻路方法
         private RedDotNode GetOrAddNode(string path)
         {
+            if (_root == null) return null;
+            
             if(string.IsNullOrEmpty(path)) return _root;
 
             string[] nodeNames = path.Split(_separator);
@@ -81,7 +83,10 @@ namespace Module.RedDot
             if (callback == null) return;
             
             RedDotNode node = GetOrAddNode(path);
-            node.OnValueChanged -= callback;
+            if (node != null)
+            {
+                node.OnValueChanged -= callback;
+            }
         }
     }
 }
